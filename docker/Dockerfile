@@ -1,53 +1,87 @@
-FROM python:3.14.6-slim-trixie AS builder
+# syntax=docker/dockerfile:1
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+FROM ghcr.io/linuxserver/baseimage-alpine:3.24 AS builder
 
-COPY requirements.txt /tmp
-# build-essential is required to build uswsi, psycopg, mysqlclient
-# libffi-dev is required to build cffi (a dependency of minio and cryptography)
-# libpq-dev is required to build psycopg[c]
-# libmaria-dev is required to build mysqlclient
-# libcurl4-openssl-dev is required to build pycurl
-# pkg-config is required to build mysqlclient
-RUN \
-    apt-get update && \
-    apt-get install -y build-essential libffi-dev libpq-dev libmariadb-dev libcurl4-openssl-dev pkg-config
-RUN pip wheel --wheel-dir /wheels apprise uwsgi mysqlclient minio==7.2.20 "psycopg[c]" -r /tmp/requirements.txt
+ARG BUILD_DATE
+ARG VERSION
+LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="felix2yu"
 
-COPY . /opt/healthchecks/
-RUN \
-    rm -rf /opt/healthchecks/.git && \
-    rm -rf /opt/healthchecks/stuff
-
-FROM python:3.14.6-slim-trixie
-
-RUN useradd --system hc
 ENV PYTHONUNBUFFERED=1
-WORKDIR /opt/healthchecks
 
 RUN \
-    apt-get update && \
-    apt-get install -y libcurl4t64 libpq5 libmariadb3 && \
-    rm -rf /var/apt/cache && \
-    rm -rf /var/lib/apt/lists
+  echo "**** install build packages ****" && \
+  apk add --no-cache --virtual=build-dependencies \
+    build-base \
+    cargo \
+    curl-dev \
+    jpeg-dev \
+    libffi-dev \
+    mariadb-dev \
+    musl-dev \
+    postgresql-dev \
+    python3-dev \
+    zlib-dev && \
+  echo "**** install runtime packages ****" && \
+  apk add --no-cache \
+    grep \
+    mariadb-client \
+    postgresql-client \
+    python3 \
+    uwsgi \
+    uwsgi-python \
+    mariadb-connector-c && \
+  echo "**** create python virtualenv ****" && \
+  python3 -m venv /lsiopy && \
+  pip install -U --no-cache-dir \
+    pip \
+    wheel
 
-RUN --mount=type=bind,target=/wheels,source=/wheels,from=builder \
-    pip install --upgrade pip && \
-    pip install --no-cache /wheels/*
+COPY requirements.txt /tmp/
+RUN \
+  . /lsiopy/bin/activate && \
+  pip install -U --no-cache-dir \
+    apprise \
+    minio \
+    mysqlclient && \
+  pip install -U --no-cache-dir -r /tmp/requirements.txt
 
-COPY --from=builder /opt/healthchecks/ /opt/healthchecks/
-COPY docker/fetchstatus.py docker/entrypoint.sh /opt/healthchecks/
+COPY . /app/healthchecks/
+
+RUN cd /app/healthchecks && \
+    rm -rf .git stuff && \
+    . /lsiopy/bin/activate && \
+    DEBUG=False SECRET_KEY=build-key python3 ./manage.py collectstatic --noinput && \
+    DEBUG=False SECRET_KEY=build-key python3 ./manage.py compress
 
 RUN \
-    rm -f /opt/healthchecks/hc/local_settings.py && \
-    DEBUG=False SECRET_KEY=build-key ./manage.py collectstatic --noinput && \
-    DEBUG=False SECRET_KEY=build-key ./manage.py compress && \
-    chmod +x /opt/healthchecks/entrypoint.sh
+  echo "**** cleanup ****" && \
+  apk del --purge \
+    build-dependencies && \
+  rm -rf \
+    /root/.cache \
+    /root/.cargo \
+    /tmp/*
 
-RUN mkdir /data && chown hc /data && \
-    mkdir /config && chown hc /config
+FROM ghcr.io/linuxserver/baseimage-alpine:3.24
 
-ENV USE_GZIP_MIDDLEWARE=True
-HEALTHCHECK --start-period=20s --start-interval=5s --interval=60s --retries=1 CMD ./fetchstatus.py
-ENTRYPOINT ["/opt/healthchecks/entrypoint.sh"]
-CMD [ "uwsgi", "/opt/healthchecks/docker/uwsgi.ini"]
+ENV PYTHONUNBUFFERED=1
+
+RUN \
+  apk add --no-cache \
+    grep \
+    mariadb-client \
+    postgresql-client \
+    python3 \
+    uwsgi \
+    uwsgi-python \
+    mariadb-connector-c
+
+COPY --from=builder /lsiopy /lsiopy
+COPY --from=builder /app/healthchecks /app/healthchecks
+
+COPY docker/root/ /
+
+EXPOSE 8000
+
+VOLUME /config
