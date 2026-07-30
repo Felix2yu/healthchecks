@@ -2,15 +2,15 @@ import requests
 URL = "PING_URL"
 
 def do_work():
-    # Do your number crunching, backup dumping, newsletter sending work here.
-    # Return a truthy value on success.
-    # Return a falsy value or throw an exception on failure.
+    # 在此处进行数据处理、备份转储、邮件发送等工作。
+    # 成功时返回真值。
+    # 失败时返回假值或抛出异常。
     return True
 
 success = False
 try:
     success = do_work()
 finally:
-    # On success, requests PING_URL
-    # On failure, requests PING_URL/fail
+    # 成功时，请求 PING_URL
+    # 失败时，请求 PING_URL/fail
     requests.get(URL if success else URL + "/fail")

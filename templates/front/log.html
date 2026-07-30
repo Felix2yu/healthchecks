@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}Event Log - {{ site_name }}{% endblock %}
+{% block title %}事件日志 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -11,7 +11,7 @@
             <li>
                 <a href="{% url 'hc-details' check.code %}">{{ check.name_then_code }}</a>
             </li>
-            <li class="active">Events</li>
+            <li class="active">事件</li>
 
             <li id="tz-switcher-container" class="pull-right hidden-xs">
                 <div id="tz-switcher" class="btn-group" data-toggle="buttons">
@@ -37,9 +37,9 @@
 
         {% if oldest_ping %}
         <div class="alert alert-info">
-            Showing <span id="num-hits">{{ events|length }}</span> matching events.
+            显示 <span id="num-hits">{{ events|length }}</span> 个匹配事件。
             <br >
-            The oldest stored ping is ping #{{ oldest_ping.n }} from
+            最早存储的 Ping 是第 #{{ oldest_ping.n }} 号 Ping，来自
             <span data-dt="{{ oldest_ping.created|timestamp }}"></span>.
         </div>
         {% endif %}
@@ -47,7 +47,7 @@
     <div class="col-sm-3">
         <form id="filters" method="get">
         <div>
-            <label>Show events older than:</label>
+            <label>显示早于以下时间的事件：</label>
             <span id="end-formatted">now</span>
         </div>
         <input
@@ -65,28 +65,28 @@
         </p>
 
         <br>
-        <label>Event types</label>
+        <label>事件类型</label>
         <div class="checkbox">
-            <label><input type="checkbox" name="success" autocomplete="off" checked> Success</label>
+            <label><input type="checkbox" name="success" autocomplete="off" checked> 成功</label>
         </div>
         <div class="checkbox">
-            <label><input type="checkbox" name="fail" autocomplete="off" checked> Failure</label>
+            <label><input type="checkbox" name="fail" autocomplete="off" checked> 失败</label>
         </div>
         <div class="checkbox">
-            <label><input type="checkbox" name="start" autocomplete="off" checked> Started</label>
+            <label><input type="checkbox" name="start" autocomplete="off" checked> 已开始</label>
         </div>
         <div class="checkbox">
-            <label><input type="checkbox" name="log" autocomplete="off" checked> Log</label>
+            <label><input type="checkbox" name="log" autocomplete="off" checked> 日志</label>
         </div>
         <div class="checkbox">
-            <label><input type="checkbox" name="ign" autocomplete="off" checked> Ignored ping</label>
+            <label><input type="checkbox" name="ign" autocomplete="off" checked> 已忽略的 Ping</label>
         </div>
         <hr>
         <div class="checkbox">
-            <label><input type="checkbox" name="flip" autocomplete="off" checked> Status change</label>
+            <label><input type="checkbox" name="flip" autocomplete="off" checked> 状态变更</label>
         </div>
         <div class="checkbox">
-            <label><input type="checkbox" name="notification" autocomplete="off"> Downtime alert</label>
+            <label><input type="checkbox" name="notification" autocomplete="off"> 宕机告警</label>
         </div>
         </form>
     </div>
@@ -95,9 +95,9 @@
 <div id="ping-details-modal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id="ping-details-body">Loading</div>
+            <div id="ping-details-body">加载中</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Got It!</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">知道了！</button>
             </div>
         </div>
     </div>

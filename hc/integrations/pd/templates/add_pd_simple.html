@@ -1,10 +1,10 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}PagerDuty Integration for {{ site_name }}{% endblock %}
+{% block title %}PagerDuty 集成 - {{ site_name }}{% endblock %}
 
 {% block description %}
-    <meta name="description" content="Use {{ site_name }} with PagerDuty: configure {{ site_name }} to create a PagerDuty incident when a check goes down, and resolve it when a check goes back up.">
+    <meta name="description" content="将 {{ site_name }} 与 PagerDuty 配合使用：配置 {{ site_name }} 在检查项宕机时创建 PagerDuty 事件，并在检查项恢复时将其解决。">
 {% endblock %}
 
 {% block content %}
@@ -14,16 +14,16 @@
 
     <div class="jumbotron">
         {% if request.user.is_authenticated %}
-        <p>If your team uses <a href="https://www.pagerduty.com">PagerDuty</a>,
-        you can set up {{ site_name }} to create a PagerDuty incident when
-        a check goes down, and resolve it when a check goes back up.</p>
+        <p>如果您的团队使用 <a href="https://www.pagerduty.com">PagerDuty</a>，
+        您可以设置 {{ site_name }} 在检查项宕机时创建 PagerDuty 事件，
+        并在检查项恢复时将其解决。</p>
 
         {% if install_url %}
         <div class="text-center">
             <div class="text-center">
                 <a href="{{ install_url|safe }}" class="btn btn-lg btn-default">
                     <img class="ai-icon" src="{% static 'img/pd.png' %}" alt="PagerDuty" />
-                    Connect PagerDuty
+                    连接 PagerDuty
                 </a>
             </div>
         </div>
@@ -31,11 +31,11 @@
 
         {% else %}
         <p>
-        {{ site_name }} is a <strong>free</strong> and
-        <a href="https://github.com/healthchecks/healthchecks">open source</a>
-        service for monitoring your cron jobs, background processes and
-        scheduled tasks. Before adding PagerDuty integration, please log into
-        {{ site_name }}:</p>
+        {{ site_name }} 是一款<strong>免费</strong>且
+        <a href="https://github.com/healthchecks/healthchecks">开源</a>的
+        服务，用于监控您的 cron 作业、后台进程和
+        计划任务。在添加 PagerDuty 集成之前，请登录
+        {{ site_name }}：</p>
 
         <div class="text-center">
             <a href="{% url 'hc-login' %}"
@@ -44,7 +44,7 @@
         {% endif %}
     </div>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
 
     {% if not connect_url %}
         <div class="row ai-step">
@@ -52,20 +52,19 @@
                 <span class="step-no"></span>
                 <p>
                     {% if request.user.is_authenticated %}
-                    Go
+                    前往
                     {% else %}
-                    After logging in, go
+                    登录后，前往
                     {% endif %}
 
-                    to the <strong>Integrations</strong> page,
-                    and click on <strong>Add Integration</strong> next to the
-                    PagerDuty integration.
+                     <strong>集成</strong>页面，
+                    点击 PagerDuty 集成旁的 <strong>添加集成</strong>。
                 </p>
             </div>
             <div class="col-sm-6">
                 <img
                     class="ai-guide-screenshot"
-                    alt="Screenshot"
+                    alt="截图"
                     src="{% static 'img/setup_pd_simple_0.png' %}">
             </div>
         </div>
@@ -75,14 +74,14 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Click on "Connect PagerDuty", and you will be
-                asked to log into your PagerDuty account.
+                点击"连接 PagerDuty"，系统将要求您
+                登录您的 PagerDuty 帐户。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_pd_simple_1.png' %}">
         </div>
     </div>
@@ -91,14 +90,14 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Next, PagerDuty will let set the services
-                for this integration.
+                接下来，PagerDuty 将让您设置
+                此集成的服务。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_pd_simple_2.png' %}">
         </div>
     </div>
@@ -107,15 +106,15 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                And that is all! You will then be redirected back to
-                "Integrations" page on {{ site_name }} and see
-                the new integration!
+                大功告成！您将被重定向回
+                {{ site_name }} 的"集成"页面，
+                并看到新的集成！
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_pd_simple_3.png' %}">
         </div>
     </div>

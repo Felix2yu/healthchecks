@@ -1,79 +1,79 @@
 {% if ch.kind == "email" %}
-    Email to <span>{{ ch.email.value }}</span>
+    邮件发送至 <span>{{ ch.email.value }}</span>
     {% if ch.email.notify_down and not ch.email.notify_up %}
-        (down only)
+        （仅异常）
     {% endif %}
     {% if ch.email.notify_up and not ch.email.notify_down %}
-        (up only)
+        （仅恢复）
     {% endif %}
 {% elif ch.kind == "pd" %}
-    PagerDuty account <span>{{ ch.pd.account }}</span>
+    PagerDuty 账户 <span>{{ ch.pd.account }}</span>
 {% elif ch.kind == "po" %}
-    Pushover ({{ ch.po_priority }} priority)
+    Pushover（{{ ch.po_priority }} 优先级）
 {% elif ch.kind == "slack" %}
     Slack
     {% if ch.slack_team %}
-        team <span>{{ ch.slack_team }}</span>,
-        channel <span>{{ ch.slack_channel }}</span>
+        团队 <span>{{ ch.slack_team }}</span>,
+        频道 <span>{{ ch.slack_channel }}</span>
     {% endif %}
 {% elif ch.kind == "telegram" %}
     Telegram
     {% if ch.telegram.type == "group" %}
-        group <span>{{ ch.telegram.name }}</span>
+        群组 <span>{{ ch.telegram.name }}</span>
     {% elif ch.telegram.type == "private" %}
-        user <span>{{ ch.telegram.name }}</span>
+        用户 <span>{{ ch.telegram.name }}</span>
     {% elif ch.telegram.type == "channel" %}
-        channel <span>{{ ch.telegram.name }}</span>
+        频道 <span>{{ ch.telegram.name }}</span>
     {% endif %}
 {% elif ch.kind == "sms" %}
-    SMS to <span>{{ ch.phone.value }}</span>
+    短信发送至 <span>{{ ch.phone.value }}</span>
     {% if ch.phone.notify_down and not ch.phone.notify_up %}
-        (down only)
+        （仅异常）
     {% endif %}
     {% if ch.phone.notify_up and not ch.phone.notify_down %}
-        (up only)
+        （仅恢复）
     {% endif %}
 {% elif ch.kind == "call" %}
-    Phone call to <span>{{ ch.phone.value }}</span>
+    电话呼叫至 <span>{{ ch.phone.value }}</span>
 {% elif ch.kind == "trello" %}
     Trello
-    board <span>{{ ch.trello.board_name }}</span>,
-    list <span>{{ ch.trello.list_name }}</span>
+    看板 <span>{{ ch.trello.board_name }}</span>,
+    列表 <span>{{ ch.trello.list_name }}</span>
 {% elif ch.kind == "matrix" %}
     Matrix <span>{{ ch.value }}</span>
 {% elif ch.kind == "whatsapp" %}
-    WhatsApp to <span>{{ ch.phone.value }}</span>
+    WhatsApp 发送至 <span>{{ ch.phone.value }}</span>
     {% if ch.phone.notify_down and not ch.phone.notify_up %}
-        (down only)
+        （仅异常）
     {% endif %}
     {% if ch.phone.notify_up and not ch.phone.notify_down %}
-        (up only)
+        （仅恢复）
     {% endif %}
 {% elif ch.kind == "zulip" %}
     Zulip
     {% if ch.zulip.mtype == "stream" %}
-    stream <span>{{ ch.zulip.to}}</span>
+    流 <span>{{ ch.zulip.to}}</span>
     {% elif ch.zulip.mtype == "private" %}
-    user <span>{{ ch.zulip.to}}</span>
+    用户 <span>{{ ch.zulip.to}}</span>
     {% endif %}
 {% elif ch.kind == "signal" %}
-    Signal to <span>{{ ch.phone.value }}</span>
+    Signal 发送至 <span>{{ ch.phone.value }}</span>
     {% if ch.phone.notify_down and not ch.phone.notify_up %}
-        (down only)
+        （仅异常）
     {% endif %}
     {% if ch.phone.notify_up and not ch.phone.notify_down %}
-        (up only)
+        （仅恢复）
     {% endif %}
 {% elif ch.kind == "ntfy" %}
-    ntfy topic <span>{{ ch.ntfy.topic }}</span>,
+    ntfy 主题 <span>{{ ch.ntfy.topic }}</span>,
     {{ ch.ntfy.priority_display }}
 {% elif ch.kind == "group" %}
-    Group,
+    分组，
     {% with ch.group_channels.count as num_members %}
-    {{ num_members }} member{{ num_members|pluralize}}
+    {{ num_members }} 个成员
     {% endwith %}
 {% elif ch.kind == "github" %}
-    GitHub repo <span>{{ ch.github.repo }}</span>
+    GitHub 仓库 <span>{{ ch.github.repo }}</span>
 {% elif ch.kind == "gotify" and ch.gotify.priority_display %}
     Gotify, {{ ch.gotify.priority_display }}
 {% else %}

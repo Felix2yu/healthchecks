@@ -5,25 +5,25 @@
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
         <div class="hc-dialog">
-            <h1>Change Account's Email Address</h1>
+            <h1>修改账户邮箱地址</h1>
             <div class="dialog-body">
                 <p>
-                    Your account's email address is used for sending
-                    the sign-in links and monthly reports.
+                    您的账户邮箱地址用于发送
+                    登录链接和月度报告。
 
                     <strong>
-                        Make sure you can receive emails at the new address.
+                        请确保您能接收新地址的邮件。
                     </strong>
 
-                    Otherwise, you may get locked out of
-                    your {{ site_name }} account.
+                    否则，您可能会被锁定在
+                    您的 {{ site_name }} 账户之外。
                 </p>
 
                 {% if request.user.credentials.exists or request.profile.totp %}
                 <p class="alert alert-warning">
-                    <strong>Two-factor authentication is active.</strong>
-                    If you are handing this account over to somebody else,
-                    consider disabling two-factor authentication first.
+                    <strong>双重身份验证已启用。</strong>
+                    如果您要将此账户交给他人，
+                    请考虑先禁用双重身份验证。
                 </p>
                 {% endif %}
             </div>
@@ -32,7 +32,7 @@
                 {% csrf_token %}
 
                 <div class="form-group">
-                    <label class="control-label">Current Email</label>
+                    <label class="control-label">当前邮箱</label>
                     <input
                         type="text"
                         class="form-control input-lg"
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="form-group {{ form.email.css_classes }}">
-                    <label for="ce-email" class="control-label">New Email</label>
+                    <label for="ce-email" class="control-label">新邮箱</label>
                     <input
                         type="email"
                         class="form-control input-lg"
@@ -58,7 +58,7 @@
 
                 <div class="clearfix">
                     <button type="submit" class="btn btn-lg btn-primary pull-right">
-                        Change Email
+                        修改邮箱
                     </button>
                 </div>
             </form>

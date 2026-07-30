@@ -29,7 +29,7 @@ def add(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
             channel.save()
 
             channel.assign_all_checks()
-            messages.success(request, "The Google Chat integration has been added!")
+            messages.success(request, "Google Chat 集成已添加！")
             return redirect("hc-channels", project.code)
     else:
         form = forms.AddUrlForm()

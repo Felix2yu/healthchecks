@@ -1,47 +1,45 @@
 {% extends "base_project.html" %}
 {% load compress static hc_extras %}
 
-{% block title %}Status Badges - {{ site_name }}{% endblock %}
+{% block title %}状态徽章 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div id="status-badges" class="row">
     <div class="col-sm-12">
-        <h1>Status Badges</h1>
+        <h1>状态徽章</h1>
         <p>
-            {{ site_name }} provides status badges for each of the tags
-            you have used. The badges have public, but hard-to-guess
-            URLs. You can use them in your READMEs,
-            dashboards or status pages.
+            {{ site_name }} 为您使用的每个标签提供状态徽章。
+            这些徽章拥有公开但难以猜测的 URL。
+            您可以在 README、仪表盘或状态页面中使用它们。
         </p>
-        <p>Each badge can be in one of the following states:</p>
+        <p>每个徽章可以处于以下状态之一：</p>
         <ul>
-            <li><strong>up</strong> – all matching checks are up.</li>
-            <li><strong>down</strong> – at least one check is currently down.</li>
+            <li><strong>正常</strong> – 所有匹配的检查项均正常。</li>
+            <li><strong>异常</strong> – 至少有一个检查项当前异常。</li>
         </ul>
         <p>
-            As an option, the badges can report a third state:
-           <strong>late</strong> (when at least one check is running late but has not
-           exceeded its grace time yet).
+            作为可选功能，徽章还可以报告第三种状态：
+           <strong>延迟</strong>（当至少一个检查项运行延迟但尚未超过宽限期时）。
         </p>
     </div>
 
     <div class="col-md-4">
-        <h2>Badge Generator</h2>
+        <h2>徽章生成器</h2>
         {% csrf_token %}
         <form id="badge-settings-form">
         <div class="form-group">
-            <p>Generate a badge for</p>
+            <p>为以下目标生成徽章</p>
 
             <label class="radio-container">
                 <input type="radio" name="target" value="all" autocomplete="off" checked>
                 <span class="radiomark"></span>
-                All checks in the project
+                项目中的所有检查项
             </label>
             {% if tags %}
             <label class="radio-container">
                 <input type="radio" name="target" value="tag" autocomplete="off">
                 <span class="radiomark"></span>
-                The checks tagged with this tag:
+                使用此标签的检查项：
             </label>
 
             <select
@@ -58,7 +56,7 @@
             <label class="radio-container">
                 <input type="radio" name="target" value="check" autocomplete="off">
                 <span class="radiomark"></span>
-                A specific check:
+                特定检查项：
             </label>
 
             <select
@@ -73,7 +71,7 @@
             {% endif %}
         </div>
         <div class="form-group">
-        <p>Badge format</p>
+        <p>徽章格式</p>
             <label class="radio-container">
                 <input type="radio" name="fmt" value="svg" autocomplete="off" checked>
                 <span class="radiomark"></span> SVG
@@ -88,14 +86,14 @@
             </label>
         </div>
         <div class="form-group">
-            <p>Badge states</p>
+            <p>徽章状态</p>
             <label class="radio-container">
                 <input type="radio" name="states" value="2" autocomplete="off" checked>
-                <span class="radiomark"></span> Two states (<strong>up</strong>, <strong>down</strong>)
+                <span class="radiomark"></span>                     两种状态（<strong>正常</strong>、<strong>异常</strong>）
             </label>
             <label class="radio-container">
                 <input type="radio" name="states" value="3" autocomplete="off">
-                <span class="radiomark"></span> Three states (<strong>up</strong>, <strong>late</strong> or <strong>down</strong>)
+                <span class="radiomark"></span>                     三种状态（<strong>正常</strong>、<strong>延迟</strong>或<strong>异常</strong>）
             </label>
         </div>
         </form>

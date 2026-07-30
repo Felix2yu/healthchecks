@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load compress hc_extras static %}
 
-{% block title %}Log In - {{ site_name }}{% endblock %}
+{% block title %}登录 - {{ site_name }}{% endblock %}
 
 {% block description %}{% endblock %}
 
@@ -15,17 +15,17 @@
         {% if account_closed %}
         <div class="alert alert-info">
             <p>
-                <strong>Account closed.</strong>
-                Your account has been closed and its associated data has been deleted.
+                <strong>账户已关闭。</strong>
+                您的账户已关闭，相关数据已删除。
             </p>
         </div>
         {% endif %}
 
-        <h1>Log In to {{ site_name }}</h1>
+        <h1>登录 {{ site_name }}</h1>
         {% if bad_link %}
         <div class="alert alert-warning">
-            <p>The login link you just used is either incorrect or expired.</p>
-            <p>Please use the form below to request a fresh login link.</p>
+            <p>您刚刚使用的登录链接不正确或已过期。</p>
+            <p>请使用下面的表单请求一个新的登录链接。</p>
         </div>
         {% endif %}
 
@@ -40,7 +40,7 @@
                         {% for e in magic_form.identity.errors %}{{ e }}{% endfor %}
                     </p>
                     {% else %}
-                    <p>Enter your <strong>email address</strong>.</p>
+                    <p>输入您的<strong>邮箱地址</strong>。</p>
                     {% endif %}
 
                     <input
@@ -52,19 +52,19 @@
                         autocomplete="email">
 
                     <p id="link-instruction">
-                        We will email you a magic log in link.
+                        我们会向您发送一个神奇的登录链接。
                     </p>
 
                     <button type="submit" class="btn btn-lg btn-primary btn-block">
-                        Email Me a Link
+                        发送登录链接
                     </button>
                 </form>
-                <div id="login-sep" class="hidden-xs"><div>or</div></div>
+                <div id="login-sep" class="hidden-xs"><div>或</div></div>
             </div>
 
             <div class="col-xs-12 visible-xs-block">
                 <div id="xs-login-sep">
-                    <div>or</div>
+                    <div>或</div>
                 </div>
             </div>
             {% endif %}
@@ -77,10 +77,10 @@
                     {% if form.non_field_errors %}
                         <p class="text-danger">{{ form.non_field_errors|join:"" }}</p>
                     {% elif form.errors %}
-                        <p class="text-danger">Incorrect email or password.</p>
+                        <p class="text-danger">邮箱或密码不正确。</p>
                     {% else %}
                     <p>
-                        Enter your <strong>email address</strong> and <strong>password</strong>.
+                        输入您的<strong>邮箱地址</strong>和<strong>密码</strong>。
                     </p>
                     {% endif %}
 
@@ -97,14 +97,14 @@
                         type="password"
                         class="form-control input-lg"
                         name="password"
-                        placeholder="your password">
+                        placeholder="您的密码">
 
                     <p id="forgot-password">
-                        <a href="#" data-toggle="modal" data-target="#lost-password-modal">Lost your password?</a>
+                        <a href="#" data-toggle="modal" data-target="#lost-password-modal">忘记密码？</a>
                     </p>
 
                     <button type="submit" class="btn btn-lg btn-primary btn-block">
-                        Log In
+                        登录
                     </button>
                 </form>
             </div>
@@ -121,30 +121,30 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4>Lost Password?</h4>
+                <h4>忘记密码？</h4>
             </div>
             <div class="modal-body">
                 <p>
-                    If you need to reset your password, please do the following:
+                    如果您需要重置密码，请执行以下操作：
                 </p>
                 <ol>
-                    <li>Log in using the <strong>Email Me a Link</strong> method.</li>
+                    <li>使用<strong>发送登录链接</strong>方式登录。</li>
                     <li>
-                        Once in your account, go to
-                        <strong>Account Settings › Set Password</strong>
-                        to set a new password.
+                        登录账户后，前往
+                        <strong>账户设置 › 设置密码</strong>
+                        设置新密码。
                     </li>
                 </ol>
                 {% if support_email %}
                 <p>
-                    Please contact us at
+                    如需帮助，请通过
                     <a href="mailto:{{ support_email }}">{{ support_email }}</a>
-                    in case you need assistance!
+                    联系我们！
                 </p>
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Got it</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">知道了</button>
             </div>
         </div>
     </div>

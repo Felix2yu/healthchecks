@@ -1,16 +1,16 @@
 {% extends "base_bare.html" %}
 
-{% block title %}Unsubscribe{% endblock %}
+{% block title %}取消订阅{% endblock %}
 
 {% block content %}
-<p>Please press the button below to unsubscribe:</p>
+<p>请点击下方按钮取消订阅：</p>
 <br />
 <form id="form" method="post">
     <input
         id="submit-btn"
         type="submit"
         class="btn btn-lg btn-primary"
-        value="Unsubscribe">
+        value="取消订阅">
 </form>
 
 {% if autosubmit %}

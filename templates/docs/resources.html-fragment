@@ -1,60 +1,59 @@
-<h1>Third-Party Resources</h1>
-<p>A collection of third-party software projects that integrate with SITE_NAME.
-Please submit additions and corrections
-<a href="https://github.com/healthchecks/healthchecks/issues">on GitHub</a>.</p>
-<h2>Command Runners, Shell Wrappers</h2>
+<h1>第三方资源</h1>
+<p>与 SITE_NAME 集成的第三方软件项目集合。
+请通过 <a href="https://github.com/healthchecks/healthchecks/issues">GitHub</a> 提交补充和更正。</p>
+<h2>命令运行器、Shell 包装器</h2>
 <ul>
-<li><a href="https://github.com/bdd/runitor">runitor</a> - A command runner with Healthchecks.io integration to keep your scripts and containers simple.</li>
-<li><a href="https://github.com/pforret/crontask">crontask.sh</a> – Bash wrapper to use in crontab. Supports pinging.</li>
-<li><a href="https://github.com/dimo414/task-mon">task-mon</a> – A small binary for notifying Healthchecks.io when a command runs, written in Rust.</li>
-<li><a href="https://gist.github.com/odolbeau/bd6d8eb7910d1289e2687682c8db9275">hc-monitor</a> – Bash wrapper, supports pinging.</li>
-<li><a href="https://github.com/hartwork/pytocron">pytocron</a> – Cron implementation in Python with built-in Healthchecks support.</li>
+<li><a href="https://github.com/bdd/runitor">runitor</a> - 具有 Healthchecks.io 集成的命令运行器，让你的脚本和容器保持简单。</li>
+<li><a href="https://github.com/pforret/crontask">crontask.sh</a> – 用于 crontab 的 Bash 包装器。支持 ping。</li>
+<li><a href="https://github.com/dimo414/task-mon">task-mon</a> – 用于在命令运行时通知 Healthchecks.io 的小型二进制文件，用 Rust 编写。</li>
+<li><a href="https://gist.github.com/odolbeau/bd6d8eb7910d1289e2687682c8db9275">hc-monitor</a> – Bash 包装器，支持 ping。</li>
+<li><a href="https://github.com/hartwork/pytocron">pytocron</a> – 带有内置 Healthchecks 支持的 Python cron 实现。</li>
 </ul>
-<h2>Tools for Self-Hosting</h2>
+<h2>自托管工具</h2>
 <ul>
-<li><a href="https://github.com/linuxserver/docker-healthchecks">linuxserver/docker-healthchecks</a> – Alternative Docker image</li>
-<li><a href="https://github.com/galexrt/docker-healthchecks">galexrt/docker-healthchecks</a> – Alternative Docker image</li>
-<li><a href="https://elest.io/open-source/healthchecks">Elestio</a> – Managed hosting platform with Healthchecks support (uses the linuxserver image)</li>
+<li><a href="https://github.com/linuxserver/docker-healthchecks">linuxserver/docker-healthchecks</a> – 替代 Docker 镜像</li>
+<li><a href="https://github.com/galexrt/docker-healthchecks">galexrt/docker-healthchecks</a> – 替代 Docker 镜像</li>
+<li><a href="https://elest.io/open-source/healthchecks">Elestio</a> – 具有 Healthchecks 支持的托管平台（使用 linuxserver 镜像）</li>
 </ul>
-<h2>API Wrappers</h2>
+<h2>API 包装器</h2>
 <h3>Ansible</h3>
 <ul>
-<li><a href="https://github.com/ansible-collections/community.healthchecksio">ansible-collections/community.healthchecksio</a> - Ansible modules for automating tasks on Healthchecks.io</li>
+<li><a href="https://github.com/ansible-collections/community.healthchecksio">ansible-collections/community.healthchecksio</a> - 用于在 Healthchecks.io 上自动化任务的 Ansible 模块</li>
 </ul>
 <h3>Go</h3>
 <ul>
-<li><a href="https://github.com/kristofferahl/go-healthchecksio">kristofferahl/go-healthchecksio</a> – Supports listing, creating, updating, deleting, pausing, pinging.</li>
-<li><a href="https://gitlab.com/etke.cc/go/healthchecks">gitlab.com/etke.cc/go/healthchecks</a> – Supports pinging.</li>
+<li><a href="https://github.com/kristofferahl/go-healthchecksio">kristofferahl/go-healthchecksio</a> – 支持列出、创建、更新、删除、暂停、ping。</li>
+<li><a href="https://gitlab.com/etke.cc/go/healthchecks">gitlab.com/etke.cc/go/healthchecks</a> – 支持 ping。</li>
 </ul>
 <h3>PowerShell</h3>
 <ul>
-<li><a href="https://github.com/davehope/HealthChecksIOStatusReport">davehope/HealthChecksIOStatusReport</a> – Supports pinging.</li>
-<li><a href="https://github.com/ptmorris1/healthchecks-pwsh">ptmorris1/healthchecks-pwsh</a> – Supports pinging and all Management API calls.</li>
+<li><a href="https://github.com/davehope/HealthChecksIOStatusReport">davehope/HealthChecksIOStatusReport</a> – 支持 ping。</li>
+<li><a href="https://github.com/ptmorris1/healthchecks-pwsh">ptmorris1/healthchecks-pwsh</a> – 支持 ping 和所有 Management API 调用。</li>
 </ul>
 <h3>Python</h3>
 <ul>
-<li><a href="https://github.com/samarpan-rai/healthchecks_wrapper">samarpan-rai/healthchecks_wrapper</a> – Python context manager, supports pinging.</li>
-<li><a href="https://github.com/danidelvalle/healthchecks-decorator">danidelvalle/healthchecks-decorator</a> – Python context manager, supports pinging.</li>
-<li><a href="https://github.com/andrewthetechie/py-healthchecks.io">andrewthetechie/py-healthchecks.io</a> – Supports creating, pinging. Has sync and async implementations.</li>
+<li><a href="https://github.com/samarpan-rai/healthchecks_wrapper">samarpan-rai/healthchecks_wrapper</a> – Python 上下文管理器，支持 ping。</li>
+<li><a href="https://github.com/danidelvalle/healthchecks-decorator">danidelvalle/healthchecks-decorator</a> – Python 上下文管理器，支持 ping。</li>
+<li><a href="https://github.com/andrewthetechie/py-healthchecks.io">andrewthetechie/py-healthchecks.io</a> – 支持创建、ping。具有同步和异步实现。</li>
 </ul>
 <h3>Rust</h3>
 <ul>
-<li><a href="https://github.com/msfjarvis/healthchecks-rs">msfjarvis/healthchecks-rs</a> – Supports all current Ping API and Management API calls.</li>
+<li><a href="https://github.com/msfjarvis/healthchecks-rs">msfjarvis/healthchecks-rs</a> – 支持所有当前的 Ping API 和 Management API 调用。</li>
 </ul>
 <h3>Terraform</h3>
 <ul>
-<li><a href="https://github.com/kristofferahl/terraform-provider-healthchecksio">terraform-provider-healthchecksio</a> – Terraform Provider for Healthchecks.io. Supports creating, updating, deleting checks.</li>
+<li><a href="https://github.com/kristofferahl/terraform-provider-healthchecksio">terraform-provider-healthchecksio</a> – Healthchecks.io 的 Terraform Provider。支持创建、更新、删除检查项。</li>
 </ul>
-<h2>Backup Software Integrations</h2>
+<h2>备份软件集成</h2>
 <ul>
-<li><a href="https://github.com/garethgeorge/backrest">backrest</a> – A web UI and orchestrator for restic, includes Healthchecks.io support.</li>
-<li><a href="https://github.com/binarybucks/restic-tools">binarybucks/restic-tools</a> – Wrapper around restic backup, with Healthchecks.io support.</li>
-<li><a href="https://torsion.org/borgmatic/docs/how-to/monitor-your-backups/#healthchecks-hook">borgmatic</a> – A frontend to Borg, includes Healthchecks.io support.</li>
-<li><a href="https://emborg.readthedocs.io/en/latest/monitoring.html#healthchecks-io">emborg</a> – A frontend to Borg, includes Healthchecks.io support.</li>
+<li><a href="https://github.com/garethgeorge/backrest">backrest</a> – restic 的 Web UI 和编排器，包含 Healthchecks.io 支持。</li>
+<li><a href="https://github.com/binarybucks/restic-tools">binarybucks/restic-tools</a> – restic 备份的包装器，具有 Healthchecks.io 支持。</li>
+<li><a href="https://torsion.org/borgmatic/docs/how-to/monitor-your-backups/#healthchecks-hook">borgmatic</a> – Borg 的前端，包含 Healthchecks.io 支持。</li>
+<li><a href="https://emborg.readthedocs.io/en/latest/monitoring.html#healthchecks-io">emborg</a> – Borg 的前端，包含 Healthchecks.io 支持。</li>
 </ul>
-<h2>Dashboards</h2>
+<h2>仪表盘</h2>
 <ul>
-<li><a href="https://github.com/healthchecks/dashboard">healthchecks/dashboard</a> – A standalone HTML page showing the status of the checks in your account.</li>
-<li><a href="https://github.com/nicoandrade/healthchecks-front">nicoandrade/healthchecks-front</a> – Beautiful &amp; free web dashboard, works great on desktop and mobile.</li>
-<li><a href="https://apps.apple.com/ca/app/kumabar/id6746335356?mt=12">KumaBar</a> – MacOS menu bar app, supports Uptime Kuma and Healthchecks.io.</li>
+<li><a href="https://github.com/healthchecks/dashboard">healthchecks/dashboard</a> – 显示你账户中检查项状态的独立 HTML 页面。</li>
+<li><a href="https://github.com/nicoandrade/healthchecks-front">nicoandrade/healthchecks-front</a> – 漂亮且免费的 Web 仪表盘，在桌面和移动设备上都能很好地工作。</li>
+<li><a href="https://apps.apple.com/ca/app/kumabar/id6746335356?mt=12">KumaBar</a> – MacOS 菜单栏应用，支持 Uptime Kuma 和 Healthchecks.io。</li>
 </ul>

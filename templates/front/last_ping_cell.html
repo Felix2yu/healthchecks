@@ -3,7 +3,7 @@
 {% if check.last_ping %}
     <span data-dt="{{ check.last_ping|timestamp }}">{{ check.last_ping|naturaltime }}</span>
     {% if check.has_confirmation_link %}
-    <br /><span class="label label-confirmation">confirmation link</span>
+    <br /><span class="label label-confirmation">确认链接</span>
     {% elif check.clamped_last_duration %}
 	<br />
 	<span class="checks-subline">
@@ -11,5 +11,5 @@
 	</span>
     {% endif %}
 {% else %}
-    Never
+    从未
 {% endif %}

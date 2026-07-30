@@ -1,14 +1,13 @@
 # PHP
 
-Below is an example of making an HTTP request to SITE_NAME from PHP.
+以下是从 PHP 向 SITE_NAME 发起 HTTP 请求的示例。
 
 ```php
 file_get_contents('PING_URL');
 ```
 
-If you would like to setup timeout and retry options, as discussed in the
-[reliability tips section](../reliability_tips/), there is a
-[curl package](https://www.phpcurlclass.com/) available that lets you do that easily:
+如果你想要设置超时和重试选项（如[可靠性提示](../reliability_tips/)中所述），有一个
+[curl 包](https://www.phpcurlclass.com/)可以轻松实现：
 
 ```php
 use Curl\Curl;
@@ -19,4 +18,4 @@ $curl->setTimeout(5);
 $curl->get('PING_URL');
 ```
 
-Note: this code does not throw any exceptions.
+注意：此代码不会抛出任何异常。

@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Discord Integration for {{ site_name }}{% endblock %}
+{% block title %}Discord 集成 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -10,17 +10,16 @@
 
     <div class="jumbotron">
         <p>
-            With this integration, {{ site_name }} will send
-            a notification to a <a href="http://discord.com/">Discord</a>
-            channel when a check
-            goes <strong>up</strong> or <strong>down</strong>.
+            通过此集成，{{ site_name }} 将在检查项
+            <strong>恢复</strong>或<strong>宕机</strong>时
+            向 <a href="http://discord.com/">Discord</a> 频道发送通知。
         </p>
 
         <form method="post" class="text-center">
             {% csrf_token %}
             <a href="{{ authorize_url }}" class="btn btn-lg btn-default">
                 <img class="ai-icon" src="{% static 'img/discord.png' %}" alt="Discord" />
-                Connect Discord
+                连接 Discord
             </a>
         </form>
     </div>

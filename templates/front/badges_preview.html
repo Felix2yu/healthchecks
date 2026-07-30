@@ -1,9 +1,9 @@
-<h2>Preview</h2>
+<h2>预览</h2>
 
 {% if fmt == "json" %}
 <pre class="fetch-json" data-url="{{ url }}"></pre>
 
-<p>JSON endpoint URL</p>
+<p>JSON 接口 URL</p>
 <input
     class="form-control"
     type="text" name=""
@@ -11,18 +11,18 @@
 
 {% else %}
 <img src="{{ url }}">
-<p>Badge URL</p>
+<p>徽章 URL</p>
 <input
     class="form-control"
     type="text" name=""
     value="{{ url }}" readonly>
-<p>HTML code</p>
+<p>HTML 代码</p>
 <input
     class="form-control"
     type="text"
     name=""
     value="&lt;img src=&quot;{{ url }}&quot; alt=&quot;{{ label }}&quot;&gt;" readonly>
-<p>Markdown code</p>
+<p>Markdown 代码</p>
 <input
     class="form-control"
     type="text"

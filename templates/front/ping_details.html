@@ -3,24 +3,24 @@
 <div class="modal-body">
     <h3>Ping #{{ ping.n }}
         {% if ping.kind == "ign" %}
-        <span class="text-muted">(ignored)</span>
+        <span class="text-muted">（已忽略）</span>
         {% elif ping.exitstatus > 0 %}
-        <span class="text-danger">(failure, exit status {{ ping.exitstatus }})</span>
+        <span class="text-danger">（失败，退出状态 {{ ping.exitstatus }}）</span>
         {% elif ping.exitstatus == 0 %}
-        <span class="text-success">(exit status 0)</span>
+        <span class="text-success">（退出状态 0）</span>
         {% elif ping.kind == "fail" %}
-        <span class="text-danger">(received via the <code>/fail</code> endpoint)</span>
+        <span class="text-danger">（通过 <code>/fail</code> 端点接收）</span>
         {% elif ping.kind == "start" %}
-        <span class="text-success">(received via the <code>/start</code> endpoint)</span>
+        <span class="text-success">（通过 <code>/start</code> 端点接收）</span>
         {% elif ping.kind == "log" %}
-        <span class="text-muted">(received via the <code>/log</code> endpoint)</span>
+        <span class="text-muted">（通过 <code>/log</code> 端点接收）</span>
         {% endif %}
     </h3>
 
     <div class="row">
         <div class="col-sm-12">
             <p>
-                <strong>Time Received</strong>
+                <strong>接收时间</strong>
                 <code>{{ ping.created.isoformat }}</code>
                 <div class="times" data-dt="{{ ping.created|timestamp }}">
                     {% for tz in tz_switches %}
@@ -35,7 +35,7 @@
 
         <div class="col-sm-6">
             <p>
-                <strong>Source</strong>
+                <strong>来源</strong>
                 {% if ping.scheme == "email" %}
                 {{ ping.ua }}
                 {% else %}
@@ -48,7 +48,7 @@
         {% if ping.duration %}
         <div class="col-sm-6">
             <p>
-                <strong>Duration</strong>
+                <strong>持续时间</strong>
                 <span class="ic-timer"></span> {{ ping.duration|hms }}
             </p>
         </div>
@@ -57,7 +57,7 @@
         {% if ping.rid %}
         <div class="col-sm-6">
             <p>
-                <strong>Run ID</strong>
+                <strong>运行 ID</strong>
                 <span>{{ ping.rid }}</span>
             </p>
         </div>
@@ -66,7 +66,7 @@
         {% if ping.scheme != "email" %}
         <div class="col-sm-12">
             <p>
-                <strong>User Agent</strong>
+                <strong>用户代理</strong>
                 <span class="ua">{{ ping.ua }}</span>
             </p>
         </div>
@@ -75,7 +75,7 @@
         {% if subject %}
         <div class="col-sm-12">
             <p>
-                <strong>Subject</strong>
+                <strong>主题</strong>
                 <span>{{ subject }}</span>
             </p>
         </div>
@@ -83,22 +83,21 @@
     </div>
 
     {% if ping.has_body %}
-        <h4>Request Body</h4>
+        <h4>请求正文</h4>
 
         {% if ping.object_size and not body %}
             <p class="alert alert-info">
-                The request body data is not yet available,
-                please check back later.
+                请求正文数据尚不可用，请稍后再查看。
             </p>
         {% else %}
             {% if plain or html %}
             <ul class="nav nav-pills">
                 <li>
-                    <a href="#email-body-raw" data-toggle="tab">Raw Message</a>
+                    <a href="#email-body-raw" data-toggle="tab">原始消息</a>
                 </li>
                 {% if plain %}
                 <li{% if active == 'plain' %} class="active"{% endif %}>
-                    <a href="#email-body-plain" data-toggle="tab">Text</a>
+                    <a href="#email-body-plain" data-toggle="tab">文本</a>
                 </li>
                 {% endif %}
                 {% if html %}
@@ -128,7 +127,7 @@
             <pre>{{ body }}</pre>
             {% endif %}
             <p class="download">
-                <a href="{% url 'hc-ping-body' check.code ping.n %}">Download Original</a>
+                <a href="{% url 'hc-ping-body' check.code ping.n %}">下载原始内容</a>
             </p>
         {% endif %}
     {% endif %}

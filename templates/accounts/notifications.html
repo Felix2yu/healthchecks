@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load compress hc_extras static tz %}
 
-{% block title %}Account Settings - {{ site_name }}{% endblock %}
+{% block title %}账户设置 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
         <h1 class="settings-title">
-            Settings
+            设置
             <small>{{ request.user.email }}</small>
         </h1>
     </div>
@@ -16,12 +16,12 @@
 <div class="row">
     <div class="col-sm-3">
         <ul class="nav nav-pills nav-stacked">
-            <li><a href="{% url 'hc-profile' %}">Account</a></li>
-            <li><a href="{% url 'hc-appearance' %}">Appearance</a></li>
+            <li><a href="{% url 'hc-profile' %}">账户</a></li>
+            <li><a href="{% url 'hc-appearance' %}">外观</a></li>
             {% if show_pricing %}
-            <li><a href="{% url 'hc-billing' %}">Billing</a></li>
+            <li><a href="{% url 'hc-billing' %}">账单</a></li>
             {% endif %}
-            <li class="active"><a href="{% url 'hc-notifications' %}">Email Reports</a></li>
+            <li class="active"><a href="{% url 'hc-notifications' %}">邮件报告</a></li>
         </ul>
     </div>
 
@@ -30,9 +30,9 @@
             <div id="email-reports" class="panel-body settings-block">
                 <form method="post">
                     {% csrf_token %}
-                    <h2>Email Reports</h2>
+                    <h2>邮件报告</h2>
 
-                    <p>Periodic email reports:</p>
+                    <p>定期邮件报告：</p>
                     <label class="radio-container">
                         <input
                             type="radio"
@@ -40,7 +40,7 @@
                             value="off"
                             {% if profile.reports == "off" %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        Off
+                        关闭
                     </label>
                     <label class="radio-container">
                         <input
@@ -49,7 +49,7 @@
                             value="daily"
                             {% if profile.reports == "daily" %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        <strong>Daily</strong> between 9:00 and 11:00
+                        <strong>每日</strong> 9:00-11:00 之间
                     </label>
                     <label class="radio-container">
                         <input
@@ -58,7 +58,7 @@
                             value="weekly"
                             {% if profile.reports == "weekly" %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        <strong>Weekly</strong> on Mondays
+                        <strong>每周</strong> 星期一
                     </label>
                     <label class="radio-container">
                         <input
@@ -67,11 +67,11 @@
                             value="monthly"
                             {% if profile.reports == "monthly" %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        <strong>Monthly</strong> on 1st of every month
+                        <strong>每月</strong> 1 号
                     </label>
 
                     <br>
-                    <p>Ongoing reminders if any checks are down:</p>
+                    <p>如果监控点出现故障时的持续提醒：</p>
 
                     <label class="radio-container">
                         <input
@@ -80,7 +80,7 @@
                             value="0"
                             {% if profile.nag_period.total_seconds == 0 %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        Do not remind me
+                        不提醒
                     </label>
                     <label class="radio-container">
                         <input
@@ -89,7 +89,7 @@
                             value="86400"
                             {% if profile.nag_period.total_seconds == 86400 %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        Remind me <strong>daily</strong>
+                        <strong>每日</strong>提醒我
                     </label>
                     <label class="radio-container">
                         <input
@@ -98,30 +98,31 @@
                             value="3600"
                             {% if profile.nag_period.total_seconds == 3600 %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        Remind me <strong>hourly</strong>
+                        <strong>每小时</strong>提醒我
                     </label>
 
                     <br />
                     <p class="text-muted">
-                        {% site_name %} will send reports and ongoing reminders to
-                        <strong>{{ profile.user.email }}</strong>.
+                        {% site_name %} 将向
+                        <strong>{{ profile.user.email }}</strong>
+                        发送报告和持续提醒。
                         {% if profile.next_report_date %}
                             {% timezone profile.tz %}
                                 <br />
-                                Next {{ profile.reports }} report date is
-                                {{ profile.next_report_date|date:"F j, Y" }}.
+                                下次 {{ profile.reports }} 报告日期是
+                                {{ profile.next_report_date|date:"F j, Y" }}。
                             {% endtimezone 0%}
                         {% endif %}
                     </p>
                     <br />
                     <button
                         type="submit"
-                        class="btn btn-default pull-right">Save Changes</button>
+                        class="btn btn-default pull-right">保存更改</button>
                 </form>
             </div>
             {% if status == "info" %}
             <div class="panel-footer">
-                Your settings have been updated!
+                您的设置已更新！
             </div>
             {% endif %}
         </div>

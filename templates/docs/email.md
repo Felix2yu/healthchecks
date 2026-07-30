@@ -1,59 +1,55 @@
-# Email
+# 电子邮件
 
-Alternatively to HTTP/HTTPS requests, you can "ping" checks by
-sending email messages to special email addresses.
+除了 HTTP/HTTPS 请求，你也可以通过向特殊电子邮件地址发送邮件来"ping"检查项。
 
-![Email address for pinging via email](IMG_URL/emails.png)
+![通过电子邮件进行 ping 的邮箱地址](IMG_URL/emails.png)
 
-## Keyword Filtering {: #keyword-filtering }
+## 关键字过滤 {: #keyword-filtering }
 
-By default, SITE_NAME will consider any email received at the displayed address as
-a "success" signal. Optionally, you can configure SITE_NAME to look for specific
-keywords in the subject line or the message body to decide if the message
-is a "start," a "success," or a "failure" signal.
+默认情况下，SITE_NAME 将收到的任何发送到显示地址的邮件视为
+"success"信号。你也可以配置 SITE_NAME 在主题行或邮件正文中查找特定
+关键字，以判断该消息是"start"、"success"还是"failure"信号。
 
-SITE_NAME treats keywords as case-sensitive (for example, "Error" and "error" are
-different keywords), and matches them in a specific order:
+SITE_NAME 将关键字视为区分大小写（例如，"Error"和"error"是
+不同的关键字），并按特定顺序进行匹配：
 
-* SITE_NAME first checks the message for presence of any **failure** keyword.
-* It then checks for any **success** keyword.
-* It then checks for any **start** keyword.
-* If filtering is enabled but none of the keywords match, SITE_NAME either **ignores**
-  the email message or **classifies it as a failure signal**, depending on the
-  selected "If no keywords match" option.
+* SITE_NAME 首先检查消息中是否存在任何 **failure** 关键字。
+* 然后检查是否存在任何 **success** 关键字。
+* 然后检查是否存在任何 **start** 关键字。
+* 如果过滤已启用但没有关键字匹配，SITE_NAME 将根据所选的
+  "如果无关键字匹配"选项，**忽略**该邮件或**将其归类为故障信号**。
 
-You can set up keywords in the **Filtering Rules** dialog:
+你可以在**过滤规则**对话框中设置关键字：
 
-![Setting filtering rules](IMG_URL/filtering_rules.png)
+![设置过滤规则](IMG_URL/filtering_rules.png)
 
-## Use Case: Newsletter Delivery Monitoring
+## 用例：新闻通讯投递监控
 
-Consider a cron job that runs weekly and sends newsletters
-to a list of email addresses. You have already set up a check to get alerted
-when your cron job fails to run. But you ultimately want to check if
-**your emails are getting sent and delivered**.
+假设有一个每周运行并发送新闻通讯的 cron 任务
+到一组电子邮件地址。你已经设置了一个检查项以便在 cron 任务
+未能运行时收到警报。但你最终想检查的是
+**你的邮件是否被发送并投递成功**。
 
-The solution: set up another check, and add its email address to your list of
-recipient email addresses. Set its Period to 1 week. As long as your weekly email
-script runs correctly, and there are no email delivery issues,
-SITE_NAME will regularly receive an email, and the check will stay up.
+解决方案：设置另一个检查项，将其电子邮件地址添加到你的
+收件人电子邮件地址列表中。将其周期设置为 1 周。只要你的每周邮件
+脚本正常运行，并且没有邮件投递问题，
+SITE_NAME 就会定期收到邮件，该检查项将保持正常状态。
 
-## Use Case: Backup Monitoring
+## 用例：备份监控
 
-If you use backup software that can be configured to send an email report
-after each backup run, you can monitor it with SITE_NAME. Create a new check in
-SITE_NAME and configure your backup software to send email reports to its email
-address. Then set up keywords in the **Filtering Rules** dialog to distinguish
-between successful and failed backup runs. SITE_NAME will keep quiet as long
-as it receives regular success reports, but will notify you when it
-does not receive a success report for too long or receives a failure report.
+如果你使用的备份软件可以配置为在每次备份运行后发送电子邮件报告，
+你可以使用 SITE_NAME 对其进行监控。在 SITE_NAME 中创建一个新的检查项，
+并配置你的备份软件将电子邮件报告发送到其电子邮件地址。
+然后在**过滤规则**对话框中设置关键字，以区分
+成功和失败的备份运行。只要 SITE_NAME 定期收到成功报告，
+它就会保持静默，但如果长时间未收到成功报告或收到失败报告，
+它将通知你。
 
-## Email Delivery Delays
+## 邮件投递延迟
 
-Emails are more susceptible to random delivery delays than HTTP requests.
-Adjust the grace time parameter for your checks to account for the
-possible email delivery delays, and avoid false alerts.
+邮件比 HTTP 请求更容易受到随机投递延迟的影响。
+调整检查项的宽限期参数以考虑
+可能的邮件投递延迟，避免误报。
 
-Tracking job durations (using the "start" and "success" signals) will be less
-accurate when pinging via email and may not be feasible at all for jobs with
-very short durations.
+通过邮件进行 ping 时，跟踪任务持续时间（使用"start"和"success"信号）将
+不够精确，对于持续时间很短的任务可能根本不可行。

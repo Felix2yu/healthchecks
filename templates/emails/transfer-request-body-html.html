@@ -2,18 +2,17 @@
 {% load hc_extras %}
 
 {% block content %}
-Hello,
+您好，
 <br />
 
-<strong>{{ project.owner.email }}</strong> would like to transfer the ownership of
-their project
-{% if project.name %}<strong>{{ project.name }}</strong>{% endif %} to you.
+<strong>{{ project.owner.email }}</strong> 希望将他们的项目
+{% if project.name %}<strong>{{ project.name }}</strong>{% endif %} 的所有权转移给您。
 <br /><br />
-To accept or reject this request, please visit the project's Settings
-page:
+
+要接受或拒绝此请求，请访问项目的设置页面：
 {% endblock %}
 
 {% block content_more %}
-Thanks,<br>
-The {% site_name %} Team
+谢谢，<br>
+{% site_name %} 团队
 {% endblock %}

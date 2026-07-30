@@ -104,16 +104,16 @@ def verify_signal_number(request: AuthenticatedHttpRequest) -> HttpResponse:
 
     # Enforce per-account rate limit (50 verifications per day)
     if not TokenBucket.authorize_signal_verification(request.user):
-        return render_result("Verification rate limit exceeded")
+        return render_result("验证频率超限")
 
     form = forms.SignalRecipientForm(request.POST)
     if not form.is_valid():
-        return render_result("Invalid phone number")
+        return render_result("无效的手机号码")
 
     recipient = form.cleaned_data["recipient"]
     # Enforce per-recipient rate limit (6 messages per minute)
     if not TokenBucket.authorize_signal(recipient):
-        return render_result("Verification rate limit exceeded")
+        return render_result("验证频率超限")
 
     try:
         Signal.send(recipient, f"Test message from {settings.SITE_NAME}")

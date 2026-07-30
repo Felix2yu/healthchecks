@@ -1,42 +1,38 @@
-# Pinging Reliability Tips
+# Ping 可靠性提示
 
-Sending monitoring signals over the public internet is inherently unreliable.
-HTTP requests can sometimes take excessively long or fail completely
-for a variety of reasons. Here are some general tips to make your monitoring
-code more robust.
+通过公共互联网发送监控信号本质上不可靠。
+HTTP 请求有时可能耗时过长或因各种原因完全失败。
+以下是一些让你的监控代码更健壮的通用技巧。
 
-## Specify HTTP Request Timeout
+## 指定 HTTP 请求超时
 
-Put a time limit on how long each ping is allowed to take. This is especially
-important when sending a "start" signal at the start of a job: you don't want
-a stuck ping to prevent the actual job from running. Another case is a continuously
-running worker process that pings SITE_NAME after each completed item. A stuck
-request could block the whole process. An explicit per-request time limit mitigates
-this problem.
+为每个 ping 设置允许的时间限制。这在任务开始时发送"start"信号时
+尤为重要：你不希望一个卡住的 ping 阻止实际任务的运行。
+另一种情况是持续运行的 worker 进程在每完成一个项目后 ping SITE_NAME。
+一个卡住的请求可能阻塞整个进程。明确的每个请求时间限制可以缓解
+这个问题。
 
-Specifying the timeout depends on the tool you use. curl, for example, has the
-`--max-time` (shorthand: `-m`) parameter:
+指定超时取决于你使用的工具。例如，curl 有 `--max-time`（简写：`-m`）参数：
 
 ```bash
-# Send an HTTP request, 10 second timeout:
+# 发送 HTTP 请求，10 秒超时：
 curl -m 10 PING_URL
 ```
 
-## Use Retries
+## 使用重试
 
-To minimize the amount of false alerts you get from SITE_NAME, instruct your HTTP
-client to retry failed requests several times.
+为了最大程度减少从 SITE_NAME 收到的误报数量，请指示你的 HTTP
+客户端重试失败的请求若干次。
 
-Specifying the retry policy depends on the tool you use. curl, for example, has the
-`--retry` parameter:
+指定重试策略取决于你使用的工具。例如，curl 有 `--retry` 参数：
 
 ```bash
-# Retry up to 5 times, uses an increasing delay between each retry (1s, 2s, 4s, 8s, ...)
+# 最多重试 5 次，每次重试之间使用递增的延迟（1s、2s、4s、8s...）
 curl --retry 5 PING_URL
 ```
 
-## Handle Exceptions
+## 处理异常
 
-Make sure you know how your HTTP client handles failed requests. For example,
-if you use an HTTP library that raises exceptions, decide if you want to
-catch the exceptions or let them bubble up.
+确保你了解你的 HTTP 客户端如何处理失败的请求。例如，
+如果你使用的 HTTP 库会抛出异常，请决定是要
+捕获异常还是让它们往外传递。

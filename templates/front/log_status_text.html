@@ -1,29 +1,29 @@
 {% load hc_extras humanize %}
 {% with check.get_status as status %}
     {% if status == "down" %}
-        This check is down. Last ping was {{ check.last_ping|naturaltime }}.
+        此检查项异常。上次 Ping 是 {{ check.last_ping|naturaltime }}。
     {% elif status == "up" %}
-        This check is up. Last ping was {{ check.last_ping|naturaltime }}.
+        此检查项正常。上次 Ping 是 {{ check.last_ping|naturaltime }}。
     {% elif status == "grace" %}
-        This check is late. Last ping was {{ check.last_ping|naturaltime }}.
+        此检查项延迟。上次 Ping 是 {{ check.last_ping|naturaltime }}。
     {% elif status == "paused" and check.manual_resume %}
-        This check is paused, and will ignore pings until resumed.
+        此检查项已暂停，将忽略 Ping 直到恢复。
         {% if rw %}
-        <a id="resume-btn" href="#">(Resume&nbsp;Now)</a>
+        <a id="resume-btn" href="#">（立即恢复）</a>
         {% endif %}
     {% elif status == "paused" and check.last_start %}
-        This check is ready for pings.
+        此检查项已准备好接收 Ping。
     {% elif status == "paused" %}
-        This check is paused.
+        此检查项已暂停。
     {% elif status == "new" and check.n_pings %}
-        This check is ready for pings.
+        此检查项已准备好接收 Ping。
     {% elif status == "new" %}
-        This check has never received a ping.
+        此检查项从未收到过 Ping。
     {% endif %}
 
     {% if check.last_start %}
         <br />
-        Currently running, started {{ check.last_start|hms }} ago.
+        正在运行，{{ check.last_start|hms }} 前开始。
     {% else %}
         <br /> &nbsp;
     {% endif %}

@@ -1,119 +1,117 @@
-# Measuring Script Run Time
+# 测量脚本运行时间
 
- Append `/start` to a ping URL and use it to signal when a job starts.
- After receiving a start signal, Healthchecks.io will show the check as "Started."
- It will store the "start" events and display the job execution times. SITE_NAME
- calculates the job execution times as the time gaps between adjacent "start" and
- "success" events.
+在 ping URL 后追加 `/start`，并在任务开始时使用它发送信号。
+收到 start 信号后，SITE_NAME 将显示检查项为"Started"。
+它将存储"start"事件并显示任务执行时间。SITE_NAME
+将任务执行时间计算为相邻"start"和"success"事件之间的时间间隔。
 
-Note: if appending `/start` to the ping URL on the client side is not feasible, you can
-alternatively configure SITE_NAME to classify HTTP pings as start, success, or failure
-signals [by looking for specific keywords in the HTTP request body](../configuring_checks/#filtering-rules).
+注意：如果在客户端向 ping URL 追加 `/start` 不可行，您也可以
+配置 SITE_NAME 通过[在 HTTP 请求体中查找特定关键字](../configuring_checks/#filtering-rules)
+来将 HTTP ping 分类为 start、success 或 failure 信号。
 
-## Alerting Logic
+## 警报逻辑
 
-SITE_NAME applies an additional alerting rule for jobs that use the `/start` signal.
+SITE_NAME 对使用 `/start` 信号的任务应用额外的警报规则。
 
-If a job sends a "start" signal but does not send a "success"
-signal within its configured grace time, SITE_NAME will assume the job
-has failed. It will mark the job as "down" and send out alerts.
+如果任务发送了"start"信号但未在其配置的宽限期内发送"success"
+信号，SITE_NAME 将假定该任务
+已失败。它将把该任务标记为"down"并发出发警报。
 
-## Usage Example
+## 使用示例
 
-Below is a code example in Python:
+以下是 Python 代码示例：
 
 ```python
 import requests
 URL = "PING_URL"
 
 
-# "/start" kicks off a timer: if the job takes longer than
-# the configured grace time, SITE_NAME will mark it as "down"
+# "/start" 启动计时器：如果任务执行时间超过
+# 配置的宽限期，SITE_NAME 将将其标记为"down"
 try:
     requests.get(URL + "/start", timeout=5)
 except requests.exceptions.RequestException:
-    # If the network request fails for any reason, we don't want
-    # it to prevent the main job from running
+    # 如果网络请求因任何原因失败，我们不希望
+    # 它阻止主任务的运行
     pass
 
 
-# TODO: run the job here
+# TODO: 在此处运行任务
 fib = lambda n: n if n < 2 else fib(n - 1) + fib(n - 2)
 print("F(42) = %d" % fib(42))
 
-# Signal success:
+# 发送 success 信号：
 requests.get(URL)
 ```
 
-## Viewing Measured Run Times
+## 查看测量的运行时间
 
-When SITE_NAME receives a "start" signal followed by a regular ping or a "fail"
-signal, and the two events are less than 72 hours apart,
-you will see the duration displayed in the list of checks. If the two events are
-more than 72 hours apart, they are assumed to be unrelated, and the duration is
-not displayed.
+当 SITE_NAME 收到"start"信号后跟常规 ping 或"fail"
+信号，且两个事件相隔不到 72 小时时，
+您将在检查项列表中看到显示的执行时间。如果两个事件
+相隔超过 72 小时，则假定它们不相关，并且不显示
+执行时间。
 
-![List of checks with durations](IMG_URL/checks_durations.png)
+![带有执行时间的检查项列表](IMG_URL/checks_durations.png)
 
-You can also see the durations of the previous runs when viewing an individual
-check:
+您还可以在查看单个检查项时看到先前运行的执行时间：
 
-![Log of received pings with durations](IMG_URL/details_durations.png)
+![带有执行时间的收到 ping 日志](IMG_URL/details_durations.png)
 
-## Specifying Run IDs
+## 指定运行 ID
 
-When several instances of the same job can run concurrently, the calculated run times
-can come out wrong, as SITE_NAME cannot reliably determine which success event
-corresponds to which start event. To work around this problem, the client can
-optionally specify a run ID in the `rid` query parameter of any ping URL. When a
-success event specifies the `rid` parameter, SITE_NAME will look for a
-start event with a matching `rid` value when calculating the execution time.
+当同一任务的多个实例可以同时运行时，计算出的运行时间
+可能出错，因为 SITE_NAME 无法可靠地确定哪个 success 事件
+对应于哪个 start 事件。为解决此问题，客户端可以
+在任何 ping URL 的 `rid` 查询参数中可选地指定运行 ID。当
+success 事件指定了 `rid` 参数时，SITE_NAME 将在计算执行时间时查找
+具有匹配 `rid` 值的 start 事件。
 
-The run IDs must be in a specific format: they must be UUID values in the canonical
-textual representation (example: `728b3763-ea80-4113-9fc0-f49b3adf226a`, note no
-curly braces). The letters in the UUID are allowed to be either in the lower or
-upper case.
+运行 ID 必须是特定格式：它们必须是规范文本表示形式的 UUID 值
+（示例：`728b3763-ea80-4113-9fc0-f49b3adf226a`，注意没有
+花括号）。UUID 中的字母可以是小写或
+大写。
 
-The client is free to pick run ID values randomly or use a deterministic process
-to generate them. The only thing that matters is that the start and the success
-pings of a single job execution use the same run ID value.
+客户端可以自由地随机选择运行 ID 值，或使用确定性过程
+来生成它们。唯一重要的是，单个任务执行的 start 和 success
+ping 使用相同的运行 ID 值。
 
-Below is an example shell script that generates the run ID using `uuidgen` and
-makes HTTP requests using curl:
+以下是使用 `uuidgen` 生成运行 ID 并使用 curl 发起 HTTP 请求的
+示例 shell 脚本：
 
 ```bash
 #!/bin/sh
 
 RID=`uuidgen`
 
-# send a start ping, specify rid parameter:
+# 发送 start ping，指定 rid 参数：
 curl -fsS -m 10 --retry 5 PING_URL/start?rid=$RID
 
-# ... FIXME: run the job here ...
+# ... FIXME: 在此处运行任务 ...
 
-# send the success ping, use the same rid parameter:
+# 发送 success ping，使用相同的 rid 参数：
 curl -fsS -m 10 --retry 5 PING_URL?rid=$RID
 ```
 
-If the client specifies run IDs, SITE_NAME will display them in the "Events"
-section in a shortened form:
+如果客户端指定了运行 ID，SITE_NAME 将在"Events"
+部分中以缩写形式显示它们：
 
-![Log of received pings with run IDs and durations](IMG_URL/run_ids.png)
+![带有运行 ID 和执行时间的收到 ping 日志](IMG_URL/run_ids.png)
 
-Also, note how the execution times are available for both "success" events. If the
-run IDs were not used in this example, the event #4 would not show an execution time
-since it is not preceded by a "start" event.
+另外，请注意两个"success"事件都有执行时间。如果
+在此示例中未使用运行 ID，事件 #4 将不显示执行时间，
+因为它前面没有"start"事件。
 
-## Alerting Logic When Using Run IDs
+## 使用运行 ID 时的警报逻辑
 
-If a job sends a "start" signal but does not send a "success"
-signal within its configured grace time, SITE_NAME will assume the job
-has failed and notify you. However, when using Run IDs, there is an important
-caveat: SITE_NAME **will not monitor the execution times of all
-concurrent job runs**. It will only monitor the execution time of the
-most recently started run.
+如果任务发送了"start"信号但未在其配置的宽限期内发送"success"
+信号，SITE_NAME 将假定该任务
+已失败并通知您。但是，使用运行 ID 时，有一个重要的
+注意事项：SITE_NAME **不会监控所有并发任务运行的
+执行时间**。它只会监控最近启动的运行
+的执行时间。
 
-To illustrate, let's assume the grace time of 1 minute and look at the above example
-again. The event #4 ran for 6 minutes 39 seconds and so overshot the time budget
-of 1 minute. But SITE_NAME generated no alerts because **the most recently started
-run completed within the time limit** (it took 37 seconds, which is less than 1 minute).
+为了说明，假设宽限期为 1 分钟，再次查看上面的示例。
+事件 #4 运行了 6 分 39 秒，超出了 1 分钟的时间预算。
+但 SITE_NAME 没有产生警报，因为**最近启动的
+运行在时限内完成了**（耗时 37 秒，不到 1 分钟）。

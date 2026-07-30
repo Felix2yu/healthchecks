@@ -1,112 +1,107 @@
-# Pinging API
+# Ping API
 
-With the Pinging API, you can signal **success**, **start**, **failure**,
-and **log** events from your systems.
+通过 Ping API，你可以从你的系统发送 **success（成功）**、**start（开始）**、**failure（失败）**
+和 **log（日志）** 信号。
 
-## General Notes
+## 通用说明
 
-All ping endpoints support:
+所有 ping 端点支持：
 
-* HTTP and HTTPS
-* HTTP 1.0, HTTP 1.1, and HTTP 2
-* IPv4 and IPv6
-* HEAD, GET, and POST request methods. For HTTP POST requests, clients can optionally
-include diagnostic information in the request body. If the request body looks like a
-UTF-8 string, SITE_NAME stores the request body (limited to the first
-PING_BODY_LIMIT_FORMATTED for each received ping).
+* HTTP 和 HTTPS
+* HTTP 1.0、HTTP 1.1 和 HTTP 2
+* IPv4 和 IPv6
+* HEAD、GET 和 POST 请求方法。对于 HTTP POST 请求，客户端可以选择性地在请求体中包含诊断信息。
+如果请求体看起来是有效的 UTF-8 字符串，SITE_NAME 会存储请求体（每个接收到的 ping
+限制为前 PING_BODY_LIMIT_FORMATTED）。
 
-Successful responses will have the "200 OK" HTTP response status code and a short
-"OK" string in the response body.
+成功的响应将包含 "200 OK" HTTP 响应状态码，并在响应体中包含简短的 "OK" 字符串。
 
-## UUIDs and Slugs
+## UUID 和标识
 
-Each Pinging API request needs to identify a check uniquely.
-SITE_NAME supports two ways of identifying a check: by the check's UUID
-or by a combination of the project's Ping Key and the check's slug.
+每个 Ping API 请求需要唯一标识一个检查项。
+SITE_NAME 支持两种标识检查项的方式：通过检查项的 UUID
+或通过项目的 Ping Key 和检查项的标识的组合。
 
-**Check's UUID** is automatically assigned when the check is created. It is
-immutable. You cannot replace the automatically assigned UUID with a manually
-chosen one. When you delete a check, you lose its UUID and cannot get it back.
+**检查项的 UUID** 在创建检查项时自动分配。它是
+不可变的。你不能用手动选择的 UUID 替换自动分配的 UUID。
+当你删除一个检查项时，你会失去其 UUID 且无法找回。
 
-You can look up the UUIDs of your checks in web UI or via [Management API](../api/) calls.
+你可以通过 Web UI 或 [Management API](../api/) 调用查看检查项的 UUID。
 
-**Check's slug** can be chosen by the user. The slug should only contain the following
-characters: `a-z`, `0-9`, hyphens, and underscores. A common practice is to
-derive the slug from the check's name (for example, a check named "Database Backup"
-might have a slug "database-backup"), but the user is free to pick arbitrary slug
-values.
+**检查项的标识**可以由用户选择。标识只能包含以下
+字符：`a-z`、`0-9`、连字符和下划线。通常的做法是
+从检查项的名称派生标识（例如，名为"Database Backup"的检查项
+可能具有标识"database-backup"），但用户可以自由选择任意标识值。
 
-Check's slug **can be changed** by the user, from the web interface or by using
-[Management API](../api/) calls.
+检查项的标识**可以更改**，通过 Web 界面或使用
+[Management API](../api/) 调用。
 
-Check's slug is **not guaranteed to be unique**. If you make a Pinging API request
-using a non-unique slug, SITE_NAME will return the "409 Conflict" HTTP status code
-and ignore the request.
+检查项的标识**不保证唯一**。如果你使用非唯一的标识发起 Ping API 请求，
+SITE_NAME 将返回"409 Conflict" HTTP 状态码并忽略该请求。
 
-Slug URLs optionally support **auto-provisioning**: if you make a Pinging API request
-to a slug with no corresponding check, SITE_NAME will create the check automatically.
-Auto-provisioning is off by default. To enable it, add a `create=1` query parameter
-to the ping URL.
+标识 URL 可选地支持**自动配置**：如果你向一个没有对应检查项的标识
+发起 Ping API 请求，SITE_NAME 将自动创建检查项。
+自动配置默认关闭。要启用它，请在 ping URL 中添加 `create=1` 查询参数。
 
-## Rate Limits
+## 频率限制
 
-Please be nice to our servers. Do not ping a check more frequently than is necessary.
-If you ping a check more than 5 times per minute, some of the requests may get rate
-limited and not recorded to the database. In extreme cases we will block the client's
-IP address.
+请善待我们的服务器。不要过于频繁地 ping 检查项。
+如果你每分钟 ping 检查项超过 5 次，某些请求可能会被限速
+且不会记录到数据库。在极端情况下，我们会屏蔽客户端的
+IP 地址。
 
-## Endpoints
+## 端点
 
-Endpoint Name                                               | Endpoint Address
+端点名称                                               | 端点地址
 ------------------------------------------------------------|-------
-[Success (UUID)](#success-uuid)       | `PING_ENDPOINT<uuid>`
-[Start (UUID)](#start-uuid)           | `PING_ENDPOINT<uuid>/start`
-[Failure (UUID)](#fail-uuid)          | `PING_ENDPOINT<uuid>/fail`
-[Log (UUID)](#log-uuid)               | `PING_ENDPOINT<uuid>/log`
-[Report script's exit status (UUID)](#exitcode-uuid)           | `PING_ENDPOINT<uuid>/<exit-status>`
-[Success (slug)](#success-slug)       | `PING_ENDPOINT<ping-key>/<slug>`
-[Start (slug)](#start-slug)           | `PING_ENDPOINT<ping-key>/<slug>/start`
-[Failure (slug)](#fail-slug)          | `PING_ENDPOINT<ping-key>/<slug>/fail`
-[Log (slug)](#log-slug)               | `PING_ENDPOINT<ping-key>/<slug>/log`
-[Report script's exit status (slug)](#exitcode-slug)           | `PING_ENDPOINT<ping-key>/<slug>/<exit-status>`
+[成功 (UUID)](#success-uuid)       | `PING_ENDPOINT<uuid>`
+[开始 (UUID)](#start-uuid)           | `PING_ENDPOINT<uuid>/start`
+[失败 (UUID)](#fail-uuid)          | `PING_ENDPOINT<uuid>/fail`
+[日志 (UUID)](#log-uuid)               | `PING_ENDPOINT<uuid>/log`
+[报告脚本退出状态 (UUID)](#exitcode-uuid)           | `PING_ENDPOINT<uuid>/<exit-status>`
+[成功 (标识)](#success-slug)       | `PING_ENDPOINT<ping-key>/<slug>`
+[开始 (标识)](#start-slug)           | `PING_ENDPOINT<ping-key>/<slug>/start`
+[失败 (标识)](#fail-slug)          | `PING_ENDPOINT<ping-key>/<slug>/fail`
+[日志 (标识)](#log-slug)               | `PING_ENDPOINT<ping-key>/<slug>/log`
+[报告脚本退出状态 (标识)](#exitcode-slug)           | `PING_ENDPOINT<ping-key>/<slug>/<exit-status>`
 
-## Send a "success" Signal Using UUID {: #success-uuid .rule }
+## 使用 UUID 发送"success"信号 {: #success-uuid .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<uuid>
 ```
 
-Signals to SITE_NAME that the job has been completed successfully (or
-a continuously running process is still running and healthy).
+向 SITE_NAME 发送信号，表示任务已成功完成（或者
+持续运行的过程仍在运行且健康）。
 
-SITE_NAME identifies the check by the UUID value included in the URL.
+SITE_NAME 通过 URL 中的 UUID 值来标识检查项。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding start ping for this ping and
-    calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确开始 ping 并
+    计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 404 not found
-:   Could not find a check with the specified UUID.
+:   找不到具有指定 UUID 的检查项。
 
-**Example**
+**示例**
 
 ```http
 GET /5bf66975-d4c7-4bf5-bcc8-b8d8a82ea278 HTTP/1.0
@@ -126,44 +121,44 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Send a "start" Signal Using UUID {: #start-uuid .rule }
+## 使用 UUID 发送"start"信号 {: #start-uuid .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<uuid>/start
 ```
 
-Sends a "job has started!" message to SITE_NAME. Sending a "start" signal is optional,
-but it enables a few extra features:
+向 SITE_NAME 发送"任务已开始！"消息。发送"start"信号是可选的，
+但它启用了一些额外功能：
 
-* SITE_NAME will measure and display job execution times
-* SITE_NAME will detect if the job runs longer than its configured grace time
+* SITE_NAME 将测量并显示任务执行时间
+* SITE_NAME 将检测任务是否运行超过其配置的宽限期
 
-SITE_NAME identifies the check by the UUID value included in the URL.
+SITE_NAME 通过 URL 中的 UUID 值来标识检查项。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding completion ping for this ping
-    and calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确完成 ping
+    并计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 404 not found
-:   Could not find a check with the specified UUID.
+:   找不到具有指定 UUID 的检查项。
 
 **Example**
 
@@ -185,41 +180,41 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Send a "failure" Signal Using UUID {: #fail-uuid .rule }
+## 使用 UUID 发送"failure"信号 {: #fail-uuid .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<uuid>/fail
 ```
 
-Signals to SITE_NAME that the job has failed. Actively signaling a failure
-minimizes the delay from your monitored service failing to you receiving an alert.
+向 SITE_NAME 发送信号，表示任务已失败。主动发送故障信号
+最大程度地缩短从被监控服务失败到收到警报的延迟。
 
-SITE_NAME identifies the check by the UUID value included in the URL.
+SITE_NAME 通过 URL 中的 UUID 值来标识检查项。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding start ping for this ping and
-    calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确开始 ping 并
+    计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 404 not found
-:   Could not find a check with the specified UUID.
+:   找不到具有指定 UUID 的检查项。
 
 **Example**
 
@@ -241,40 +236,40 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Send a "log" Signal Using UUID {: #log-uuid .rule }
+## 使用 UUID 发送"log"信号 {: #log-uuid .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<uuid>/log
 ```
 
-Sends logging information to SITE_NAME without signaling success or failure.
-SITE_NAME will log the event and display it in the check's "Events" section with the
-"Log" label. The check's status will remain the same.
+向 SITE_NAME 发送日志信息，而不发送 success 或 failure 信号。
+SITE_NAME 将记录该事件并在检查项的"Events"部分以"Log"标签显示。
+检查项的状态将保持不变。
 
-SITE_NAME identifies the check by the UUID value included in the URL.
+SITE_NAME 通过 URL 中的 UUID 值来标识检查项。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. The value must be a client-picked
-    UUID in the canonical textual representation.
+:   可选，指定此 ping 的运行 ID。值必须是客户端选择的
+    UUID，采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 404 not found
-:   Could not find a check with the specified UUID.
+:   找不到具有指定 UUID 的检查项。
 
 **Example**
 
@@ -300,47 +295,47 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Report Script's Exit Status (Using UUID) {: #exitcode-uuid .rule }
+## 报告脚本退出状态（使用 UUID）{: #exitcode-uuid .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<uuid>/<exit-status>
 ```
 
-Sends a success or failure signal depending on the exit status
-included in the URL. The exit status is a 0-255 integer. SITE_NAME
-interprets 0 as a success and all other values as a failure.
+根据 URL 中包含的退出状态发送 success 或 failure 信号。
+退出状态是 0-255 的整数。SITE_NAME
+将 0 解释为成功，所有其他值解释为失败。
 
-SITE_NAME identifies the check by the UUID value included in the URL.
+SITE_NAME 通过 URL 中的 UUID 值来标识检查项。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding start ping for this ping and
-    calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确开始 ping 并
+    计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 400 invalid url format
-:   The URL does not match the expected format.
+:   URL 不符合预期格式。
 
 404 not found
-:   Could not find a check with the specified UUID.
+:   找不到具有指定 UUID 的检查项。
 
-**Example**
+**示例**
 
 ```http
 GET /5bf66975-d4c7-4bf5-bcc8-b8d8a82ea278/1 HTTP/1.0
@@ -360,58 +355,58 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Send a "success" Signal (Using Slug) {: #success-slug .rule }
+## 使用标识发送"success"信号 {: #success-slug .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<ping-key>/<slug>
 ```
 
-Signals to SITE_NAME that the job has been completed successfully (or
-a continuously running process is still running and healthy).
+向 SITE_NAME 发送信号，表示任务已成功完成（或者
+持续运行的过程仍在运行且健康）。
 
-SITE_NAME identifies the check by project's ping key and check's slug
-included in the URL. The slug should consist of lowercase ASCII letters (`a-z`),
-digits (`0-9`), underscores (`_`), and hyphens (`-`) only.
+SITE_NAME 通过 URL 中项目的 ping key 和检查项的标识
+来标识检查项。标识应仅包含小写 ASCII 字母（`a-z`）、
+数字（`0-9`）、下划线（`_`）和连字符（`-`）。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 create=0|1
-:   Optional, default "0". If set to "1", and if the slug in the URL does not match
-    any existing check in the project, SITE_NAME creates a new check automatically.
+:   可选，默认为"0"。如果设置为"1"，并且 URL 中的标识与
+    项目中的任何现有检查项都不匹配，SITE_NAME 会自动创建一个新的检查项。
 
-    Example: `create=1`
+    示例：`create=1`
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding start ping for this ping, and
-    calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确开始 ping，并
+    计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 201 Created
-:   A new check was automatically created, the request succeeded.
+:   自动创建了新的检查项，请求成功。
 
 400 invalid url format
-:   The URL does not match the expected format.
+:   URL 不符合预期格式。
 
 404 not found
-:   Could not find a check with the specified ping key and slug combination.
+:   找不到具有指定 ping key 和标识组合的检查项。
 
 409 ambiguous slug
-:   Ambiguous, the slug matched multiple checks.
+:   标识不明确，匹配了多个检查项。
 
 **Example**
 
@@ -433,61 +428,61 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Send a "start" Signal (Using Slug) {: #start-slug .rule }
+## 使用标识发送"start"信号 {: #start-slug .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<ping-key>/<slug>/start
 ```
 
-Sends a "job has started!" message to SITE_NAME. Sending a "start" signal is
-optional, but it enables a few extra features:
+向 SITE_NAME 发送"任务已开始！"消息。发送"start"信号是
+可选的，但它启用了一些额外功能：
 
-* SITE_NAME will measure and display job execution times
-* SITE_NAME will detect if the job runs longer than its configured grace time
+* SITE_NAME 将测量并显示任务执行时间
+* SITE_NAME 将检测任务是否运行超过其配置的宽限期
 
-SITE_NAME identifies the check by project's ping key and check's slug
-included in the URL. The slug should consist of lowercase ASCII letters (`a-z`),
-digits (`0-9`), underscores (`_`), and hyphens (`-`) only.
+SITE_NAME 通过 URL 中项目的 ping key 和检查项的标识
+来标识检查项。标识应仅包含小写 ASCII 字母（`a-z`）、
+数字（`0-9`）、下划线（`_`）和连字符（`-`）。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes, and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 create=0|1
-:   Optional, default "0". If set to "1", and if the slug in the URL does not match
-    any existing check in the project, SITE_NAME creates a new check automatically.
+:   可选，默认为"0"。如果设置为"1"，并且 URL 中的标识与
+    项目中的任何现有检查项都不匹配，SITE_NAME 会自动创建一个新的检查项。
 
-    Example: `create=1`
+    示例：`create=1`
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding completion ping for this ping,
-    and calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确完成 ping，
+    并计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 201 Created
-:   A new check was automatically created, the request succeeded.
+:   自动创建了新的检查项，请求成功。
 
 400 invalid url format
-:   The URL does not match the expected format.
+:   URL 不符合预期格式。
 
 404 not found
-:   Could not find a check with the specified ping key and slug combination.
+:   找不到具有指定 ping key 和标识组合的检查项。
 
 409 ambiguous slug
-:   Ambiguous, the slug matched multiple checks.
+:   标识不明确，匹配了多个检查项。
 
 **Example**
 
@@ -509,58 +504,58 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Send a "failure" Signal (Using slug) {: #fail-slug .rule }
+## 使用标识发送"failure"信号 {: #fail-slug .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<ping-key/<slug>/fail
 ```
 
-Signals to SITE_NAME that the job has failed. Actively signaling a failure
-minimizes the delay from your monitored service failing to you receiving an alert.
+向 SITE_NAME 发送信号，表示任务已失败。主动发送故障信号
+最大程度地缩短从被监控服务失败到收到警报的延迟。
 
-SITE_NAME identifies the check by project's ping key and check's slug
-included in the URL. The slug should consist of lowercase ASCII letters (`a-z`),
-digits (`0-9`), underscores (`_`), and hyphens (`-`) only.
+SITE_NAME 通过 URL 中项目的 ping key 和检查项的标识
+来标识检查项。标识应仅包含小写 ASCII 字母（`a-z`）、
+数字（`0-9`）、下划线（`_`）和连字符（`-`）。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes, and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 create=0|1
-:   Optional, default "0". If set to "1", and if the slug in the URL does not match
-    any existing check in the project, SITE_NAME creates a new check automatically.
+:   可选，默认为"0"。如果设置为"1"，并且 URL 中的标识与
+    项目中的任何现有检查项都不匹配，SITE_NAME 会自动创建一个新的检查项。
 
-    Example: `create=1`
+    示例：`create=1`
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding start ping for this ping, and
-    calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确开始 ping，并
+    计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 201 Created
-:   A new check was automatically created, the request succeeded.
+:   自动创建了新的检查项，请求成功。
 
 400 invalid url format
-:   The URL does not match the expected format.
+:   URL 不符合预期格式。
 
 404 not found
-:   Could not find a check with the specified ping key and slug combination.
+:   找不到具有指定 ping key 和标识组合的检查项。
 
 409 ambiguous slug
-:   Ambiguous, the slug matched multiple checks.
+:   标识不明确，匹配了多个检查项。
 
 **Example**
 
@@ -582,54 +577,54 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Send a "log" Signal (Using slug) {: #log-slug .rule }
+## 使用标识发送"log"信号 {: #log-slug .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<ping-key/<slug>/log
 ```
 
-Sends logging information to SITE_NAME without signaling success or failure.
-SITE_NAME will log the event and display it in check's "Events" section with the
-"Log" label. The check's status will not change.
+向 SITE_NAME 发送日志信息，而不发送 success 或 failure 信号。
+SITE_NAME 将记录该事件并在检查项的"Events"部分以"Log"标签显示。
+检查项的状态将保持不变。
 
-SITE_NAME identifies the check by project's ping key and check's slug
-included in the URL. The slug should consist of lowercase ASCII letters (`a-z`),
-digits (`0-9`), underscores (`_`), and hyphens (`-`) only.
+SITE_NAME 通过 URL 中项目的 ping key 和检查项的标识
+来标识检查项。标识应仅包含小写 ASCII 字母（`a-z`）、
+数字（`0-9`）、下划线（`_`）和连字符（`-`）。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes, and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 create=0|1
-:   Optional, default "0". If set to "1", and if the slug in the URL does not match
-    any existing check in the project, SITE_NAME creates a new check automatically.
+:   可选，默认为"0"。如果设置为"1"，并且 URL 中的标识与
+    项目中的任何现有检查项都不匹配，SITE_NAME 会自动创建一个新的检查项。
 
-    Example: `create=1`
+    示例：`create=1`
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. The value must be a client-picked UUID
-    in the canonical textual representation.
+:   可选，指定此 ping 的运行 ID。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 201 Created
-:   A new check was automatically created, the request succeeded.
+:   自动创建了新的检查项，请求成功。
 
 404 not found
-:   Could not find a check with the specified ping key and slug combination.
+:   找不到具有指定 ping key 和标识组合的检查项。
 
 409 ambiguous slug
-:   Ambiguous, the slug matched multiple checks.
+:   标识不明确，匹配了多个检查项。
 
 **Example**
 
@@ -655,59 +650,59 @@ Ping-Body-Limit: PING_BODY_LIMIT
 OK
 ```
 
-## Report Script's Exit Status (Using Slug) {: #exitcode-slug .rule }
+## 报告脚本退出状态（使用标识）{: #exitcode-slug .rule }
 
 ```text
 HEAD|GET|POST PING_ENDPOINT<ping-key>/<slug>/<exit-status>
 ```
 
-Sends a success or failure signal depending on the exit status
-included in the URL. The exit status is a 0-255 integer. SITE_NAME
-interprets 0 as a success and all other values as a failure.
+根据 URL 中包含的退出状态发送 success 或 failure 信号。
+退出状态是 0-255 的整数。SITE_NAME
+将 0 解释为成功，所有其他值解释为失败。
 
-SITE_NAME identifies the check by project's ping key and check's slug
-included in the URL. The slug should consist of lowercase ASCII letters (`a-z`),
-digits (`0-9`), underscores (`_`), and hyphens (`-`) only.
+SITE_NAME 通过 URL 中项目的 ping key 和检查项的标识
+来标识检查项。标识应仅包含小写 ASCII 字母（`a-z`）、
+数字（`0-9`）、下划线（`_`）和连字符（`-`）。
 
-The response may optionally contain a `Ping-Body-Limit: <n>` response header.
-If this header is present, its value is an integer, and it specifies how many
-bytes from the request body SITE_NAME will store per request. For example, if n=100,
-but the client sends 123 bytes in the request body, SITE_NAME will store the first
-100 bytes, and ignore the remaining 23. The client can use this header to decide
-how much data to send in the request bodies of subsequent requests.
+响应可能可选地包含 `Ping-Body-Limit: <n>` 响应头。
+如果存在此头，其值为整数，指定 SITE_NAME 每次请求
+将存储请求体中的多少字节。例如，如果 n=100，
+但客户端在请求体中发送了 123 字节，SITE_NAME 将存储前
+100 字节并忽略剩余的 23 字节。客户端可以使用此头来决定
+后续请求的请求体中发送多少数据。
 
-### Query Parameters
+### 查询参数
 
 create=0|1
-:   Optional, default "0". If set to "1", and if the slug in the URL does not match
-    any existing check in the project, SITE_NAME creates a new check automatically.
+:   可选，默认为"0"。如果设置为"1"，并且 URL 中的标识与
+    项目中的任何现有检查项都不匹配，SITE_NAME 会自动创建一个新的检查项。
 
-    Example: `create=1`
+    示例：`create=1`
 
 rid=&lt;uuid&gt;
-:   Optional, specifies a run ID of this ping. If run ID is specified,
-    SITE_NAME uses it to match the correct corresponding start ping for this ping, and
-    calculate an accurate duration. The value must be a client-picked UUID in the
-    canonical textual representation.
+:   可选，指定此 ping 的运行 ID。如果指定了运行 ID，
+    SITE_NAME 使用它来匹配此 ping 对应的正确开始 ping，并
+    计算准确的持续时间。值必须是客户端选择的 UUID，
+    采用规范的文本表示形式。
 
-    Example: `rid=123e4567-e89b-12d3-a456-426614174000`.
+    示例：`rid=123e4567-e89b-12d3-a456-426614174000`。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 201 Created
-:   A new check was automatically created, the request succeeded.
+:   自动创建了新的检查项，请求成功。
 
 400 invalid url format
-:   The URL does not match the expected format.
+:   URL 不符合预期格式。
 
 404 not found
-:   Could not find a project matching the specified ping key.
+:   找不到与指定 ping key 匹配的项目。
 
 409 ambiguous slug
-:   Ambiguous, the slug matched multiple checks.
+:   标识不明确，匹配了多个检查项。
 
 **Example**
 

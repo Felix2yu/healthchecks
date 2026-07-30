@@ -1,154 +1,148 @@
-# Configuring Checks
+# 配置检查项
 
-In SITE_NAME, a **Check** represents a single service you want to
-monitor. For example, when monitoring cron jobs, you would create a separate check for
-each cron job you wish to monitor. SITE_NAME pricing plans are structured primarily
-around how many checks you can have in your account. You can create checks
-in the SITE_NAME web interface or via [Management API](../api/).
+在 SITE_NAME 中，**检查项**代表您要监控的单个服务。
+例如，在监控 cron 作业时，您需要为每个要监控的 cron 作业创建一个单独的检查项。
+SITE_NAME 的定价计划主要围绕
+您的帐户中可以拥有多少检查项来设计。您可以在
+SITE_NAME Web 界面或通过[管理 API](../api/)创建检查项。
 
-## Name, Tags, Description
+## 名称、标签、描述
 
-Describe each check using an optional name, slug, tags, and description fields.
+使用可选的名称、标识、标签和描述字段来描述每个检查项。
 
-![Editing name, tags and description](IMG_URL/edit_name.png)
+![编辑名称、标签和描述](IMG_URL/edit_name.png)
 
-* **Name**: names are optional, but setting them is a good idea.
-Good naming becomes especially important as you add more checks to the
-account. SITE_NAME will display check names in the web interface, email reports,
-and notifications.
-* **Slug**: URL-friendly identifier used in [slug-based ping URLs](../http_api/#success-slug)
-(an alternative to the default UUID-based ping URLs). The slug should only contain the
-following characters: `a-z`, `0-9`, hyphens, and underscores. If you don't plan to use
-slug-based ping URLs, you can leave the slug field empty.
-* **Tags**: a space-separated list of optional labels. Use tags to organize and group
-checks within a project. You can tag checks by the environment
-(`prod`, `staging`, `dev`, etc.), by role (`www`, `db`, `worker`, etc.), or by using
-any other system.
-* **Description**: a free-form text field with any related information for your team
-or your future self. Describe the cron job's role, who set it up, what to do in
-case of failures, and where to look for additional information.
+* **名称**：名称是可选的，但设置它们是个好主意。
+  良好的命名在您向帐户添加更多检查项时变得尤为重要。
+  SITE_NAME 将在 Web 界面、电子邮件报告
+  和通知中显示检查项名称。
+* **标识**：用于[基于标识的 ping URL](../http_api/#success-slug) 的 URL 友好标识符
+  （默认基于 UUID 的 ping URL 的替代方案）。标识应仅包含
+  以下字符：`a-z`、`0-9`、连字符和下划线。如果您不打算使用
+  基于标识的 ping URL，可以将标识字段留空。
+* **标签**：可选标签的空格分隔列表。使用标签来组织和分组
+  项目内的检查项。您可以按环境
+  （`prod`、`staging`、`dev` 等）、按角色（`www`、`db`、`worker` 等）或使用
+  任何其他系统来标记检查项。
+* **描述**：一个自由格式的文本字段，用于为您的团队
+  或您自己保存相关信息。描述 cron 作业的角色、谁设置的、
+  失败时该怎么做，以及到哪里查找更多信息。
 
-## Simple Schedules
+## 简单计划
 
-SITE_NAME supports three types of schedules: **Simple**, **Cron**, and **OnCalendar**.
-Use Simple schedules for monitoring processes that you expect to run at relatively
-regular intervals: once an hour, once a day, once a week, etc.
+SITE_NAME 支持三种类型的计划：**Simple**、**Cron** 和 **OnCalendar**。
+使用 Simple 计划来监控您期望以相对规律的间隔运行的进程：
+每小时一次、每天一次、每周一次等。
 
-![Editing the period and grace time](IMG_URL/edit_simple_schedule.png)
+![编辑周期和宽限期](IMG_URL/edit_simple_schedule.png)
 
-For the simple schedules, you can configure two parameters, Period and Grace Time.
+对于简单计划，您可以配置两个参数：周期和宽限期。
 
-* **Period** is the expected time between pings.
-* **Grace Time** is the additional time to wait before sending an alert when a check
-is late. Use this parameter to account for minor, expected deviations in job
-execution times.
+* **周期**是 ping 之间的预期时间。
+* **宽限期**是在检查项延迟时发送警报前额外等待的时间。
+  使用此参数来考虑任务执行时间中微小、预期的偏差。
 
-Note: if you use the "start" signal to [measure job run times](../measuring_script_run_time/),
-then Grace Time also specifies the maximum allowed time gap between "start" and
-"success" signals. Whenever SITE_NAME receives a "start" signal, it expects a subsequent
-"success" signal within Grace Time. If the success signal does not arrive within the
-configured Grace Time, SITE_NAME will mark the check as failed and send out alerts.
+注意：如果您使用"start"信号来[测量任务运行时间](../measuring_script_run_time/)，
+则宽限期还指定了"start"和"success"信号之间允许的最大时间间隔。
+每当 SITE_NAME 收到"start"信号时，它期望在宽限期内收到后续的
+"success"信号。如果 success 信号未在配置的宽限期内到达，
+SITE_NAME 将把检查项标记为失败并发出警报。
 
-## Cron Schedules
+## Cron 计划
 
-Use "Cron" for monitoring cron jobs and other processes with more complex schedules.
-This monitoring mode ensures that jobs run **at the correct time** and not just at
-the correct time intervals.
+使用"Cron"来监控 cron 作业和其他具有更复杂计划的进程。
+此监控模式确保作业**在正确的时间**运行，而不仅仅是
+在正确的时间间隔运行。
 
-See [Cron syntax cheatsheet](../cron/) for cron expression syntax examples.
-See [crontab(5) man page](https://www.man7.org/linux/man-pages/man5/crontab.5.html)
-for complete cron syntax reference.
+有关 cron 表达式语法示例，请参阅 [Cron 语法速查表](../cron/)。
+有关完整的 cron 语法参考，请参阅 [crontab(5) man page](https://www.man7.org/linux/man-pages/man5/crontab.5.html)。
 
-![Editing cron schedule](IMG_URL/edit_cron_schedule.png)
+![编辑 cron 计划](IMG_URL/edit_cron_schedule.png)
 
-You will need to specify Cron Expression, Server's Time Zone, and Grace Time.
+您需要指定 cron 表达式、服务器的时区和宽限期。
 
-* **Cron Expression** is the cron expression you specified in the crontab.
-* **Server's Time Zone** is the timezone of your server. The cron daemon typically uses
-the system's local time. If the machine does not use the UTC timezone, specify its
-timezone here.
-* **Grace Time**, same as for simple schedules, is how long to wait before sending an
-alert for a late check.
+* **Cron 表达式**是您在 crontab 中指定的 cron 表达式。
+* **服务器的时区**是您的服务器所在的时区。cron 守护进程通常使用
+  系统的本地时间。如果机器不使用 UTC 时区，请在此处指定其
+  时区。
+* **宽限期**，与简单计划相同，是在发送延迟检查项
+  警报前等待的时间。
 
-## OnCalendar Schedules
+## OnCalendar 计划
 
-Use "OnCalendar" schedules to monitor systemd timers that use `OnCalendar=` schedules.
-Same as with systemd timers, you can specify more than one `OnCalendar` expression
-(separated with newlines, one schedule per line), and SITE_NAME will expect a ping
-whenever any schedule matches.
+使用"OnCalendar"计划来监控使用 `OnCalendar=` 计划的 systemd 定时器。
+与 systemd 定时器一样，您可以指定多个 `OnCalendar` 表达式
+（用换行符分隔，每行一个计划），SITE_NAME 将在
+任何计划匹配时预期收到 ping。
 
-See [systemd.time(7) man page](https://www.man7.org/linux/man-pages/man7/systemd.time.7.html#CALENDAR_EVENTS)
-for complete OnCalendar syntax reference.
+有关完整的 OnCalendar 语法参考，请参阅 [systemd.time(7) man page](https://www.man7.org/linux/man-pages/man7/systemd.time.7.html#CALENDAR_EVENTS)。
 
-![Editing cron schedule](IMG_URL/edit_oncalendar_schedule.png)
+![编辑 cron 计划](IMG_URL/edit_oncalendar_schedule.png)
 
-## Filtering Rules {: #filtering-rules }
+## 过滤规则 {: #filtering-rules }
 
-In the "Filtering Rules" dialog, you can control several advanced aspects of
-how SITE_NAME handles incoming pings for a particular check.
+在"Filtering Rules"对话框中，您可以控制 SITE_NAME 如何处理
+特定检查项的传入 ping 的几个高级方面。
 
-![Setting filtering rules](IMG_URL/filtering_rules.png)
+![设置过滤规则](IMG_URL/filtering_rules.png)
 
-* **Allowed HTTP Request Methods**. You can require the ping
-requests to use HTTP POST. Use the "Only POST" option if you run into issues of
-preview bots hitting the ping URLs when you send them in email or post them in chat.
-* **Content Filtering**. You can instruct SITE_NAME to look for specific keywords
-in the subject line or the message body of email pings, and in the HTTP request body
-of HTTP pings.
-* **Pinging a Paused Check**. Normally, when you ping a paused check, it leaves the
-paused state and goes into the "up" state (or the "down" state
-in case of [a failure signal](../signaling_failures/)).
-You can change this behavior by selecting the "Ignore the ping, stay in
-the paused state" option. With this option selected, the paused state becomes "sticky":
-SITE_NAME will ignore all incoming pings until you explicitly *resume* the check.
+* **允许的 HTTP 请求方法**。您可以要求 ping
+  请求使用 HTTP POST。如果您在通过电子邮件发送或发布到聊天时遇到
+  预览机器人点击 ping URL 的问题，请使用"Only POST"选项。
+* **内容过滤**。您可以指示 SITE_NAME 在电子邮件 ping 的
+  主题行或消息正文中，以及在 HTTP ping 的 HTTP 请求体中
+  查找特定关键字。
+* **Ping 已暂停的检查项**。通常，当您 ping 已暂停的检查项时，它会离开
+  暂停状态并进入"up"状态（或在
+  [failure 信号](../signaling_failures/)的情况下进入"down"状态）。
+  您可以通过选择"Ignore the ping, stay in
+  the paused state"选项来更改此行为。选择此选项后，暂停状态变为"粘性"：
+  SITE_NAME 将忽略所有传入的 ping，直到您显式*恢复*检查项。
 
-### Content Filtering
+### 内容过滤
 
-If the **Request body of HTTP requests** option is checked, SITE_NAME will classify
-the HTTP pings as start, success, or failure signals by looking for keywords in
-the first PING_BODY_LIMIT_FORMATTED of the request body.
+如果选中了 **HTTP 请求的请求体** 选项，SITE_NAME 将通过
+在请求体的前 PING_BODY_LIMIT_FORMATTED 中查找关键字来将
+HTTP ping 分类为 start、success 或 failure 信号。
 
-If either the **Subject line of email messages** or the **Message body of email
-messages** option is checked, SITE_NAME will classify email pings as start, success, or
-failure signals by looking for keywords in the subject line and/or message body.
-SITE_NAME supports HTML emails: when looking for keywords in message body, it checks
-both plain text and HTML versions of the email.
+如果选中了**电子邮件的主题行**或**电子邮件的消息正文**
+选项，SITE_NAME 将通过查找主题行和/或消息正文中的关键字来将
+电子邮件 ping 分类为 start、success 或 failure 信号。
+SITE_NAME 支持 HTML 电子邮件：在消息正文中查找关键字时，它会检查
+电子邮件的纯文本和 HTML 版本。
 
-You can specify multiple keywords in each of the **Start Keywords**,
-**Success Keywords**, and **Failure Keywords** fields by separating them with commas.
-The keyword matching is case-sensitive (for example, "error" and "ERROR" are different
-keywords).
+您可以在 **Start Keywords**、**Success Keywords** 和 **Failure Keywords** 字段中
+通过逗号分隔指定多个关键字。关键字匹配区分大小写
+（例如，"error"和"ERROR"是不同的关键字）。
 
-SITE_NAME looks for keywords in a specific order:
+SITE_NAME 按特定顺序查找关键字：
 
-* It first looks for **failure keywords**. If any are found, it classifies the ping
-  as a failure signal and does not look further.
-* It then looks for **success keywords**. If any are found, it classifies the ping
-  as a success signal and does not look further.
-* It then looks for **start keywords**. If any are found, it classifies the ping
-  as a start signal.
-* Finally, if no matching keywords are found, SITE_NAME either ignores the ping or
-  classifies it as a failure signal, depending on the **If no keywords match**
-  configuration option. Ignored pings are shown in the event log with an "Ignored" label,
-  but they do not affect check's status as they are neither "success" nor "failure"
-  nor "start" signals.
+* 它首先查找 **failure 关键字**。如果找到任何关键字，则将 ping
+  分类为 failure 信号，不再继续查找。
+* 然后查找 **success 关键字**。如果找到任何关键字，则将 ping
+  分类为 success 信号，不再继续查找。
+* 然后查找 **start 关键字**。如果找到任何关键字，则将 ping
+  分类为 start 信号。
+* 最后，如果没有找到匹配的关键字，SITE_NAME 将忽略 ping 或
+  将其分类为 failure 信号，具体取决于 **If no keywords match**
+  配置选项。被忽略的 ping 在事件日志中显示为"Ignored"标签，
+  但它们不会影响检查项的状态，因为它们既不是"success"也不是"failure"
+  更不是"start"信号。
 
-Example use case: consider a backup cron job that sends an HTTP POST request every
-time it completes. If the job completes successfully, the HTTP request will contain
-text "Backup successful". If the job fails, the request body will contain an
-error message. The error messages can vary, and the complete list of all possible error
-messages is not known. To handle this scenario, you can use content filtering as
-follows:
+示例用例：考虑一个每次完成时发送 HTTP POST 请求的备份 cron 作业。
+如果作业成功完成，HTTP 请求将包含
+文本"Backup successful"。如果作业失败，请求体将包含
+错误消息。错误消息可能各不相同，并且无法预知所有可能错误消息的
+完整列表。要处理此场景，您可以如下使用内容过滤：
 
-* Enable the **Request body of HTTP requests** – enables content filtering for
-  HTTP pings.
-* In the **Success keywords** field enter "Backup successful" – if this string is found
-  in the request body of a HTTP ping, SITE_NAME will classify the ping as a success
-  signal.
-* Select the **If no keywords match: Classify the ping as failure** option – SITE_NAME
-  will classify all other HTTP requests as failure signals.
+* 启用 **HTTP 请求的请求体**——启用 HTTP ping 的内容过滤。
+* 在 **Success keywords** 字段中输入"Backup successful"——如果在
+  HTTP ping 的请求体中找到此字符串，SITE_NAME 将把 ping 分类为 success
+  信号。
+* 选择 **If no keywords match: Classify the ping as failure** 选项——SITE_NAME
+  将把所有其他 HTTP 请求分类为 failure 信号。
 
-With these settings, SITE_NAME will classify a HTTP ping as a success signal
-if and only if the request body contains text "Backup successful". If the request
-body does not contain this string (or the request body is absent altogether),
-it will classify the ping as a failure signal.
+使用这些设置，SITE_NAME 将把 HTTP ping 分类为 success 信号
+当且仅当请求体包含文本"Backup successful"。如果请求
+体不包含此字符串（或根本没有请求体），
+它将把 ping 分类为 failure 信号。

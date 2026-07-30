@@ -18,41 +18,38 @@
         <div id="my-checks-limit-notice">
             <p>
             {% if request.user == project.owner %}
-            Your account is currently over its check limit. Please upgrade, or reduce
-            the number of checks in your account.
+            您的账户已超出检查项数量限制。请升级或减少账户中的检查项数量。
             {% else %}
-            The account <strong>{{ project.owner.email }}</strong> is currently
-            over its check limit. Please ask <strong>{{ project.owner.email }}</strong>
-            to upgrade their account.
+            账户 <strong>{{ project.owner.email }}</strong> 已超出检查项数量限制。请让 <strong>{{ project.owner.email }}</strong>
+            升级他们的账户。
             {% endif %}
 
-            Accounts that remain over the limit for more
-            than 30 days are scheduled for deletion.</p>
+            超过限制超过 30 天的账户将被计划删除。</p>
 
             <table class="table">
                 <tr>
-                    <th>Project's Owner:</th>
+                    <th>项目所有者：</th>
                     <td>{{ project.owner.email }}</td>
                 </tr>
                 <tr>
-                    <th>Current Plan:</th>
+                    <th>当前方案：</th>
                     <td>
                         {% if project.owner.subscription and project.owner.subscription.plan_name %}
                         {{ project.owner.subscription.plan_name }}
                         {% else %}
-                        Hobbyist (free)
+                        爱好者（免费）
                         {% endif %}
                     </td>
                 </tr>
                 <tr>
-                    <th>Checks Used:</th>
+                    <th>已用检查项：</th>
                     <td class="at-limit">
                         <span>{{ project.owner.profile.num_checks_used }} of {{ project.owner.profile.check_limit }}</span>
                     </td>
                 </tr>
             </table>
             {% if request.user == project.owner %}
-            <p><a class="btn btn-default" href="{% url 'hc-billing' %}">Billing Details and Plan Upgrades</a></p>
+            <p><a class="btn btn-default" href="{% url 'hc-billing' %}">账单详情与方案升级</a></p>
             {% endif %}
         </div>
     </div>
@@ -77,35 +74,35 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">
-                <li class="header">Filter by status</li>
+                <li class="header">按状态筛选</li>
                 <li>
                     <a href="javascript:;" data-value="new">
-                        <span class="status ic-new"></span> New
+                        <span class="status ic-new"></span> 新建
                     </a>
                 </li>
                 <li>
                     <a href="javascript:;" data-value="paused">
-                        <span class="status ic-paused"></span> Paused
+                        <span class="status ic-paused"></span> 已暂停
                     </a>
                 </li>
                 <li>
                     <a href="javascript:;" data-value="started">
-                        <span class="status ic-dots"></span> Started
+                        <span class="status ic-dots"></span> 运行中
                     </a>
                 </li>
                 <li>
                     <a href="javascript:;" data-value="up">
-                        <span class="status ic-up"></span> Up
+                        <span class="status ic-up"></span> 正常
                     </a>
                 </li>
                 <li>
                     <a href="javascript:;" data-value="grace">
-                        <span class="status ic-grace"></span> Late
+                        <span class="status ic-grace"></span> 延迟
                     </a>
                 </li>
                 <li>
                     <a href="javascript:;" data-value="down">
-                        <span class="status ic-down"></span> Down
+                        <span class="status ic-down"></span> 异常
                     </a>
                 </li>
             </ul>
@@ -114,36 +111,36 @@
     <button
         class="filter-btn btn btn-default hidden-xs"
         {% if 'new' not in selected_statuses %}style="display: none"{% endif %}
-        data-value="new">New ×</button>
+        data-value="new">新建 ×</button>
     <button
         class="filter-btn btn btn-default hidden-xs"
         {% if 'paused' not in selected_statuses %}style="display: none"{% endif %}
-        data-value="paused">Paused ×</button>
+        data-value="paused">已暂停 ×</button>
     <button
         class="filter-btn btn btn-default hidden-xs"
         {% if 'started' not in selected_statuses %}style="display: none"{% endif %}
-        data-value="started">Started ×</button>
+        data-value="started">运行中 ×</button>
     <button
         class="filter-btn btn btn-default hidden-xs"
         {% if 'up' not in selected_statuses %}style="display: none"{% endif %}
-        data-value="up">Up ×</button>
+        data-value="up">正常 ×</button>
     <button
         class="filter-btn btn btn-default hidden-xs"
         {% if 'grace' not in selected_statuses %}style="display: none"{% endif %}
-        data-value="grace">Late ×</button>
+        data-value="grace">延迟 ×</button>
     <button
         class="filter-btn btn btn-default hidden-xs"
         {% if 'down' not in selected_statuses %}style="display: none"{% endif %}
-        data-value="down">Down ×</button>
+        data-value="down">异常 ×</button>
 
     {% if rw %}
     <button
         class="btn btn-primary hidden-xs"
         data-toggle="modal"
         data-target="#add-check-modal"
-        title="{{ checks|length }} in use, {{ num_available }} available"
+        title="已使用 {{ checks|length }} 个，可用 {{ num_available }} 个"
         {% if num_available <= 0 %}disabled{% endif %}>
-            Add Check
+            添加检查项
         </button>
     {% endif %}
 </div>
@@ -153,7 +150,7 @@
     <div class="col-sm-12">
         {% include "front/checks_table.html" %}
         <div id="no-checks" {% if num_visible > 0 %}style="display: none"{% endif %}>
-            no matching checks found
+            未找到匹配的检查项
         </div>
     </div>
 </div>
@@ -161,7 +158,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="alert alert-info">
-            The project <strong>{{ project }}</strong> does not have any checks yet.
+            项目 <strong>{{ project }}</strong> 还没有任何检查项。
             {% if rw and num_available > 0 %}
             <br><br>
             <button
@@ -169,7 +166,7 @@
                 data-toggle="modal"
                 data-target="#add-check-modal"
                 {% if num_available <= 0 %}disabled{% endif %}>
-                    Add Check
+                    添加检查项
             </button>
             {% endif %}
         </div>
@@ -184,12 +181,12 @@
 <div id="my-checks-bottom-actions" class="row">
     <div class="col-sm-12 text-center">
         <div class="alert alert-info">
-            <strong>There are more things to monitor.</strong>
-            To add more checks, please
+            <strong>还有更多可以监控的项目。</strong>
+            要添加更多检查项，请
             {% if request.user == project.owner %}
-            <a href="{% url 'hc-billing' %}">upgrade your account</a>.
+            <a href="{% url 'hc-billing' %}">升级您的账户</a>。
             {% else %}
-            ask <strong>{{ project.owner.email }}</strong> to upgrade their account.
+            让 <strong>{{ project.owner.email }}</strong> 升级他们的账户。
             {% endif %}
         </div>
     </div>
@@ -203,19 +200,19 @@
 <div id="ping-details-modal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id="ping-details-body">Loading</div>
+            <div id="ping-details-body">加载中</div>
             <div class="modal-footer">
                 <a
                     id="ping-details-log"
                     href="#"
                     class="btn btn-default">
-                    Show Earlier Events
+                    显示更早的事件
                 </a>
                 <button
                     type="button"
                     class="btn btn-default"
                     data-dismiss="modal">
-                    Got It!
+                    知道了！
                 </button>
             </div>
         </div>

@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}Gotify Integration for {{ site_name }}{% endblock %}
+{% block title %}Gotify 集成 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -9,28 +9,28 @@
         <h1>Gotify</h1>
 
         <p>
-        <a href="https://gotify.net/">Gotify</a> is an open-source, self-hosted
-        push notification service. If you use or plan on using Gotify,
-        you can can integrate it with your {{ site_name }} account in few simple steps.
+        <a href="https://gotify.net/">Gotify</a> 是一个开源、自托管的
+        推送通知服务。如果您正在使用或计划使用 Gotify，
+        只需几个简单步骤即可将其与您的 {{ site_name }} 账号集成。
         </p>
 
-        <h2>Setup Guide</h2>
+        <h2>设置指南</h2>
 
         <div class="row ai-step">
             <div class="col-sm-6">
                 <span class="step-no"></span>
                 <p>
-                    Log into your Gotify instance, go to
-                    <strong>Apps</strong>, and create a new application.
+                    登录您的 Gotify 实例，进入
+                    <strong>应用</strong>，创建一个新应用。
                 </p>
                 <p>
-                    Pick a descriptive name and short description.
-                    After creating the app, you can also upload an icon for it
-                    (feel free to use <a href="{% absolute_site_logo_url %}">this one</a>).
+                    选择一个描述性名称和简短说明。
+                    创建应用后，您还可以为其上传图标
+                    （可以随意使用<a href="{% absolute_site_logo_url %}">这个</a>）。
                 </p>
             </div>
             <div class="col-sm-6">
-                <img class="ai-guide-screenshot" alt="Click create integration button"
+                <img class="ai-guide-screenshot" alt="点击创建集成按钮"
                     src="{% static 'img/setup_gotify_1.png' %}" />
             </div>
         </div>
@@ -39,12 +39,12 @@
             <div class="col-sm-6">
                 <span class="step-no"></span>
                 <p>
-                    After you have created the application, copy its
-                    <strong>Token</strong>.
+                    创建应用后，复制其
+                    <strong>令牌</strong>。
                 </p>
             </div>
             <div class="col-sm-6">
-                <img class="ai-guide-screenshot" alt="Create Healthchecks.io integration with details"
+                <img class="ai-guide-screenshot" alt="创建 Healthchecks.io 集成详情"
                     src="{% static 'img/setup_gotify_2.png' %}">
             </div>
         </div>
@@ -53,20 +53,20 @@
             <div class="col-sm-6">
                 <span class="step-no"></span>
                 <p>
-                    Enter the URL of your Gotify server, and the
-                    application token in the form below.
-                    Save the integration, and you are done!
+                    在下方表单中输入您的 Gotify 服务器链接
+                    和应用令牌。
+                    保存集成，完成！
                 </p>
             </div>
         </div>
 
-        <h2>Integration Settings</h2>
+        <h2>集成设置</h2>
 
         <form method="post" class="form-horizontal">
             {% csrf_token %}
 
             <div class="form-group {{ form.url.css_classes }}">
-                <label for="url" class="col-sm-3 control-label">Gotify Server URL</label>
+                <label for="url" class="col-sm-3 control-label">Gotify 服务器链接</label>
                 <div class="col-sm-6">
                     <input
                         id="url"
@@ -83,7 +83,7 @@
                 </div>
             </div>
             <div class="form-group {{ form.token.css_classes }}">
-                <label for="token" class="col-sm-3 control-label">Application Token</label>
+                <label for="token" class="col-sm-3 control-label">应用令牌</label>
                 <div class="col-sm-6">
                     <input
                         id="token"
@@ -100,7 +100,7 @@
             </div>
 
             <div class="form-group {{ form.priority.css_classes }}">
-                <label class="col-sm-3 control-label">Priority for "down" events</label>
+                <label class="col-sm-3 control-label">"宕机"事件优先级</label>
                 <div class="col-sm-6">
                     {{ form.priority }}
                     {% if form.priority.errors %}
@@ -110,7 +110,7 @@
             </div>
 
             <div class="form-group {{ form.priority_up.css_classes }}">
-                <label class="col-sm-3 control-label">Priority for "up" events</label>
+                <label class="col-sm-3 control-label">"恢复"事件优先级</label>
                 <div class="col-sm-6">
                     {{ form.priority_up }}
                     {% if form.priority_up.errors %}
@@ -121,7 +121,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">
-                    <button type="submit" class="btn btn-primary">Save Integration</button>
+                    <button type="submit" class="btn btn-primary">保存集成</button>
                 </div>
             </div>
         </form>

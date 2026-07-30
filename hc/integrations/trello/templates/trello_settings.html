@@ -1,6 +1,6 @@
 {% if num_lists %}
-<p class="alert alert-success">Authentication successful!</p>
-<p>Please select the Trello list to post notifications to:</p>
+<p class="alert alert-success">认证成功！</p>
+<p>请选择要发布通知到的 Trello 列表：</p>
 
 <form method="post" class="form-horizontal">
     {% csrf_token %}
@@ -10,7 +10,7 @@
     <input id="list-id" type="hidden" name="list_id" value="" />
 
     <div class="form-group {{ form.value.css_classes }}">
-        <label for="list-selector" class="col-sm-3 control-label">Post Notifications to</label>
+        <label for="list-selector" class="col-sm-3 control-label">发布通知到</label>
         <div class="col-sm-3">
             <select id="list-selector" name="board_list_id" class="form-control">
             {% for board in boards %}
@@ -35,18 +35,18 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-9">
-            <button type="submit" class="btn btn-primary">Save Integration</button>
+            <button type="submit" class="btn btn-primary">保存集成</button>
         </div>
     </div>
 </form>
 {% elif error %}
 <p class="alert alert-warning">
-    Could not retrieve data from your Trello account.
-    Received an unexpected response from Trello.
+    无法从你的 Trello 账户获取数据。
+    收到来自 Trello 的意外响应。
 </p>
 {% else %}
 <p class="alert alert-warning">
-    Could not find any boards with lists in your Trello account.
-    Are you logged in the correct Trello account?
+    在你的 Trello 账户中未找到任何包含列表的看板。
+    你是否登录了正确的 Trello 账户？
 </p>
 {% endif %}

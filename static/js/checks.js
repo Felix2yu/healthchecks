@@ -70,7 +70,7 @@ $(function () {
         delay: 200,
         title: function () {
             if (this.querySelector(".label-confirmation")) {
-                return 'The word "confirm" was found in request body';
+                return '在请求体中发现了 "confirm" 字样';
             }
             var dtSpan = this.querySelector("[data-dt]");
             if (dtSpan) {
@@ -210,10 +210,10 @@ $(function () {
             var code = $(this).closest("tr.checks-row").attr("id");
             var alreadyPaused = $("#" + code + " span.status").hasClass("ic-paused");
             if (alreadyPaused) {
-                return "This check is already paused.";
+                return "此检查已暂停。";
             }
 
-            return "Pause this check?<br />Click again to confirm.";
+            return "暂停此检查？<br />再次点击确认。";
         },
         trigger: "manual",
         html: true,
@@ -261,15 +261,15 @@ $(function () {
         title: function () {
             var cssClasses = this.getAttribute("class");
             if (cssClasses.indexOf("ic-new") > -1)
-                return "New. Has never received a ping.";
+                return "新检查，从未收到过 ping。";
             if (cssClasses.indexOf("ic-paused") > -1)
-                return "Monitoring paused.<br />Ping to resume.";
+                return "监控已暂停。<br />发送 ping 以恢复。";
 
             if (cssClasses.indexOf("sort-name") > -1)
-                return "Sort by name<br />(but failed always first)";
+                return "按名称排序<br />（但失败项始终排在前面）";
 
             if (cssClasses.indexOf("sort-last-ping") > -1)
-                return "Sort by last ping<br />(but failed always first)";
+                return "按最后 ping 时间排序<br />（但失败项始终排在前面）";
         },
     });
 
@@ -360,7 +360,7 @@ $(function () {
         searchField: ["value"],
     });
 
-    $(".my-checks-url").tooltip({ container: "body", title: "Click to copy" });
+    $(".my-checks-url").tooltip({ container: "body", title: "点击复制" });
     $(".my-checks-url").click(function (e) {
         if (window.getSelection().toString()) {
             // do nothing, selection not empty
@@ -368,7 +368,7 @@ $(function () {
         }
 
         navigator.clipboard.writeText(this.textContent);
-        $(".tooltip-inner").text("Copied!");
+        $(".tooltip-inner").text("已复制！");
     });
 
     $("#check-filters button[title]").tooltip();

@@ -1,6 +1,5 @@
 <h1>GitHub Actions</h1>
-<p>You can augment your GitHub Actions workflows to report success and
-failure to SITE_NAME:</p>
+<p>你可以增强你的 GitHub Actions 工作流，向 SITE_NAME 报告成功和失败：</p>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hourly Housekeeping</span>
 <span class="nt">on</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
@@ -9,7 +8,7 @@ failure to SITE_NAME:</p>
 <span class="w">  </span><span class="nt">Main-Job</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;Running housekeeping tasks...&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;正在执行维护任务...&quot;</span>
 <span class="w">  </span><span class="nt">Ping-Success</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Main-Job</span><span class="p p-Indicator">]</span>
@@ -23,15 +22,15 @@ failure to SITE_NAME:</p>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">curl -m 10 --retry 5 ${{ secrets.ping_url }}/fail</span>
 </code></pre></div>
 
-<p>Note how the jobs <code>Ping-Success</code> and <code>Ping-Failure</code> define <code>Main-Job</code> as
-their dependency. <code>Ping-Success</code> runs only if <code>Main-Job</code> completes
-successfully, and <code>Ping-Failure</code> runs when <code>Main-Job</code> fails.</p>
-<p>To avoid exposing the ping URL, it is a good idea to define it
-as <a href="https://docs.github.com/en/actions/security-guides/encrypted-secrets">a secret</a>
-and access it via the <code>secrets</code> context.</p>
-<h2>Using the <code>workflow_run</code> Trigger</h2>
-<p>Alternatively, you can put the pinging logic in a separate workflow,
-and configure it to trigger every time your main workflow finishes. The main workflow:</p>
+<p>注意 <code>Ping-Success</code> 和 <code>Ping-Failure</code> 作业将 <code>Main-Job</code> 定义为其依赖项。
+<code>Ping-Success</code> 仅在 <code>Main-Job</code> 成功完成时运行，
+而 <code>Ping-Failure</code> 在 <code>Main-Job</code> 失败时运行。</p>
+<p>为避免暴露 ping URL，建议将其定义为
+<a href="https://docs.github.com/en/actions/security-guides/encrypted-secrets">密钥</a>
+并通过 <code>secrets</code> 上下文访问。</p>
+<h2>使用 <code>workflow_run</code> 触发器</h2>
+<p>或者，你可以将 ping 逻辑放在单独的工作流中，
+并配置它在每次主工作流完成时触发。主工作流：</p>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hourly Housekeeping</span>
 <span class="nt">on</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
@@ -40,10 +39,10 @@ and configure it to trigger every time your main workflow finishes. The main wor
 <span class="w">  </span><span class="nt">Main-Job</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;Running housekeeping tasks...&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;正在执行维护任务...&quot;</span>
 </code></pre></div>
 
-<p>And the monitoring workflow:</p>
+<p>以及监控工作流：</p>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ping SITE_NAME</span>
 <span class="nt">on</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">workflow_run</span><span class="p">:</span>

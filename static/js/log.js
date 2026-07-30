@@ -7,7 +7,7 @@ $(function () {
     var dateFormatter = new DateFormatter(initialTz);
 
     function updateSliderPreview() {
-        var toFormatted = "now, live updates";
+        var toFormatted = "现在，实时更新";
         if (slider.value != slider.max) {
             var dt = new Date(slider.value * 1000);
             toFormatted = dateFormatter.formatDateTime(dt);

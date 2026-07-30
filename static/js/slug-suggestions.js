@@ -21,9 +21,9 @@ $(function () {
         function update() {
             var suggested = slugify(nameInput.val());
             if (suggested) {
-                help.html(`Suggested value: <code>${suggested}</code>`);
+                help.html(`建议值：<code>${suggested}</code>`);
             } else {
-                help.text("Allowed characters: a-z, 0-9, hyphens, underscores.");
+                help.text("允许的字符：a-z、0-9、连字符、下划线。");
             }
 
             btn.attr("disabled", !suggested);

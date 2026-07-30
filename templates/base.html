@@ -1,13 +1,13 @@
 <!DOCTYPE html>{% load compress static hc_extras %}
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}{{ site_name }} - Monitor Cron Jobs. Get Notified When Your Cron Jobs Fail{% endblock %}</title>
+    <title>{% block title %}{{ site_name }} - 监控 Cron 任务，任务失败时即时通知{% endblock %}</title>
     {% block description %}
-    <meta name="description" content="Monitor and Get Notified When Your Cron Jobs Fail. Free alternative to Cronitor and Dead Man's Snitch.">
+    <meta name="description" content="监控 Cron 任务，在任务失败时收到通知。Cronitor 和 Dead Man's Snitch 的免费替代方案。">
     {% endblock %}
     {% block keywords %}
-    <meta name="keywords" content="healthchecks, monitor cron jobs, cron monitoring, cron job syntax, health checks, crontab cheat sheet, crontab monitoring, cronjob monitoring, cron dashboard">
+    <meta name="keywords" content="健康检查, 监控 cron 任务, cron 监控, cron 任务语法, 健康检查, crontab 速查表, crontab 监控, cronjob 监控, cron 仪表盘">
     {% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block favicon %}
@@ -63,8 +63,8 @@
     {% debug_warning %}
     {% if request.user.is_authenticated and request.profile.deletion_scheduled_date %}
     <div id="account-warning">
-        Warning: Your account is scheduled for deletion on {{ request.profile.deletion_scheduled_date.date }}.
-        <a href="mailto:{% support_email %}">Contact support</a> to resolve.
+        警告：你的账户已计划于 {{ request.profile.deletion_scheduled_date.date }} 删除。
+        <a href="mailto:{% support_email %}">联系支持</a>以解决。
     </div>
     {% endif %}
 
@@ -78,7 +78,7 @@
                 data-target="#navbar"
                 aria-expanded="false"
                 aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">切换导航</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -92,11 +92,11 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a id="base-url" href="{% url 'hc-index' %}">All Projects</a></li>
+                        <li><a id="base-url" href="{% url 'hc-index' %}">所有项目</a></li>
                         <li id="projects-divider" role="separator" class="divider"></li>
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a  href="#" data-toggle="modal"  data-target="#add-project-modal">New Project&hellip;</a>
+                            <a  href="#" data-toggle="modal"  data-target="#add-project-modal">新项目&hellip;</a>
                         </li>
                     </ul>
                 </div>
@@ -119,24 +119,24 @@
             {% if project %}
             <ul id="nav-main-sections" class="nav navbar-nav">
                 <li {% if page == 'checks' %} class="active" {% endif %}>
-                    <a href="{% url 'hc-checks' project.code %}">Checks</a>
+                    <a href="{% url 'hc-checks' project.code %}">检查项</a>
                 </li>
 
                 {% with b=project.have_channel_issues %}
                 <li {% if b %}id="broken-channels"{% endif %} {% if page == 'channels' %}class="active"{% endif %}>
                     <a href="{% url 'hc-channels' project.code %}">
-                        Integrations
+                        集成
                         {% if b %}<span class="ic-grace"></span>{% endif %}
                     </a>
                 </li>
                 {% endwith %}
 
                 <li {% if page == 'badges' %} class="active" {% endif %}>
-                    <a href="{% url 'hc-badges' project.code %}">Badges</a>
+                    <a href="{% url 'hc-badges' project.code %}">徽章</a>
                 </li>
 
                 <li {% if page == 'project' %} class="active" {% endif %}>
-                    <a href="{% url 'hc-project-settings' project.code %}">Settings</a>
+                    <a href="{% url 'hc-project-settings' project.code %}">设置</a>
                 </li>
             </ul>
             {% endif %}
@@ -145,45 +145,45 @@
                 {% if show_pricing %}
                 <li {% if page == 'pricing' %} class="active" {% endif %}>
                     {% if project %}
-                    <a href="{% url 'hc-p-pricing' project.code %}">Pricing</a>
+                    <a href="{% url 'hc-p-pricing' project.code %}">定价</a>
                     {% else %}
-                    <a href="{% url 'hc-pricing' %}">Pricing</a>
+                    <a href="{% url 'hc-pricing' %}">定价</a>
                     {% endif %}
                 </li>
                 {% endif %}
 
                 <li {% if page == 'docs' %} class="active" {% endif %}>
-                    <a href="{% url 'hc-docs' %}">Docs</a>
+                    <a href="{% url 'hc-docs' %}">文档</a>
                 </li>
 
                 {% if request.user.is_authenticated %}
                 <li class="dropdown">
                     <a id="nav-email" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        Account
+                        账户
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         {% if request.user.is_superuser %}
-                            <li><a href="{% url 'admin:index' %}">Site Administration</a></li>
+                            <li><a href="{% url 'admin:index' %}">站点管理</a></li>
                             <li role="separator" class="divider"></li>
                         {% endif %}
 
                     <li class="dropdown-header">{{ request.user.email }}</li>
 
                     <li>
-                        <a href="{% url 'hc-profile' %}">Account Settings</a>
+                        <a href="{% url 'hc-profile' %}">账户设置</a>
                     </li>
                     <li>
                         <form method="post" action="{% url 'hc-logout' %}">
                             {% csrf_token %}
-                            <button class="btn btn-link" type="submit">Log Out</button>
+                            <button class="btn btn-link" type="submit">退出登录</button>
                         </form>
                     </li>
                     </ul>
                 </li>
                 {% elif page != "login" %}
                 <li>
-                    <a href="{% url 'hc-login' %}">Log In</a>
+                    <a href="{% url 'hc-login' %}">登录</a>
                 </li>
                 {% endif %}
 
@@ -191,7 +191,7 @@
                 {% if page == "welcome" or page == "login" %}
                 <li>
                     <a id="nav-sign-up" href="#" data-toggle="modal" data-target="#signup-modal">
-                        <span>Sign Up</span>
+                        <span>注册</span>
                     </a>
                 </li>
                 {% endif %}
@@ -213,8 +213,8 @@
             <ul>
                 <li>
                     Healthchecks {% site_version %}
-                    (<a href="https://github.com/healthchecks/healthchecks">github</a>,
-                     <a href="https://healthchecks.io">healthchecks.io</a>)
+                   （<a href="https://github.com/healthchecks/healthchecks">GitHub</a>，
+                     <a href="https://healthchecks.io">healthchecks.io</a>）
                 </li>
             </ul>
         </div>

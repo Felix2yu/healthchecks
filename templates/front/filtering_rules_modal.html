@@ -9,8 +9,8 @@
             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-body">
-                    <h2>Allowed HTTP Request Methods</h2>
-                    <p>Accept and process HTTP ping requests if the request method is</p>
+                    <h2>允许的 HTTP 请求方法</h2>
+                    <p>接受并处理 HTTP Ping 请求，当请求方法为</p>
                     <label class="radio-container">
                         <input
                             type="radio"
@@ -18,7 +18,7 @@
                             value=""
                             {% if check.methods == "" %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        HEAD, GET, POST, PUT
+                        HEAD、GET、POST、PUT
                     </label>
                     <label class="radio-container">
                         <input
@@ -27,10 +27,9 @@
                             value="POST"
                             {% if check.methods == "POST" %} checked {% endif %}>
                         <span class="radiomark"></span>
-                        Only POST
+                        仅 POST
                         <span class="help-block">
-                            May help if bots (email content scanners, link preview
-                            loaders) make GET requests to the ping URL.
+                            如果机器人（邮件内容扫描器、链接预览加载器）对 Ping URL 发起 GET 请求，可能有帮助。
                         </span>
                     </label>
                 </div>
@@ -38,9 +37,8 @@
                 <hr>
 
                 <div class="modal-body">
-                    <h2>Content Filtering</h2>
-                    <p>Classify pings as start, success, or failure signals by
-                       matching keywords (case-sensitive) in</p>
+                    <h2>内容过滤</h2>
+                    <p>通过匹配关键词（区分大小写）将 Ping 分类为开始、成功或失败信号，匹配位置</p>
                     <label class="checkbox-container">
                         <input
                             type="checkbox"
@@ -48,7 +46,7 @@
                             name="filter_http_body"
                             {% if check.filter_http_body %}checked{% endif %} />
                         <span class="checkmark"></span>
-                        Request body of HTTP requests
+                        HTTP 请求的请求正文
                     </label>
 
                     <label class="checkbox-container">
@@ -58,7 +56,7 @@
                             name="filter_subject"
                             {% if check.filter_subject %}checked{% endif %} />
                         <span class="checkmark"></span>
-                        Subject line of email messages
+                        邮件主题行
                     </label>
 
                     <label class="checkbox-container">
@@ -68,12 +66,12 @@
                             name="filter_body"
                             {% if check.filter_body %}checked{% endif %} />
                         <span class="checkmark"></span>
-                        Message body of email messages
+                        邮件正文
                     </label>
 
                     <div class="form-group">
                         <label for="start_kw" class="col-sm-4 control-label">
-                            Start keywords
+                            开始关键词
                         </label>
                         <div class="col-sm-7">
                             <input
@@ -88,7 +86,7 @@
                     </div>
                     <div class="form-group">
                         <label for="success_kw" class="col-sm-4 control-label">
-                            Success keywords
+                            成功关键词
                         </label>
                         <div class="col-sm-7">
                             <input
@@ -103,7 +101,7 @@
                     </div>
                     <div class="form-group">
                         <label for="failure_kw" class="col-sm-4 control-label">
-                            Failure keywords
+                            失败关键词
                         </label>
                         <div class="col-sm-7">
                             <input
@@ -115,16 +113,14 @@
                                 {% if not check.filter_any %}disabled{% endif %}
                                 class="form-control filter-kw" />
                             <span class="help-block">
-                                Comma-separated list of keywords. If
-                                any keyword is found, classify the ping as a
-                                start / success / failure signal. <a href="{% url 'hc-serve-doc' 'configuring_checks' %}#filtering-rules">(Docs)</a>
+                                逗号分隔的关键词列表。如果找到任何关键词，将 Ping 分类为开始/成功/失败信号。<a href="{% url 'hc-serve-doc' 'configuring_checks' %}#filtering-rules">（文档）</a>
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-4 control-label">
-                            If no keywords match
+                            如果没有关键词匹配
                         </label>
                         <div class="col-sm-7">
                             <label class="radio-container">
@@ -136,7 +132,7 @@
                                     {% if not check.filter_any %}disabled{% endif %}
                                     {% if not check.filter_default_fail %}checked{% endif %}>
                                 <span class="radiomark"></span>
-                                Ignore the ping
+                                忽略此 Ping
                             </label>
                             <label class="radio-container">
                                 <input
@@ -147,7 +143,7 @@
                                     {% if not check.filter_any %}disabled{% endif %}
                                     {% if check.filter_default_fail %}checked{% endif %}>
                                 <span class="radiomark"></span>
-                                Classify the ping as failure
+                                将 Ping 分类为失败
                             </label>
                         </div>
                     </div>
@@ -155,8 +151,8 @@
                 <hr>
 
                 <div class="modal-body">
-                    <h2>Pinging a Paused Check</h2>
-                    <p>When a paused check receives a ping:</p>
+                    <h2>Ping 已暂停的检查项</h2>
+                    <p>当已暂停的检查项收到 Ping 时：</p>
                     <label class="radio-container">
                         <input
                             type="radio"
@@ -164,7 +160,7 @@
                             value=""
                             {% if not check.manual_resume %}checked{% endif %}>
                         <span class="radiomark"></span>
-                        Leave the paused state (default)
+                        退出暂停状态（默认）
                     </label>
                     <label class="radio-container">
                         <input
@@ -173,13 +169,13 @@
                             value="1"
                             {% if check.manual_resume %}checked{% endif %}>
                         <span class="radiomark"></span>
-                        Ignore the ping, stay in the paused state
+                        忽略此 Ping，保持暂停状态
                     </label>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </div>
         </form>

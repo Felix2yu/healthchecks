@@ -81,7 +81,7 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
         channel.save()
         channel.assign_all_checks()
 
-    messages.success(request, "The PagerDuty integration has been added!")
+    messages.success(request, "PagerDuty 集成已添加！")
     return redirect("hc-channels", project.code)
 
 

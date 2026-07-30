@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}Telegram Integration for {{ site_name }}{% endblock %}
+{% block title %}Telegram 集成 - {{ site_name }}{% endblock %}
 
 {% block description %}
-    <meta name="description" content="Use {{ site_name }} with Telegram: configure {{ site_name }} to post status updates to a Telegram user, group or channel.">
+    <meta name="description" content="将 {{ site_name }} 与 Telegram 配合使用：配置 {{ site_name }} 向 Telegram 用户、群组或频道发布状态更新。">
 {% endblock %}
 
 {% block content %}
@@ -15,24 +15,24 @@
     {% if recipient.id %}
     <div class="jumbotron">
         <p>
-            When a check goes <strong>up</strong> or <strong>down</strong>,
-            {{ site_name }} will send notifications to
+            当检查项<strong>恢复</strong>或<strong>宕机</strong>时，
+            {{ site_name }} 将发送通知到
             {% if recipient.type == "private" %}
-                a Telegram user
+                名为 <strong>{{ recipient.name }}</strong> 的 Telegram 用户
             {% elif recipient.type == "channel" %}
-                a Telegram channel
+                名为 <strong>{{ recipient.name }}</strong> 的 Telegram 频道
             {% else %}
-                a Telegram group
+                名为 <strong>{{ recipient.name }}</strong> 的 Telegram 群组
             {% endif %}
-            named <strong>{{ recipient.name }}</strong>.
+            。
         </p>
     </div>
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
     <form id="add-telegram" method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group">
-            <label class="col-sm-3 control-label">Project</label>
+            <label class="col-sm-3 control-label">项目</label>
             <div class="col-sm-6 col-lg-4">
                 <select name="project" class="form-control">
                     {% for project in projects %}
@@ -46,37 +46,36 @@
             <div class="col-sm-offset-3 col-sm-8">
                 <button type="submit" class="btn btn-default">
                     <img class="ai-icon" src="{% static 'img/telegram.png' %}" alt="Telegram" />
-                    Connect Telegram
+                    连接 Telegram
                 </button>
             </div>
         </div>
     </form>
 
     {% else %}
-    <p>If your team uses <a href="https://telegram.org/">Telegram</a>,
-    you can set up {{ site_name }} to post status updates directly to an
-    appropriate Telegram user, group or channel.</p>
+    <p>如果你的团队使用 <a href="https://telegram.org/">Telegram</a>，
+    你可以设置 {{ site_name }} 直接向指定的 Telegram 用户、群组或频道
+    发布状态更新。</p>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                <strong>Groups:</strong> If you want notifications sent to a group, start by inviting
+                <strong>群组：</strong>如果要将通知发送到群组，首先将
                 <a href="https://t.me/{{ bot_name }}">{{ bot_name }}</a>
-                to the group. The bot will get added as a member with no access to
-                group messages.
+                邀请到群组中。机器人将以成员身份加入，无法访问群组消息。
             </p>
             <p>
-                <strong>Direct messages:</strong> If you want notifications sent to yourself directly,
-                start a conversation with
-                <a href="https://t.me/{{ bot_name }}">{{ bot_name }}</a>.
+                <strong>私信：</strong>如果要将通知发送给自己，
+                与 <a href="https://t.me/{{ bot_name }}">{{ bot_name }}</a>
+                开始对话。
             </p>
             <p>
-                <strong>Channels:</strong> If you want notifications sent to a Telegram channel,
-                add <a href="https://t.me/{{ bot_name }}">{{ bot_name }}</a>
-                to the channel's Administrators. Enable the "Post Messages" admin
-                right, and disable all other admin rights.
+                <strong>频道：</strong>如果要将通知发送到 Telegram 频道，
+                将 <a href="https://t.me/{{ bot_name }}">{{ bot_name }}</a>
+                添加为频道的管理员。启用"发布消息"管理员权限，
+                并禁用所有其他管理员权限。
             </p>
         </div>
         <div class="col-sm-6">
@@ -89,15 +88,15 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Type <strong><code>/start</code></strong> command.
-               If there are multiple bots in the group, type
-               <strong><code>/start@{{ bot_name }}</code></strong> instead.
+            <p>输入 <strong><code>/start</code></strong> 命令。
+               如果群组中有多个机器人，请改为输入
+               <strong><code>/start@{{ bot_name }}</code></strong>。
            </p>
-           <p>If you want {{ site_name }} to post notifications to a <strong>specific
-              group topic</strong>, send a <strong><code>/start@{{ bot_name }}</code></strong>
-              command from that topic.
+           <p>如果你希望 {{ site_name }} 将通知发布到<strong>特定的
+              群组话题</strong>，请在该话题中发送 <strong><code>/start@{{ bot_name }}</code></strong>
+              命令。
            </p>
-            <p>The bot will respond with a confirmation link.</p>
+            <p>机器人将回复一个确认链接。</p>
         </div>
         <div class="col-sm-6">
             <img
@@ -109,11 +108,10 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Click or tap on the confirmation link, and
-            {{ site_name }} will open in a browser window asking you to
-             confirm the new integration.</p>
-            <p>Select the project you want the Telegram integration added to,
-            click on "Connect Telegram", and it's done!</p>
+            <p>点击确认链接，{{ site_name }} 将在浏览器窗口中打开，
+            要求你确认新的集成。</p>
+            <p>选择要添加 Telegram 集成的项目，
+            点击"连接 Telegram"，就完成了！</p>
 
         </div>
         <div class="col-sm-6">

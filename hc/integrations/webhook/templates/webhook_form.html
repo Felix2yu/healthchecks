@@ -3,9 +3,9 @@
 
 {% block title %}
     {% if is_new %}
-    Add Webhook Integration - {% site_name %}
+    添加 Webhook 集成 - {% site_name %}
     {% else %}
-    Webhook Settings - {% site_name %}
+    Webhook 设置 - {% site_name %}
     {% endif %}
 {% endblock %}
 
@@ -16,20 +16,19 @@
         <h1>Webhook</h1>
 
         <p>
-            Executes an HTTP request to your specified URL when a check
-            goes up or down.  You can use placeholders <strong>$NAME</strong>,
-            <strong>$STATUS</strong> and others in webhook URLs, request body and
-            header values
-            <a href="#" data-toggle="modal" data-target="#reference-modal">(available placeholders)</a>.
+            在检查项恢复或宕机时向指定链接执行 HTTP 请求。
+            你可以在 Webhook 链接、请求正文和头部值中使用占位符
+            <strong>$NAME</strong>、<strong>$STATUS</strong> 等
+            <a href="#" data-toggle="modal" data-target="#reference-modal">（可用占位符）</a>。
         </p>
         <p>
-            Webhook retry policy:
-            {% site_name %} retries failed webhook calls up to 2 additional times.
-            {% site_name %} considers a HTTP request failed if:
+            Webhook 重试策略：
+            {% site_name %} 最多重试失败的 Webhook 调用 2 次。
+            在以下情况下，{% site_name %} 认为 HTTP 请求失败：
         </p>
         <ul>
-            <li>The destination server does not return a complete response within 30 seconds.</li>
-            <li>The HTTP response status code is not one of: 200, 201, 202 or 204.</li>
+            <li>目标服务器未在 30 秒内返回完整响应。</li>
+            <li>HTTP 响应状态码不是 200、201、202 或 204。</li>
         </ul>
 
         <form id="add-webhook-form" method="post">
@@ -37,7 +36,7 @@
 
         <div class="form-group {{ form.name.css_classes }}">
             <br>
-            <label>Name</label>
+            <label>名称</label>
             <input
                 id="webhook-form-name"
                 name="name"
@@ -45,16 +44,16 @@
                 type="text"
                 class="form-control" />
 
-            <div class="help-block">Give this integration a descriptive name, so you can easily recognize it later. </div>
+            <div class="help-block">为此集成提供一个描述性名称，方便日后识别。</div>
         </div>
 
         <div class="row">
         <div class="col-sm-6">
-            <h2>Execute when a check goes <strong class="label-down">down</strong></h2>
+            <h2>检查项<strong class="label-down">宕机</strong>时执行</h2>
             <br />
 
             <div class="form-group {{ form.url_down.css_classes }}">
-                <label>URL</label>
+                <label>链接</label>
                 <div class="method-url-group">
                     <select id="method-down" name="method_down" class="form-control">
                         <option{% if form.method_down.value == "GET" %} selected{% endif %}>GET</option>
@@ -76,7 +75,7 @@
             </div>
 
             <div id="body-down-group" class="form-group {{ form.body_down.css_classes }}" style="display: none">
-                <label class="control-label">Request Body</label>
+                <label class="control-label">请求正文</label>
                 <textarea
                     class="form-control"
                     rows="3"
@@ -90,27 +89,27 @@
             </div>
 
             <div class="form-group {{ form.headers_down.css_classes }}">
-                <label class="control-label">Request Headers</label>
+                <label class="control-label">请求头部</label>
                 <textarea
                     class="form-control"
                     rows="3"
                     name="headers_down"
-                    placeholder="X-Sample-Header: $NAME has gone down">{{ form.headers_down.value|default:"" }}</textarea>
+                    placeholder="X-Sample-Header: $NAME 已宕机">{{ form.headers_down.value|default:"" }}</textarea>
                 <div class="help-block">
                     {% if form.headers_down.errors %}
                         {{ form.headers_down.errors|join:"" }}
                     {% else %}
-                        Optional "Header-Name: value" pairs, one pair per line.
+                        可选的"头部名称: 值"对，每行一对。
                     {% endif %}
                 </div>
             </div>
         </div>
 
         <div class="col-sm-6">
-            <h2>Execute when a check goes <strong class="label-up">up</strong></h2>
+            <h2>检查项<strong class="label-up">恢复</strong>时执行</h2>
             <br />
             <div class="form-group {{ form.url_up.css_classes }}">
-                <label>URL</label>
+                <label>链接</label>
                 <div class="method-url-group">
                     <select id="method-up" name="method_up" class="form-control">
                         <option{% if form.method_up.value == "GET" %} selected{% endif %}>GET</option>
@@ -132,7 +131,7 @@
                 {% endif %}
             </div>
             <div id="body-up-group" class="form-group {{ form.body_up.css_classes }}" style="display: none">
-                <label class="control-label">Request Body</label>
+                <label class="control-label">请求正文</label>
                 <textarea
                     class="form-control"
                     rows="3"
@@ -146,17 +145,17 @@
             </div>
 
             <div class="form-group {{ form.headers_up.css_classes }}">
-                <label class="control-label">Request Headers</label>
+                <label class="control-label">请求头部</label>
                 <textarea
                     class="form-control"
                     rows="3"
                     name="headers_up"
-                    placeholder="X-Sample-Header: $NAME is back up">{{ form.headers_up.value|default:"" }}</textarea>
+                    placeholder="X-Sample-Header: $NAME 已恢复">{{ form.headers_up.value|default:"" }}</textarea>
                 <div class="help-block">
                     {% if form.headers_up.errors %}
                         {{ form.headers_up.errors|join:"" }}
                     {% else %}
-                        Optional "Header-Name: value" pairs, one pair per line.
+                        可选的"头部名称: 值"对，每行一对。
                     {% endif %}
                 </div>
             </div>
@@ -168,9 +167,9 @@
         <div class="form-group text-right">
             <button type="submit" class="btn btn-primary">
                 {% if channel %}
-                Save Changes
+                保存更改
                 {% else %}
-                Save Integration
+                保存集成
                 {% endif %}
             </button>
         </div>
@@ -183,86 +182,84 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Supported Placeholders</h4>
+                <h4>支持的占位符</h4>
             </div>
             <div class="modal-body">
                 <p>
-                    You can use the below placeholders in webhook URL, request body
-                    and header values.  {% site_name %} will replace the placeholders
-                    with the correct values.
+                    你可以在 Webhook 链接、请求正文和头部值中使用以下占位符。
+                    {% site_name %} 会将占位符替换为正确的值。
                 </p>
 
                 <table id="webhook-variables" class="table modal-body">
                     <tr>
                         <th><code>$CODE</code></th>
-                        <td>The UUID code of the check.</td>
+                        <td>检查项的 UUID 代码。</td>
                     </tr>
                     <tr>
                         <th><code>$NAME</code></th>
-                        <td>Name of the check.</td>
+                        <td>检查项的名称。</td>
                     </tr>
                     <tr>
                         <th><code>$NAME_JSON</code></th>
-                        <td><p>Name of the check, encoded as JSON string. If
-                            the check's name contains a double quote, this would produce
-                            invalid JSON:</p>
+                        <td><p>检查项的名称，编码为 JSON 字符串。如果
+                            检查项名称包含双引号，使用以下方式会产生无效的 JSON：</p>
                             <pre>{"name": "$NAME"}</pre>
-                            <p>But this would work:</p>
+                            <p>但以下方式可以正常工作：</p>
                             <pre>{"name": $NAME_JSON}</pre>
                         </td>
                     </tr>
                     <tr>
                         <th><code>$SLUG</code></th>
-                        <td>Check's slug.</td>
+                        <td>检查项的别名。</td>
                     </tr>
                     <tr>
                         <th><code>$NOW</code></th>
                         <td>
-                            Current UTC time in ISO8601 format. Example:
+                            当前 UTC 时间，ISO8601 格式。示例：
                             "{% now_isoformat %}"
                         </td>
                     </tr>
                     <tr>
                         <th><code>$STATUS</code></th>
-                        <td>Check's current status ("up" or "down").</td>
+                        <td>检查项的当前状态（"up" 或 "down"）。</td>
                     </tr>
                     <tr>
                         <th><code>$TAGS</code></th>
-                        <td>Check's tags, separated by spaces.</td>
+                        <td>检查项的标签，以空格分隔。</td>
                     </tr>
                     <tr>
                         <th><code>$TAG1, $TAG2, …</code></th>
-                        <td>Value of the first tag, the second tag, …</td>
+                        <td>第一个标签、第二个标签……的值。</td>
                     </tr>
                     <tr>
                         <th><code>$BODY</code></th>
-                        <td>The request body of the most recent ping. Works only in the webhook's "Request Body" field.</td>
+                        <td>最近一次 Ping 的请求正文。仅在 Webhook 的"请求正文"字段中有效。</td>
                     </tr>
                     <tr>
                         <th><code>$BODY_JSON</code></th>
-                        <td>Same as $BODY, but encoded as JSON string.</td>
+                        <td>与 $BODY 相同，但编码为 JSON 字符串。</td>
                     </tr>
                     <tr>
                         <th><code>$EXITSTATUS</code></th>
-                        <td>The exit status value of the most recent ping. Default value: "-1".</td>
+                        <td>最近一次 Ping 的退出状态值。默认值："-1"。</td>
                     </tr>
                     <tr>
                         <th><code>$JSON</code></th>
                         <td>
                             <p>
-                            A JSON representation of the check.
-                            The JSON document has the same fields as the
-                            <a href="{% url 'hc-serve-doc' 'api' %}#get-check">Get a Single Check</a>
-                            API response. You can nest <code>$JSON</code> in your own JSON structure, example: </p>
+                            检查项的 JSON 表示。
+                            JSON 文档包含与
+                            <a href="{% url 'hc-serve-doc' 'api' %}#get-check">获取单个检查项</a>
+                            API 响应相同的字段。你可以在自己的 JSON 结构中嵌套 <code>$JSON</code>，示例：</p>
                             <pre>{"now": "$NOW", "check": $JSON}</pre>
-                            <p>The resulting payload would be:</p>
+                            <p>生成的有效负载将为：</p>
                             <pre>{"now": "{% now_isoformat %}", "check": {"name": "Foo", "slug": "foo", ... }}</pre>
                         </td>
                     </tr>
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Got It!</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">知道了！</button>
             </div>
         </div>
     </div>

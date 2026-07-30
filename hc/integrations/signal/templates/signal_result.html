@@ -1,21 +1,21 @@
 {% if result is None %}
 <div class="alert alert-success">
-    <strong>Success!</strong>
-    All good, the message was sent.
+    <strong>成功！</strong>
+    一切正常，消息已发送。
 </div>
 {% elif result == "CAPTCHA proof required" %}
 <div class="alert alert-danger">
-    <p>We hit a Signal rate-limit while sending the message.</p>
+    <p>发送消息时遇到了 Signal 速率限制。</p>
 
-    <p>Let's try the other way around: from the Signal application, please send a
-        short message to our Signal account.
-        Then click the "Send Test Message!" button again.
+    <p>让我们换个方式：请从 Signal 应用程序向我们
+        的 Signal 帐户发送一条短消息。
+        然后再次点击"发送测试消息！"按钮。
     </p>
 </div>
 {% elif result == "Recipient not found" %}
 <div class="alert alert-danger">
-    <strong>Recipient not found.</strong>
-    Please make sure you have entered the phone number correctly.
+    <strong>未找到接收者。</strong>
+    请确保您输入的手机号码正确。
 </div>
 {% else %}
 <div class="alert alert-danger">{{ result }}</div>

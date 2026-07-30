@@ -1,88 +1,85 @@
-# Shell Scripts
+# Shell 脚本
 
-You can easily add SITE_NAME monitoring to a shell script. All you
-have to do is make an HTTP request at an appropriate place in the script.
-[curl](https://curl.haxx.se/docs/manpage.html) and
+你可以轻松地为 shell 脚本添加 SITE_NAME 监控。只需在脚本中的适当位置发起 HTTP 请求即可。
+[curl](https://curl.haxx.se/docs/manpage.html) 和
 [wget](https://www.gnu.org/software/wget/manual/wget.html)
-are two common command-line HTTP clients you can use.
+是两种常用的命令行 HTTP 客户端。
 
 ```bash
-# Sends an HTTP GET request with curl:
+# 使用 curl 发送 HTTP GET 请求：
 curl -m 10 --retry 5 PING_URL
 
-# Silent version (no stdout/stderr output unless curl hits an error):
+# 静默版本（除非 curl 遇到错误，否则不输出 stdout/stderr）：
 curl -fsS -m 10 --retry 5 -o /dev/null PING_URL
 
 ```
 
-Here's what each curl parameter does:
+以下是每个 curl 参数的作用：
 
 **-m &lt;seconds&gt;**
-:   Maximum time in seconds that you allow the HTTP request to take.
-    If you use the `--retry` parameter, then the time counter is reset
-    at the start of each retry.
+:   允许 HTTP 请求花费的最长时间（秒）。
+    如果使用了 `--retry` 参数，则每次重试开始时计时器会重置。
 
 **--retry &lt;num&gt;**
-:   On transient errors, retry up to this many times. By default, curl
-    uses an increasing delay between each retry (1s, 2s, 4s, 8s, ...).
-    See also [--retry-delay](https://curl.haxx.se/docs/manpage.html#--retry-delay).
-    Transient errors are: timeouts, HTTP status codes 408, 429, 500, 502, 503, 504.
+:   对于瞬时错误，最多重试这么多次。默认情况下，curl
+    会在每次重试之间使用递增的延迟（1s、2s、4s、8s...）。
+    另请参阅 [--retry-delay](https://curl.haxx.se/docs/manpage.html#--retry-delay)。
+    瞬时错误包括：超时、HTTP 状态码 408、429、500、502、503、504。
 
 **-f, --fail**
-:   Makes curl treat non-200 responses as errors, and
-    [return error 22](https://curl.se/docs/manpage.html#-f).
+:   使 curl 将非 200 的响应视为错误，并
+    [返回错误码 22](https://curl.se/docs/manpage.html#-f)。
 
 **-s, --silent**
-:   Silent or quiet mode. Hides the progress meter, but also
-    hides error messages.
+:   静默或安静模式。隐藏进度条，但也会
+    隐藏错误消息。
 
 **-S, --show-error**
-:   Re-enables error messages when -s is used.
+:   在使用 -s 时重新启用错误消息。
 
 **-o /dev/null**
-:   Redirects curl's stdout to /dev/null (error messages still go to stderr).
+:   将 curl 的 stdout 重定向到 /dev/null（错误消息仍会发送到 stderr）。
 
-## Signaling Failure from Shell Scripts
+## 从 Shell 脚本发送故障信号
 
-You can append `/fail` or `/{exit-status}` to any ping URL and use the resulting URL
-to actively signal a failure. The exit status should be a 0-255 integer.
-SITE_NAME will interpret exit status 0 as success and all non-zero values as failures.
+你可以将 `/fail` 或 `/{exit-status}` 附加到任何 ping URL，并使用生成的 URL
+主动发送故障信号。退出状态应为 0-255 的整数。
+SITE_NAME 将退出状态 0 解释为成功，所有非零值解释为失败。
 
-The following example runs `/usr/bin/certbot renew`, and uses the `$?` variable to
-look up its exit status:
+以下示例运行 `/usr/bin/certbot renew`，并使用 `$?` 变量来
+获取其退出状态：
 
 ```bash
 #!/bin/sh
 
-# Payload here:
+# 此处为实际任务：
 /usr/bin/certbot renew
 # Ping SITE_NAME
 curl -m 10 --retry 5 PING_URL/$?
 ```
 
-Note on pipelines (`command1 | command2 | command3`) in Bash scripts: by default, a
-pipeline's exit status is the exit status of the rightmost command in the pipeline.
-Use `set -o pipefail` if you need the pipeline to return non-zero exit status if *any*
-part of the pipeline fails:
+关于 Bash 脚本中管道（`command1 | command2 | command3`）的说明：默认情况下，管道的
+退出状态是管道中最右侧命令的退出状态。
+如果你需要管道在*任何*部分失败时返回非零退出状态，请使用 `set -o pipefail`：
 
 ```bash
 #!/bin/sh
 
 set -o pipefail
 pg_dump somedb | gpg --encrypt --recipient alice@example.org --output somedb.sql.gpg
-# Without pipefail, if pg_dump command fails, but gpg succeeds, $? will be 0,
-# and the script will report success.
-# With pipefail, if pg_dump fails, the script will report the exit code returned by pg_dump.
+# 如果没有 pipefail，如果 pg_dump 命令失败但 gpg 成功，$? 将为 0，
+# 脚本将报告成功。
+# 使用 pipefail 后，如果 pg_dump 失败，脚本将报告 pg_dump 返回的退出码。
 curl -m 10 --retry 5 PING_URL/$?
 ```
 
-## Logging Command Output
+## 记录命令输出
 
-When pinging with HTTP POST, you can put extra diagnostic information in the request
-body. If the request body looks like a valid UTF-8 string, SITE_NAME
-will accept and store the first PING_BODY_LIMIT_FORMATTED of the request body.
+使用 HTTP POST 进行 ping 时，可以在请求体中放入额外的诊断信息。
+如果请求体看起来是有效的 UTF-8 字符串，SITE_NAME
+将接受并存储请求体的前 PING_BODY_LIMIT_FORMATTED。
 
-In the below example, certbot's output is captured and submitted via HTTP POST:
+在下面的示例中，certbot 的输出被捕获并通过 HTTP POST 提交：
 
 ```bash
 #!/bin/sh
@@ -91,24 +88,23 @@ m=$(/usr/bin/certbot renew 2>&1)
 curl -fsS -m 10 --retry 5 --data-raw "$m" PING_URL
 ```
 
-## Auto Provisioning New Checks
+## 自动配置新检查项
 
-This example uses SITE_NAME [auto provisioning feature](../autoprovisioning/) to
-create a check "on the fly" if it does not already exist. Using this technique, you can
-write services that automatically register with SITE_NAME the first time they run.
-
+此示例使用 SITE_NAME 的[自动配置功能](../autoprovisioning/)来
+在检查项尚不存在时"即时"创建。使用此技术，你可以
+编写在首次运行时自动向 SITE_NAME 注册的服务。
 
 ```bash
 #!/bin/bash
 
 PING_KEY=fixme-your-ping-key-here
 
-# Use system's hostname as check's slug
+# 使用系统的主机名作为检查项的标识
 SLUG=$(hostname)
 
-# Construct a ping URL and append "?create=1" at the end:
+# 构造 ping URL 并在末尾追加 "?create=1"：
 URL=PING_ENDPOINT$PING_KEY/$SLUG?create=1
 
-# Send a ping:
+# 发送 ping：
 curl -m 10 --retry 5 $URL
 ```

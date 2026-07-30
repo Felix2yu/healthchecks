@@ -62,7 +62,7 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     project = _get_rw_project_for_user(request, code)
 
     if request.GET.get("error") == "access_denied":
-        messages.warning(request, "Pushbullet setup was cancelled.")
+        messages.warning(request, "Pushbullet 设置已取消。")
         return redirect("hc-channels", project.code)
 
     if request.GET.get("state") != state:
@@ -81,7 +81,7 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
         logger.warning("Unexpected Pushbullet OAuth response: %s", result.content)
         messages.warning(
             request,
-            "Received an unexpected response from Pushbullet. Integration not added.",
+            "收到来自 Pushbullet 的意外响应。集成未添加。",
         )
         return redirect("hc-channels", project.code)
 
@@ -89,5 +89,5 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     channel.value = doc.access_token
     channel.save()
     channel.assign_all_checks()
-    messages.success(request, "The Pushbullet integration has been added!")
+    messages.success(request, "Pushbullet 集成已添加！")
     return redirect("hc-channels", project.code)

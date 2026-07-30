@@ -12,7 +12,7 @@ $(function () {
 
         // OK, we're good
         currentPreviewHash = schedule;
-        $("#cron-preview-title").text("Updating...");
+        $("#cron-preview-title").text("更新中...");
 
         var token = $('input[name=csrfmiddlewaretoken]').val();
         $.ajax({

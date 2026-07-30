@@ -1,9 +1,9 @@
-# Using Python 3 standard library:
+# 使用 Python 3 标准库：
 import socket
 import urllib.request
 
 try:
     urllib.request.urlopen("PING_URL", timeout=10)
 except socket.error as e:
-    # Log ping failure here...
+    # 在此记录 ping 失败日志...
     print("Ping failed: %s" % e)

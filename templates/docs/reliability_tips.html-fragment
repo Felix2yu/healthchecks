@@ -1,31 +1,27 @@
-<h1>Pinging Reliability Tips</h1>
-<p>Sending monitoring signals over the public internet is inherently unreliable.
-HTTP requests can sometimes take excessively long or fail completely
-for a variety of reasons. Here are some general tips to make your monitoring
-code more robust.</p>
-<h2>Specify HTTP Request Timeout</h2>
-<p>Put a time limit on how long each ping is allowed to take. This is especially
-important when sending a "start" signal at the start of a job: you don't want
-a stuck ping to prevent the actual job from running. Another case is a continuously
-running worker process that pings SITE_NAME after each completed item. A stuck
-request could block the whole process. An explicit per-request time limit mitigates
-this problem.</p>
-<p>Specifying the timeout depends on the tool you use. curl, for example, has the
-<code>--max-time</code> (shorthand: <code>-m</code>) parameter:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Send an HTTP request, 10 second timeout:</span>
+<h1>Ping 可靠性提示</h1>
+<p>通过公共互联网发送监控信号本质上不可靠。
+HTTP 请求有时可能耗时过长或因各种原因完全失败。
+以下是一些让你的监控代码更健壮的通用技巧。</p>
+<h2>指定 HTTP 请求超时</h2>
+<p>为每个 ping 设置允许的时间限制。这在任务开始时发送"start"信号时
+尤为重要：你不希望一个卡住的 ping 阻止实际任务的运行。
+另一种情况是持续运行的 worker 进程在每完成一个项目后 ping SITE_NAME。
+一个卡住的请求可能阻塞整个进程。明确的每个请求时间限制可以缓解
+这个问题。</p>
+<p>指定超时取决于你使用的工具。例如，curl 有 <code>--max-time</code>（简写：<code>-m</code>）参数：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 发送 HTTP 请求，10 秒超时：</span>
 curl<span class="w"> </span>-m<span class="w"> </span><span class="m">10</span><span class="w"> </span>PING_URL
 </code></pre></div>
 
-<h2>Use Retries</h2>
-<p>To minimize the amount of false alerts you get from SITE_NAME, instruct your HTTP
-client to retry failed requests several times.</p>
-<p>Specifying the retry policy depends on the tool you use. curl, for example, has the
-<code>--retry</code> parameter:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Retry up to 5 times, uses an increasing delay between each retry (1s, 2s, 4s, 8s, ...)</span>
+<h2>使用重试</h2>
+<p>为了最大程度减少从 SITE_NAME 收到的误报数量，请指示你的 HTTP
+客户端重试失败的请求若干次。</p>
+<p>指定重试策略取决于你使用的工具。例如，curl 有 <code>--retry</code> 参数：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 最多重试 5 次，每次重试之间使用递增的延迟（1s、2s、4s、8s...）</span>
 curl<span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>PING_URL
 </code></pre></div>
 
-<h2>Handle Exceptions</h2>
-<p>Make sure you know how your HTTP client handles failed requests. For example,
-if you use an HTTP library that raises exceptions, decide if you want to
-catch the exceptions or let them bubble up.</p>
+<h2>处理异常</h2>
+<p>确保你了解你的 HTTP 客户端如何处理失败的请求。例如，
+如果你使用的 HTTP 库会抛出异常，请决定是要
+捕获异常还是让它们往外传递。</p>

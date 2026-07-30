@@ -527,7 +527,7 @@ def project(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
 
             ctx["is_owner"] = True
             ctx["is_manager"] = True
-            messages.success(request, "You are now the owner of this project!")
+            messages.success(request, "您现在是此项目的拥有者！")
 
         elif "reject_transfer" in request.POST:
             tr = project.transfer_request()

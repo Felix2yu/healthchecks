@@ -6,7 +6,7 @@ $(function() {
     $(".highlight").append(markup);
 
     $(".highlight button")
-        .tooltip({title: "Copied", trigger: "manual"})
+        .tooltip({title: "已复制", trigger: "manual"})
         .on("mouseleave", function(e) {
             $(e.target).tooltip("hide");
         })

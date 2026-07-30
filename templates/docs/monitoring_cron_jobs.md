@@ -1,151 +1,145 @@
-# How to Monitor Cron Jobs with SITE_NAME
+# 如何使用 SITE_NAME 监控 Cron 任务
 
-SITE_NAME can monitor your cron jobs and notify you when they don't run at
-expected times. Assuming `curl` or `wget` is available, you will not need to install
-any new software on your servers.
+SITE_NAME 可以监控你的 cron 任务，并在它们未按预期时间运行时通知你。
+假设 `curl` 或 `wget` 可用，你不需要在服务器上安装任何新软件。
 
-The principle of operation is simple: your cron job sends an HTTP request ("ping") to
-SITE_NAME every time it completes. When SITE_NAME does not receive the HTTP request
-at the expected time, it notifies you. This monitoring technique, sometimes called
-"heartbeat monitoring", is a type of [dead man's switch](https://en.wikipedia.org/wiki/Dead_man%27s_switch).
-It can detect various failure modes:
+工作原理很简单：你的 cron 任务每次完成时向
+SITE_NAME 发送一个 HTTP 请求（"ping"）。当 SITE_NAME 在预期时间
+未收到 HTTP 请求时，它会通知你。这种监控技术有时被称为
+"心跳监控"，是一种[死机开关](https://en.wikipedia.org/wiki/Dead_man%27s_switch)。
+它可以检测各种故障模式：
 
-* The whole machine goes down (power outage, hardware failure, somebody trips on cables, etc.).
-* The cron daemon is not running or has an invalid configuration.
-* Cron does start your task, but the task exits with a non-zero exit code.
-* The cron job runs for an abnormally long time.
+* 整个机器宕机（断电、硬件故障、有人绊到线缆等）。
+* cron 守护进程未运行或配置无效。
+* Cron 确实启动了你的任务，但任务以非零退出码退出。
+* cron 任务运行时间异常长。
 
-## Setting Up
+## 设置
 
-Let's take a look at an example cron job:
+让我们看一个 cron 任务示例：
 
 ```bash
-# run backup.sh at 06:08 every day
+# 每天早上 06:08 运行 backup.sh
 8 6 * * * /home/me/backup.sh
 ```
 
-To monitor it, first create a new Check in your SITE_NAME account:
+要监控它，首先在你的 SITE_NAME 账户中创建一个新的检查项：
 
-![The "Add Check" dialog](IMG_URL/add_check.png)
+!["添加检查项" 对话框](IMG_URL/add_check.png)
 
-After creating the check, copy the generated **ping URL** , and update the job's
-definition:
+创建检查项后，复制生成的 **ping URL**，并更新任务的
+定义：
 
 ```bash
-# run backup.sh, then send a success signal to SITE_NAME
+# 运行 backup.sh，然后向 SITE_NAME 发送成功信号
 8 6 * * * /home/me/backup.sh && curl -fsS -m 10 --retry 5 -o /dev/null PING_URL
 ```
 
-The extra curl call lets SITE_NAME know the cron job has run successfully.
-SITE_NAME keeps track of the received pings and notifies you as soon as a ping does
-not arrive on time.
+额外的 curl 调用让 SITE_NAME 知道 cron 任务已成功运行。
+SITE_NAME 会跟踪接收到的 ping，并在 ping 未按时到达时立即通知你。
 
-Note: you can alternatively add the extra `curl` call as a final line inside the
-`/home/me/backup.sh` script to keep the cron job's definition clean and short.
-You can use an HTTP client other than curl to send the HTTP request.
+注意：你也可以将额外的 `curl` 调用作为最后一行添加到
+`/home/me/backup.sh` 脚本内部，以保持 cron 任务的定义简洁。
+你可以使用 curl 以外的 HTTP 客户端来发送 HTTP 请求。
 
-## Curl Options
+## Curl 选项
 
-The extra options in the above example tell curl to retry failed HTTP requests,
-limit the maximum execution time, and silence output unless there is an error.
-Feel free to adjust the curl options to suit your needs.
+上例中的额外选项告诉 curl 重试失败的 HTTP 请求、
+限制最大执行时间，并在无错误时静默输出。
+请根据你的需要自由调整 curl 选项。
 
 **&amp;&amp;**
-:   Run curl only if `/home/me/backup.sh` exits with an exit code 0.
+:   仅在 `/home/me/backup.sh` 以退出码 0 退出时才运行 curl。
 
 **-f, --fail**
-:   Makes curl treat non-200 responses as errors.
+:   使 curl 将非 200 的响应视为错误。
 
 **-s, --silent**
-:   Silent or quiet mode. Hides the progress meter but also hides error messages.
+:   静默或安静模式。隐藏进度条，但也会隐藏错误消息。
 
 **-S, --show-error**
-:   Re-enables error messages when -s is used.
+:   在使用 -s 时重新启用错误消息。
 
 **-m &lt;seconds&gt;**
-:   Maximum time in seconds that you allow the whole operation to take.
+:   允许整个操作花费的最长时间（秒）。
 
 **--retry &lt;num&gt;**
-:   If a transient error is returned when curl tries to perform a
-    transfer, it will retry this number of times before giving up.
-    Setting the number to 0 makes curl do no retries (which is the default).
-    A transient error is a timeout or an HTTP 5xx response code.
+:   如果 curl 尝试传输时返回瞬时错误，
+    它将在放弃前重试这么多次。
+    设置为 0 表示不重试（这是默认值）。
+    瞬时错误是超时或 HTTP 5xx 响应码。
 
 **-o /dev/null**
-:   Redirect curl's stdout to /dev/null (error messages still go to stderr).
+:   将 curl 的 stdout 重定向到 /dev/null（错误消息仍发送到 stderr）。
 
 
-## Grace Time
+## 宽限期
 
-Grace Time is the amount of extra time to wait when a cron job is running late
-before declaring it as down. Set Grace Time to be above the expected
-duration of your cron job.
+宽限期是指当 cron 任务运行延迟时，在将其宣告为宕机之前等待的额外时间。
+将宽限期设置为高于 cron 任务的预期持续时间。
 
-For example, let's say the cron job starts at 14:00 every day and takes
-between 15 and 25 minutes to complete. The grace time is set to 30 minutes.
-In this scenario, SITE_NAME will expect a ping to arrive at 14:00 but will not send
-any alerts yet. If there is no ping by 14:30, it will declare the job failed and
-send alerts.
+例如，假设 cron 任务每天 14:00 开始，需要 15 到 25 分钟完成。
+宽限期设置为 30 分钟。在这种情况下，SITE_NAME 将期望在 14:00 收到 ping，
+但不会立即发送警报。如果在 14:30 之前没有 ping，它将宣告任务失败并
+发送警报。
 
-## Notifications
+## 通知
 
-SITE_NAME has integrations to deliver notifications over different channels: email,
-webhooks, SMS, chat messages, incident management systems, and more. You can and should
-set up multiple ways to get notified about job failures:
+SITE_NAME 具有通过不同渠道发送通知的集成方式：电子邮件、
+Webhook、短信、聊天消息、事件管理系统等。你可以且应该
+设置多种方式来获取任务失败的通知：
 
-* **Redundancy:** if one notification channel fails (e.g., an email message gets
-delivered to spam), you will still receive notifications over the other channels.
-* **Use different notification methods depending on job priority**. You can set up
-notifications from low-priority jobs to email only, but notifications from
-high-priority jobs to email, SMS, and team chat.
+* **冗余：**如果一个通知渠道失败（例如，电子邮件被投递到
+  垃圾箱），你仍会通过其他渠道收到通知。
+* **根据任务优先级使用不同的通知方法**。你可以将低优先级任务的
+  通知仅设置为电子邮件，而高优先级任务的通知
+  设置为电子邮件、短信和团队聊天。
 
-Additionally, to make sure no issues "slip through the cracks", in the
-[Account Settings › Email Reports](../../accounts/profile/notifications/) page
-you can configure SITE_NAME to send repeated email notifications every hour or every
-day as long as any of the jobs is down:
+此外，为确保没有任何问题"被遗漏"，在
+[账户设置 › 电子邮件报告](../../accounts/profile/notifications/) 页面
+中，你可以配置 SITE_NAME 在有任何任务宕机的情况下，
+每小时或每天发送重复的电子邮件通知：
 
-![Email reminder options](IMG_URL/email_reports.png)
+![电子邮件提醒选项](IMG_URL/email_reports.png)
 
-## Advanced Techniques
+## 高级技巧
 
-* If your cron job hits an error, you can [actively signal it to SITE_NAME](../signaling_failures/).
-* You can send a "start" signal at the start of the cron job, to [track its run time](../measuring_script_run_time/).
-* You can [send stdout and stderr output](../attaching_logs/) in the HTTP POST body.
+* 如果你的 cron 任务遇到错误，你可以[主动向 SITE_NAME 发送信号](../signaling_failures/)。
+* 你可以在 cron 任务开始时发送"start"信号，以[跟踪其运行时间](../measuring_script_run_time/)。
+* 你可以在 HTTP POST 体中[发送 stdout 和 stderr 输出](../attaching_logs/)。
 
-## What about MAILTO?
+## 那 MAILTO 呢？
 
-Classic cron implementations have a built-in method of notifying about cron job
-failures, the MAILTO variable:
+传统的 cron 实现有一个内置的通知 cron 任务失败的方法，即 MAILTO 变量：
 
 ```bash
 MAILTO=email@example.org
 8 6 * * * /home/me/backup.sh
 ```
 
-So why not just use that? There are several drawbacks:
+那为什么不直接使用它呢？有几个缺点：
 
-* For MAILTO to work, the server needs to have a configured MTA.
-* You will not be notified if the whole machine is powered off or has lost
-  network connection.
-* If your cron job produces any stdout output, you will receive an
-  email every time the job runs. This may result in alert fatigue and you not
-  noticing errors between diagnostic messages.
+* MAILTO 要工作，服务器需要已配置 MTA。
+* 如果整个机器断电或失去网络连接，你将不会收到通知。
+* 如果你的 cron 任务产生任何 stdout 输出，你将在每次任务运行时收到
+  一封电子邮件。这可能导致警报疲劳，并且你可能
+  无法在诊断消息之间注意到错误。
 
-## Looking up Your Machine's Time Zone
+## 查看机器的时区
 
-If your cron job consistently pings SITE_NAME an hour early or an hour late,
-the likely cause is a timezone mismatch: your machine may be using a timezone
-different from what you have configured on SITE_NAME.
+如果你的 cron 任务始终提前或推迟一小时 ping SITE_NAME，
+很可能是时区不匹配：你的机器可能使用了与你在 SITE_NAME 上配置的
+不同的时区。
 
-On modern GNU/Linux systems, you can look up the time zone using the
-`timedatectl status` command and looking for "Time zone" in its output:
+在 modern GNU/Linux 系统上，你可以使用 `timedatectl status` 命令
+查看时区，在输出中查找"Time zone"：
 
 ```text hl_lines="6"
 $ timedatectl status
 
-               Local time: C  2020-01-23 12:35:50 EET
-           Universal time: C  2020-01-23 10:35:50 UTC
-                 RTC time: C  2020-01-23 10:35:50
+               Local time: C  2020-01-23 12:35:50 EET
+           Universal time: C  2020-01-23 10:35:50 UTC
+                 RTC time: C  2020-01-23 10:35:50
                 Time zone: Europe/Riga (EET, +0200)
 System clock synchronized: yes
               NTP service: active
@@ -153,18 +147,18 @@ System clock synchronized: yes
 ```
 
 
-## Viewing Cron Logs Using `journalctl`
+## 使用 `journalctl` 查看 Cron 日志
 
-On a systemd-based system, you can use the `journalctl` utility to see system logs,
-including logs from the cron daemon.
+在基于 systemd 的系统上，你可以使用 `journalctl` 工具查看系统日志，
+包括 cron 守护进程的日志。
 
-To see live logs:
+查看实时日志：
 
 ```bash
 journalctl -f
 ```
 
-To see the logs from e.g. the last hour, and only from the cron daemon:
+查看例如过去一小时且仅来自 cron 守护进程的日志：
 
 ```bash
 journalctl --since "1 hour ago" -t CRON

@@ -1,21 +1,18 @@
 {% load hc_extras %}
-{% block content %}Hello,
+{% block content %}您好，
 {% if membership %}
-{{ membership.project.owner.email }} invites you to their {% site_name %} account.
+{{ membership.project.owner.email }} 邀请您加入他们的 {% site_name %} 账户。
 
-{% if membership.role == "r" %}You will be able to view their existing monitoring checks, but not
-modify them.{% else %}You will be able to manage their existing monitoring checks and set up
-new ones.{% endif %} If you already have your own account on {% site_name %}, you will
-be able to switch between the two accounts.{% endif %}
+{% if membership.role == "r" %}您可以查看现有的监控检查项，但无法修改它们。{% else %}您可以管理现有的监控检查项并设置新的检查项。{% endif %} 如果您已拥有自己的 {% site_name %} 账户，您可以在两个账户之间切换。{% endif %}
 
-To log into {% site_name %}, please open the link below:
+要登录 {% site_name %}，请打开下面的链接：
 
 {{ button_url }}
 
-Thanks,
-The {% site_name %} Team
+谢谢，
+{% site_name %} 团队
 
-P.S. Need help getting started? Check out our help documentation
-at {% site_root %}{% url 'hc-docs' %}
-Or, just reply to this email with any questions or issues you have.
+附注：需要帮助入门？请查看我们的帮助文档：
+{% site_root %}{% url 'hc-docs' %}
+或者，直接回复此邮件提出任何问题。
 {% endblock %}

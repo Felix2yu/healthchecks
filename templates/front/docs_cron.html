@@ -1,45 +1,44 @@
 {% extends "base.html" %}
 {% load compress hc_extras static %}
 
-{% block title %}Cron Expression Syntax Cheatsheet - {{ site_name }}{% endblock %}
+{% block title %}Cron 表达式语法速查表 - {{ site_name }}{% endblock %}
 
 {% block description %}
-    <meta name="description" content="Visual examples of main Cron syntax features: numeric values, commas, ranges, ranges with step, day and month names.">
+    <meta name="description" content="主要 Cron 语法功能的直观示例：数值、逗号、范围、带步进的范围、日期和月份名称。">
 {% endblock %}
 
 {% block keywords %}
-    <meta name="keywords" content="cron syntax, crontab syntax, cron howto, cron tutorial, cron jobs, cron job example, monitor cron jobs">
+    <meta name="keywords" content="cron 语法, crontab 语法, cron 教程, cron 任务, cron 任务示例, 监控 cron 任务">
 {% endblock %}
 
 {% block content %}
 
-<h1>Cron Expression Syntax Cheatsheet</h1>
+<h1>Cron 表达式语法速查表</h1>
 
 <p>
-    {{ site_name }} understands most of the traditional cron syntax features.
-    Under the hood, it uses the
-    <a href="https://github.com/cuu508/cronsim">cronsim package</a>
-    to parse and interpret cron expressions. Below is a showcase of
-    supported syntax features.
+    {{ site_name }} 支持大多数传统 cron 语法功能。
+    底层使用
+    <a href="https://github.com/cuu508/cronsim">cronsim 包</a>
+    来解析和解释 cron 表达式。以下是所支持语法功能的展示。
 </p>
 <p>
-    <strong>Pro-tip!</strong>
-    On Unix-like operating systems, you can also easily access cron syntax
-    documentation by typing <code>man 5 crontab</code> in shell.
+    <strong>专业提示！</strong>
+    在类 Unix 操作系统上，您还可以通过在 shell 中输入 <code>man 5 crontab</code>
+    来轻松访问 cron 语法文档。
 </p>
 <br />
 
 <div id="cron-examples">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Basics</h3>
+            <h3 class="panel-title">基础</h3>
         </div>
         <div class="panel-body">
-            <p>A cron expression has five fields, separated by spaces.
-            Asterisk is a wild card character and means "any value."
+            <p>Cron 表达式包含五个字段，用空格分隔。
+            星号是通配符，表示"任意值"。
             </p>
 
-            <div class="desc">"Run every minute"</div>
+            <div class="desc">"每分钟运行"</div>
 
             <table class="cron-example">
                 <tr>
@@ -65,26 +64,26 @@
                     <td>
                         <div class="guide"></div>
                     </td>
-                    <td>Day of week, 0 - 7, 0 or 7 is Sun</td>
+                    <td>星期，0 - 7，0 或 7 表示周日</td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        Month, 1 - 12
+                        月份，1 - 12
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3">
-                        Day of month, 1 - 31
+                        日期，1 - 31
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4">
-                        Hour of day, 0 - 23
+                        小时，0 - 23
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        Minute, 0 - 59
+                        分钟，0 - 59
                     </td>
                 </tr>
             </table>
@@ -93,14 +92,13 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Numeric values</h3>
+            <h3 class="panel-title">数值</h3>
         </div>
         <div class="panel-body">
-            <p>Use numeric values instead of asterisks to match specific
-               minutes, hours, days, and months.
+            <p>使用数值代替星号来匹配特定的分钟、小时、日期和月份。
             </p>
 
-            <div class="desc">"Run at 6 PM on Fridays"</div>
+            <div class="desc">"在周五下午 6 点运行"</div>
 
             <table class="cron-example">
                 <tr>
@@ -126,26 +124,26 @@
                     <td>
                         <div class="guide"></div>
                     </td>
-                    <td>Run only on Fridays</td>
+                    <td>仅在周五运行</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="minor">
-                        Run every month of the year
+                        每年的每个月都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="minor">
-                        Run every day of the month
+                        每月的每天都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4">
-                        Run at 6 PM
+                        在下午 6 点运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        Run at the start of the hour
+                        在整点运行
                     </td>
                 </tr>
             </table>
@@ -154,12 +152,12 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Commas</h3>
+            <h3 class="panel-title">逗号</h3>
         </div>
         <div class="panel-body">
-            <p>Use <code>{v1},{v2},...,{vn}</code> to list multiple values.</p>
+            <p>使用 <code>{v1},{v2},...,{vn}</code> 列出多个值。</p>
 
-            <div class="desc">"Run at 9 AM, 12 PM, and 6 PM every day"</div>
+            <div class="desc">"每天早上 9 点、中午 12 点和下午 6 点运行"</div>
 
             <table class="cron-example">
                 <tr>
@@ -185,26 +183,26 @@
                     <td>
                         <div class="guide"></div>
                     </td>
-                    <td class="minor">Run on every weekday</td>
+                    <td class="minor">每个工作日运行</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="minor">
-                        Run every month of the year
+                        每年的每个月都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="minor">
-                        Run every day of the month
+                        每月的每天都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4">
-                        Run at 9 AM, 12 PM and 6 PM
+                        在早上 9 点、中午 12 点和下午 6 点运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        Run at the start of the hour
+                        在整点运行
                     </td>
                 </tr>
             </table>
@@ -213,12 +211,12 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Ranges of values</h3>
+            <h3 class="panel-title">数值范围</h3>
         </div>
         <div class="panel-body">
-            <p>Use <code>{start}-{end}</code> to define a range of matching values.</p>
+            <p>使用 <code>{start}-{end}</code> 定义匹配值的范围。</p>
 
-            <div class="desc">"Run every minute on workdays"</div>
+            <div class="desc">"在工作日每分钟运行"</div>
 
             <table class="cron-example">
                 <tr>
@@ -244,26 +242,26 @@
                     <td>
                         <div class="guide"></div>
                     </td>
-                    <td>Run from Monday to Friday</td>
+                    <td>周一至周五运行</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="minor">
-                        Run every month of the year
+                        每年的每个月都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="minor">
-                        Run every day of the month
+                        每月的每天都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4" class="minor">
-                        Run every hour of the day
+                        每天的每小时都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5" class="minor">
-                        Run every minute of the hour
+                        每小时的每分钟都运行
                     </td>
                 </tr>
             </table>
@@ -272,13 +270,13 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Ranges with a step</h3>
+            <h3 class="panel-title">带步进的范围</h3>
         </div>
         <div class="panel-body">
-            <p>Use <code>{start}-{end}/{step}</code> or <code>*/{step}</code>
-               to define a range with a step.</p>
+            <p>使用 <code>{start}-{end}/{step}</code> 或 <code>*/{step}</code>
+               定义带步进的范围。</p>
 
-            <div class="desc">"Run every quarter of an hour"</div>
+            <div class="desc">"每 15 分钟运行"</div>
 
             <table class="cron-example">
                 <tr>
@@ -304,26 +302,26 @@
                     <td>
                         <div class="guide"></div>
                     </td>
-                    <td class="minor">Run on every weekday</td>
+                    <td class="minor">每个工作日运行</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="minor">
-                        Run every month of the year
+                        每年的每个月都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="minor">
-                        Run every day of the month
+                        每月的每天都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4" class="minor">
-                        Run every hour of the day
+                        每天的每小时都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        Run every 15 minutes
+                        每 15 分钟运行
                     </td>
                 </tr>
             </table>
@@ -332,13 +330,12 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Combine numeric values and ranges in lists</h3>
+            <h3 class="panel-title">在列表中组合数值和范围</h3>
         </div>
         <div class="panel-body">
-            <p>In the comma-separated lists, you can combine not only
-            numeric values but also ranges.</p>
+            <p>在逗号分隔的列表中，您不仅可以组合数值，还可以组合范围。</p>
 
-            <div class="desc">"Run every round hour outside office hours"</div>
+            <div class="desc">"在非工作时间的每个整点运行"</div>
 
             <table class="cron-example">
                 <tr>
@@ -364,26 +361,26 @@
                     <td>
                         <div class="guide"></div>
                     </td>
-                    <td class="minor">Run on every weekday</td>
+                    <td class="minor">每个工作日运行</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="minor">
-                        Run every month of the year
+                        每年的每个月都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="minor">
-                        Run every day of the month
+                        每月的每天都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4">
-                        Run at 6 PM, 7 PM, 8 PM, ..., 7 AM, 8 AM
+                        在下午 6 点、7 点、8 点、...、早上 7 点、8 点运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        Run at the start of the hour
+                        在整点运行
                     </td>
                 </tr>
             </table>
@@ -392,15 +389,14 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Abbreviated day and month names</h3>
+            <h3 class="panel-title">缩写日期和月份名称</h3>
         </div>
         <div class="panel-body">
-            <p><code>JAN-DEC</code> can be used in the month field
-                and
-                <code>MON-SUN</code> in the weekday field.
+            <p><code>JAN-DEC</code> 可用于月份字段，
+                <code>MON-SUN</code> 可用于星期字段。
             </p>
 
-            <div class="desc">"Run every round hour on April 1st"</div>
+            <div class="desc">"在 4 月 1 日的每个整点运行"</div>
 
             <table class="cron-example">
                 <tr>
@@ -426,26 +422,26 @@
                     <td>
                         <div class="guide"></div>
                     </td>
-                    <td class="minor">Run on every weekday</td>
+                    <td class="minor">每个工作日运行</td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        Run in April
+                        在四月运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3">
-                        Run on the first day of the month
+                        在每月第一天运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4" class="minor">
-                        Run every hour of the day
+                        每天的每小时都运行
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        Run at the start of the hour
+                        在整点运行
                     </td>
                 </tr>
             </table>
@@ -454,26 +450,24 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Timezones</h3>
+            <h3 class="panel-title">时区</h3>
         </div>
         <div class="panel-body">
             <p>
-                The cron daemon uses the server's <strong>local time</strong>.
-                If your server's timezone is other than UTC, make sure
-                to set a matching timezone for your check
-                on {{ site_name }} as well.
+                Cron 守护进程使用服务器的<strong>本地时间</strong>。
+                如果服务器的时区不是 UTC，请确保在 {{ site_name }}
+                上也设置匹配的时区。
             </p>
 
-            <p>On Ubuntu systems, you can check the server's timezone
-            with:</p>
+            <p>在 Ubuntu 系统上，您可以使用以下命令检查服务器的时区：</p>
             <pre>cat /etc/timezone</pre>
         </div>
     </div>
 </div> <!-- cron examples -->
 
 <div id="test-area">
-    <h2>Cron Expression Tester</h2>
-    <p>Type or paste any cron expression:</p>
+    <h2>Cron 表达式测试器</h2>
+    <p>输入或粘贴任意 Cron 表达式：</p>
 
     <input
         id="schedule"
@@ -487,78 +481,78 @@
 
     <div id="cron-preview"></div>
 
-    <h2>Common Cron Expressions</h2>
+    <h2>常用 Cron 表达式</h2>
 
     <table id="common-cron-expressions" class="table">
         <tr>
-            <td>Every minute</td>
+            <td>每分钟</td>
             <td>* * * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>Every 5 minutes</td>
+            <td>每 5 分钟</td>
             <td>*/5 * * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>Every 15 minutes</td>
+            <td>每 15 分钟</td>
             <td>*/15 * * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>Every 30 minutes</td>
+            <td>每 30 分钟</td>
             <td>*/30 * * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>Every hour</td>
+            <td>每小时</td>
             <td>0 * * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>At 30 minutes past every hour</td>
+            <td>每小时过 30 分钟</td>
             <td>30 * * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>Every 2 hours</td>
+            <td>每 2 小时</td>
             <td>0 */2 * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>Every 3 hours</td>
+            <td>每 3 小时</td>
             <td>0 */3 * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>Every 6 hours</td>
+            <td>每 6 小时</td>
             <td>0 */6 * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>At 3 AM every day</td>
+            <td>每天凌晨 3 点</td>
             <td>0 3 * * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>At 3 AM every Monday</td>
+            <td>每周一凌晨 3 点</td>
             <td>0 3 * * MON</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>At 8 AM, only on workdays</td>
+            <td>工作日早上 8 点</td>
             <td>0 8 * * 1-5</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>At the midnight of the first day of every month</td>
+            <td>每月第一天的午夜</td>
             <td>0 0 1 * *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
         <tr>
-            <td>At the start of every third month</td>
+            <td>每三个月开始时</td>
             <td>0 0 1 */3 *</td>
-            <td><button class="btn btn-default btn-sm">Test</button></td>
+            <td><button class="btn btn-default btn-sm">测试</button></td>
         </tr>
 
     </table>

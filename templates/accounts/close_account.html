@@ -8,12 +8,12 @@
     {% csrf_token %}
     <div class="panel panel-default">
         <div class="panel-body settings-block">
-            <h2>Close Account?</h2>
+            <h2>关闭账户？</h2>
             <p></p>
 
             <p>
-                You are about to close your {% site_name %} account. This
-                operation will permanently remove:
+                您即将关闭您的 {% site_name %} 账户。此
+                操作将永久删除：
             </p>
 
             <ul>
@@ -22,8 +22,8 @@
             </ul>
 
             <p>
-                To confirm, please type your account's email address
-                (<code>{{ request.user.email }}</code>) below:
+                请确认，在下方输入您账户的邮箱地址
+                (<code>{{ request.user.email }}</code>)：
             </p>
 
             <div class="form-group {% if wrong_confirmation%}has-error{% endif %}">
@@ -31,18 +31,18 @@
                     class="form-control"
                     type="text"
                     name="confirmation"
-                    placeholder="type your email address to confirm" />
+                    placeholder="输入您的邮箱地址以确认" />
             </div>
 
             <div class="text-right">
                 <a
                     href="{% url 'hc-profile' %}"
-                    class="btn btn-default">Cancel</a>
+                    class="btn btn-default">取消</a>
                 <button
                     id="close-go"
                     type="submit"
                     name="close_account"
-                    class="btn btn-danger">Close Account</button>
+                    class="btn btn-danger">关闭账户</button>
             </div>
         </div>
     </div>

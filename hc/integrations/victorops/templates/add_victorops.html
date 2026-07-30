@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Splunk On-Call Integration for {{ site_name }}{% endblock %}
+{% block title %}Splunk On-Call 集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -11,18 +11,17 @@
 
     <p>
     <a href="https://www.splunk.com/en_us/software/splunk-on-call.html">Splunk On-Call</a>
-    is a collaboration and incident management platform for on-call DevOps teams.
-    You can integrate it with your {{ site_name }} account in a few
-    simple steps.</p>
+    是一个面向值班 DevOps 团队的协作与事件管理平台。
+    只需几个简单步骤，即可将其与你的 {{ site_name }} 账户集成。</p>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Log into your Splunk On-Call account,
-                go to <strong>Integrations</strong>,
-                and look up the REST integration.
+                登录你的 Splunk On-Call 账户，
+                进入 <strong>集成</strong>，
+                找到 REST 集成。
             </p>
         </div>
         <div class="col-sm-6">
@@ -36,14 +35,14 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Enable the integration, and copy
-                the displayed <strong>Service API Endpoint</strong>.
-                Paste it in the form below. Be sure to replace
-                the <strong>$routing_key</strong> section with the
-                actual routing key you intend to use.
+                启用集成，复制
+                显示的<strong>服务 API 端点</strong>。
+                将其粘贴到下面的表单中。请务必将
+                <strong>$routing_key</strong> 部分替换为你实际使用的
+                路由键。
             </p>
             <p>
-                Save the integration, and it's done!
+                保存集成，大功告成！
             </p>
         </div>
         <div class="col-sm-6">
@@ -54,12 +53,12 @@
         </div>
     </div>
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {{ form.value.css_classes }}">
-            <label for="post-url" class="col-sm-2 control-label">Service API Endpoint</label>
+            <label for="post-url" class="col-sm-2 control-label">服务 API 端点</label>
             <div class="col-sm-10">
                 <input
                     id="post-url"
@@ -78,7 +77,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

@@ -4,11 +4,11 @@
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
         <div class="hc-dialog">
-            <h1>Enter a Confirmation Code</h1>
+            <h1>输入确认码</h1>
             <br />
             <p>
-                We have sent a confirmation code to your email
-                address. Please enter it below to continue:
+                我们已向您的邮箱地址发送了一个确认码。
+                请在下方输入以继续：
             </p>
 
             <form method="POST">
@@ -25,7 +25,7 @@
 
                     {% if wrong_code %}
                     <div class="help-block">
-                        Not a valid code. Did you type it in correctly?
+                        验证码无效。您输入正确吗？
                     </div>
                     {% endif %}
                 </div>
@@ -33,7 +33,7 @@
                 <button
                     class="btn btn-lg btn-primary btn-block"
                     type="submit">
-                    Continue
+                    继续
                 </button>
 
             </form>

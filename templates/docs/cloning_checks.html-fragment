@@ -1,22 +1,16 @@
-<h1>Cloning Checks</h1>
-<p>You can clone individual checks from the "Check Details"
-page:</p>
-<p><img alt="The &quot;Create a Copy&quot; button" src="IMG_URL/create_copy.png" /></p>
-<p>The "Create a Copy..." function creates a new check in the same project and copies
-over the following:</p>
+<h1>克隆检查项</h1>
+<p>你可以从"检查项详情"页面克隆单个检查项：</p>
+<p><img alt="&quot;创建副本&quot;按钮" src="IMG_URL/create_copy.png" /></p>
+<p>"创建副本..."功能会在同一项目中创建一个新的检查项，并复制以下内容：</p>
 <ul>
-<li>Name, tags, description</li>
-<li>Schedule</li>
-<li>Filtering rules</li>
-<li>Assigned notification methods</li>
+<li>名称、标签、描述</li>
+<li>时间表</li>
+<li>过滤规则</li>
+<li>已分配的通知方式</li>
 </ul>
-<p>The newly created check has a different ping URL and an empty event log.</p>
-<h2>Cloning All Checks Into a New Project</h2>
-<p>It is sometimes useful to clone an entire project. For example, when recreating
-an existing deployment in a new region. The SITE_NAME web interface does
-not have a function to clone an entire project, but you can clone all checks in the
-project relatively easily using the <a href="../api/">Management API</a> calls.
-Below is an example using Python and the <a href="https://requests.readthedocs.io/en/master/">requests</a> library:</p>
+<p>新创建的检查项具有不同的 ping URL 和空的日志历史。</p>
+<h2>将所有检查项克隆到新项目</h2>
+<p>有时克隆整个项目会很有用。例如，在新区域重建已有部署时。SITE_NAME Web 界面没有克隆整个项目的功能，但你可以使用<a href="../api/">管理 API</a> 调用来相对容易地克隆项目中的所有检查项。以下是使用 Python 和 <a href="https://requests.readthedocs.io/en/master/">requests</a> 库的示例：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">API_URL</span> <span class="o">=</span> <span class="s2">&quot;SITE_ROOT/api/v3/checks/&quot;</span>

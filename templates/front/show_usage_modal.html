@@ -6,7 +6,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 id="usage-examples-title">
                     {% if check.name %}"{{ check.name }}"{% endif %}
-                    Usage Examples
+                    使用示例
                 </h4>
                 <ul class="nav nav-pills" role="tablist">
                     <li class="active">
@@ -34,7 +34,7 @@
                         <a href="#cs" data-toggle="tab">C#</a>
                     </li>
                     <li class="hidden-xs">
-                        <a href="#browser" data-toggle="tab">Browser</a>
+                        <a href="#browser" data-toggle="tab">浏览器</a>
                     </li>
                     <li class="hidden-xs">
                         <a href="#powershell" data-toggle="tab">PowerShell</a>
@@ -93,12 +93,12 @@
                     </div>
                     <div class="tab-pane" id="email">
                         <p>
-                            Signal success or failure by sending an
-                            email message to <a href="mailto:{{ check.email }}">{{ check.email }}</a>.
+                            通过发送邮件到 <a href="mailto:{{ check.email }}">{{ check.email }}</a>
+                            来标记成功或失败。
                         </p>
                         <p>
-                            <a href="{% url 'hc-serve-doc' 'email' %}">Read more</a>
-                            about pinging via email.
+                            <a href="{% url 'hc-serve-doc' 'email' %}">了解更多</a>
+                            关于通过邮件发送 Ping 的信息。
                         </p>
                     </div>
                     {% endwith %}
@@ -106,7 +106,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Got It!</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">知道了！</button>
             </div>
         </div>
     </div>

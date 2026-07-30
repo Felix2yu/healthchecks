@@ -1,24 +1,23 @@
 <h1>Javascript</h1>
-<p>Below is a minimal example of making an HTTP request to SITE_NAME from Node.js.</p>
+<p>以下是从 Node.js 向 SITE_NAME 发起 HTTP 请求的最小示例。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">https</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;https&#39;</span><span class="p">);</span>
 <span class="nx">https</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;PING_URL&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Ping failed: &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
 <span class="p">});</span>
 </code></pre></div>
 
-<p>Note: the "https" library executes requests asynchronously. If you send both "start"
-and "success" signals, you can encounter a race condition where the "success" signal
-arrives before the "start" signal. Avoid the race condition by using callbacks,
-promises or the async/await feature. Here is an example that uses async/await and the
-<a href="https://axios-http.com/">axios</a> library:</p>
+<p>注意："https" 库会异步执行请求。如果你同时发送 "start" 和 "success" 信号，
+可能会遇到 "success" 信号在 "start" 信号之前到达的竞态条件。
+通过使用回调、promise 或 async/await 特性可以避免竞态条件。以下是使用 async/await 和
+<a href="https://axios-http.com/">axios</a> 库的示例：</p>
 <div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;axios&quot;</span><span class="p">);</span>
 
 <span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">ping</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">timeout</span><span class="o">:</span><span class="w"> </span><span class="mf">5000</span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Log the error and continue. A ping failure should</span>
-<span class="w">        </span><span class="c1">// not prevent the job from running.</span>
+<span class="w">        </span><span class="c1">// 记录错误并继续。ping 失败不应</span>
+<span class="w">        </span><span class="c1">// 阻止任务运行。</span>
 <span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Ping failed: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">error</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -28,9 +27,9 @@ promises or the async/await feature. Here is an example that uses async/await an
 
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">ping</span><span class="p">(</span><span class="nx">pingUrl</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;/start&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;TODO: run the job here&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;TODO: 在此运行任务&quot;</span><span class="p">);</span>
 
-<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="nx">ping</span><span class="p">(</span><span class="nx">pingUrl</span><span class="p">);</span><span class="w"> </span><span class="c1">// success</span>
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="nx">ping</span><span class="p">(</span><span class="nx">pingUrl</span><span class="p">);</span><span class="w"> </span><span class="c1">// 成功</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="nx">ping</span><span class="p">(</span><span class="nx">pingUrl</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;/fail&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
@@ -39,9 +38,9 @@ promises or the async/await feature. Here is an example that uses async/await an
 <span class="nx">runJob</span><span class="p">();</span>
 </code></pre></div>
 
-<h2>Browser</h2>
-<p>You can also send pings from a browser environment. SITE_NAME sets the
-<code>Access-Control-Allow-Origin:*</code> CORS header, so cross-domain AJAX requests work.</p>
+<h2>浏览器</h2>
+<p>你也可以从浏览器环境发送 ping。SITE_NAME 设置了
+<code>Access-Control-Allow-Origin:*</code> CORS 头，因此跨域 AJAX 请求可以正常工作。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">xhr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">XMLHttpRequest</span><span class="p">();</span>
 <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;PING_URL&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
 <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>

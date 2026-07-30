@@ -89,7 +89,7 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     code = UUID(code_str)
     project = _get_rw_project_for_user(request, code)
     if request.GET.get("error") == "access_denied":
-        messages.warning(request, "Slack setup was cancelled.")
+        messages.warning(request, "Slack 设置已取消。")
         return redirect("hc-channels", project.code)
 
     if request.GET.get("state") != state:
@@ -106,7 +106,7 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     if not isinstance(doc, dict) or not doc.get("ok"):
         messages.warning(
             request,
-            "Received an unexpected response from Slack. Integration not added.",
+            "收到来自 Slack 的意外响应。集成未添加。",
         )
         logger.warning("Unexpected Slack OAuth response: %s", result.content)
         return redirect("hc-channels", project.code)
@@ -118,5 +118,5 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     channel.save()
     channel.assign_all_checks()
 
-    messages.success(request, "Success, integration added!")
+    messages.success(request, "集成添加成功！")
     return redirect("hc-channels", project.code)

@@ -1,51 +1,49 @@
-<h1>Network Routers</h1>
-<p>Certain network router operating systems can be configured to send regular HTTP(S)
-requests to SITE_NAME directly from the router. This is a handy way to monitor them: when
-the router loses its WAN connection, it will not be able to ping SITE_NAME, and SITE_NAME
-will notify you about the outage.</p>
+<h1>网络路由器</h1>
+<p>某些网络路由器操作系统可以配置为直接从路由器向 SITE_NAME 发送定期 HTTP(S)
+请求。这是监控它们的便捷方式：当
+路由器失去 WAN 连接时，它将无法 ping SITE_NAME，SITE_NAME
+会通知你中断情况。</p>
 <h2>DD-WRT</h2>
-<p><a href="https://dd-wrt.com/">DD-WRT</a> is a Linux-based firmware for routers that runs on wide
-variety of router models. DD-WRT ships with a cron daemon and wget utility. You can
-enable the cron daemon and edit crontab in DD-WRT control panel,
-<strong>Administration › Management › Cron</strong>.</p>
-<p>The crontab syntax on DD-WRT is:</p>
-<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="n">cron</span><span class="w"> </span><span class="n">expression</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">username</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">command</span><span class="p">]</span>
+<p><a href="https://dd-wrt.com/">DD-WRT</a> 是一种基于 Linux 的路由器固件，可运行在多种
+路由器型号上。DD-WRT 自带 cron 守护进程和 wget 工具。你可以
+在 DD-WRT 控制面板中启用 cron 守护进程并编辑 crontab，
+路径为 <strong>Administration › Management › Cron</strong>。</p>
+<p>DD-WRT 上的 crontab 语法为：</p>
+<div class="highlight"><pre><span></span><code>[cron 表达式] [用户名] [命令]
 </code></pre></div>
 
-<p>Example for sending a ping every minute:</p>
+<p>每分钟发送 ping 的示例：</p>
 <div class="highlight"><pre><span></span><code><span class="k">*</span> * <span class="gs">* *</span> * root wget PING_URL
 </code></pre></div>
 
-<p>Screenshot:</p>
-<p><img alt="DD-WRT control panel" src="IMG_URL/ddwrt.png" /></p>
+<p>截图：</p>
+<p><img alt="DD-WRT 控制面板" src="IMG_URL/ddwrt.png" /></p>
 <h2>MikroTik RouterOS</h2>
-<p><a href="https://mikrotik.com/software">MikroTik RouterOS</a> is a router operating system used
-primarily on MikroTik network hardware. Among its many features is scripting support
-and a scheduler.</p>
-<p>First, create a script in WebFig, <strong>System › Scripts › Add New</strong>. Use the following
-parameters:</p>
+<p><a href="https://mikrotik.com/software">MikroTik RouterOS</a> 是一种路由器操作系统，主要用于
+MikroTik 网络硬件。其众多功能包括脚本支持
+和调度器。</p>
+<p>首先，在 WebFig 中创建脚本，路径为 <strong>System › Scripts › Add New</strong>。使用以下
+参数：</p>
 <ul>
-<li>Name: <code>ping</code> (example, you can use a different name)</li>
+<li>Name: <code>ping</code>（示例，你可以使用其他名称）</li>
 <li>Policy: <code>read</code>, <code>test</code></li>
 <li>Source: <code>/tool fetch url="PING_URL" output=none</code></li>
 </ul>
-<p><img alt="DD-WRT control panel" src="IMG_URL/routeros1.png" /></p>
-<p>Then, create a schedule in WebFig, <strong>System › Scheduler › Add New</strong>. Use parameters:</p>
+<p><img alt="DD-WRT 控制面板" src="IMG_URL/routeros1.png" /></p>
+<p>然后，在 WebFig 中创建调度，路径为 <strong>System › Scheduler › Add New</strong>。使用参数：</p>
 <ul>
-<li>Interval: <code>00:01:00</code> (one minute)</li>
+<li>Interval: <code>00:01:00</code>（一分钟）</li>
 <li>Policy: <code>read</code>, <code>test</code></li>
-<li>On Event: <code>ping</code> (the name of the script from the previous step)</li>
+<li>On Event: <code>ping</code>（上一步中脚本的名称）</li>
 </ul>
-<p><img alt="DD-WRT control panel" src="IMG_URL/routeros2.png" /></p>
-<p>Notes:</p>
+<p><img alt="DD-WRT 控制面板" src="IMG_URL/routeros2.png" /></p>
+<p>注意：</p>
 <ul>
-<li>The <code>output=none</code> parameter tells the system to discard response body. Without
-  this parameter, the system will save response body to a file, which will additionally
-  require the <code>write</code> policy.</li>
-<li>The "tool fetch" utility supports HTTPS URLs but does not verify TLS certificates
-  by default. You can add <code>check-certificate=yes</code> parameter to require a valid TLS
-  certificate. Note that RouterOS ships with no root CA certificates, so you will
-  also need to load these.</li>
-<li><a href="https://wiki.mikrotik.com/wiki/Manual:Tools/Fetch">Here's the full list of options</a>
-  supported by "tool fetch".</li>
+<li><code>output=none</code> 参数告诉系统丢弃响应体。如果没有
+  此参数，系统会将响应体保存到文件，这还额外需要 <code>write</code> 策略。</li>
+<li>"tool fetch" 工具支持 HTTPS URL，但默认情况下不验证 TLS 证书。
+  你可以添加 <code>check-certificate=yes</code> 参数以要求有效 TLS
+  证书。请注意，RouterOS 不附带根 CA 证书，因此你还需要
+  加载这些证书。</li>
+<li><a href="https://wiki.mikrotik.com/wiki/Manual:Tools/Fetch">这里是 "tool fetch" 支持的完整选项列表</a>。</li>
 </ul>

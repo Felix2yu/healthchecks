@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Spike.sh Integration for {{ site_name }}{% endblock %}
+{% block title %}Spike.sh 集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -9,19 +9,19 @@
     <div class="col-sm-12">
         <h1>Spike.sh</h1>
 
-        <p>If you are using <a href="https://spike.sh">Spike.sh</a>,
-            you can set up {{ site_name }} to create a Spike.sh incident when a check
-            goes down, and resolve it when a check goes back up.</p>
+        <p>如果你使用 <a href="https://spike.sh">Spike.sh</a>，
+            你可以设置 {{ site_name }} 在检查项宕机时创建 Spike.sh 事件，
+            并在检查项恢复时自动解决该事件。</p>
 
-        <h2>Setup Guide</h2>
+        <h2>设置指南</h2>
 
         <div class="row ai-step">
             <div class="col-sm-6">
                 <span class="step-no"></span>
                 <p>
-                    Log into your Spike.sh account and go to
-                    <strong>Integrations › New integration</strong>.
-                    Select "Healthchecks" and click "Next".
+                    登录你的 Spike.sh 账户，进入
+                    <strong>集成 › 新建集成</strong>。
+                    选择"Healthchecks"并点击"下一步"。
                 </p>
             </div>
             <div class="col-sm-6">
@@ -34,13 +34,12 @@
             <div class="col-sm-6">
                 <span class="step-no"></span>
                 <p>
-                    Give the integration a descriptive <strong>name</strong> and select
-                    the Spike.sh <strong>service</strong> to add it to.
+                    为集成提供一个描述性的<strong>名称</strong>，并选择要添加到的
+                    Spike.sh <strong>服务</strong>。
                 </p>
                 <p>
-                    In the following step, create or select an existing
-                    <strong>escalation policy</strong> to associate with the
-                    integration.
+                    在下一步中，创建或选择现有的
+                    <strong>升级策略</strong>与该集成关联。
                 </p>
             </div>
             <div class="col-sm-6">
@@ -53,8 +52,8 @@
             <div class="col-sm-6">
                 <span class="step-no"></span>
                 <p>
-                    After you have created the integration, click on
-                    <strong>Copy Webhook</strong>.
+                    创建集成后，点击
+                    <strong>复制 Webhook</strong>。
 
                 </p>
             </div>
@@ -68,8 +67,8 @@
             <div class="col-sm-6">
                 <span class="step-no"></span>
                 <p>
-                    Copy the shown webhook URL and paste it in the form below.
-                    Save the integration, and you are done!
+                    将显示的 Webhook 链接复制并粘贴到下面的表单中。
+                    保存集成，大功告成！
                 </p>
             </div>
             <div class="col-sm-6">
@@ -78,12 +77,12 @@
             </div>
         </div>
 
-        <h2>Integration Settings</h2>
+        <h2>集成设置</h2>
 
         <form method="post" class="form-horizontal">
             {% csrf_token %}
             <div class="form-group {{ form.value.css_classes }}">
-                <label for="post-url" class="col-sm-2 control-label">Webhook URL</label>
+                <label for="post-url" class="col-sm-2 control-label">Webhook 链接</label>
                 <div class="col-sm-10">
                     <input id="post-url" type="text" class="form-control" name="value" placeholder="https://"
                         value="{{ form.value.value|default:"" }}">
@@ -97,7 +96,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary">Save Integration</button>
+                    <button type="submit" class="btn btn-primary">保存集成</button>
                 </div>
             </div>
         </form>

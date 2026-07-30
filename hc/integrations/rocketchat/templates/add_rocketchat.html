@@ -1,9 +1,9 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Rocket.Chat Integration for {{ site_name }}{% endblock %}
+{% block title %}Rocket.Chat 集成 - {{ site_name }}{% endblock %}
 {% block description %}
-    <meta name="description" content="If your team uses Rocket.Chat, you can set up {{ site_name }} to post alerts directly to an appropriate Rocket.Chat channel when a check goes up or down.">
+    <meta name="description" content="如果您的团队使用 Rocket.Chat，您可以设置 {{ site_name }} 在检查项恢复或宕机时直接将警报发布到合适的 Rocket.Chat 频道。">
 {% endblock %}
 
 {% block content %}
@@ -14,19 +14,18 @@
     <div class="jumbotron">
         {% if request.user.is_authenticated %}
         <p>
-            If your team uses <a href="https://www.rocket.chat/">Rocket.Chat</a>,
-            you can set up {{ site_name }} to post alerts directly to an
-            appropriate Rocket.Chat channel when a check goes <strong>up</strong>
-            or <strong>down</strong>.
+            如果您的团队使用 <a href="https://www.rocket.chat/">Rocket.Chat</a>，
+            您可以设置 {{ site_name }} 在检查项<strong>恢复</strong>
+            或<strong>宕机</strong>时直接将警报发布到合适的 Rocket.Chat 频道。
         </p>
         {% else %}
         <p>
-            {{ site_name }} is a free and
-            <a href="https://github.com/healthchecks/healthchecks">open source</a>
-            service for monitoring <strong>cron jobs</strong>, <strong>background processes</strong> and
-            <strong>scheduled tasks</strong>. When {% site_name %} detects a problem, it can notify
-            you by posting to a Rocket.Chat channel. To set up the Rocket.Chat
-            integration, please log into {{ site_name }}:
+            {{ site_name }} 是一款免费且
+            <a href="https://github.com/healthchecks/healthchecks">开源</a>的
+            服务，用于监控<strong>cron 作业</strong>、<strong>后台进程</strong>和
+            <strong>计划任务</strong>。当 {% site_name %} 检测到问题时，它可以通过
+            在 Rocket.Chat 频道中发布消息来通知您。要设置 Rocket.Chat
+            集成，请登录 {{ site_name }}：
         </p>
 
         <div class="text-center">
@@ -36,48 +35,48 @@
         {% endif %}
     </div>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
 
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            Log into your Rocket.Chat account and
-            navigate to <strong>Administration</strong> > <strong>Workspace</strong> > <strong>Integrations</strong>.
+            登录您的 Rocket.Chat 帐户，
+            导航至 <strong>管理</strong> > <strong>工作区</strong> > <strong>集成</strong>。
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_rocketchat_1.png' %}">
         </div>
     </div>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Click <strong>"+New"</strong> at the top right corner.</p>
+            <p>点击右上角的 <strong>"+新建"</strong>。</p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_rocketchat_2.png' %}">
         </div>
     </div>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Switch to the <strong>Incoming</strong> tab, and fill in the form:</p>
+            <p>切换到 <strong>传入</strong> 选项卡，填写表单：</p>
             <ul>
-                <li>Turn on the <strong>Enabled</strong> toggle.</li>
-                <li><strong>Name:</strong> give the integration a descriptive name.</li>
-                <li><strong>Post to Channel: </strong> select the channel or user to receive alerts.</li>
-                <li><strong>Post as: </strong> choose the username that this integration posts as. The user must already exist.</li>
+                <li>打开 <strong>启用</strong> 开关。</li>
+                <li><strong>名称：</strong> 为集成起一个描述性的名称。</li>
+                <li><strong>发布到频道：</strong> 选择接收警报的频道或用户。</li>
+                <li><strong>发布身份：</strong> 选择此集成发布时使用的用户名。该用户必须已存在。</li>
             </ul>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_rocketchat_3.png' %}">
         </div>
     </div>
@@ -86,16 +85,16 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             {% if project %}
-            <p>Save the integration, then copy the generated
-            <strong>Webhook URL</strong> and paste it in the form below.</p>
+            <p>保存集成，然后复制生成的
+            <strong>Webhook 链接</strong>并粘贴到下面的表单中。</p>
             {% else %}
-            <p>Save the integration, then copy the generated <strong>Webhook URL</strong>.</p>
+            <p>保存集成，然后复制生成的 <strong>Webhook 链接</strong>。</p>
             {% endif %}
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_rocketchat_4.png' %}">
         </div>
     </div>
@@ -104,15 +103,14 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Log into {% site_name %}, then go to the <strong>Integrations</strong>
-                page and click on <strong>Add Integration</strong> next to the
-                Rocket.Chat integration.
+            <p>登录 {% site_name %}，然后前往 <strong>集成</strong>
+                页面，点击 Rocket.Chat 集成旁的 <strong>添加集成</strong>。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_rocketchat_5.png' %}">
         </div>
     </div>
@@ -120,25 +118,25 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Paste the copied <strong>URL</strong> in the form.</p>
-            <p>Save the integration, and you are all set!</p>
+            <p>将复制的 <strong>链接</strong> 粘贴到表单中。</p>
+            <p>保存集成，一切就绪！</p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_rocketchat_6.png' %}">
         </div>
     </div>
     {% endif %}
 
     {% if project %}
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
     <form method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {{ form.value.css_classes }}">
             <label for="callback-url" class="col-sm-2 control-label">
-                Webhook URL
+                Webhook 链接
             </label>
             <div class="col-sm-10">
                 <input
@@ -158,7 +156,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

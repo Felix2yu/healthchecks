@@ -1,7 +1,7 @@
-# Server Configuration
+# 服务器配置
 
-Healthchecks prepares its configuration in `hc/settings.py`. It reads configuration
-from environment variables. Below is a list of environment variables it reads and uses.
+Healthchecks 在 `hc/settings.py` 中准备其配置。它从环境变量中读取配置。
+以下是它读取和使用的环境变量列表。
 
 <ul class="self-hosted-configuration-toc">
 <li><a href="#ADMINS">ADMINS</a></li>
@@ -109,46 +109,37 @@ from environment variables. Below is a list of environment variables it reads an
 
 ## `ADMINS` {: #ADMINS }
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-A comma-separated list of email addresses to send code error notifications to.
-When `DEBUG=False`, Healthchecks will send the details of exceptions raised in the
-request/response cycle to the listed addresses. Example:
+用于发送代码错误通知的电子邮件地址列表，以逗号分隔。当 `DEBUG=False` 时，Healthchecks 会将请求/响应周期中引发的异常详情发送到列出的地址。示例：
 
 ```ini
 ADMINS=alice@example.org,bob@example.org
 ```
 
-Note: for error notifications to work, make sure you have also specified working
-SMTP credentials in the `EMAIL_...` environment variables.
+注意：要使错误通知生效，请确保你还在 `EMAIL_...` 环境变量中指定了有效的 SMTP 凭据。
 
 ## `ALLOWED_HOSTS` {: #ALLOWED_HOSTS }
 
-Default: the domain part of `SITE_ROOT`
+默认值：`SITE_ROOT` 的域名部分
 
-The host/domain names that this site can serve. Healthchecks populates this setting
-automatically with the domain part of [SITE_ROOT](#SITE_ROOT). You do not need
-to set it unless you serve Healthchecks on more than one domain.
+此站点可以服务的主机/域名。Healthchecks 会自动用 [SITE_ROOT](#SITE_ROOT) 的域名部分填充此设置。除非你在多个域名上提供 Healthchecks 服务，否则无需设置。
 
-If you do serve the same Healthchecks instance on more than one domain, specify
-them all in `ALLOWED_HOSTS`, separated by commas:
+如果确实在多个域名上提供同一 Healthchecks 实例的服务，请在 `ALLOWED_HOSTS` 中指定它们，以逗号分隔：
 
 ```ini
 ALLOWED_HOSTS=first.example.org,second.example.org
 ```
 
-Aside from the comma-separated syntax, this is a standard Django setting.
-Read more about it in the
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts).
+除了逗号分隔语法之外，这是一个标准的 Django 设置。在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts)中了解更多。
 
 ## `APPRISE_ENABLED` {: #APPRISE_ENABLED }
 
-Default: `False`
+默认值：`False`
 
-A boolean that turns on/off the [Apprise](https://github.com/caronc/apprise)
-integration.
+一个布尔值，用于开启/关闭 [Apprise](https://github.com/caronc/apprise) 集成。
 
-Before enabling the Apprise integration, make sure the `apprise` package is installed:
+在启用 Apprise 集成之前，请确保已安装 `apprise` 包：
 
 ```bash
 pip install apprise
@@ -156,258 +147,207 @@ pip install apprise
 
 ## `DB` {: #DB }
 
-Default: `sqlite`
+默认值：`sqlite`
 
-The database engine to use. Possible values: `sqlite`, `postgres`, `mysql`.
+要使用的数据库引擎。可能的值：`sqlite`、`postgres`、`mysql`。
 
 ## `DB_CONN_MAX_AGE` {: #DB_CONN_MAX_AGE }
 
-Default: `0`
+默认值：`0`
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#conn-max-age).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#conn-max-age)中了解更多。
 
 ## `DB_HOST` {: #DB_HOST }
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#host).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#host)中了解更多。
 
 ## `DB_NAME` {: #DB_NAME }
 
-Default: `hc` (PostgreSQL, MySQL) or `/path/to/projectdir/hc.sqlite` (SQLite)
+默认值：`hc`（PostgreSQL、MySQL）或 `/path/to/projectdir/hc.sqlite`（SQLite）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#name).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#name)中了解更多。
 
 ## `DB_PASSWORD` {: #DB_PASSWORD }
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#password).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#password)中了解更多。
 
 ## `DB_PASSWORD_FILE` {: #DB_PASSWORD_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [DB_PASSWORD](#DB_PASSWORD) setting.
-If `DB_PASSWORD` and `DB_PASSWORD_FILE` are both set, `DB_PASSWORD_FILE` takes
-precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [DB_PASSWORD](#DB_PASSWORD) 设置。如果同时设置了 `DB_PASSWORD` 和 `DB_PASSWORD_FILE`，则 `DB_PASSWORD_FILE` 优先。
 
 ## `DB_PORT` {: #DB_PORT }
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#port).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#port)中了解更多。
 
 ## `DB_SSLMODE` {: #DB_SSLMODE }
 
-Default: `prefer`
+默认值：`prefer`
 
-PostgreSQL-specific, [details](https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-SSLMODE)
+PostgreSQL 专用，[详情](https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-SSLMODE)
 
 ## `DB_TARGET_SESSION_ATTRS` {: #DB_TARGET_SESSION_ATTRS }
 
-Default: `read-write`
+默认值：`read-write`
 
-PostgreSQL-specific, [details](https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-TARGET-SESSION-ATTRS)
+PostgreSQL 专用，[详情](https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-TARGET-SESSION-ATTRS)
 
 ## `DB_USER` {: #DB_USER }
 
-Default: `postgres` (PostgreSQL) or `root` (MySQL)
+默认值：`postgres`（PostgreSQL）或 `root`（MySQL）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#user).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#user)中了解更多。
 
 ## `DEBUG` {: #DEBUG }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off debug mode.
+一个布尔值，用于开启/关闭调试模式。
 
-_Never run a Healthchecks instance in production with the debug mode turned on!_
+_切勿在生产环境中以调试模式运行 Healthchecks 实例！_
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#debug).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#debug)中了解更多。
 
 ## `DEFAULT_FROM_EMAIL` {: #DEFAULT_FROM_EMAIL }
 
-Default: `healthchecks@example.org`
+默认值：`healthchecks@example.org`
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#default-from-email).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#default-from-email)中了解更多。
 
 ## `DISCORD_CLIENT_ID` {: #DISCORD_CLIENT_ID }
 
-Default: `None`
+默认值：`None`
 
-The Discord Client ID, required by the Discord integration.
+Discord 客户端 ID，Discord 集成所需。
 
-To set up the Discord integration:
+设置 Discord 集成：
 
-* Register a new application at
-  [https://discordapp.com/developers/applications/me](https://discordapp.com/developers/applications/me)
-* Add a Redirect URI to your Discord application. The URI format is
-  `SITE_ROOT/integrations/add_discord/`. For example, if `your SITE_ROOT`
-  is `https://my-hc.example.org` then the Redirect URI would be
-  `https://my-hc.example.org/integrations/add_discord/`
-* Look up your Discord app's _Client ID_ and _Client Secret_. Put them
-  in the `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` environment
-  variables.
+* 在 [https://discordapp.com/developers/applications/me](https://discordapp.com/developers/applications/me) 注册一个新应用
+* 为你的 Discord 应用添加重定向 URI。URI 格式为 `SITE_ROOT/integrations/add_discord/`。例如，如果你的 `SITE_ROOT` 是 `https://my-hc.example.org`，则重定向 URI 为 `https://my-hc.example.org/integrations/add_discord/`
+* 查找你的 Discord 应用的_客户端 ID_ 和_客户端密钥_。将它们放入 `DISCORD_CLIENT_ID` 和 `DISCORD_CLIENT_SECRET` 环境变量中。
 
 ## `DISCORD_CLIENT_SECRET` {: #DISCORD_CLIENT_SECRET }
 
-Default: `None`
+默认值：`None`
 
-The Discord Client Secret, required by the Discord integration. Look it up at
-[https://discordapp.com/developers/applications/me](https://discordapp.com/developers/applications/me).
+Discord 客户端密钥，Discord 集成所需。在 [https://discordapp.com/developers/applications/me](https://discordapp.com/developers/applications/me) 查找。
 
 ## `DISCORD_CLIENT_SECRET_FILE` {: #DISCORD_CLIENT_SECRET_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [DISCORD_CLIENT_SECRET](#DISCORD_CLIENT_SECRET)
-setting. If `DISCORD_CLIENT_SECRET` and `DISCORD_CLIENT_SECRET_FILE` are both set,
-`DISCORD_CLIENT_SECRET_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [DISCORD_CLIENT_SECRET](#DISCORD_CLIENT_SECRET) 设置。如果同时设置了 `DISCORD_CLIENT_SECRET` 和 `DISCORD_CLIENT_SECRET_FILE`，则 `DISCORD_CLIENT_SECRET_FILE` 优先。
 
 ## `EMAIL_HOST` {: #EMAIL_HOST }
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host)中了解更多。
 
 ## `EMAIL_HOST_PASSWORD` {: #EMAIL_HOST_PASSWORD }
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-password).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-password)中了解更多。
 
 ## `EMAIL_HOST_PASSWORD_FILE` {: #EMAIL_HOST_PASSWORD_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [EMAIL_HOST_PASSWORD](#EMAIL_HOST_PASSWORD)
-setting. If `EMAIL_HOST_PASSWORD` and `EMAIL_HOST_PASSWORD_FILE`
-are both set, `EMAIL_HOST_PASSWORD_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [EMAIL_HOST_PASSWORD](#EMAIL_HOST_PASSWORD) 设置。如果同时设置了 `EMAIL_HOST_PASSWORD` 和 `EMAIL_HOST_PASSWORD_FILE`，则 `EMAIL_HOST_PASSWORD_FILE` 优先。
 
 ## `EMAIL_HOST_USER` {: #EMAIL_HOST_USER }
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-user).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-user)中了解更多。
 
 ## `EMAIL_PORT` {: #EMAIL_PORT }
 
-Default: `587`
+默认值：`587`
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#email-port).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-port)中了解更多。
 
 ## `EMAIL_USE_TLS` {: #EMAIL_USE_TLS }
 
-Default: `True`
+默认值：`True`
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-tls).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-tls)中了解更多。
 
 ## `EMAIL_USE_SSL` {: #EMAIL_USE_SSL}
 
-Default: `False`
+默认值：`False`
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-ssl).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-ssl)中了解更多。
 
 ## `EMAIL_USE_VERIFICATION` {: #EMAIL_USE_VERIFICATION }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off a verification step when adding an email integration.
+一个布尔值，用于开启/关闭添加电子邮件集成时的验证步骤。
 
-If enabled, whenever a user adds an email integration, Healthchecks emails a
-verification link to the new address. The new integration becomes active only
-after the user clicks the verification link.
+如果启用，每当用户添加电子邮件集成时，Healthchecks 会向新地址发送一封验证链接邮件。新的集成只有在用户单击验证链接后才会激活。
 
-If you are setting up a private healthchecks instance where
-you trust your users, you can opt to disable the verification step. In that case,
-set `EMAIL_USE_VERIFICATION` to `False`.
+如果你在设置一个受信任的私有 Healthchecks 实例，你可以选择禁用验证步骤。在这种情况下，将 `EMAIL_USE_VERIFICATION` 设置为 `False`。
 
 ## `GITHUB_CLIENT_ID` {: #GITHUB_CLIENT_ID }
 
-Default: `None`
+默认值：`None`
 
-The GitHub Client ID, required by the GitHub Issues integration.
+GitHub 客户端 ID，GitHub Issues 集成所需。
 
-To set up the GitHub Issues integration:
+设置 GitHub Issues 集成：
 
-* [Register a new GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app)
-  (not OAuth app).
-* In GitHub App settings, under **General › About**, look up the **Client ID** and **Public link** values and put
-  them in the Healthchecks `GITHUB_CLIENT_ID` and `GITHUB_PUBLIC_LINK` environment
-  variables respectively.
-* Under **General › Client secrets**, generate a client secret, and put it in the
-  Healthchecks `GITHUB_CLIENT_SECRET` environment variable.
-* Under **General › Identifying and authorizing users**, set the **Callback URL**.
-  The URL format is `SITE_ROOT/integrations/add_github/`.
-  For example, if `your SITE_ROOT` is `https://my-hc.example.org` then the
-  Callback URL would be `https://my-hc.example.org/integrations/add_github/`.
-* Under **General › Post installation**, set **Setup URL** to the same value.
-* Under **General › Private keys**, generate a private key and put it in the
-  Healthchecks `GITHUB_PRIVATE_KEY` environment variable.
-* Under **Permissions & events › Repository permissions**, set access for permission
-  "Issues" to "Read and write".
+* [注册一个新的 GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app)（不是 OAuth 应用）。
+* 在 GitHub App 设置中，在 **General › About** 下查找**客户端 ID** 和**公共链接**值，分别放入 Healthchecks 的 `GITHUB_CLIENT_ID` 和 `GITHUB_PUBLIC_LINK` 环境变量。
+* 在 **General › Client secrets** 下生成客户端密钥，放入 Healthchecks 的 `GITHUB_CLIENT_SECRET` 环境变量。
+* 在 **General › Identifying and authorizing users** 下设置**回调 URL**。URL 格式为 `SITE_ROOT/integrations/add_github/`。例如，如果你的 `SITE_ROOT` 是 `https://my-hc.example.org`，则回调 URL 为 `https://my-hc.example.org/integrations/add_github/`。
+* 在 **General › Post installation** 下，将**设置 URL** 设置为相同的值。
+* 在 **General › Private keys** 下生成私钥，放入 Healthchecks 的 `GITHUB_PRIVATE_KEY` 环境变量。
+* 在 **Permissions & events › Repository permissions** 下，将"Issues"权限设置为"Read and write"。
 
 ## `GITHUB_CLIENT_SECRET` {: #GITHUB_CLIENT_SECRET }
 
-Default: `None`
+默认值：`None`
 
-The GitHub App's Client Secret, required by the GitHub Issues integration.
+GitHub App 的客户端密钥，GitHub Issues 集成所需。
 
 ## `GITHUB_CLIENT_SECRET_FILE` {: #GITHUB_CLIENT_SECRET_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [GITHUB_CLIENT_SECRET](#GITHUB_CLIENT_SECRET)
-setting. If `GITHUB_CLIENT_SECRET` and `GITHUB_CLIENT_SECRET_FILE` are both set,
-`GITHUB_CLIENT_SECRET_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [GITHUB_CLIENT_SECRET](#GITHUB_CLIENT_SECRET) 设置。如果同时设置了 `GITHUB_CLIENT_SECRET` 和 `GITHUB_CLIENT_SECRET_FILE`，则 `GITHUB_CLIENT_SECRET_FILE` 优先。
 
 ## `GITHUB_PRIVATE_KEY` {: #GITHUB_PRIVATE_KEY }
 
-Default: `None`
+默认值：`None`
 
-The GitHub App's private key, required by the GitHub Issues integration.
+GitHub App 的私钥，GitHub Issues 集成所需。
 
 ## `GITHUB_PRIVATE_KEY_FILE` {: #GITHUB_PRIVATE_KEY_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [GITHUB_PRIVATE_KEY](#GITHUB_PRIVATE_KEY)
-setting. If `GITHUB_PRIVATE_KEY` and `GITHUB_PRIVATE_KEY_FILE` are both set,
-`GITHUB_PRIVATE_KEY_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [GITHUB_PRIVATE_KEY](#GITHUB_PRIVATE_KEY) 设置。如果同时设置了 `GITHUB_PRIVATE_KEY` 和 `GITHUB_PRIVATE_KEY_FILE`，则 `GITHUB_PRIVATE_KEY_FILE` 优先。
 
 ## `GITHUB_PUBLIC_LINK` {: #GITHUB_PUBLIC_LINK }
 
-Default: `None`
+默认值：`None`
 
-A URL pointing to the  GitHub App's public page on the GitHub website, required by
-the GitHub Issues integration.
+指向 GitHub App 在 GitHub 网站上的公共页面的 URL，GitHub Issues 集成所需。
 
 ## `http_proxy` and `https_proxy` {: #http_proxy}
 
-Default: `""` (empty string)
+默认值：`""`（空字符串）
 
-Specifies the proxy server to use for outgoing HTTP and HTTPS requests.
-Supports different proxy server types. Examples:
+指定用于出站 HTTP 和 HTTPS 请求的代理服务器。支持不同的代理服务器类型。示例：
 
 ```ini
 https_proxy=http://example.org:1234
@@ -416,206 +356,169 @@ https_proxy=socks4://example.org:1234
 https_proxy=socks5://example.org:1234
 ```
 
-Healthchecks uses libcurl as the HTTP client library for making HTTP(S) requests.
-For more information about the proxy functionality, please see
-[libcurl documentation](https://curl.se/libcurl/c/CURLOPT_PROXY.html).
+Healthchecks 使用 libcurl 作为 HTTP 客户端库来发出 HTTP(S) 请求。有关代理功能的更多信息，请参阅 [libcurl 文档](https://curl.se/libcurl/c/CURLOPT_PROXY.html)。
 
-Note: If your proxy server has a private IP address, you will also need to
-set the `INTEGRATIONS_ALLOW_PRIVATE_IPS` setting to `True` to use it.
+注意：如果你的代理服务器具有私有 IP 地址，你还需要将 `INTEGRATIONS_ALLOW_PRIVATE_IPS` 设置为 `True` 才能使用它。
 
 ## `INTEGRATIONS_ALLOW_PRIVATE_IPS` {: #INTEGRATIONS_ALLOW_PRIVATE_IPS }
 
-Default: `False`
+默认值：`False`
 
-A boolean that controls whether the integrations are allowed to make
-HTTP(S) requests to private IP addresses (127.0.0.1, 192.168.x.x, ...). This setting
-is set to `False` by default, because allowing users to define webhooks that probe
-internal addresses is a security risk.
+一个布尔值，控制集成是否允许向私有 IP 地址（127.0.0.1、192.168.x.x 等）发出 HTTP(S) 请求。默认情况下此设置为 `False`，因为允许用户定义探测内部地址的 Webhook 存在安全风险。
 
-Only enable this setting if you run your Healthchecks instance in a trusted
-environment, and need to integrate with services running in your internal network.
+只有在受信任的环境中运行 Healthchecks 实例，并且需要与内部网络中的服务集成时，才启用此设置。
 
-This setting affects all integration types except Apprise, not just webhooks. For
-example, if you run a Gotify instance on `localhost`, you will need to enable
-`INTEGRATIONS_ALLOW_PRIVATE_IPS` to be able to use it via the Gotify integration.
+此设置影响除 Apprise 之外的所有集成类型，而不仅仅是 Webhook。例如，如果你在 `localhost` 上运行 Gotify 实例，你需要启用 `INTEGRATIONS_ALLOW_PRIVATE_IPS` 才能通过 Gotify 集成使用它。
 
-This setting affects all outbound HTTP requests, including those made
-while setting up new integrations (e.g. during the OAuth2 authorization flow).
+此设置影响所有出站 HTTP 请求，包括在设置新集成时发出的请求（例如在 OAuth2 授权流程期间）。
 
-This setting also affects connections to the proxy server when the `http_proxy` or
-`https_proxy` environment variables are set. If your proxy server has a private
-IP address, you will need to enable `INTEGRATIONS_ALLOW_PRIVATE_IPS` to use it.
+此设置也影响在设置 `http_proxy` 或 `https_proxy` 环境变量时与代理服务器的连接。如果你的代理服务器具有私有 IP 地址，你需要启用 `INTEGRATIONS_ALLOW_PRIVATE_IPS` 才能使用它。
 
-This setting *does not* have effect on the Apprise integration, as the Apprise library
-uses its own HTTP client. Apprise can make requests to private IPs regardless
-of this setting.
+此设置*不*影响 Apprise 集成，因为 Apprise 库使用自己的 HTTP 客户端。无论此设置如何，Apprise 都可以向私有 IP 发出请求。
 
 ## `MASTER_BADGE_LABEL` {: #MASTER_BADGE_URL }
 
-Default: same as `SITE_NAME`
+默认值：与 `SITE_NAME` 相同
 
-The label for the "Overall Status" status badge.
+"总体状态"状态徽章的标签。
 
 ## `MATRIX_ACCESS_TOKEN` {: #MATRIX_ACCESS_TOKEN }
 
-Default: `None`
+默认值：`None`
 
-The [Matrix](https://matrix.org/) bot user's access token, required by the Matrix
-integration.
+[Matrix](https://matrix.org/) 机器人用户的访问令牌，Matrix 集成所需。
 
-To set up the Matrix integration:
+设置 Matrix 集成：
 
-* Register a bot user (for posting notifications) in your preferred Matrix homeserver.
-* Use the [Login API call](https://www.matrix.org/docs/guides/client-server-api#login)
-  to retrieve bot user's access token. You can run it as shown in the documentation,
-  using curl in the command shell.
-* Set the `MATRIX_` environment variables. Example:
+* 在你首选的 Matrix 主服务器上注册一个机器人用户（用于发布通知）。
+* 使用[登录 API 调用](https://www.matrix.org/docs/guides/client-server-api#login)检索机器人用户的访问令牌。你可以按照文档中的说明，使用 curl 在命令 shell 中运行它。
+* 设置 `MATRIX_` 环境变量。示例：
 
 ```ini
-MATRIX_ACCESS_TOKEN=[a long string of characters returned by the login call]
+MATRIX_ACCESS_TOKEN=[登录调用返回的一长串字符]
 MATRIX_HOMESERVER=https://matrix.org
 MATRIX_USER_ID=@mychecks:matrix.org
 ```
 
 ## `MATRIX_ACCESS_TOKEN_FILE` {: #MATRIX_ACCESS_TOKEN_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [MATRIX_ACCESS_TOKEN](#MATRIX_ACCESS_TOKEN)
-setting. If `MATRIX_ACCESS_TOKEN` and `MATRIX_ACCESS_TOKEN_FILE` are both set,
-`MATRIX_ACCESS_TOKEN_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [MATRIX_ACCESS_TOKEN](#MATRIX_ACCESS_TOKEN) 设置。如果同时设置了 `MATRIX_ACCESS_TOKEN` 和 `MATRIX_ACCESS_TOKEN_FILE`，则 `MATRIX_ACCESS_TOKEN_FILE` 优先。
 
 ## `MATRIX_HOMESERVER` {: #MATRIX_HOMESERVER }
 
-Default: `None`
+默认值：`None`
 
-The Matrix bot's homeserver address, required by the Matrix integration.
+Matrix 机器人的主服务器地址，Matrix 集成所需。
 
 ## `MATRIX_USER_ID` {: #MATRIX_USER_ID }
 
-Default: `None`
+默认值：`None`
 
-The Matrix bot's user identifier, required by the Matrix integration.
+Matrix 机器人的用户标识符，Matrix 集成所需。
 
 ## `MATTERMOST_ENABLED` {: #MATTERMOST_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Mattermost integration. Enabled by default.
+一个布尔值，用于开启/关闭 Mattermost 集成。默认启用。
 
 ## `MSTEAMS_ENABLED` {: #MSTEAMS_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the MS Teams integration. Enabled
+一个布尔值，用于开启/关闭 MS Teams 集成。默认启用。
 
 ## `NTFY_SH_TOKEN` {: #NTFY_SH_TOKEN }
 
-Default: `None`
+默认值：`None`
 
-The default access token to use when sending ntfy notifications to the hosted ntfy.sh
-server. This token will be only used when sending to the ntfy server at
-`https://ntfy.sh` and when the user has not specified their own access token
-when setting up the ntfy integration.
+向托管的 ntfy.sh 服务器发送 ntfy 通知时使用的默认访问令牌。此令牌仅在发送到 `https://ntfy.sh` 的 ntfy 服务器且用户在设置 ntfy 集成时未指定自己的访问令牌时使用。
 
-Use this setting if your Healthchecks instance is hitting ntfy.sh free plan's
-[daily sending limit](https://docs.ntfy.sh/publish/#limitations) and you want to ensure
-reliable notification delivery for ntfy integrations that do not bring their own
-access token.
+如果你的 Healthchecks 实例达到了 ntfy.sh 免费计划的[每日发送限制](https://docs.ntfy.sh/publish/#limitations)，并且你希望确保未自带访问令牌的 ntfy 集成能够可靠地投递通知，请使用此设置。
 
 ## `NTFY_SH_TOKEN_FILE` {: #NTFY_SH_TOKEN_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [NTFY_SH_TOKEN](#NTFY_SH_TOKEN) setting.
-If `NTFY_SH_TOKEN` and `NTFY_SH_TOKEN_FILE` are both set, `NTFY_SH_TOKEN_FILE` takes
-precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [NTFY_SH_TOKEN](#NTFY_SH_TOKEN) 设置。如果同时设置了 `NTFY_SH_TOKEN` 和 `NTFY_SH_TOKEN_FILE`，则 `NTFY_SH_TOKEN_FILE` 优先。
 
 ## `OPSGENIE_ENABLED` {: #OPSGENIE_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Opsgenie integration. Enabled by default.
+一个布尔值，用于开启/关闭 Opsgenie 集成。默认启用。
 
 ## `PAGERTREE_ENABLED` {: #PAGERTREE_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the PagerTree integration. Enabled by default.
+一个布尔值，用于开启/关闭 PagerTree 集成。默认启用。
 
 ## `PD_APP_ID` {: #PD_APP_ID }
 
-Default: `None`
+默认值：`None`
 
-PagerDuty application ID. If set, enables the PagerDuty
-[Simple Install Flow](https://developer.pagerduty.com/docs/app-integration-development/events-integration/).
-If `None`, Healthchecks will fall back to the even simpler flow where users manually
-copy integration keys from PagerDuty and paste them in Healthchecks.
+PagerDuty 应用 ID。如果设置，启用 PagerDuty [简单安装流程](https://developer.pagerduty.com/docs/app-integration-development/events-integration/)。如果为 `None`，Healthchecks 将回退到更简单的流程，用户手动从 PagerDuty 复制集成密钥并粘贴到 Healthchecks 中。
 
-To set up:
+设置步骤：
 
-* Register a PagerDuty app at [PagerDuty](https://pagerduty.com/) › Developer Mode › My Apps
-* In the newly created app, add the "Events Integration" functionality
-* Specify a Redirect URL: `https://your-domain.com/integrations/add_pagerduty/`
-* Copy the displayed app_id value (PXXXXX) and put it in the `PD_APP_ID` environment
-  variable
+* 在 [PagerDuty](https://pagerduty.com/) › 开发者模式 › 我的应用 中注册一个 PagerDuty 应用
+* 在新创建的应用中，添加"Events Integration"功能
+* 指定重定向 URL：`https://your-domain.com/integrations/add_pagerduty/`
+* 复制显示的 app_id 值（PXXXXX）并放入 `PD_APP_ID` 环境变量
 
 ## `PD_ENABLED` {: #PD_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the PagerDuty integration. Enabled by default.
+一个布尔值，用于开启/关闭 PagerDuty 集成。默认启用。
 
 ## `PING_BODY_LIMIT` {: #PING_BODY_LIMIT }
 
-Default: `10000`
+默认值：`10000`
 
-The upper size limit in bytes for logged ping request bodies.
-The default value is 10000 (10 kilobytes). You can adjust the limit or you can remove
-it altogether by setting this value to `None`.
+记录的 ping 请求体的最大字节数限制。默认值为 10000（10 KB）。你可以调整限制，或者通过将此值设置为 `None` 来完全移除限制。
 
 ## `PING_EMAIL_DOMAIN` {: #PING_EMAIL_DOMAIN }
 
 Default: `localhost`
 
-The domain to use for generating ping email addresses. Example:
+用于生成 ping 电子邮件地址的域名。示例：
 
 ```ini
 PING_EMAIL_DOMAIN=hc.example.org
 ```
 
-In this example, Healthchecks would generate ping email addresses similar
-to `3f1a7317-8e96-437c-a17d-b0d550b51e86@hc.example.org`.
+在此示例中，Healthchecks 将生成类似于
+`3f1a7317-8e96-437c-a17d-b0d550b51e86@hc.example.org` 的 ping 电子邮件地址。
 
-This setting only controls how the ping email addresses are constructed, and
-does not by itself enable the ping-by-sending-email functionality. To receive
-emails, you will also need:
+此设置仅控制 ping 电子邮件地址的构建方式，
+其本身不会启用通过发送电子邮件进行 ping 的功能。要接收
+电子邮件，您还需要：
 
-* A DNS record pointing `hc.example.org` to your Healthchecks
-  instance's IP address.
-* `manage.py smtpd` (Healthchecks' SMTP listener service) running, listening
-  on port 25, and reachable from the outside world. If you are using the
-  [official Docker image](https://hub.docker.com/r/healthchecks/healthchecks),
-  see [the instructions here](../self_hosted_docker/#SMTPD_PORT) for enabling the SMTP
-  listener service.
+* 一条将 `hc.example.org` 指向您的 Healthchecks 实例 IP 地址的 DNS 记录。
+* `manage.py smtpd`（Healthchecks 的 SMTP 监听服务）正在运行，监听
+  端口 25，并且可从外部世界访问。如果您使用的是
+  [官方 Docker 镜像](https://hub.docker.com/r/healthchecks/healthchecks)，
+  请参阅[此处的说明](../self_hosted_docker/#SMTPD_PORT)以了解如何启用 SMTP
+  监听服务。
 
 ## `PING_ENDPOINT` {: #PING_ENDPOINT }
 
 Default: `SITE_ROOT` + `/ping/`
 
-The base URL to use for constructing ping URLs for display. Healthchecks constructs ping
-URLs by appending either an UUID value or `<ping-key>/<slug>` value to `PING_ENDPOINT`.
+用于构建显示用 ping URL 的基础 URL。Healthchecks 通过将 UUID 值或 `<ping-key>/<slug>` 值追加到 `PING_ENDPOINT` 来构建 ping URL。
 
-Notes:
+注意：
 
-* Make sure the `PING_ENDPOINT` value ends with a trailing slash. If a trailing slash
-  is missing, Healthchecks will *not* add it implicitly.
-* Healthchecks uses `PING_ENDPOINT` for formatting ping URLs for display.
-  The `PING_ENDPOINT` value does not influence the routing of incoming HTTP requests.
-  If you change the `PING_ENDPOINT` value, you will likely also need to add matching
-  URL rewriting rules in your reverse proxy configuration.
+* 确保 `PING_ENDPOINT` 值以尾部斜杠结尾。如果缺少尾部斜杠，
+  Healthchecks *不会*隐式添加它。
+* Healthchecks 使用 `PING_ENDPOINT` 来格式化用于显示的 ping URL。
+  `PING_ENDPOINT` 值不影响传入 HTTP 请求的路由。
+  如果您更改 `PING_ENDPOINT` 值，您可能还需要在反向代理配置中添加匹配的
+  URL 重写规则。
 
 Example:
 
@@ -623,7 +526,7 @@ Example:
 PING_ENDPOINT=https://ping.my-hc.example.org/
 ```
 
-With this setting, Healthchecks will generate ping URLs similar to:
+使用此设置，Healthchecks 将生成类似于以下的 ping URL：
 
 ```
 https://ping.my-hc.example.org/3f1a7317-8e96-437c-a17d-b0d550b51e86
@@ -632,149 +535,104 @@ https://ping.my-hc.example.org/1fj9XWM6Ns8vLGTmnPGk9g/dummy-slug
 
 ## `PROMETHEUS_ENABLED` {: #PROMETHEUS_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Prometheus integration. Enabled by default.
+一个布尔值，用于开启/关闭 Prometheus 集成。默认启用。
 
 ## `PUSHBULLET_CLIENT_ID` {: #PUSHBULLET_CLIENT_ID }
 
-Default: `None`
+默认值：`None`
 
-The Pushbullet Client ID, required by the Pushbullet integration.
+Pushbullet 客户端 ID，Pushbullet 集成所需。
 
-To set up the Pushbullet integration:
+设置 Pushbullet 集成：
 
-* Add a new OAuth client at
-  [https://www.pushbullet.com/#settings/clients](https://www.pushbullet.com/#settings/clients)
-* Add a `redirect_uri` to your OAuth client. The URI format is
-  `SITE_ROOT/integrations/add_pushbullet/`. For example, if `your SITE_ROOT`
-  is `https://my-hc.example.org` then the `redirect_uri` would be
-  `https://my-hc.example.org/integrations/add_pushbullet/`
-* Look up your OAuth client's `client_id` and `client_secret` values. Put them
-  in the `PUSHBULLET_CLIENT_ID` and `PUSHBULLET_CLIENT_SECRET` environment
-  variables.
+* 在 [https://www.pushbullet.com/#settings/clients](https://www.pushbullet.com/#settings/clients) 添加新的 OAuth 客户端
+* 为你的 OAuth 客户端添加 `redirect_uri`。URI 格式为 `SITE_ROOT/integrations/add_pushbullet/`。例如，如果你的 `SITE_ROOT` 是 `https://my-hc.example.org`，则 `redirect_uri` 为 `https://my-hc.example.org/integrations/add_pushbullet/`
+* 查找你的 OAuth 客户端的 `client_id` 和 `client_secret` 值。将它们放入 `PUSHBULLET_CLIENT_ID` 和 `PUSHBULLET_CLIENT_SECRET` 环境变量。
 
-Read more about setting up a Pushbullet OAuth client in the
-[Pushbullet OAuth2 guide](https://docs.pushbullet.com/#oauth2).
+在 [Pushbullet OAuth2 指南](https://docs.pushbullet.com/#oauth2)中阅读有关设置 Pushbullet OAuth 客户端的更多信息。
 
 ## `PUSHBULLET_CLIENT_SECRET` {: #PUSHBULLET_CLIENT_SECRET }
 
-Default: `None`
+默认值：`None`
 
-The Pushbullet Client Secret, required by the Pushbullet integration. Look it up at
-[https://www.pushbullet.com/#settings/clients](https://www.pushbullet.com/#settings/clients).
+Pushbullet 客户端密钥，Pushbullet 集成所需。在 [https://www.pushbullet.com/#settings/clients](https://www.pushbullet.com/#settings/clients) 查找。
 
 ## `PUSHBULLET_CLIENT_SECRET_FILE` {: #PUSHBULLET_CLIENT_SECRET_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the
-[PUSHBULLET_CLIENT_SECRET](#PUSHBULLET_CLIENT_SECRET) setting. If
-`PUSHBULLET_CLIENT_SECRET` and `PUSHBULLET_CLIENT_SECRET_FILE` are both set,
-`PUSHBULLET_CLIENT_SECRET_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [PUSHBULLET_CLIENT_SECRET](#PUSHBULLET_CLIENT_SECRET) 设置。如果同时设置了 `PUSHBULLET_CLIENT_SECRET` 和 `PUSHBULLET_CLIENT_SECRET_FILE`，则 `PUSHBULLET_CLIENT_SECRET_FILE` 优先。
 
 ## `PUSHOVER_API_TOKEN` {: #PUSHOVER_API_TOKEN }
 
-Default: `None`
+默认值：`None`
 
-The [Pushover](https://pushover.net/) API token, required by the Pushover integration.
+[Pushover](https://pushover.net/) API 令牌，Pushover 集成所需。
 
-To enable the Pushover integration:
+启用 Pushover 集成：
 
-* Register a new Pushover application at
-  [https://pushover.net/apps/build](https://pushover.net/apps/build).
-* Within the Pushover application configuration, enable subscriptions.
-  Make sure the subscription type is set to "URL". Also make sure the redirect
-  URL is configured to point back to the root of the Healthchecks instance
-  (e.g., `https://my-hc.example.org/`).
-* Put the Pushover application's _API Token_ and the _Subscription URL_ in
-  `PUSHOVER_API_TOKEN` and `PUSHOVER_SUBSCRIPTION_URL` environment
-  variables. The Pushover subscription URL should look similar to
-  `https://pushover.net/subscribe/yourAppName-randomAlphaNumericData`.
+* 在 [https://pushover.net/apps/build](https://pushover.net/apps/build) 注册一个新的 Pushover 应用。
+* 在 Pushover 应用配置中，启用订阅。确保订阅类型设置为"URL"。同时确保重定向 URL 配置为指向 Healthchecks 实例的根路径（例如 `https://my-hc.example.org/`）。
+* 将 Pushover 应用的_API 令牌_和_订阅 URL_ 放入 `PUSHOVER_API_TOKEN` 和 `PUSHOVER_SUBSCRIPTION_URL` 环境变量。Pushover 订阅 URL 应类似于 `https://pushover.net/subscribe/yourAppName-randomAlphaNumericData`。
 
 ## `PUSHOVER_API_TOKEN_FILE` {: #PUSHOVER_API_TOKEN_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [PUSHOVER_API_TOKEN](#PUSHOVER_API_TOKEN)
-setting. If `PUSHOVER_API_TOKEN` and `PUSHOVER_API_TOKEN_FILE` are both set,
-`PUSHOVER_API_TOKEN_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [PUSHOVER_API_TOKEN](#PUSHOVER_API_TOKEN) 设置。如果同时设置了 `PUSHOVER_API_TOKEN` 和 `PUSHOVER_API_TOKEN_FILE`，则 `PUSHOVER_API_TOKEN_FILE` 优先。
 
 ## `PUSHOVER_EMERGENCY_EXPIRATION` {: #PUSHOVER_EMERGENCY_EXPIRATION }
 
-Default: `86400` (24 hours)
+默认值：`86400`（24 小时）
 
-Specifies how many seconds an emergency Pushover notification
-will continue to be retried for.
+指定紧急 Pushover 通知将持续重试的秒数。
 
-More information in [Pushover API documentation](https://pushover.net/api#priority).
+更多信息请参阅 [Pushover API 文档](https://pushover.net/api#priority)。
 
 ## `PUSHOVER_EMERGENCY_RETRY_DELAY` {: #PUSHOVER_EMERGENCY_RETRY_DELAY }
 
-Default: `300` (5 minutes)
+默认值：`300`（5 分钟）
 
-Specifies how often (in seconds) the Pushover servers will send the same notification
-to the user.
+指定 Pushover 服务器向用户发送相同通知的频率（秒）。
 
-More information in [Pushover API documentation](https://pushover.net/api#priority).
+更多信息请参阅 [Pushover API 文档](https://pushover.net/api#priority)。
 
 ## `PUSHOVER_SUBSCRIPTION_URL` {: #PUSHOVER_SUBSCRIPTION_URL }
 
-Default: `None`
+默认值：`None`
 
-The Pushover Subscription URL, required by the Pushover integration.
+Pushover 订阅 URL，Pushover 集成所需。
 
 ## `REGISTRATION_OPEN` {: #REGISTRATION_OPEN }
 
-Default: `True`
+默认值：`True`
 
-A boolean that controls whether site visitors can create new accounts.
-Set it to `False` if you are setting up a private Healthchecks instance, but
-it needs to be publicly accessible (so, for example, your cloud services
-can send pings to it).
+一个布尔值，控制站点访问者是否可以创建新帐户。如果你在设置一个私有 Healthchecks 实例，但它需要公开访问（例如，你的云服务需要向其发送 ping），请将其设置为 `False`。
 
-If you close new user registration, you can still selectively invite users
-to your team account.
+如果你关闭了新用户注册，你仍然可以有选择地邀请用户加入你的团队帐户。
 
 ## `REMOTE_USER_HEADER` {: #REMOTE_USER_HEADER }
 
-Default: `None`
+默认值：`None`
 
-Specifies the request header to use for external authentication. If you use
-a reverse proxy that handles user authentication, and the reverse proxy can pass
-the authenticated user's email address in an HTTP request header, you can use this
-setting to integrate Healthchecks with it.
+指定用于外部身份验证的请求标头。如果你使用处理用户身份验证的反向代理，并且反向代理可以在 HTTP 请求标头中传递已验证用户的电子邮件地址，你可以使用此设置将 Healthchecks 与之集成。
 
-When `REMOTE_USER_HEADER` is set, Healthchecks will:
+设置了 `REMOTE_USER_HEADER` 后，Healthchecks 将：
 
- - in views that require authentication, look up the request header
-   specified in `REMOTE_USER_HEADER`
- - assume the header contains the user's email address
- - automatically log in the user with a matching email address
- - automatically create a user account if it does not exist
- - disable the default authentication methods (login link to email, password)
+- 在需要身份验证的视图中，查找 `REMOTE_USER_HEADER` 中指定的请求标头
+- 假定该标头包含用户的电子邮件地址
+- 自动登录具有匹配电子邮件地址的用户
+- 如果用户帐户不存在，则自动创建
+- 禁用默认的身份验证方法（登录链接到电子邮件、密码）
 
-The header name in `REMOTE_USER_HEADER` must be specified in upper-case,
-with any dashes replaced with underscores, and prefixed with `HTTP_`. For
-example, if your authentication proxy sets a `X-Authenticated-User` request
-header, you should set `REMOTE_USER_HEADER=HTTP_X_AUTHENTICATED_USER`.
+`REMOTE_USER_HEADER` 中的标头名称必须使用大写指定，将所有短横线替换为下划线，并加上 `HTTP_` 前缀。例如，如果你的身份验证代理设置了 `X-Authenticated-User` 请求标头，则应将 `REMOTE_USER_HEADER` 设置为 `HTTP_X_AUTHENTICATED_USER`。
 
-**Important:** When this option is enabled, **Healthchecks will trust the header's
-value implicitly**, so it is **very important** to ensure that attackers cannot
-set the value themselves (and thus impersonate any user). How to do this varies by
-your chosen proxy, but generally involves configuring it to strip out headers that
-normalize to the same name as the chosen identity header.
+**重要：** 启用此选项后，**Healthchecks 将隐式信任该标头的值**，因此**非常重要的是**确保攻击者无法自行设置该值（从而冒充任何用户）。如何做到这一点因你选择的代理而异，但通常涉及将其配置为剥离与所选身份标头归一化后同名的标头。
 
-**On using `local_settings.py`:**
-When Healthchecks reads settings from environment variables and encounters
-the `REMOTE_USER_HEADER` environment variable, it sets *two* settings,
-`REMOTE_USER_HEADER` and `AUTHENTICATION_BACKENDS`. This logic has already run by the
-time Healthchecks reads `local_settings.py`. Therefore, if you configure Healthchecks
-using the `local_settings.py` file instead of environment variables, and specify
-`REMOTE_USER_HEADER` there, you will also need a line which sets the other setting,
-`AUTHENTICATION_BACKENDS`:
+**关于使用 `local_settings.py`：**
+当 Healthchecks 从环境变量读取设置并遇到 `REMOTE_USER_HEADER` 环境变量时，它会设置*两个*设置：`REMOTE_USER_HEADER` 和 `AUTHENTICATION_BACKENDS`。在 Healthchecks 读取 `local_settings.py` 时，此逻辑已运行完毕。因此，如果你使用 `local_settings.py` 文件而不是环境变量来配置 Healthchecks，并在其中指定 `REMOTE_USER_HEADER`，你还需要一行设置另一个设置 `AUTHENTICATION_BACKENDS`：
 
 ```
 REMOTE_USER_HEADER = "HTTP_X_AUTHENTICATED_USER"
@@ -783,406 +641,324 @@ AUTHENTICATION_BACKENDS = ["hc.accounts.backends.CustomHeaderBackend"]
 
 ## `ROCKETCHAT_ENABLED` {: #ROCKETCHAT_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Rocket.Chat integration. Enabled by default.
+一个布尔值，用于开启/关闭 Rocket.Chat 集成。默认启用。
 
 ## `RP_ID` {: #RP_ID }
 
-Default: `None`
+默认值：`None`
 
-The [Relying Party identifier](https://www.w3.org/TR/webauthn-2/#relying-party-identifier),
-required by the WebAuthn second-factor authentication feature.
+[依赖方标识符](https://www.w3.org/TR/webauthn-2/#relying-party-identifier)，WebAuthn 双因素身份验证功能所需。
 
-Healthchecks optionally supports two-factor authentication using the WebAuthn
-standard. To enable WebAuthn support, set the `RP_ID` setting to a non-null value.
-Set its value to your site's domain without scheme and without port. For example,
-if your site runs on `https://my-hc.example.org`, set `RP_ID` to `my-hc.example.org`.
+Healthchecks 可选地支持使用 WebAuthn 标准的双因素身份验证。要启用 WebAuthn 支持，请将 `RP_ID` 设置为非空值。将其值设置为站点的域名，不包含协议和端口。例如，如果你的站点运行在 `https://my-hc.example.org`，将 `RP_ID` 设置为 `my-hc.example.org`。
 
-Note that WebAuthn requires HTTPS, even if running on localhost. To test WebAuthn
-locally with a self-signed certificate, you can use the `runsslserver` command
-from the `django-sslserver` package.
+请注意 WebAuthn 需要 HTTPS，即使在 localhost 上运行也是如此。要在本地使用自签名证书测试 WebAuthn，你可以使用 `django-sslserver` 包中的 `runsslserver` 命令。
 
 ## `S3_ACCESS_KEY` {: #S3_ACCESS_KEY }
 
-Default: `None`
+默认值：`None`
 
-Access key of an account in S3 service.
+S3 服务中账户的访问密钥。
 
-Healthchecks can optionally upload ping request body data to S3-compatible object
-storage instead of storing it in the database. To use this feature, provide valid
-credentials to an S3-compatible service by setting the following environment variables:
+Healthchecks 可以选择将 ping 请求体数据上传到兼容 S3 的对象存储，而不是存储在数据库中。要使用此功能，请通过设置以下环境变量向兼容 S3 的服务提供有效凭据：
 
-* `S3_ACCESS_KEY` (example: `AKIAFIXMEFIXME`)
-* `S3_BUCKET` (example: `my-bucket`)
-* `S3_ENDPOINT` (example: `s3.eu-central-1.amazonaws.com`)
-* `S3_REGION` (example: `eu-central-1`)
+* `S3_ACCESS_KEY`（示例：`AKIAFIXMEFIXME`）
+* `S3_BUCKET`（示例：`my-bucket`）
+* `S3_ENDPOINT`（示例：`s3.eu-central-1.amazonaws.com`）
+* `S3_REGION`（示例：`eu-central-1`）
 * `S3_SECRET_KEY`
 
 ## `S3_BUCKET` {: #S3_BUCKET }
 
-Default: `None`
+默认值：`None`
 
-Name of the bucket in S3 service for storing ping request body data.
+S3 服务中用于存储 ping 请求体数据的存储桶名称。
 
 ## `S3_ENDPOINT` {: #S3_ENDPOINT }
 
-Default: `None`
+默认值：`None`
 
-URL to the S3-compatible service.
+兼容 S3 的服务的 URL。
 
 ## `S3_REGION` {: #S3_REGION }
 
-Default: `None`
+默认值：`None`
 
-Region name of buckets in S3 service.
+S3 服务中存储桶的区域名称。
 
 ## `S3_SECRET_KEY` {: #S3_SECRET_KEY }
 
-Default: `None`
+默认值：`None`
 
-The secret key of an account in S3 service.
+S3 服务中账户的密钥。
 
 ## `S3_SECRET_KEY_FILE` {: #S3_SECRET_KEY_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [S3_SECRET_KEY](#S3_SECRET_KEY) setting.
-If `S3_SECRET_KEY` and `S3_SECRET_KEY_FILE` are both set, `S3_SECRET_KEY_FILE` takes
-precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [S3_SECRET_KEY](#S3_SECRET_KEY) 设置。如果同时设置了 `S3_SECRET_KEY` 和 `S3_SECRET_KEY_FILE`，则 `S3_SECRET_KEY_FILE` 优先。
 
 ## `S3_TIMEOUT` {: #S3_TIMEOUT }
 
-Default: `60`
+默认值：`60`
 
-Timeout for individual S3 operations, in seconds.
+单个 S3 操作的超时时间（秒）。
 
 ## `S3_SECURE` {: #S3_SECURE }
 
-Default: `True`
+默认值：`True`
 
-Whether to use secure (TLS) connection to S3 or not. To
-use unencrypted HTTP requests, set this value to `False`.
+是否使用安全（TLS）连接到 S3。要使用未加密的 HTTP 请求，请将此值设置为 `False`。
 
 ## `SECRET_KEY` {: #SECRET_KEY }
 
-Default: `---`
+默认值：`---`
 
-A secret key used for cryptographic signing. Should be set to a unique,
-unpredictable value.
+用于加密签名的密钥。应设置为唯一且不可预测的值。
 
-This is a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key).
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key)中了解更多。
 
 ## `SECRET_KEY_FILE` {: #SECRET_KEY_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [SECRET_KEY](#SECRET_KEY) setting.
-If `SECRET_KEY` and `SECRET_KEY_FILE` are both set, `SECRET_KEY_FILE` takes
-precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [SECRET_KEY](#SECRET_KEY) 设置。如果同时设置了 `SECRET_KEY` 和 `SECRET_KEY_FILE`，则 `SECRET_KEY_FILE` 优先。
 
 ## `SECURE_PROXY_SSL_HEADER` {: #SECURE_PROXY_SSL_HEADER }
 
-Default: `None`
+默认值：`None`
 
-Comma-separated HTTP header name and value that signifies a request is secure
-(made over https://). This information is important for CSRF protection.
+以逗号分隔的 HTTP 标头名称和值，用于标识请求是安全的（通过 https:// 发出）。此信息对于 CSRF 保护很重要。
 
-If Healthchecks is running behind a proxy, the proxy may be "swallowing" whether the original
-request uses HTTPS or not. In this case, you may see HTTP 403 errors when submitting
-forms (for example, trying to log in).
+如果 Healthchecks 在代理后面运行，代理可能会"吞掉"原始请求是否使用 HTTPS 的信息。在这种情况下，你可能会在提交表单时看到 HTTP 403 错误（例如，尝试登录时）。
 
-If set, the value should contain the name of the header to look for and the required
-value, separated with comma. The header name must be specified in upper-case,
-with any dashes replaced with underscores, and prefixed with `HTTP_`. Example:
+如果设置，该值应包含要查找的标头名称和所需值，以逗号分隔。标头名称必须使用大写指定，将所有短横线替换为下划线，并加上 `HTTP_` 前缀。示例：
 
 ```ini
 # environment variable
 SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO,https
 ```
 
-You should *only* set this environment variable if you control your proxy or have some
-other guarantee that it sets/strips this header appropriately.
+你*仅*应在控制代理或有其他保证它能正确设置/剥离此标头时才设置此环境变量。
 
-**Note on using `local_settings.py`:**
-When Healthchecks reads settings from environment variables, it expects
-`SECURE_PROXY_SSL_HEADER` to contain header name and value, separated with comma.
-If you set `SECURE_PROXY_SSL_HEADER` in `local_settings.py`, it should be a tuple
-with two elements instead:
+**关于使用 `local_settings.py` 的说明：**
+当 Healthchecks 从环境变量读取设置时，它期望 `SECURE_PROXY_SSL_HEADER` 包含标头名称和值，以逗号分隔。如果你在 `local_settings.py` 中设置 `SECURE_PROXY_SSL_HEADER`，它应该是一个包含两个元素的元组：
 
 ```ini
 # in local_settings.py
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ```
 
-This environment variable maps to a standard Django setting, read more in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#secure-proxy-ssl-header).
+此环境变量映射到一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#secure-proxy-ssl-header)中了解更多。
 
 ## `SHELL_ENABLED` {: #SHELL_ENABLED }
 
-Default: `False`
+默认值：`False`
 
-A boolean that turns on/off the "Shell Commands" integration.
+一个布尔值，用于开启/关闭"Shell Commands"集成。
 
-The "Shell Commands" integration runs user-defined local shell commands when checks
-go up or down. This integration is disabled by default and can be enabled by setting
-the `SHELL_ENABLED` environment variable to `True`.
+"Shell Commands"集成在检查项的状态变为 up 或 down 时运行用户定义的本地 shell 命令。此集成默认禁用，可以通过将 `SHELL_ENABLED` 环境变量设置为 `True` 来启用。
 
-Note: be careful when using "Shell Commands" integration, and only enable it when
-you fully trust the users of your Healthchecks instance. The commands will be executed
-by the `manage.py sendalerts` process and will run with its system permissions.
+注意：使用"Shell Commands"集成时要小心，只有在完全信任 Healthchecks 实例的用户时才启用它。这些命令将由 `manage.py sendalerts` 进程执行，并使用其系统权限运行。
 
 ## `SIGNAL_CLI_SOCKET` {: #SIGNAL_CLI_SOCKET }
 
-Default: `None`
+默认值：`None`
 
-The path to the signal-cli UNIX socket, or the hostname:port of the signal-cli
-TCP socket.
+signal-cli UNIX 套接字的路径，或 signal-cli TCP 套接字的主机名:端口。
 
-Example (UNIX socket):
+示例（UNIX 套接字）：
 
 ```ini
 SIGNAL_CLI_SOCKET=/tmp/signal-cli.socket
 ```
 
-Example (TCP socket):
+示例（TCP 套接字）：
 
 ```ini
 SIGNAL_CLI_SOCKET=example.org:7583
 ```
 
-Healthchecks uses [signal-cli](https://github.com/AsamK/signal-cli) to send Signal
-notifications. Healthchecks interacts with signal-cli over UNIX or TCP socket (requires
-signal-cli 0.10.0 or later).
+Healthchecks 使用 [signal-cli](https://github.com/AsamK/signal-cli) 发送 Signal 通知。Healthchecks 通过 UNIX 或 TCP 套接字与 signal-cli 交互（需要 signal-cli 0.10.0 或更高版本）。
 
-To enable the Signal integration:
+启用 Signal 集成：
 
-* Set up and configure signal-cli to expose JSON RPC on an UNIX or TCP socket
-  ([instructions](https://github.com/AsamK/signal-cli/wiki/JSON-RPC-service)).
-  Example: `signal-cli -a +xxxxxx daemon --socket /tmp/signal-cli-socket`
-* Put the socket's location in the `SIGNAL_CLI_SOCKET` environment variable.
+* 设置并配置 signal-cli 以在 UNIX 或 TCP 套接字上暴露 JSON RPC（[说明](https://github.com/AsamK/signal-cli/wiki/JSON-RPC-service)）。示例：`signal-cli -a +xxxxxx daemon --socket /tmp/signal-cli-socket`
+* 将套接字的位置放入 `SIGNAL_CLI_SOCKET` 环境变量。
 
 ## `SITE_LOGO_URL` {: #SITE_LOGO_URL }
 
-Default: `None`
+默认值：`None`
 
-An URL pointing to the image you want to use as the site logo. If not set,
-Healthchecks will use a fallback image: `/static/img/logo.png`.
+指向要用作站点徽标的图像的 URL。如果未设置，Healthchecks 将使用备用图像：`/static/img/logo.png`。
 
-You can place a custom logo in `/static/img/`, run `manage.py collectstatic`, and
-point `SITE_LOGO_URL` to it like so:
+你可以将自定义徽标放在 `/static/img/` 中，运行 `manage.py collectstatic`，然后像这样指向 `SITE_LOGO_URL`：
 
 ```ini
 SITE_LOGO_URL=/static/img/my-custom-logo.png
 ```
 
-Or you can serve the logo from another server, and point to it using an absolute URL:
+或者你可以从另一台服务器提供徽标，并使用绝对 URL 指向它：
 
 ```ini
 SITE_LOGO_URL=https://example.org/cdn/my-custom-logo.png
 ```
 
-Either way, Healthchecks will use the provided `SITE_LOGO_URL` value as-is in HTML
-pages, and you should use an URL that **the end user's browser will be able to
-access directly**. The logo image can use any image format supported by browsers
-(PNG, SVG, JPG are all fine).
+无论哪种方式，Healthchecks 都会在 HTML 页面中按原样使用提供的 `SITE_LOGO_URL` 值，你应该使用**最终用户的浏览器可以直接访问的** URL。徽标图像可以使用浏览器支持的任何图像格式（PNG、SVG、JPG 都可以）。
 
-**Docker note.** You can build a custom Docker image with your logo "baked in". To
-do so, use a Dockerfile with the following contents, and with your logo.png placed next
-to it:
+**Docker 说明。** 你可以构建一个带有"内置"徽标的自定义 Docker 镜像。为此，请使用包含以下内容的 Dockerfile，并将你的 logo.png 放在其旁边：
 
 ```docker
 FROM healthchecks/healthchecks
 COPY logo.png /opt/healthchecks/static-collected/img/
 ```
 
-This overwrites the default placeholder logo, so, in this case, you do not need to
-specify `SITE_LOGO_URL`. Notice that the logo must be placed in `static-collected`, not
-`static`. This is because `manage.py collectstatic` has already been run in the base
-image's build time, and the web server will not recognize any new files placed in the
-`static` directory.
+这会覆盖默认的占位符徽标，因此在这种情况下，您无需
+指定 `SITE_LOGO_URL`。请注意，徽标必须放置在 `static-collected` 中，而不是
+`static` 中。这是因为 `manage.py collectstatic` 已在基础镜像构建时运行，
+并且 Web 服务器不会识别放置在 `static` 目录中的任何新文件。
 
-Please do not use the Healthchecks.io logo (the one with the dark green background) on
-self-hosted instances. This logo is not part of the Healthchecks open-source project.
+请不要在自托管实例上使用 Healthchecks.io 徽标（带有深绿色背景的那个）。
+此徽标不属于 Healthchecks 开源项目。
 
 ## `SITE_NAME` {: #SITE_NAME }
 
 Default: `Mychecks`
 
-The display name of this Healthchecks instance. Healthchecks uses it throughout
-its web UI and documentation.
+此 Healthchecks 实例的显示名称。Healthchecks 在其整个 Web UI 和文档中使用它。
 
 ## `SITE_ROOT` {: #SITE_ROOT }
 
-Default: `http://localhost:8000`
+默认值：`http://localhost:8000`
 
-The base URL of this Healthchecks instance. Healthchecks uses `SITE_ROOT` whenever
-it needs to construct absolute URLs. Healthchecks also uses `SITE_ROOT` to set
-several other settings, detailed below.
+此 Healthchecks 实例的基础 URL。每当 Healthchecks 需要构建绝对 URL 时，
+它都会使用 `SITE_ROOT`。Healthchecks 还使用 `SITE_ROOT` 来设置
+其他几个设置，详情如下。
 
-If the [ALLOWED_HOSTS](#ALLOWED_HOSTS) setting is not set, Healthchecks
-automatically populates it with the domain part of `SITE_ROOT`. Under typical scenarios
-you can use the automatically populated value and do not need to set
-`ALLOWED_HOSTS` yourself.
+如果未设置 [ALLOWED_HOSTS](#ALLOWED_HOSTS)，Healthchecks
+会自动用 `SITE_ROOT` 的域名部分填充它。在典型场景下，
+你可以使用自动填充的值，无需自行设置 `ALLOWED_HOSTS`。
 
-If the SITE_ROOT contains a path (for example, <code>http://localhost:8000<b>/prefix</b></code>),
-then Healthchecks automatically sets the following additional Django settings:
+如果 SITE_ROOT 包含路径（例如 <code>http://localhost:8000<b>/prefix</b></code>），
+则 Healthchecks 会自动设置以下额外的 Django 设置：
 
-* <code>LOGIN_URL=<b>/prefix</b>/accounts/login/</code>. Required
-for correct redirection to a log-in page when an unauthenticated user requests a
-page that requires authentication. `LOGIN_URL` is a standard Django setting, read more
-about it in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#login-url).
-* <code>STATIC_URL=<b>/prefix</b>/static/</code>. Required for correct
-URL generation to static files (JS, CSS, images). `STATIC_URL` is a standard Django
-setting, read more about it in
-[Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#static-url).
+* <code>LOGIN_URL=<b>/prefix</b>/accounts/login/</code>。当未认证用户请求需要认证的页面时，
+需要此设置以正确重定向到登录页面。`LOGIN_URL` 是一个标准的 Django 设置，在
+[Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#login-url)中了解更多。
+* <code>STATIC_URL=<b>/prefix</b>/static/</code>。需要此设置以正确生成静态文件（JS、CSS、图像）的 URL。
+`STATIC_URL` 是一个标准的 Django 设置，在
+[Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#static-url)中了解更多。
 
-**On using `local_settings.py`:** Healthchecks only sets the above additional settings
-if you specify `SITE_ROOT` via an environment variable. If you instead specify it in
-`local_settings.py`, you will also need to set `ALLOWED_HOSTS`, `LOGIN_URL`, and
-`STATIC_URL` there.
+**关于使用 `local_settings.py`：** 仅当你通过环境变量指定 `SITE_ROOT` 时，Healthchecks 才会设置上述额外设置。如果你在 `local_settings.py` 中指定它，你还需要在其中设置 `ALLOWED_HOSTS`、`LOGIN_URL` 和 `STATIC_URL`。
 
 ## `SLACK_CLIENT_ID` {: #SLACK_CLIENT_ID }
 
-Default: `None`
+默认值：`None`
 
-The Slack Client ID, used by the Healthchecks integration for Slack.
+Slack 客户端 ID，由 Healthchecks 的 Slack 集成使用。
 
-The integration can work with or without the Slack Client ID. If
-the Slack Client ID is not set, in the "Integrations - Add Slack" page,
-Healthchecks will ask the user to provide a webhook URL for posting notifications.
+该集成可以在设置或不设置 Slack 客户端 ID 的情况下工作。如果未设置 Slack 客户端 ID，在"集成 - 添加 Slack"页面中，Healthchecks 将要求用户提供用于发布通知的 Webhook URL。
 
-If the Slack Client ID _is_ set, Healthchecks will use the OAuth2 flow
-to get the webhook URL from Slack. The OAuth2 flow is more user-friendly.
-To set it up, go to [https://api.slack.com/apps/](https://api.slack.com/apps/)
-and create a _Slack app_. When setting up the Slack app, make sure to:
+如果设置了 Slack 客户端 ID，Healthchecks 将使用 OAuth2 流程从 Slack 获取 Webhook URL。OAuth2 流程更加用户友好。要设置它，请访问 [https://api.slack.com/apps/](https://api.slack.com/apps/) 并创建一个 _Slack 应用_。在设置 Slack 应用时，请确保：
 
-* Add the [incoming-webhook](https://api.slack.com/scopes/incoming-webhook)
-  scope to the Bot Token Scopes.
-* Add a _Redirect URL_ in the format `SITE_ROOT/integrations/add_slack_btn/`.
-  For example, if your `SITE_ROOT` is `https://my-hc.example.org` then the
-  Redirect URL would be `https://my-hc.example.org/integrations/add_slack_btn/`.
+* 将 [incoming-webhook](https://api.slack.com/scopes/incoming-webhook) 范围添加到 Bot Token Scopes。
+* 添加格式为 `SITE_ROOT/integrations/add_slack_btn/` 的_重定向 URL_。例如，如果你的 `SITE_ROOT` 是 `https://my-hc.example.org`，则重定向 URL 为 `https://my-hc.example.org/integrations/add_slack_btn/`。
 
 ## `SLACK_CLIENT_SECRET` {: #SLACK_CLIENT_SECRET }
 
-Default: `None`
+默认值：`None`
 
-The Slack Client Secret. Required if `SLACK_CLIENT_ID` is set.
-Look it up at [https://api.slack.com/apps/](https://api.slack.com/apps/).
+Slack 客户端密钥。如果设置了 `SLACK_CLIENT_ID`，则此为必需。在 [https://api.slack.com/apps/](https://api.slack.com/apps/) 查找。
 
 ## `SLACK_CLIENT_SECRET_FILE` {: #SLACK_CLIENT_SECRET_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [SLACK_CLIENT_SECRET](#SLACK_CLIENT_SECRET)
-setting. If `SLACK_CLIENT_SECRET` and `SLACK_CLIENT_SECRET_FILE` are both set,
-`SLACK_CLIENT_SECRET_FILE` takes precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [SLACK_CLIENT_SECRET](#SLACK_CLIENT_SECRET) 设置。如果同时设置了 `SLACK_CLIENT_SECRET` 和 `SLACK_CLIENT_SECRET_FILE`，则 `SLACK_CLIENT_SECRET_FILE` 优先。
 
 ## `SLACK_ENABLED` {: #SLACK_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Healthchecks integration for Slack. Enabled by default.
+一个布尔值，用于开启/关闭 Healthchecks 的 Slack 集成。默认启用。
 
 ## `SPIKE_ENABLED` {: #SPIKE_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Spike.sh integration. Enabled by default.
+一个布尔值，用于开启/关闭 Spike.sh 集成。默认启用。
 
 ## `TELEGRAM_BOT_NAME` {: #TELEGRAM_BOT_NAME }
 
-Default: `ExampleBot`
+默认值：`ExampleBot`
 
-The [Telegram](https://telegram.org/) bot name, required by the Telegram integration.
+[Telegram](https://telegram.org/) 机器人名称，Telegram 集成所需。
 
-To set up the Telegram integration:
+设置 Telegram 集成：
 
-* Create a Telegram bot by talking to the
-[BotFather](https://core.telegram.org/bots#6-botfather). Set the bot's name,
-description, user picture, and add a "/start" command.
-* After creating the bot you will have the bot's name and token. Put them
-in `TELEGRAM_BOT_NAME` and `TELEGRAM_TOKEN` environment variables.
-* Run the `settelegramwebhook` management command. This command tells Telegram
-where to forward channel messages by invoking Telegram's
-[setWebhook](https://core.telegram.org/bots/api#setwebhook) API call:
+* 通过与 [BotFather](https://core.telegram.org/bots#6-botfather) 对话创建 Telegram 机器人。设置机器人名称、描述、用户头像，并添加 "/start" 命令。
+* 创建机器人后，你将获得机器人的名称和令牌。将它们放入 `TELEGRAM_BOT_NAME` 和 `TELEGRAM_TOKEN` 环境变量。
+* 运行 `settelegramwebhook` 管理命令。此命令通过调用 Telegram 的 [setWebhook](https://core.telegram.org/bots/api#setwebhook) API 告诉 Telegram 将频道消息转发到何处：
 
 ```bash
 $ ./manage.py settelegramwebhook
 Done, Telegram's webhook set to: https://my-monitoring-project.com/integrations/telegram/bot/
 ```
 
-For this to work, your `SITE_ROOT` must be publicly accessible and use the "https://"
-scheme.
+为此，你的 `SITE_ROOT` 必须可公开访问并使用 "https://" 协议。
 
 ## `TELEGRAM_TOKEN` {: #TELEGRAM_TOKEN }
 
-Default: `None`
+默认值：`None`
 
-The Telegram bot user's authentication token, required by the Telegram integration.
+Telegram 机器人用户的身份验证令牌，Telegram 集成所需。
 
 ## `TELEGRAM_TOKEN_FILE` {: #TELEGRAM_TOKEN_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [TELEGRAM_TOKEN](#TELEGRAM_TOKEN) setting.
-If `TELEGRAM_TOKEN` and `TELEGRAM_TOKEN_FILE` are both set, `TELEGRAM_TOKEN_FILE` takes
-precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [TELEGRAM_TOKEN](#TELEGRAM_TOKEN) 设置。如果同时设置了 `TELEGRAM_TOKEN` 和 `TELEGRAM_TOKEN_FILE`，则 `TELEGRAM_TOKEN_FILE` 优先。
 
 ## `TRELLO_APP_KEY` {: #TRELLO_APP_KEY }
 
-Default: `None`
+默认值：`None`
 
-The [Trello](https://trello.com/) app key, required by the Trello integration.
+[Trello](https://trello.com/) 应用密钥，Trello 集成所需。
 
-To set up the Trello integration, get a developer API key from
-[https://trello.com/app-key](https://trello.com/app-key) and put it in the
-`TRELLO_APP_KEY` environment variable.
+要设置 Trello 集成，请从 [https://trello.com/app-key](https://trello.com/app-key) 获取开发者 API 密钥，并将其放入 `TRELLO_APP_KEY` 环境变量。
 
 ## `TRELLO_APP_KEY_FILE` {: #TRELLO_APP_KEY_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [TRELLO_APP_KEY](#TRELLO_APP_KEY) setting.
-If `TRELLO_APP_KEY` and `TRELLO_APP_KEY_FILE` are both set, `TRELLO_APP_KEY_FILE` takes
-precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [TRELLO_APP_KEY](#TRELLO_APP_KEY) 设置。如果同时设置了 `TRELLO_APP_KEY` 和 `TRELLO_APP_KEY_FILE`，则 `TRELLO_APP_KEY_FILE` 优先。
 
 ## `TWILIO_ACCOUNT` {: #TWILIO_ACCOUNT }
 
-Default: `None`
+默认值：`None`
 
-Twilio Account SID, required by the SMS, Call, and WhatsApp integrations.
+Twilio 账户 SID，SMS、电话和 WhatsApp 集成所需。
 
 ## `TWILIO_AUTH` {: #TWILIO_AUTH }
 
-Default: `None`
+默认值：`None`
 
-Twilio Auth token, required by the SMS, Call, and WhatsApp integrations.
+Twilio 身份验证令牌，SMS、电话和 WhatsApp 集成所需。
 
 ## `TWILIO_AUTH_FILE` {: #TWILIO_AUTH_FILE }
 
-Default: `None`
+默认值：`None`
 
-If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the [TWILIO_AUTH](#TWILIO_AUTH) setting.
-If `TWILIO_AUTH` and `TWILIO_AUTH_FILE` are both set, `TWILIO_AUTH_FILE` takes
-precedence.
+如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 [TWILIO_AUTH](#TWILIO_AUTH) 设置。如果同时设置了 `TWILIO_AUTH` 和 `TWILIO_AUTH_FILE`，则 `TWILIO_AUTH_FILE` 优先。
 
 ## `TWILIO_FROM` {: #TWILIO_FROM }
 
-Default: `None`
+默认值：`None`
 
-The Twilio phone number to use as the sender for SMS and WhatsApp notifications,
-and as the caller for Call integrations.
+用作 SMS 和 WhatsApp 通知发送方以及电话集成的呼叫方的 Twilio 电话号码。
 
-Example:
+示例：
 
 ```ini
 TWILIO_FROM=+15017122661
@@ -1190,19 +966,15 @@ TWILIO_FROM=+15017122661
 
 ## `TWILIO_MESSAGING_SERVICE_SID` {: #TWILIO_MESSAGING_SERVICE_SID }
 
-Default: `None`
+默认值：`None`
 
-The Twilio Messaging Service SID for sending SMS and WhatsApp notifications.
+用于发送 SMS 和 WhatsApp 通知的 Twilio Messaging Service SID。
 
-`TWILIO_MESSAGING_SERVICE_SID` is **required** for sending WhatsApp notifications.
+发送 WhatsApp 通知**需要** `TWILIO_MESSAGING_SERVICE_SID`。
 
-`TWILIO_MESSAGING_SERVICE_SID` is **optional** for sending SMS notifications. If specified,
-Healthchecks will pass it in the "MessagingServiceSid" field to Twilio API. This will
-result in Twilio using a Messaging Service instead of a plain sender number to deliver
-the SMS messages. If not specified, Healthchecks will fall back to using
-the "From" field with the value configured in [TWILIO_FROM](#TWILIO_FROM).
+发送 SMS 通知时 `TWILIO_MESSAGING_SERVICE_SID` 是**可选**的。如果指定，Healthchecks 会将其作为"MessagingServiceSid"字段传递给 Twilio API。这将导致 Twilio 使用 Messaging Service 而不是普通发送方号码来投递 SMS 消息。如果未指定，Healthchecks 将回退到使用 [TWILIO_FROM](#TWILIO_FROM) 中配置的"From"字段。
 
-Example:
+示例：
 
 ```ini
 TWILIO_MESSAGING_SERVICE_SID=MGe56e622d540e6badc52ae0ac4af028c6
@@ -1210,73 +982,65 @@ TWILIO_MESSAGING_SERVICE_SID=MGe56e622d540e6badc52ae0ac4af028c6
 
 ## `TWILIO_USE_WHATSAPP` {: #TWILIO_USE_WHATSAPP }
 
-Default: `False`
+默认值：`False`
 
-A boolean that turns on/off the WhatsApp integration. For the WhatsApp integration
-to work, you will also need to specify:
+一个布尔值，用于开启/关闭 WhatsApp 集成。要使 WhatsApp 集成正常工作，你还需要指定：
 
 * [TWILIO_ACCOUNT](#TWILIO_ACCOUNT)
 * [TWILIO_AUTH](#TWILIO_AUTH)
 * [TWILIO_FROM](#TWILIO_FROM)
 * [TWILIO_MESSAGING_SERVICE_SID](#TWILIO_MESSAGING_SERVICE_SID)
 * [WHATSAPP_DOWN_CONTENT_SID](#WHATSAPP_DOWN_CONTENT_SID)
-* [WHATSAPP_UP_CONTENT_SID](#WHATSAPP_UP_CONTENT_SID).
+* [WHATSAPP_UP_CONTENT_SID](#WHATSAPP_UP_CONTENT_SID)。
 
 ## `USE_PAYMENTS` {: #USE_PAYMENTS }
 
-Default: `False`
+默认值：`False`
 
-A boolean that turns on/off billing features.
+一个布尔值，用于开启/关闭计费功能。
 
 ## `VICTOROPS_ENABLED` {: #VICTOROPS_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Splunk On-Call (VictorOps) integration.
-Enabled by default.
+一个布尔值，用于开启/关闭 Splunk On-Call (VictorOps) 集成。默认启用。
 
 ## `WEBHOOKS_ENABLED` {: #WEBHOOKS_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Webhooks integration. Enabled by default.
+一个布尔值，用于开启/关闭 Webhooks 集成。默认启用。
 
 ## `WHATSAPP_DOWN_CONTENT_SID` {: #WHATSAPP_DOWN_CONTENT_SID }
 
-Default: `None`
+默认值：`None`
 
-Identifier of the Twilio content template to use for WhatsApp "down" notifications.
-Required by the WhatsApp integration.
+用于 WhatsApp "down"通知的 Twilio 内容模板标识符。WhatsApp 集成所需。
 
-Meta requires WhatsApp message templates to be pre-registered and approved.
-Create a content template in your Twilio account with the following contents:
+Meta 要求 WhatsApp 消息模板需要预先注册和批准。在你的 Twilio 账户中创建具有以下内容的内容模板：
 
 ````
 The check “{{1}}” is DOWN.
 ````
 
-You can tweak the message contents as needed, but make sure it has a single placeholder
-similar to the above example.
+你可以根据需要调整消息内容，但请确保它有一个类似于上述示例的单个占位符。
 
 ## `WHATSAPP_UP_CONTENT_SID` {: #WHATSAPP_UP_CONTENT_SID }
 
-Default: `None`
+默认值：`None`
 
-Identifier of the Twilio content template to use for WhatsApp "up" notifications.
-Required by the WhatsApp integration.
+用于 WhatsApp "up"通知的 Twilio 内容模板标识符。WhatsApp 集成所需。
 
-Meta requires WhatsApp message templates to be pre-registered and approved.
-Create a content template in your Twilio account with the following contents:
+Meta 要求 WhatsApp 消息模板需要预先注册和批准。在你的 Twilio 账户中创建具有以下内容的内容模板：
 
 ````
 The check “{{1}}” is now UP.
 ````
 
-You can tweak the message contents as needed, but make sure it has a single placeholder
-similar to the above example.
+你可以根据需要调整消息内容，但请确保它有一个类似于上述示例的单个占位符。
 
 ## `ZULIP_ENABLED` {: #ZULIP_ENABLED }
 
-Default: `True`
+默认值：`True`
 
-A boolean that turns on/off the Zulip integration. Enabled by default.
+一个布尔值，用于开启/关闭 Zulip 集成。默认启用。

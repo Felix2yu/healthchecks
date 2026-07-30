@@ -7,20 +7,19 @@
         <h1>Signal CAPTCHA</h1>
 
         {% if result %}
-        <p>Result:</p>
+        <p>结果：</p>
         <pre>{{ result }}</pre>
         <hr />
         {% endif %}
 
         <p>
-            First, solve a CAPTCHA
-            <a href="https://signalcaptchas.org/challenge/generate.html" target="_blank">here</a>,
-            then paste it below:
+            首先，<a href="https://signalcaptchas.org/challenge/generate.html" target="_blank">在此处</a>
+            解决 CAPTCHA，然后将其粘贴到下方：
         </p>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="challenge">Challenge</label>
+                <label for="challenge">挑战</label>
                 <input
                     id="challenge"
                     name="challenge"
@@ -38,7 +37,7 @@
                     class="form-control"
                     rows="10"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary btn-lg pull-right">Submit</button>
+                <button type="submit" class="btn btn-primary btn-lg pull-right">提交</button>
         </form>
     </div>
 </div>

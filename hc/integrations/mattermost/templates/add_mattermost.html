@@ -1,9 +1,9 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Mattermost Integration for {{ site_name }}{% endblock %}
+{% block title %}Mattermost 集成 - {{ site_name }}{% endblock %}
 {% block description %}
-    <meta name="description" content="If your team uses Mattermost, you can set up {{ site_name }} to post alerts directly to an appropriate Mattermost channel when a check goes up or down.">
+    <meta name="description" content="如果您的团队使用 Mattermost，您可以设置 {{ site_name }} 在检查项恢复或宕机时直接发布告警到指定的 Mattermost 频道。">
 {% endblock %}
 
 {% block content %}
@@ -14,36 +14,34 @@
     <div class="jumbotron">
         {% if request.user.is_authenticated %}
         <p>
-            If your team uses <a href="https://mattermost.com/">Mattermost</a>,
-            you can set up {{ site_name }} to post alerts directly to an
-            appropriate Mattermost channel when a check goes <strong>up</strong>
-            or <strong>down</strong>.
+            如果您的团队使用 <a href="https://mattermost.com/">Mattermost</a>，
+            您可以设置 {{ site_name }} 在检查项<strong>恢复</strong>
+            或<strong>宕机</strong>时直接发布告警到指定的 Mattermost 频道。
         </p>
         {% else %}
         <p>
-            {{ site_name }} is a free and
-            <a href="https://github.com/healthchecks/healthchecks">open source</a>
-            service for monitoring <strong>cron jobs</strong>, <strong>background processes</strong> and
-            <strong>scheduled tasks</strong>. When {% site_name %} detects a problem, it can notify
-            you by posting to a Mattermost channel. To set up the Mattermost
-            integration, please log into {{ site_name }}:
+            {{ site_name }} 是一个免费且
+            <a href="https://github.com/healthchecks/healthchecks">开源</a>
+            的服务，用于监控 <strong>cron 任务</strong>、<strong>后台进程</strong>和
+            <strong>计划任务</strong>。当 {% site_name %} 检测到问题时，可以通过
+            向 Mattermost 频道发布消息来通知您。要设置 Mattermost
+            集成，请登录 {{ site_name }}：
         </p>
 
         <div class="text-center">
             <a href="{% url 'hc-login' %}"
-               class="btn btn-primary btn-lg">Log In</a>
+               class="btn btn-primary btn-lg">登录</a>
         </div>
         {% endif %}
     </div>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
 
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            Log into your Mattermost account and
-            select <strong>Integrations</strong> in the
-            top left menu.
+            登录您的 Mattermost 账号，在左上角菜单中
+            选择<strong>集成</strong>。
         </div>
         <div class="col-sm-6">
             <img
@@ -56,10 +54,10 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-            In the "Integrations" screen, select <strong>Incoming Webhook</strong>
-            and then <strong>Add Incoming Webhook</strong>.
+            在"集成"界面中，选择<strong>传入 Webhook</strong>，
+            然后点击<strong>添加传入 Webhook</strong>。
             </p>
-            <p>Fill in the form and hit "Save".</p>
+            <p>填写表单并点击"保存"。</p>
         </div>
         <div class="col-sm-6">
             <img
@@ -73,10 +71,10 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             {% if project %}
-            <p>Copy the displayed <strong>URL</strong> and paste it in the form below.</p>
-            <p>Save the integration, and you are all set!</p>
+            <p>复制显示的 <strong>URL</strong> 并粘贴到下方表单中。</p>
+            <p>保存集成，就全部完成了！</p>
             {% else %}
-            <p>Copy the displayed <strong>URL</strong>.</p>
+            <p>复制显示的 <strong>URL</strong>。</p>
             {% endif %}
         </div>
         <div class="col-sm-6">
@@ -91,9 +89,8 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Log into {% site_name %}, then go to the <strong>Integrations</strong>
-                page and click on <strong>Add Integration</strong> next to the
-                Mattermost integration.
+            <p>登录 {% site_name %}，然后进入<strong>集成</strong>
+                页面，点击 Mattermost 集成旁的<strong>添加集成</strong>。
             </p>
         </div>
         <div class="col-sm-6">
@@ -107,8 +104,8 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Paste the copied <strong>URL</strong> in the form.</p>
-            <p>Save the integration, and you are all set!</p>
+            <p>将复制的 <strong>URL</strong> 粘贴到表单中。</p>
+            <p>保存集成，就全部完成了！</p>
         </div>
         <div class="col-sm-6">
             <img
@@ -120,12 +117,12 @@
     {% endif %}
 
     {% if project %}
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
     <form method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {{ form.value.css_classes }}">
             <label for="callback-url" class="col-sm-2 control-label">
-                Webhook URL
+                Webhook 链接
             </label>
             <div class="col-sm-10">
                 <input
@@ -145,7 +142,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

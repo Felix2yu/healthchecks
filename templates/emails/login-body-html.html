@@ -2,41 +2,40 @@
 {% load hc_extras %}
 
 {% block content %}
-Hello,
+您好，
 <br />
 
 {% if membership %}
     {% if membership.project.name %}
-        <strong>{{ membership.project.owner.email }}</strong> invites you to their
+        <strong>{{ membership.project.owner.email }}</strong> 邀请您加入他们的
         <a href="{% site_root %}">{% site_name %}</a>
-        project <strong>{{ membership.project }}</strong>.
+        项目 <strong>{{ membership.project }}</strong>。
     {% else %}
-        <strong>{{ membership.project.owner.email }}</strong> invites you to their
-        <a href="{% site_root %}">{% site_name %}</a> account.
+        <strong>{{ membership.project.owner.email }}</strong> 邀请您加入他们的
+        <a href="{% site_root %}">{% site_name %}</a> 账户。
     {% endif %}
     <br /><br />
 
     {% if membership.role == "r" %}
-    You will be able to view their existing monitoring checks, but not modify them.
+    您可以查看现有的监控检查项，但无法修改它们。
     {% else %}
-    You will be able to manage their existing monitoring checks and set up new ones.
+    您可以管理现有的监控检查项并设置新的检查项。
     {% endif %}
-    If you already have your own account on {% site_name %}, you will be able to switch
-    between the two accounts.
+    如果您已拥有自己的 {% site_name %} 账户，您可以在两个账户之间切换。
     <br /><br />
 {% endif %}
 
-To log into <a href="{% site_root %}">{% site_name %}</a>,
-please press the button below:
+要登录 <a href="{% site_root %}">{% site_name %}</a>，
+请点击下方按钮：
 {% endblock %}
 
 
 {% block content_more %}
-Thanks,<br>
-The {% site_name %} Team
+谢谢，<br>
+{% site_name %} 团队
 <br /><br />
 
-<strong>P.S.</strong> Need help getting started? Check out our
-<a href="{% site_root %}{% url 'hc-docs' %}">help documentation</a>.
-Or, just reply to this email with any questions or issues you have.
+<strong>附注：</strong>需要帮助入门？请查看我们的
+<a href="{% site_root %}{% url 'hc-docs' %}">帮助文档</a>。
+或者，直接回复此邮件提出任何问题。
 {% endblock %}

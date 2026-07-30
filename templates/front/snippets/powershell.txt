@@ -1,2 +1,2 @@
-# inside a PowerShell script:
+# 在 PowerShell 脚本内部：
 Invoke-RestMethod PING_URL

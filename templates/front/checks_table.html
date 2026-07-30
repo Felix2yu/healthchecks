@@ -10,15 +10,15 @@
         <th class="th-name">
             {% if sort == "name" %}
             <a href="{% sort_url '-name' %}" data-toggle="tooltip" class="sort-name" data-sort-value="-name">
-                Name<span class="ic-asc"></span>
+                名称<span class="ic-asc"></span>
             </a>
             {% elif sort == "-name" %}
             <a href="{% sort_url 'created' %}" data-toggle="tooltip" class="sort-name" data-sort-value="created">
-                Name<span class="ic-desc"></span>
+                名称<span class="ic-desc"></span>
             </a>
             {% else %}
             <a href="{% sort_url 'name' %}" data-toggle="tooltip" class="default sort-name" data-sort-value="name">
-                Name
+                名称
             </a>
             {% endif %}
         </th>
@@ -26,7 +26,7 @@
             <span class="visible-lg-inline">
                 Ping URL
             </span>
-            <span class="visible-md-inline">{{ project.show_slugs|yesno:"Key/Slug,UUID" }}</span>
+            <span class="visible-md-inline">{{ project.show_slugs|yesno:"标识/Slug,UUID" }}</span>
             {% if rw %}
             <small id="url-style-switcher">
                 <a id="to-uuid" href="?urls=uuid" {% if not project.show_slugs %}class="active"{% endif %}>uuid</a>
@@ -34,28 +34,28 @@
             </small>
             {% endif %}
         </th>
-        <th class="th-integrations hidden-xs">Integrations</th>
+        <th class="th-integrations hidden-xs">集成</th>
         <th class="th-period hidden-xs">
-            Period <br />
-            <span class="checks-subline">Grace</span>
+            周期 <br />
+            <span class="checks-subline">宽限期</span>
         </th>
         <th class="th-last-ping hidden-xs">
             {% if sort == "last_ping" %}
             <a href="{% sort_url '-last_ping' %}" data-toggle="tooltip" class="sort-last-ping" data-sort-value="-last_ping">
-                Last Ping<span class="ic-asc"></span>
+                上次 Ping<span class="ic-asc"></span>
             </a>
             {% elif sort == "-last_ping" %}
             <a href="{% sort_url 'created' %}" data-toggle="tooltip" class="sort-last-ping" data-sort-value="created">
-                Last Ping<span class="ic-desc"></span>
+                上次 Ping<span class="ic-desc"></span>
             </a>
             {% else %}
             <a href="{% sort_url 'last_ping' %}" data-toggle="tooltip" class="default sort-last-ping" data-sort-value="last_ping">
-                Last Ping
+                上次 Ping
             </a>
             {% endif %}
             {% if show_last_duration %}
             <br />
-            <span class="checks-subline">Last Duration</span>
+            <span class="checks-subline">上次持续时间</span>
             {% endif %}
         </th>
         <th></th>
@@ -72,7 +72,7 @@
                  data-tags="{{ check.tags }}"
                  data-desc="{{ check.desc }}"
                  class="my-checks-name {% if not check.name %}unnamed{% endif %}">
-                <div>{{ check.name|default:"unnamed"|break_underscore }}</div>
+                <div>{{ check.name|default:"未命名"|break_underscore }}</div>
                 {% for tag in check.tags_list %}
                 <span class="label label-tag">{{ tag }}</span>
                 {% endfor %}
@@ -80,11 +80,11 @@
         </td>
         <td class="hidden-xs hidden-sm hidden-md">
             {% if project.show_slugs and not check.slug %}
-                <span class="unavailable">unavailable, slug not set</span>
+                <span class="unavailable">不可用，标识未设置</span>
             {% else %}
                 <span class="my-checks-url">{{ check.url|format_ping_endpoint }}</span>
                 {% if project.show_slugs and check.slug in ambiguous %}
-                <small class="text-danger">(not unique)</small>
+                <small class="text-danger">（不唯一）</small>
                 {% endif %}
             {% endif %}
         </td>
@@ -124,7 +124,7 @@
                 <span class="ic-paused"></span>
             </button>
             {% endif %}
-            <a href="{% url 'hc-details' check.code %}" class="btn" title="Show Details"><span class="ic-dots"></span></a>
+            <a href="{% url 'hc-details' check.code %}" class="btn" title="查看详情"><span class="ic-dots"></span></a>
         </td>
     </tr>
     {% endfor %}

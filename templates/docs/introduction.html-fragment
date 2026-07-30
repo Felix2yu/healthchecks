@@ -1,128 +1,125 @@
-<h1>SITE_NAME Documentation</h1>
-<p>SITE_NAME is a service for monitoring cron jobs (<a href="monitoring_cron_jobs/">see guide</a>)
-and similar periodic processes:</p>
+<h1>SITE_NAME 文档</h1>
+<p>SITE_NAME 是一个用于监控 cron 作业（<a href="monitoring_cron_jobs/">查看指南</a>）
+和类似定期流程的服务：</p>
 <ul>
-<li>SITE_NAME <strong>listens for HTTP requests ("pings")</strong> from your cron jobs and scheduled
-  tasks.</li>
-<li>It <strong>keeps silent</strong> as long as pings arrive on time.</li>
-<li>It <strong>raises an alert</strong> as soon as a ping does not arrive on time.</li>
+<li>SITE_NAME <strong>监听来自 cron 作业和计划任务的 HTTP 请求（"ping"）</strong>。</li>
+<li>只要 ping 按时到达，它<strong>保持沉默</strong>。</li>
+<li>一旦 ping 未按时到达，它<strong>发出警报</strong>。</li>
 </ul>
-<p>SITE_NAME works as a <a href="https://en.wikipedia.org/wiki/Dead_man%27s_switch">dead man's switch</a> for processes that need to
-run continuously or on a regular, known schedule. Some examples of jobs that would
-benefit from SITE_NAME monitoring:</p>
+<p>SITE_NAME 作为需要持续运行或按定期、已知计划运行的流程的
+<a href="https://en.wikipedia.org/wiki/Dead_man%27s_switch">死 man 开关</a>。一些适合使用
+SITE_NAME 监控的任务示例：</p>
 <ul>
-<li>filesystem backups, database backups</li>
-<li>task queues</li>
-<li>database replication monitoring scripts</li>
-<li>report generation scripts</li>
-<li>periodic data import and sync jobs</li>
-<li>periodic antivirus scans</li>
-<li>DDNS updater scripts</li>
-<li>SSL renewal scripts</li>
+<li>文件系统备份、数据库备份</li>
+<li>任务队列</li>
+<li>数据库复制监控脚本</li>
+<li>报告生成脚本</li>
+<li>定期数据导入和同步任务</li>
+<li>定期防病毒扫描</li>
+<li>DDNS 更新脚本</li>
+<li>SSL 续期脚本</li>
 </ul>
-<p>SITE_NAME is <em>not</em> the right tool for:</p>
+<p>SITE_NAME <em>不</em>适合用于：</p>
 <ul>
-<li>monitoring website uptime by probing it with HTTP requests</li>
-<li>collecting application performance metrics</li>
-<li>log aggregation</li>
+<li>通过 HTTP 请求探测网站来监控其在线状态</li>
+<li>收集应用程序性能指标</li>
+<li>日志聚合</li>
 </ul>
-<h2>Concepts</h2>
-<p>A <strong>Check</strong> represents a single service you want to monitor. For example, when
-<a href="monitoring_cron_jobs/">monitoring cron jobs</a>, you would create a separate check for
-each cron job to be monitored. Each check has a unique ping URL, schedule,
-and associated integrations. For the available configuration options, see
-<a href="configuring_checks/">Configuring checks</a>.</p>
-<p>Each check is always in one of the following states, depicted by a status icon:</p>
+<h2>概念</h2>
+<p><strong>检查项</strong>代表您要监控的单个服务。例如，在
+<a href="monitoring_cron_jobs/">监控 cron 作业</a>时，您将为每个要监控的 cron 作业创建一个单独的检查项。
+每个检查项都有唯一的 ping URL、计划
+和关联的集成。有关可用配置选项，请参阅
+<a href="configuring_checks/">配置检查项</a>。</p>
+<p>每个检查项始终处于以下状态之一，由状态图标表示：</p>
 <dl>
 <dt><span class="status ic-new"></span></dt>
-<dd><strong>New</strong>. A newly created check that has not received any pings yet. Each new
-check you create will start in this state.</dd>
+<dd><strong>新建</strong>。尚未收到任何 ping 的新创建的检查项。您创建的每个
+新检查项都将以该状态开始。</dd>
 <dt><span class="status ic-up"></span></dt>
-<dd><strong>Up</strong>. All is well. The last "success" signal has arrived on time.</dd>
+<dd><strong>正常</strong>。一切正常。最近的"success"信号已按时到达。</dd>
 <dt><span class="status ic-grace"></span></dt>
-<dd><strong>Late</strong>. The "success" signal is due but has not arrived yet.
-It is not yet late by more than the check's configured <strong>Grace Time</strong>.</dd>
+<dd><strong>延迟</strong>。"success"信号应到达但尚未到达。
+仍未超过检查项配置的<strong>宽限期</strong>。</dd>
 <dt><span class="status ic-down"></span></dt>
-<dd><strong>Down</strong>. The "success" signal has not arrived yet, and the Grace Time has elapsed.
-When a check transitions into the "Down" state, SITE_NAME sends alert
-messages via the configured integrations.</dd>
+<dd><strong>宕机</strong>。"success"信号尚未到达，且宽限期已过。
+当检查项转换到"Down"状态时，SITE_NAME 会通过
+已配置的集成发送警报消息。</dd>
 <dt><span class="status ic-paused"></span></dt>
-<dd><strong>Paused</strong>. You can manually pause the monitoring of specific checks. For example,
-if a frequently running cron job has a known problem, and a fix is in the works
-but not yet ready, you can pause monitoring the corresponding check temporarily to
-avoid unwanted alerts about a known issue.</dd>
+<dd><strong>暂停</strong>。您可以手动暂停特定检查项的监控。例如，
+如果某个频繁运行的 cron 作业存在已知问题，修复工作正在进行中
+但尚未就绪，您可以临时暂停对相应检查项的监控，以
+避免就已知问题收到不必要的警报。</dd>
 <dt><span class="status ic-up"></span><div class="spinner started"></div></dt>
-<dd>Additionally, if the most recent received signal is a "start" signal,
-this will be indicated by three animated dots under the check's status icon.</dd>
+<dd>此外，如果最近收到的信号是"start"信号，
+这将在检查项的状态图标下通过三个动画点表示。</dd>
 </dl>
 <hr />
-<p><strong>Ping URL</strong>. Each check has a unique <strong>Ping URL</strong>. Clients (cron jobs, background
-workers, batch scripts, scheduled tasks, web services) make HTTP requests to the
-ping URL to signal a start of the execution, a success, or a failure.</p>
-<p>SITE_NAME supports two ping URL formats:</p>
+<p><strong>Ping URL</strong>。每个检查项都有唯一的 <strong>Ping URL</strong>。客户端（cron 作业、后台
+工作者、批处理脚本、计划任务、Web 服务）向 ping URL 发送 HTTP 请求
+以表示执行开始、成功或失败。</p>
+<p>SITE_NAME 支持两种 ping URL 格式：</p>
 <ul>
 <li><code>PING_ENDPOINT&lt;uuid&gt;</code><br>
-The check is identified by its UUID. Check UUIDs are assigned
-automatically by SITE_NAME, and are guaranteed to be unique.</li>
+  检查项由其 UUID 标识。检查项 UUID 由 SITE_NAME 自动分配，
+  且保证唯一。</li>
 <li><code>PING_ENDPOINT&lt;project-ping-key&gt;/&lt;name-slug&gt;</code><br>
-The check is identified by project's <strong>Ping key</strong> and check's
-<strong>slug</strong> (user-chosen, URL-friendly identifier). Optionally supports auto-provisioning:
-if you ping a slug value that does not have a corresponding check, SITE_NAME can
-create the check automatically.</li>
+  检查项由项目的 <strong>Ping key</strong> 和检查项的
+  <strong>标识</strong>（用户选择的、URL 友好的标识符）标识。可选地支持自动配置：
+  如果您 ping 一个没有对应检查项的标识值，SITE_NAME 可以
+  自动创建该检查项。</li>
 </ul>
-<p>You can append <code>/start</code>, <code>/fail</code> or <code>/&lt;exitcode&gt;</code> to the base ping URL to send
-"start" and "failure" signals. The "start" and "failure" signals are optional.
-You don't have to use them, but you can gain additional monitoring insights
-if you do use them. See <a href="measuring_script_run_time/">Measuring script run time</a> and
-<a href="signaling_failures/">Signaling failures</a> for details.</p>
-<p>You should treat check UUIDs and project Ping keys as secrets. If you make them public,
-anybody can send telemetry signals to your checks and mess with your monitoring.</p>
-<p>Read more about Ping URLs in <a href="http_api/">Pinging API</a>.</p>
+<p>您可以向基本 ping URL 追加 <code>/start</code>、<code>/fail</code> 或 <code>/&lt;exitcode&gt;</code> 来发送
+"start"和"failure"信号。"start"和"failure"信号是可选的。
+您不一定非要用它们，但如果使用它们，您将获得额外的监控洞察。
+详情请参阅<a href="measuring_script_run_time/">测量脚本运行时间</a>和
+<a href="signaling_failures/">发送故障信号</a>。</p>
+<p>您应将检查项 UUID 和项目 Ping key 视为机密。如果您将它们公开，
+任何人都可以向您的检查项发送遥测信号并干扰您的监控。</p>
+<p>在<a href="http_api/">Ping API</a>中阅读更多关于 Ping URL 的信息。</p>
 <hr />
-<p><strong>Grace Time</strong> is one of the configuration parameters you can set for each check.
-It is the additional time to wait before sending an alert when a check
-is late. Use this parameter to account for minor, expected deviations in job
-execution times.</p>
-<p>When a check is considered <em>late</em> depends on whether the check uses a simple
-or cron schedule, and whether or not you are
-<a href="measuring_script_run_time/">tracking job durations</a> using the "start" events.</p>
-<p>For <strong>simple schedules</strong>, the check is late when the checks's configured period has passed.
-For example, consider a periodic task that should run every hour, and the gaps between
-runs should not deviate by more than 5 minutes (Period = 1 hour,
-Grace Time = 5 minutes). And let's say the last successful ping arrived at 12:00.</p>
+<p><strong>宽限期</strong>是您可以为每个检查项设置的配置参数之一。
+它是在检查项延迟时发送警报前额外等待的时间。
+使用此参数来考虑任务执行时间中微小、预期的偏差。</p>
+<p>检查项何时被视为<em>延迟</em>取决于检查项使用的是简单
+计划还是 cron 计划，以及您是否使用"start"事件
+<a href="measuring_script_run_time/">跟踪任务持续时间</a>。</p>
+<p>对于<strong>简单计划</strong>，当检查项的配置周期已过时，该检查项即为延迟。
+例如，考虑一个应每小时运行一次的定期任务，运行间隔
+不应超过 5 分钟（周期 = 1 小时，宽限期 = 5 分钟）。
+假设最后一次成功的 ping 在 12:00 到达。</p>
 <ul>
-<li>At 13:00 the check will be declared late (because 1 hour will have passed
-  since the last ping).</li>
-<li>At 13:05 the check will be declared down and the alerts will go out (because
-  1 hour + 5 minutes will have passed since the last ping).</li>
+<li>在 13:00，检查项将被声明为延迟（因为距离上次 ping
+  已过去 1 小时）。</li>
+<li>在 13:05，检查项将被声明为宕机并发出警报（因为
+  距离上次 ping 已过去 1 小时 + 5 分钟）。</li>
 </ul>
-<p>For <strong>cron and OnCalendar schedules</strong>, the check enters the late state at the exact
-moment when the current wall clock time matches the schedule. Let's consider a cron
-job with the schedule <code>10 * * * *</code> (10 minutes past every hour) and grace time of 5 minutes.
-And let's say the last successful ping arrived at 12:30.</p>
+<p>对于 <strong>cron 和 OnCalendar 计划</strong>，检查项在当前的挂钟时间与计划匹配的
+确切时刻进入延迟状态。考虑一个计划为 <code>10 * * * *</code>（每小时的第 10 分钟）且宽限期为
+5 分钟的 cron 作业。假设最后一次成功的 ping 在 12:30 到达。</p>
 <ul>
-<li>At 13:10 the check will be declared late (because 13:10 is the next scheduled time
-  the cron job is expected to send a ping according to the cron schedule).</li>
-<li>At 13:15 the check will be declared down and the alerts will go out (because 5
-  minutes will have passed since the time the cron job was expected to check in).</li>
+<li>在 13:10，检查项将被声明为延迟（因为 13:10 是根据 cron 计划
+  cron 作业应发送 ping 的下一个计划时间）。</li>
+<li>在 13:15，检查项将被声明为宕机并发出警报（因为自
+  cron 作业应签到的时间起已过去 5 分钟）。</li>
 </ul>
-<p>If you use "start" signals to <a href="measuring_script_run_time/">measure job execution time</a>,
-Grace Time also sets the maximum allowed time gap between "start" and "success" signals.
-If a job sends a "start" signal but does not send a "success" signal within grace time,
-SITE_NAME will assume failure and send out alerts.</p>
+<p>如果您使用"start"信号来<a href="measuring_script_run_time/">测量任务执行时间</a>，
+宽限期还设置了"start"和"success"信号之间允许的最大时间间隔。
+如果任务发送了"start"信号但未在宽限期内发送"success"信号，
+SITE_NAME 将假定为失败并发出警报。</p>
 <hr />
-<p>An <strong>Integration</strong> is a specific method for delivering monitoring alerts when a check's
-change states. SITE_NAME supports many types of integrations: email,
-webhooks, SMS, Slack, PagerDuty, etc. You can set up multiple integrations.
-For each check, you can specify which integrations it should use.</p>
-<p>For more information on integrations, see
-<a href="configuring_notifications/">Configuring notifications</a>.</p>
+<p><strong>集成</strong>是在检查项状态发生变化时发送监控警报的特定方法。
+SITE_NAME 支持多种类型的集成：电子邮件、
+Webhook、短信、Slack、PagerDuty 等。您可以设置多个集成。
+对于每个检查项，您可以指定应使用哪些集成。</p>
+<p>有关集成的更多信息，请参阅
+<a href="configuring_notifications/">配置通知</a>。</p>
 <hr />
-<p><strong>Project</strong>. To keep things organized, you can group checks and integrations in <strong>Projects</strong>.
-Your account starts with a single default project, but you can create
-additional projects as needed. You can transfer existing checks between projects
-while preserving their configuration and ping URLs.</p>
-<p>Each project has a configurable name, a separate set of API keys, and a separate
-project team. The project's team is the set of people you have granted read-only or
-read-write access to the project.</p>
-<p>For more information on projects, see <a href="projects_teams/">Projects and teams</a>.</p>
+<p><strong>项目</strong>。为了保持井然有序，您可以将检查项和集成分组到<strong>项目</strong>中。
+您的帐户从单个默认项目开始，但您可以根据需要创建
+其他项目。您可以在项目之间转移现有检查项，
+同时保留其配置和 ping URL。</p>
+<p>每个项目都有可配置的名称、单独的 API 密钥集以及单独的
+项目团队。项目的团队是您授予了项目只读或
+读写权限的人员集合。</p>
+<p>有关项目的更多信息，请参阅<a href="projects_teams/">项目和团队</a>。</p>

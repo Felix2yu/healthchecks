@@ -246,7 +246,7 @@
                 sorted.forEach(function(item) {
                     var div = template.cloneNode(true);
                     div.setAttribute("class", tag + " status-" + item.status + (item.started ? " status-started" : ""));
-                    div.querySelector(".name").textContent = item.name || "unnamed";
+                    div.querySelector(".name").textContent = item.name || "未命名";
                     if (item.last_ping) {
                         var s = timeSince(Date.parse(item.last_ping)) + " ago";
                         div.querySelector(".lp").textContent = s;

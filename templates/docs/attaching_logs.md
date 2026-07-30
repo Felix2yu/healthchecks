@@ -1,15 +1,15 @@
-# Attaching Logs
+# 附加日志
 
-SITE_NAME ping endpoints accept HTTP HEAD, GET and POST request methods.
+SITE_NAME ping 端点接受 HTTP HEAD、GET 和 POST 请求方法。
 
-When using HTTP POST, **you can include an arbitrary payload in the request body**.
-SITE_NAME will log the first PING_BODY_LIMIT_FORMATTED (PING_BODY_LIMIT bytes) of the
-request body, so that you can inspect it later.
+使用 HTTP POST 时，**您可以在请求体中包含任意载荷**。
+SITE_NAME 将记录请求体的前 PING_BODY_LIMIT_FORMATTED（PING_BODY_LIMIT 字节），
+以便您稍后检查。
 
-## Logging Command Output
+## 记录命令输出
 
-In this example, we run `certbot renew`, capture its output (both the stdout
-and stderr streams), and submit the captured output to SITE_NAME:
+在此示例中，我们运行 `certbot renew`，捕获其输出（stdout
+和 stderr 流），并将捕获的输出提交到 SITE_NAME：
 
 ```bash
 #!/bin/sh
@@ -18,8 +18,8 @@ m=$(/usr/bin/certbot renew 2>&1)
 curl -fsS -m 10 --retry 5 --data-raw "$m" PING_URL
 ```
 
-We can extend the previous example and signal either success or failure
-depending on the exit code:
+我们可以扩展前面的示例，根据退出代码发送 success 或 failure
+信号：
 
 ```bash
 #!/bin/sh
@@ -28,14 +28,14 @@ m=$(/usr/bin/certbot renew 2>&1)
 curl -fsS -m 10 --retry 5 --data-raw "$m" PING_URL/$?
 ```
 
-If the command produces a lot of output, you may run into the following error:
+如果命令产生大量输出，您可能会遇到以下错误：
 
 ```
 /usr/bin/curl: Argument list too long
 ```
 
-In that case, one workaround is to save the output to a temporary file,
-then tell curl to send the file as the request body:
+在这种情况下，一种解决方法是保存输出到临时文件，
+然后告诉 curl 将文件作为请求体发送：
 
 ```bash
 #!/bin/sh
@@ -44,36 +44,34 @@ then tell curl to send the file as the request body:
 curl -fsS -m 10 --retry 5 --data-binary @/tmp/certbot-renew.log PING_URL/$?
 ```
 
-## Using Runitor
+## 使用 Runitor
 
-[Runitor](https://github.com/bdd/runitor) is a third-party utility that runs the
-supplied command, captures its output and reports to SITE_NAME.
-It also measures the execution time and retries HTTP requests on transient errors.
-Best of all, the syntax is simple and clean:
+[Runitor](https://github.com/bdd/runitor) 是一个第三方工具，用于运行
+提供的命令，捕获其输出并报告给 SITE_NAME。
+它还测量执行时间并在临时错误时重试 HTTP 请求。
+最棒的是，语法简单明了：
 
 ```bash
 runitor -uuid your-uuid-here -- /usr/bin/certbot renew
 ```
 
-## Sending Logs Without Signalling Success or Failure
+## 发送日志而不发送 Success 或 Failure 信号
 
-You may sometimes want to log diagnostic information without altering the check's
-current state. SITE_NAME provides the [/log endpoint](../http_api#log-uuid) just for
-that. When you send an HTTP POST request to this endpoint, SITE_NAME will log the event
-and display it in check's "Events" section but will keep the check's state unchanged.
+您有时可能希望记录诊断信息而不改变检查项的
+当前状态。SITE_NAME 为此提供了 [/log 端点](../http_api#log-uuid)。
+当您向此端点发送 HTTP POST 请求时，SITE_NAME 将记录该事件
+并在检查项的"Events"部分显示，但保持检查项的状态不变。
 
-## Handling More Than PING_BODY_LIMIT_FORMATTED of Logs
+## 处理超过 PING_BODY_LIMIT_FORMATTED 的日志
 
-While SITE_NAME can store a small amount of logs in a pinch, it is not specifically
-designed for that. If you run into the issue of logs getting cut off, consider
-the following options:
+虽然 SITE_NAME 可以在紧急情况下存储少量日志，但它并非专门
+为此而设计。如果您遇到日志被截断的问题，请考虑
+以下选项：
 
-* See if the logs can be made less verbose. For example, if you have a batch job
-that outputs a line of text per item processed, perhaps it can output a summary with
-the totals instead.
-* If the important content is usually at the end, submit the
-**last PING_BODY_LIMIT_FORMATTED** instead of the first. Here is an example that
-submits the last PING_BODY_LIMIT_FORMATTED of `dmesg` output:
+* 查看是否可以让日志不那么冗长。例如，如果您有一个批处理任务
+  每处理一个项目就输出一行文本，也许它可以输出一个包含总计的摘要。
+* 如果重要内容通常在末尾，则提交**最后 PING_BODY_LIMIT_FORMATTED**
+  而不是开头。以下示例提交 `dmesg` 输出的最后 PING_BODY_LIMIT_FORMATTED：
 
 ```bash
 #!/bin/sh
@@ -82,18 +80,17 @@ m=$(dmesg | tail --bytes=PING_BODY_LIMIT)
 curl -fsS -m 10 --retry 5 --data-raw "$m" PING_URL
 ```
 
-* Finally, if it is critical to capture the entire log output,
-consider using a dedicated log aggregation service for capturing the logs.
+* 最后，如果捕获完整日志输出至关重要，
+  请考虑使用专门的日志聚合服务来捕获日志。
 
+## 在哪里查看捕获的日志
 
-## Where to See Captured Logs
+在检查项的详情页面中，Events 部分，点击单个事件以查看
+完整的事件详情，包括捕获的日志信息。
 
-In the check's details page, Events section, click on individual events to see
-full event details, including the captured log information.
+![Events 部分](IMG_URL/events.png)
 
-![The Events section](IMG_URL/events.png)
+在打开的对话框中，使用"Download Original"链接下载请求
+体数据，完全按照提交到 SITE_NAME 的原始内容：
 
-In the dialog that opens, use the "Download Original" link to download the request
-body data, exactly as it was submitted to SITE_NAME:
-
-![The Ping Details dialog](IMG_URL/ping_details.png)
+![Ping 详情对话框](IMG_URL/ping_details.png)

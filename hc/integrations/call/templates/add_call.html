@@ -1,39 +1,37 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Add Phone Call Integration - {{ site_name }}{% endblock %}
+{% block title %}添加电话通知 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
 <div class="col-sm-12">
-    <h1>Phone Call</h1>
+    <h1>电话通知</h1>
     <p>
-        Get a phone call when a check goes down. When you pick up the call,
-        a text-to-speech engine will read out a message and then hang up.
+        当检查项宕机时拨打电话。接听时，语音引擎会朗读消息并挂断。
     </p>
     <p>
-        {{ site_name }} uses a third-party service, Twilio, to make phone calls.
-        {{ site_name }} will call you from a single, fixed phone number:
+        {{ site_name }} 使用第三方服务 Twilio 拨打电话。
+        {{ site_name }} 将从一个固定的号码拨打电话：
         <strong>{{ twilio_from }}</strong>
-        <a href="{% url 'hc-contact-vcf' %}">(add to address book).</a>
+        <a href="{% url 'hc-contact-vcf' %}">（添加到通讯录）。</a>
     </p>
 
     {% if show_pricing and profile.call_limit == 0 %}
     <p class="alert alert-info">
-        <strong>Paid plan required.</strong>
-        Phone call notifications are not available on the free plan–they
-        cost too much! Please upgrade to a
-        <a href="{% url 'hc-billing' %}">paid plan</a>
-        to enable phone call notifications.
+        <strong>需要付费套餐。</strong>
+        电话通知在免费套餐中不可用——成本太高！请升级到
+        <a href="{% url 'hc-billing' %}">付费套餐</a>
+        以启用电话通知。
     </p>
     {% endif %}
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {{ form.label.css_classes }}">
-            <label for="id_label" class="col-sm-2 control-label">Label</label>
+            <label for="id_label" class="col-sm-2 control-label">标签</label>
             <div class="col-sm-6">
                 <input
                     id="id_label"
@@ -49,14 +47,13 @@
                 </div>
                 {% else %}
                 <span class="help-block">
-                    Optional. If you add multiple phone numbers,
-                    the labels will help you tell them apart.
+                    可选。如果添加多个电话号码，标签可帮助区分。
                 </span>
                 {% endif %}
             </div>
         </div>
         <div class="form-group {{ form.phone.css_classes }}">
-            <label for="id_number" class="col-sm-2 control-label">Phone Number</label>
+            <label for="id_number" class="col-sm-2 control-label">手机号码</label>
             <div class="col-sm-3">
                 <input
                     id="id_number"
@@ -72,15 +69,14 @@
                 </div>
                 {% else %}
                 <span class="help-block">
-                    Make sure the phone number starts with "+" and  has the
-                    country code.
+                    请确保电话号码以"+"开头并包含国家代码。
                 </span>
                 {% endif %}
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

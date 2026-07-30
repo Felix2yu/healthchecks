@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress static hc_extras %}
 
-{% block title %}Project Settings - {{ project }}{% endblock %}
+{% block title %}项目设置 - {{ project }}{% endblock %}
 
 
 {% block content %}
@@ -16,21 +16,21 @@
         {% with can_accept=transfer_request.can_accept %}
         <div id="transfer-request" class="panel">
             <div class="panel-body settings-block">
-                <h2>Ownership Transfer Request</h2>
+                <h2>所有权转移请求</h2>
                 <p>
-                    <strong>{{ project.owner.email }}</strong> would like to transfer
-                    the ownership of this project to you.
+                    <strong>{{ project.owner.email }}</strong> 希望将此项目的
+                    所有权转移给您。
                 </p>
 
                 {% if not can_accept %}
                 {% with num_checks=project.check_set.count num_available=request.profile.num_checks_available %}
                 <p>
-                    This project has
-                    <strong>{{ num_checks }} check{{ num_checks|pluralize}}</strong>,
-                    but your account only has space for
-                    <strong>{{ num_available }} additional check{{ num_available|pluralize }}</strong>.
-                    To accept the transfer, please
-                    <a href="{% url 'hc-billing' %}">upgrade your account first!</a>
+                    此项目有
+                    <strong>{{ num_checks }} 个监控点</strong>，
+                    但您的账户只能容纳
+                    <strong>{{ num_available }} 个额外监控点</strong>。
+                    要接受转移，请
+                    <a href="{% url 'hc-billing' %}">先升级您的账户！</a>
                 </p>
                 {% endwith%}
                 {% endif %}
@@ -41,12 +41,12 @@
                         <button
                             type="submit"
                             name="reject_transfer"
-                            class="btn btn-default">Reject</button>
+                            class="btn btn-default">拒绝</button>
                         <button
                             type="submit"
                             name="accept_transfer"
                             {% if not can_accept %}disabled{% endif %}
-                            class="btn btn-primary">Accept</button>
+                            class="btn btn-primary">接受</button>
                     </form>
                 </div>
 
@@ -57,20 +57,20 @@
 
         <div class="panel panel-{{ project_name_status|default:'default' }}">
             <div class="panel-body settings-block">
-                <h2>Project Name</h2>
+                <h2>项目名称</h2>
                 {{ project }}
                 {% if rw %}
                 <a
                     href="#"
                     class="btn btn-default pull-right"
                     data-toggle="modal"
-                    data-target="#set-project-name-modal">Change Project Name</a>
+                    data-target="#set-project-name-modal">修改项目名称</a>
                 {% endif %}
             </div>
 
            {% if project_name_updated %}
             <div class="panel-footer">
-                Project name updated
+                项目名称已更新
             </div>
             {% endif %}
         </div>
@@ -78,87 +78,87 @@
         {% if rw %}
         <div class="panel panel-{{ api_status|default:'default' }}">
             <div class="panel-body settings-block">
-                <h2>API Access</h2>
+                <h2>API 访问</h2>
                 <table id="api-keys" class="table">
                     <tr>
-                        <td>API key</td>
+                        <td>API 密钥</td>
                         <td>
                             {% if "." in project.api_key %}
                                 <code>{{ project.api_key|mask_rw_key }}</code>
                             {% elif project.api_key %}
                                 <code data-plaintext="{{ project.api_key }}">{{ project.api_key|mask_key }}</code>
                             {% else %}
-                                <span class="not-set">not set</span>
+                                <span class="not-set">未设置</span>
                             {% endif %}
                         </td>
                         <td class="text-right">
                             {% if project.api_key %}
                             <a href="#"
                                data-revoke-key="api_key"
-                               data-name="API key">Revoke</a>
+                               data-name="API key">吊销</a>
                             {% else %}
-                            <a href="#" data-create-key="api_key">Create</a>
+                            <a href="#" data-create-key="api_key">创建</a>
                             {% endif %}
                         </td>
                     </tr>
                     <tr>
-                        <td>API key (read-only)</td>
+                        <td>API 密钥（只读）</td>
                         <td>
                             {% if "." in project.api_key_readonly %}
                                 <code>{{ project.api_key_readonly|mask_ro_key }}</code>
                             {% elif project.api_key_readonly %}
                                 <code data-plaintext="{{ project.api_key_readonly }}">{{ project.api_key_readonly|mask_key }}</code>
                             {% else %}
-                                <span class="not-set">not set</span>
+                                <span class="not-set">未设置</span>
                             {% endif %}
                         </td>
                         <td class="text-right">
                             {% if project.api_key_readonly %}
                             <a href="#"
-                               data-revoke-key="api_key_readonly"
-                               data-name="read-only API key">Revoke</a>
+                            data-revoke-key="api_key_readonly"
+                                data-name="read-only API key">吊销</a>
                             {% else %}
-                            <a href="#" data-create-key="api_key_readonly">Create</a>
+                            <a href="#" data-create-key="api_key_readonly">创建</a>
                             {% endif %}
                         </td>
                     </tr>
                     <tr>
-                        <td>Ping key</td>
+                        <td>Ping 密钥</td>
                         <td>
                             {% if project.ping_key %}
                                 <code data-plaintext="{{ project.ping_key }}">{{ project.ping_key|mask_key }}</code>
                             {% else %}
-                            <span class="not-set">not set</span>
+                            <span class="not-set">未设置</span>
                             {% endif %}
                         </td>
                         <td class="text-right">
                             {% if project.ping_key %}
                             <a href="#"
                                data-revoke-key="ping_key"
-                               data-name="Ping key">Revoke</a>
+                               data-name="Ping key">吊销</a>
                             {% else %}
-                            <a href="#" data-create-key="ping_key">Create</a>
+                            <a href="#" data-create-key="ping_key">创建</a>
                             {% endif %}
                         </td>
                     </tr>
                 </table>
 
-                <p>See also:</p>
+                <p>另请参阅：</p>
                 <ul>
-                    <li><a href="{% url 'hc-serve-doc' 'api' %}">API documentation</a></li>
-                    <li><a href="{% url 'hc-serve-doc' 'http_api' %}">Pinging API documentation</a></li>
+                    <li><a href="{% url 'hc-serve-doc' 'api' %}">API 文档</a></li>
+                    <li><a href="{% url 'hc-serve-doc' 'http_api' %}">Ping API 文档</a></li>
                 </ul>
             </div>
 
             {% if key_created %}
             <div class="panel-footer">
-                Key created
+                密钥已创建
             </div>
             {% endif %}
 
            {% if key_revoked %}
             <div class="panel-footer">
-                Key revoked
+                密钥已吊销
             </div>
             {% endif %}
         </div>
@@ -167,17 +167,17 @@
         {% with invite_suggestions=project.invite_suggestions %}
         <div class="panel panel-{{ team_status|default:'default' }}">
             <div class="panel-body settings-block">
-                <h2>Team Access</h2>
+                <h2>团队访问</h2>
                 {% if memberships or invite_suggestions %}
                     <table id="team-table" class="table">
                         <tr>
-                            <th>Email</th>
-                            <th>Role</th>
+                            <th>邮箱</th>
+                            <th>角色</th>
                             <th></th>
                         </tr>
                         <tr>
                             <td class="email">{{ project.owner.email }}</td>
-                            <td>Owner</td>
+                            <td>所有者</td>
                             <td></td>
                         </tr>
                         {% for m in memberships %}
@@ -189,7 +189,7 @@
                                 <a
                                     href="#"
                                     data-email="{{ m.user.email }}"
-                                    class="pull-right member-remove">Remove</a>
+                                    class="pull-right member-remove">移除</a>
                                 {% endif %}
                             </td>
                         </tr>
@@ -198,7 +198,7 @@
                         {% if is_manager and invite_suggestions %}
                         <tr id="suggestions-row">
                             <td colspan="3">
-                                Add Users from Other Projects
+                                从其他项目添加用户
                             </td>
                         </tr>
 
@@ -210,7 +210,7 @@
                                 <a
                                     href="#"
                                     data-email="{{ user.email }}"
-                                    class="pull-right add-to-team">Add to Team</a>
+                                    class="pull-right add-to-team">添加到团队</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -218,9 +218,9 @@
                     </table>
                 {% else %}
                     <p>
-                        <strong>Invite team members to your project.</strong>
-                        Share access to your checks and configured integrations
-                        without having to share login details.
+                        <strong>邀请团队成员加入您的项目。</strong>
+                        共享监控点和集成配置的访问权限，
+                        无需共享登录信息。
                     </p>
                 {% endif %}
 
@@ -231,26 +231,26 @@
                     href="#"
                     class="btn btn-primary pull-right"
                     data-toggle="modal"
-                    data-target="#invite-team-member-modal">Invite a Team Member</a>
+                    data-target="#invite-team-member-modal">邀请团队成员</a>
                 {% endif %}
             </div>
             {% endwith %}
 
            {% if team_member_invited %}
             <div class="panel-footer">
-                {{ team_member_invited }} invited to team
+                已邀请 {{ team_member_invited }} 加入团队
             </div>
             {% endif %}
 
            {% if team_member_duplicate %}
             <div class="panel-footer">
-                {{ team_member_duplicate }} is already a member
+                {{ team_member_duplicate }} 已是团队成员
             </div>
             {% endif %}
 
            {% if team_member_removed %}
             <div class="panel-footer">
-                {{ team_member_removed }} removed from team
+                {{ team_member_removed }} 已从团队移除
             </div>
             {% endif %}
         </div>
@@ -258,7 +258,7 @@
         {% if is_owner %}
         <div class="panel panel-{{ transfer_status|default:'default' }}">
             <div class="panel-body settings-block">
-                <h2>Transfer Ownership</h2>
+                <h2>转移所有权</h2>
 
                 {% if transfer_request %}
                 <form method="post">
@@ -266,30 +266,30 @@
                     <button
                         type="submit"
                         name="cancel_transfer"
-                        class="btn btn-default pull-right">Cancel Transfer</button>
+                        class="btn btn-default pull-right">取消转移</button>
                 </form>
 
-                Transfer initiated, awaiting confirmation from
-                <strong>{{ transfer_request.user.email }}</strong>.
+                已发起转移，正在等待
+                <strong>{{ transfer_request.user.email }}</strong> 的确认。
 
                 {% else %}
                 <a href="#"
                    class="btn btn-default pull-right"
                    data-toggle="modal"
-                   data-target="#transfer-modal">Transfer Project&hellip;</a>
-                Transfer this project to a team member.
+                   data-target="#transfer-modal">转移项目…</a>
+                将此项目转移给团队成员。
                 {% endif %}
             </div>
 
            {% if transfer_initiated %}
             <div class="panel-footer">
-                Transfer initiated!
+                转移已发起！
             </div>
             {% endif %}
 
            {% if transfer_cancelled %}
             <div class="panel-footer">
-                Transfer cancelled!
+                转移已取消！
             </div>
             {% endif %}
         </div>
@@ -299,12 +299,12 @@
         <div class="panel panel-default">
             <div class="panel-body settings-block">
                     {% csrf_token %}
-                    <h2>Remove Project</h2>
+                    <h2>删除项目</h2>
                     <a href="#"
                        class="btn btn-remove pull-right"
                        data-toggle="modal"
-                       data-target="#remove-project-modal">Remove Project</a>
-                    This will permanently remove project {{ project }}.
+                       data-target="#remove-project-modal">删除项目</a>
+                    这将永久删除项目 {{ project }}。
                 <form action="{% url 'hc-remove-project' project.code %}" method="post">
                 </form>
             </div>
@@ -330,23 +330,23 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Revoke <span class="name"></span>?</h4>
+                    <h4>吊销 <span class="name"></span>？</h4>
                 </div>
                 <div class="modal-body">
                     <p>
-                        You are about to revoke your current
-                        <span class="name"></span>.
+                        您即将吊销当前的
+                        <span class="name"></span>。
                     </p>
                     <p>
-                        Afterwards, you can generate a new key, but there will
-                        be <strong>no way of getting the key's current value back</strong>.
+                        之后，您可以生成一个新密钥，但
+                        <strong>将无法找回当前密钥的值</strong>。
                     </p>
-                    <p>Are you sure?</p>
+                    <p>确定吗？</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button type="submit" class="btn btn-danger">
-                        Revoke <span class="name"></span>
+                        吊销 <span class="name"></span>
                     </button>
                 </div>
             </div>
@@ -363,22 +363,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Remove Team Member</h4>
+                    <h4>移除团队成员</h4>
                 </div>
                 <div class="modal-body">
-                    <p>You are about to remove <strong id="rtm-email"></strong> from the project.</p>
-                    <p>Are you sure?</p>
+                    <p>您即将从项目中移除 <strong id="rtm-email"></strong>。</p>
+                    <p>确定吗？</p>
                     <input
                         type="hidden"
                         name="email"
                         id="remove-team-member-email" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button
                         type="submit"
                         name="remove_team_member"
-                        class="btn btn-danger">Remove Member from Project</button>
+                        class="btn btn-danger">从项目中移除成员</button>
                 </div>
             </div>
         </form>
@@ -395,11 +395,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Invite a Team Member</h4>
+                    <h4>邀请团队成员</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="itm-email" class="col-sm-3 control-label">Email</label>
+                        <label for="itm-email" class="col-sm-3 control-label">邮箱</label>
                         <div class="col-sm-8">
                             <input
                                 type="email"
@@ -412,7 +412,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Access Level</label>
+                        <label class="col-sm-3 control-label">访问级别</label>
 
                         <div class="col-sm-8">
                         <label class="radio-container">
@@ -422,10 +422,10 @@
                                 value="w"
                                 checked>
                             <span class="radiomark"></span>
-                            Team Member
+                            团队成员
                             <span class="help-block">
-                                Can create and manage checks and integrations.
-                                Cannot access your account's billing settings.
+                                可以创建和管理监控点及集成。
+                                无法访问账户的账单设置。
                             </span>
                         </label>
                         <label class="radio-container">
@@ -434,10 +434,10 @@
                                 name="role"
                                 value="m">
                             <span class="radiomark"></span>
-                            Manager
+                            管理员
                             <span class="help-block">
-                                Same as Team Member, plus can invite and remove
-                                other members.
+                                与团队成员相同，此外可以邀请和移除
+                                其他成员。
                             </span>
                         </label>
                         <label class="radio-container">
@@ -446,10 +446,10 @@
                                 name="role"
                                 value="r">
                             <span class="radiomark"></span>
-                            Read-only
+                            只读
                             <span class="help-block">
-                                Can view checks and integrations, but cannot
-                                modify anything. Cannot access project's API keys.
+                                可以查看监控点和集成，但不能
+                                修改任何内容。无法访问项目的 API 密钥。
                             </span>
                         </label>
                         </div>
@@ -459,11 +459,11 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button
                         type="submit"
                         name="invite_team_member"
-                        class="btn btn-primary">Send Invite</button>
+                        class="btn btn-primary">发送邀请</button>
                 </div>
             </div>
         </form>
@@ -479,11 +479,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Change Project Name</h4>
+                    <h4>修改项目名称</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="project-name" class="col-sm-4 control-label">Project Name</label>
+                        <label for="project-name" class="col-sm-4 control-label">项目名称</label>
                         <div class="col-sm-7">
                             <input
                                 type="text"
@@ -496,11 +496,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button
                         type="submit"
                         name="set_project_name"
-                        class="btn btn-primary">Set Project Name</button>
+                        class="btn btn-primary">设置项目名称</button>
                 </div>
             </div>
         </form>
@@ -516,19 +516,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Remove "{{ project }}"?</h4>
+                    <h4>删除"{{ project }}"？</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Danger zone! You are about to permanently remove
-                    project <strong>{{ project }}</strong> and all
-                    of its associated checks and integrations. Are you sure?
+                    <p>危险区域！您即将永久删除
+                    项目 <strong>{{ project }}</strong> 及其所有
+                    关联的监控点和集成。确定吗？
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button
                         type="submit"
-                        class="btn btn-danger">Remove Project</button>
+                        class="btn btn-danger">删除项目</button>
                 </div>
             </div>
         </form>
@@ -547,14 +547,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4>Transfer Ownership</h4>
+                <h4>转移所有权</h4>
             </div>
             <div class="modal-body">
 
                 {% if memberships %}
                 <div class="form-group">
                     <label for="new-owner" class="col-sm-4 control-label">
-                        Choose owner
+                        选择所有者
                     </label>
                     <div class="col-sm-7">
                         <select
@@ -571,19 +571,19 @@
                 </div>
                 {% else %}
                 <p>
-                    This project currently has no team members.
-                    To transfer the ownership of this project, please start by
-                    inviting the new owner as a team member.
+                    此项目目前没有团队成员。
+                    要转移此项目的所有权，请先邀请
+                    新所有者作为团队成员加入。
                 </p>
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button
-                    id="transfer-confirm"
-                    disabled
-                    type="submit"
-                    class="btn btn-primary">Initiate Transfer</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button
+                        id="transfer-confirm"
+                        disabled
+                        type="submit"
+                        class="btn btn-primary">发起转移</button>
             </div>
         </div>
     </form>
@@ -596,14 +596,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>API Key Created!</h4>
+                <h4>API 密钥已创建！</h4>
             </div>
             <div class="modal-body">
-                <p>Copy the key and store it securely. The key will not be shown again:</p>
+                <p>复制密钥并安全存储。密钥将不再显示：</p>
                 <input type="text" class="form-control" value="{{ new_key }}" readonly />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">OK, I copied the key</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">好的，我已复制密钥</button>
             </div>
         </div>
     </div>
@@ -615,19 +615,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Ping Key Created!</h4>
+                <h4>Ping 密钥已创建！</h4>
             </div>
             <div class="modal-body">
-                <p>Here is the new ping key.</p>
+                <p>这是新的 Ping 密钥。</p>
                 <p>
-                <strong>Tip:</strong> unlike API keys, you will be able to
-                look up the ping key later too. When {% site_name %} displays the ping
-                key in a masked form, you can <strong>click on it to reveal it</strong>.
+                <strong>提示：</strong>与 API 密钥不同，您之后
+                也可以查看 Ping 密钥。当 {% site_name %} 以掩码形式显示 Ping
+                密钥时，您可以<strong>点击它以显示明文</strong>。
                 </p>
                 <input type="text" class="form-control" value="{{ new_ping_key }}" readonly />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">OK, I copied the key</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">好的，我已复制密钥</button>
             </div>
         </div>
     </div>

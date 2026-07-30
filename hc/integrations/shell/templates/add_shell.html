@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}Add Shell Command - {{ site_name }}{% endblock %}
+{% block title %}添加 Shell 命令 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -9,13 +9,12 @@
     <div class="col-sm-12">
         <h1>Shell Command</h1>
 
-        <p>Executes a local shell command when a check
-        goes up or down.</p>
+        <p>在检查项恢复或宕机时执行本地 Shell 命令。</p>
 
         <p>
-            You can use placeholders <strong>$NAME</strong>, <strong>$STATUS</strong>
-            and others
-            <a href="#" data-toggle="modal" data-target="#reference-modal">(quick reference)</a>.
+            您可以使用占位符 <strong>$NAME</strong>、<strong>$STATUS</strong>
+            等
+            <a href="#" data-toggle="modal" data-target="#reference-modal">（快速参考）</a>。
         </p>
         <br />
 
@@ -25,7 +24,7 @@
         <div class="row">
         <div class="col-sm-6">
             <div class="form-group {{ form.cmd_down.css_classes }}">
-                <label class="control-label">Execute when a check goes <span class="label-down">down</span></label>
+                <label class="control-label">检查项<span class="label-down">宕机</span>时执行</label>
                 <textarea
                     class="form-control"
                     rows="3"
@@ -41,7 +40,7 @@
 
         <div class="col-sm-6">
             <div class="form-group {{ form.cmd_up.css_classes }}">
-                <label class="control-label">Execute when a check goes <span class="label-up">up</span></label>
+                <label class="control-label">检查项<span class="label-up">恢复</span>时执行</label>
                 <textarea
                     class="form-control"
                     rows="3"
@@ -59,7 +58,7 @@
         <br>
         <br>
         <div class="form-group text-right">
-            <button type="submit" class="btn btn-primary">Save Integration</button>
+                    <button type="submit" class="btn btn-primary">保存集成</button>
         </div>
         </form>
 
@@ -70,47 +69,46 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Supported Placeholders</h4>
+                <h4>支持的占位符</h4>
             </div>
             <div class="modal-body">
                 <p>
-                    You can use the below placeholders in the command.
-                    {{ site_name }} will replace the placeholders
-                    with the correct values.
+                    您可以在命令中使用以下占位符。
+                    {{ site_name }} 会将占位符替换为正确的值。
                 </p>
 
                 <table id="webhook-variables" class="table modal-body">
                     <tr>
                         <th><code>$CODE</code></th>
-                        <td>The UUID code of the check</td>
+                        <td>检查项的 UUID 代码</td>
                     </tr>
                     <tr>
                         <th><code>$NAME</code></th>
-                        <td>Name of the check</td>
+                        <td>检查项的名称</td>
                     </tr>
                     <tr>
                         <th><code>$NOW</code></th>
                         <td>
-                            Current UTC time in ISO8601 format.<br />
-                            Example: "{% now_isoformat %}"
+                            当前 UTC 时间，ISO8601 格式。<br />
+                            示例："{% now_isoformat %}"
                         </td>
                     </tr>
                     <tr>
                         <th><code>$STATUS</code></th>
-                        <td>Check's current status ("up" or "down")</td>
+                        <td>检查项的当前状态（"up" 或 "down"）</td>
                     </tr>
                     <tr>
                         <th><code>$TAGS</code></th>
-                        <td>Check's tags, separated by spaces</td>
+                        <td>检查项的标签，以空格分隔</td>
                     </tr>
                     <tr>
                         <th><code>$TAG1, $TAG2, …</code></th>
-                        <td>Value of the first tag, the second tag, …</td>
+                        <td>第一个标签的值、第二个标签的值……</td>
                     </tr>
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Got It!</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">知道了！</button>
             </div>
         </div>
     </div>

@@ -1,107 +1,105 @@
-<h1>Self-Hosted Healthchecks</h1>
-<p>Healthchecks is open-source, and is licensed under the BSD 3-clause license.</p>
-<p>As an alternative to using the hosted service at
-<a href="https://healthchecks.io">https://healthchecks.io</a>, you have the option to host a
-Healthchecks instance yourself.</p>
-<p>The building blocks are:</p>
+<h1>自托管 Healthchecks</h1>
+<p>Healthchecks 是开源的，采用 BSD 3-clause 许可证。</p>
+<p>除了使用位于 <a href="https://healthchecks.io">https://healthchecks.io</a> 的托管服务外，
+您还可以选择自行托管
+Healthchecks 实例。</p>
+<p>其构建模块包括：</p>
 <ul>
 <li>Python 3.12+</li>
 <li>Django 6.0</li>
-<li>PostgreSQL or MySQL</li>
+<li>PostgreSQL 或 MySQL</li>
 </ul>
-<h2>Setting Up for Development</h2>
-<p>You can set up a development environment in a Python
-<a href="https://docs.python.org/3/tutorial/venv.html">virtual environment</a>
-on your local system to develop a new feature, write a new integration
-or test a bugfix.</p>
-<p>The following instructions assume you are using a Debian-based OS.</p>
+<h2>设置开发环境</h2>
+<p>您可以在本地系统的 Python
+<a href="https://docs.python.org/3/tutorial/venv.html">虚拟环境</a>中
+设置开发环境，以开发新功能、编写新集成
+或测试错误修复。</p>
+<p>以下说明假设您使用基于 Debian 的操作系统。</p>
 <ul>
 <li>
-<p>Install dependencies:</p>
+<p>安装依赖：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
 $<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>gcc<span class="w"> </span>python3-dev<span class="w"> </span>python3-venv
 </code></pre></div>
 
 </li>
 <li>
-<p>Prepare directory for project code and virtualenv. Feel free to use a
-  different location:</p>
+<p>准备项目代码和 virtualenv 的目录。请随意使用
+  不同的位置：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/webapps
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/webapps
 </code></pre></div>
 
 </li>
 <li>
-<p>Prepare virtual environment
-  (with virtualenv you get pip, we'll use it soon to install requirements):</p>
+<p>准备虚拟环境
+  （使用 virtualenv，您将获得 pip，我们很快就会用它来安装依赖）：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>hc-venv
 $<span class="w"> </span><span class="nb">source</span><span class="w"> </span>hc-venv/bin/activate
 </code></pre></div>
 
 </li>
 <li>
-<p>Check out project code:</p>
+<p>检出项目代码：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/healthchecks/healthchecks.git
 </code></pre></div>
 
 </li>
 <li>
-<p>Install requirements (Django, ...) into virtualenv:</p>
+<p>将依赖（Django 等）安装到 virtualenv 中：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>wheel
 $<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>healthchecks/requirements.txt
 </code></pre></div>
 
 </li>
 <li>
-<p>Create database tables and a superuser account:</p>
+<p>创建数据库表和超级用户帐户：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/webapps/healthchecks
 $<span class="w"> </span>./manage.py<span class="w"> </span>migrate
 $<span class="w"> </span>./manage.py<span class="w"> </span>createsuperuser
 </code></pre></div>
 
-<p>With the default configuration, Healthchecks stores data in a SQLite file
-<code>hc.sqlite</code> in the project directory (<code>~/webapps/healthchecks/</code>).</p>
+<p>使用默认配置时，Healthchecks 将数据存储在项目目录下的 SQLite 文件
+<code>hc.sqlite</code> 中（<code>~/webapps/healthchecks/</code>）。</p>
 </li>
 <li>
-<p>Run tests:</p>
+<p>运行测试：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span><span class="nb">test</span>
 </code></pre></div>
 
 </li>
 <li>
-<p>Run development server:</p>
+<p>运行开发服务器：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>runserver
 </code></pre></div>
 
 </li>
 <li>
-<p>From another shell, run the <code>sendalerts</code> management command, responsible for
-  sending out notifications:
+<p>在另一个 shell 中，运行负责发送通知的 <code>sendalerts</code> 管理命令：
         $ ./manage.py sendalerts</p>
 </li>
 </ul>
-<p>At this point, the site should now be running at <code>http://localhost:8000</code>.</p>
-<h2>Accessing Administration Panel</h2>
-<p>Healthchecks comes with Django's administration panel where you can perform
-administrative tasks: delete user accounts, change passwords, increase limits for
-specific users, inspect contents of database tables.</p>
-<p>To access the administration panel, if you haven't already, create a superuser account:</p>
+<p>此时，站点应已在 <code>http://localhost:8000</code> 运行。</p>
+<h2>访问管理面板</h2>
+<p>Healthchecks 附带 Django 的管理面板，您可以在其中执行
+管理任务：删除用户帐户、更改密码、提高特定用户的限制、
+检查数据库表的内容。</p>
+<p>要访问管理面板，如果您还没有创建超级用户帐户：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>createsuperuser
 </code></pre></div>
 
-<p>This will trigger an interactive prompt.</p>
-<p>You can also provide credentials via parameters, bypassing the interactive prompt:</p>
+<p>这将触发交互式提示。</p>
+<p>您也可以通过参数提供凭据，绕过交互式提示：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>createsuperuser<span class="w"> </span>--email<span class="w"> </span>user@example.com<span class="w"> </span>--password<span class="w"> </span>changeme123
 </code></pre></div>
 
-<p>Then, log into the site using the superuser credentials. Once logged in,
-click on the "Account" dropdown in top navigation, and select "Site Administration".</p>
-<h2>Sending Emails</h2>
-<p>Healthchecks needs SMTP credentials to be able to send emails:
-login links, monitoring notifications, monthly reports.</p>
-<p>Specify SMTP credentials using the <code>EMAIL_HOST</code>, <code>EMAIL_PORT</code>, <code>EMAIL_HOST_USER</code>,
-<code>EMAIL_HOST_PASSWORD</code>, <code>EMAIL_USE_SSL</code>, and <code>EMAIL_USE_TLS</code> environment variables.
-Example:</p>
+<p>然后，使用超级用户凭据登录站点。登录后，
+点击顶部导航中的"Account"下拉菜单，选择"Site Administration"。</p>
+<h2>发送电子邮件</h2>
+<p>Healthchecks 需要 SMTP 凭据才能发送电子邮件：
+登录链接、监控通知、月度报告。</p>
+<p>使用 <code>EMAIL_HOST</code>、<code>EMAIL_PORT</code>、<code>EMAIL_HOST_USER</code>、<code>EMAIL_HOST_PASSWORD</code>、<code>EMAIL_USE_SSL</code> 和 <code>EMAIL_USE_TLS</code> 环境变量指定 SMTP 凭据。
+示例：</p>
 <div class="highlight"><pre><span></span><code><span class="na">EMAIL_HOST</span><span class="o">=</span><span class="s">my-smtp-server-here.com</span>
 <span class="na">EMAIL_PORT</span><span class="o">=</span><span class="s">465</span>
 <span class="na">EMAIL_HOST_USER</span><span class="o">=</span><span class="s">my-username</span>
@@ -110,68 +108,67 @@ Example:</p>
 <span class="na">EMAIL_USE_TLS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">False</span>
 </code></pre></div>
 
-<p>You can read more about handling outbound email in the Django documentation,
-<a href="https://docs.djangoproject.com/en/4.2/topics/email/">Sending Email</a> section.</p>
-<h2>Receiving Emails</h2>
-<p>Healthchecks comes with a <code>smtpd</code> management command, which starts up an
-SMTP listener service. With the command running, you can ping your
-checks by sending email messages.</p>
-<p>Start the SMTP listener on port 2525:</p>
+<p>您可以在 Django 文档的 <a href="https://docs.djangoproject.com/en/4.2/topics/email/">Sending Email</a>
+部分阅读有关处理外发电子邮件的更多信息。</p>
+<h2>接收电子邮件</h2>
+<p>Healthchecks 附带一个 <code>smtpd</code> 管理命令，用于启动
+SMTP 监听服务。运行该命令后，您可以通过发送电子邮件消息
+来 ping 您的检查项。</p>
+<p>在端口 2525 上启动 SMTP 监听器：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>smtpd<span class="w"> </span>--port<span class="w"> </span><span class="m">2525</span>
 </code></pre></div>
 
-<p>Send a test email:</p>
+<p>发送测试邮件：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>--url<span class="w"> </span><span class="s1">&#39;smtp://127.0.0.1:2525&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--mail-from<span class="w"> </span><span class="s1">&#39;foo@example.org&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--mail-rcpt<span class="w"> </span><span class="s1">&#39;11111111-1111-1111-1111-111111111111@my-hc.example.org&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-F<span class="w"> </span><span class="s1">&#39;=&#39;</span>
 </code></pre></div>
 
-<h2>Sending Status Notifications</h2>
-<p>The <code>sendalerts</code> management command continuously polls the database for any checks
-changing state, and sends out notifications as needed.
-When <code>sendalerts</code> is not running, the Healthchecks instance will not send out any
-alerts.</p>
-<p>Within an activated virtualenv, run the <code>sendalerts</code> command like so:</p>
+<h2>发送状态通知</h2>
+<p><code>sendalerts</code> 管理命令持续轮询数据库以查找状态变化的检查项，
+并根据需要发送通知。
+当 <code>sendalerts</code> 未运行时，Healthchecks 实例将不发送任何
+警报。</p>
+<p>在激活的 virtualenv 中，按如下方式运行 <code>sendalerts</code> 命令：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>sendalerts
 </code></pre></div>
 
-<p>In a production setup, make sure the <code>sendalerts</code> command can survive
-server restarts.</p>
-<h2 id="database-cleanup">Database Cleanup</h2>
-<p>Healthchecks deletes old entries from <code>api_ping</code>, <code>api_flip</code>, and <code>api_notification</code>
-tables automatically. By default, Healthchecks keeps the 100 most recent
-pings for every check. You can set the limit higher to keep a longer history:
-go to the Administration Panel, look up user's <strong>Profile</strong> and modify its
-"Ping log limit" field.</p>
-<p>Healthchecks provides management commands for cleaning up
-<code>auth_user</code> (user accounts) and <code>api_tokenbucket</code> (rate limiting records) tables,
-and for removing stale objects from external object storage.</p>
-<p>Remove user accounts that are older than 1 month and have never logged in:</p>
+<p>在生产设置中，确保 <code>sendalerts</code> 命令能够在
+服务器重启后继续运行。</p>
+<h2 id="database-cleanup">数据库清理</h2>
+<p>Healthchecks 自动从 <code>api_ping</code>、<code>api_flip</code> 和 <code>api_notification</code>
+表中删除旧条目。默认情况下，Healthchecks 为每个检查项保留最近的 100 条
+ping。您可以设置更高的限制以保留更长的历史记录：
+转到管理面板，查找用户的 <strong>Profile</strong> 并修改其
+"Ping log limit"字段。</p>
+<p>Healthchecks 提供了用于清理 <code>auth_user</code>（用户帐户）和 <code>api_tokenbucket</code>（速率限制记录）表的
+管理命令，
+以及用于从外部对象存储中删除过时对象的命令。</p>
+<p>删除超过 1 个月且从未登录过的用户帐户：</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>pruneusers
 </code></pre></div>
 
-<p>Remove old records from the <code>api_tokenbucket</code> table. The TokenBucket
-model is used for rate-limiting login attempts and similar operations.
-Any records older than one day can be safely removed.</p>
+<p>从 <code>api_tokenbucket</code> 表中删除旧记录。TokenBucket
+模型用于速率限制登录尝试和类似操作。
+任何超过一天的记录都可以安全删除。</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>prunetokenbucket
 </code></pre></div>
 
-<p>Remove old objects from external object storage. When an user removes
-a check, removes a project, or closes their account, Healthchecks
-does not remove the associated objects from the external object
-storage on the fly. Instead, you should run <code>pruneobjects</code> occasionally
-(for example, once a month). This command first takes an inventory
-of all checks in the database, and then iterates over top-level
-keys in the object storage bucket, and deletes any that don't also
-exist in the database.</p>
+<p>从外部对象存储中删除旧对象。当用户删除
+检查项、删除项目或关闭其帐户时，Healthchecks
+不会立即从外部对象存储中删除关联的对象。
+相反，您应该偶尔运行 <code>pruneobjects</code> 命令
+（例如，每月一次）。此命令首先枚举
+数据库中所有检查项，然后遍历对象存储桶中的顶级
+键，并删除数据库中不存在的任何键。</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>pruneobjects
 </code></pre></div>
 
-<p>When you first try these commands on your data, it is a good idea to
-test them on a copy of your database, not on the live database right away.
-In a production setup, you will want to run these commands regularly, as well as
-have regular, automatic database backups set up.</p>
-<h2>Next Steps</h2>
-<p>Get the <a href="https://github.com/healthchecks/healthchecks">source code</a>.</p>
-<p>See <a href="../self_hosted_configuration/">Configuration</a> for a list of configuration options.</p>
+<p>当您首次对数据运行这些命令时，最好先在
+数据库副本上进行测试，而不是立即在实时数据库上操作。
+在生产环境中，您需要定期运行这些命令，并
+设置定期的自动数据库备份。</p>
+<h2>后续步骤</h2>
+<p>获取<a href="https://github.com/healthchecks/healthchecks">源代码</a>。</p>
+<p>查看<a href="../self_hosted_configuration/">配置</a>以获取配置选项列表。</p>

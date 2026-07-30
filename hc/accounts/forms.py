@@ -25,7 +25,7 @@ class SignupForm(forms.Form):
     # Call it "identity" instead of "email"
     # to avoid some of the dumber bots
     identity = LowercaseEmailField(
-        error_messages={"required": "Please enter your email address."}
+        error_messages={"required": "请输入您的邮箱地址。"}
     )
     tz = forms.CharField(required=False)
 
@@ -35,18 +35,18 @@ class SignupForm(forms.Form):
 
     def clean_identity(self) -> str:
         if not TokenBucket.authorize_auth_ip(self.request):
-            raise forms.ValidationError("Too many attempts, please try later.")
+            raise forms.ValidationError("尝试次数过多，请稍后再试。")
 
         v = self.cleaned_data["identity"]
         assert isinstance(v, str)
         if len(v) > 254:
-            raise forms.ValidationError("Address is too long.")
+            raise forms.ValidationError("地址过长。")
         # When user signs up with an email address that already has an account
         # we send them the magic login link. Hence we must rate-limit attempts
         # to sign up with a specific email address the same as we would rate-limit
         # attempts to log in with that email address:
         if not TokenBucket.authorize_login_email(v):
-            raise forms.ValidationError("Too many attempts, please try later.")
+            raise forms.ValidationError("尝试次数过多，请稍后再试。")
 
         return v
 
@@ -77,11 +77,11 @@ class EmailLoginForm(forms.Form):
 
         assert isinstance(v, str)
         if not TokenBucket.authorize_login_email(v):
-            raise forms.ValidationError("Too many attempts, please try later.")
+            raise forms.ValidationError("尝试次数过多，请稍后再试。")
 
         assert self.request
         if not TokenBucket.authorize_auth_ip(self.request):
-            raise forms.ValidationError("Too many attempts, please try later.")
+            raise forms.ValidationError("尝试次数过多，请稍后再试。")
 
         self.user: User | None
         try:
@@ -102,11 +102,11 @@ class PasswordLoginForm(forms.Form):
 
         if username and password:
             if not TokenBucket.authorize_login_password(username):
-                raise forms.ValidationError("Too many attempts, please try later.")
+                raise forms.ValidationError("尝试次数过多，请稍后再试。")
 
             self.user = authenticate(username=username, password=password)
             if self.user is None or not self.user.is_active:
-                raise forms.ValidationError("Incorrect email or password.")
+                raise forms.ValidationError("邮箱或密码不正确。")
 
         return self.cleaned_data
 
@@ -119,7 +119,7 @@ class ReportSettingsForm(forms.Form):
         seconds = self.cleaned_data["nag_period"]
 
         if seconds not in (0, 3600, 86400):
-            raise forms.ValidationError(f"Bad nag_period: {seconds}")
+            raise forms.ValidationError(f"无效的重复提醒周期：{seconds}")
 
         return td(seconds=seconds)
 
@@ -136,7 +136,7 @@ class ChangeEmailForm(forms.Form):
         v = self.cleaned_data["email"]
         assert isinstance(v, str)
         if User.objects.filter(email=v).exists():
-            raise forms.ValidationError(f"{v} is already registered")
+            raise forms.ValidationError(f"{v} 已被注册")
 
         return v
 
@@ -178,7 +178,7 @@ class TotpForm(forms.Form):
     def clean_code(self) -> str:
         assert isinstance(self.cleaned_data["code"], str)
         if not self.totp.verify(self.cleaned_data["code"], valid_window=1):
-            raise forms.ValidationError("The code you entered was incorrect.")
+            raise forms.ValidationError("您输入的验证码不正确。")
 
         return self.cleaned_data["code"]
 

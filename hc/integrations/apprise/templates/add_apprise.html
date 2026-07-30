@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Apprise Integration for {{ site_name }}{% endblock %}
+{% block title %}Apprise 集成 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -9,20 +9,18 @@
     <h1>Apprise</h1>
 
     <p>
-    Identify as many Apprise URLs as you wish. You can use a comma (,) to identify
-		more than on URL if you wish to.
-
-		For a detailed list of all supported Apprise Notification URLs simply
-		<a href="https://github.com/caronc/apprise#popular-notification-services" >click here</a>.
+    您可以添加任意数量的 Apprise 链接。如需添加多个链接，请使用逗号（,）分隔。
+    查看所有支持的 Apprise 通知服务的详细列表，请
+    <a href="https://github.com/caronc/apprise#popular-notification-services" >点击此处</a>。
     </p>
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
 
         <div class="form-group {{ form.room_id.css_classes }}">
-            <label for="url" class="col-sm-2 control-label">Apprise URL</label>
+            <label for="url" class="col-sm-2 control-label">Apprise 链接</label>
             <div class="col-sm-6">
                 <input
                     id="url"
@@ -40,7 +38,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

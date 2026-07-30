@@ -1,6 +1,6 @@
 # Go
 
-Below is an example of making an HTTP request to SITE_NAME from Go.
+以下是从 Go 向 SITE_NAME 发起 HTTP 请求的示例。
 
 ```go
 package main

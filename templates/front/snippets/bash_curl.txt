@@ -1,2 +1,2 @@
-# using curl (10 second timeout, retry up to 5 times):
+# 使用 curl（10 秒超时，最多重试 5 次）：
 curl -m 10 --retry 5 PING_URL

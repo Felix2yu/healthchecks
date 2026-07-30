@@ -15,10 +15,10 @@ $(function() {
             optgroupField: "group",
             options: all.map(toOption),
             optgroups: [
-                {value: "c", label: "Common time zones"},
-                {value: "a", label: "All time zones"}
+                {value: "c", label: "常用时区"},
+                {value: "a", label: "所有时区"}
             ],
-            placeholder: "Type to search",
+            placeholder: "输入搜索",
             plugins: ["dropdown_input", "no_backspace_delete"],
             refreshThrottle: 0,
             searchField: ["value"],

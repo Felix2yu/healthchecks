@@ -1,5 +1,5 @@
 <h1>Ruby</h1>
-<p>Below is an example of making an HTTP request to SITE_NAME from Ruby.</p>
+<p>以下是从 Ruby 向 SITE_NAME 发起 HTTP 请求的示例。</p>
 <div class="highlight"><pre><span></span><code><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;net/http&#39;</span>
 <span class="nb">require</span><span class="w"> </span><span class="s1">&#39;uri&#39;</span>
 

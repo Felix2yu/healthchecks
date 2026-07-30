@@ -38,7 +38,7 @@ $(function () {
 
         // Cron
         cronPreviewHash = "";
-        $("#cron-preview").html("<p>Updating...</p>");
+        $("#cron-preview").html("<p>更新中...</p>");
         $("#schedule").val(this.dataset.kind == "cron" ? this.dataset.schedule: "* * * * *");
         $("#tz")[0].tomselect.setValue(this.dataset.tz, true);
         graceCron.value = parsed.value;
@@ -48,7 +48,7 @@ $(function () {
 
         // OnCalendar
         onCalendarPreviewHash = "";
-        $("#oncalendar-preview").html("<p>Updating...</p>");
+        $("#oncalendar-preview").html("<p>更新中...</p>");
         $("#schedule-oncalendar").val(this.dataset.kind == "oncalendar" ? this.dataset.schedule: "*-*-* *:*:*");
         $("#tz-oncalendar")[0].tomselect.setValue(this.dataset.tz, true);
         graceOncalendar.value = parsed.value
@@ -73,14 +73,14 @@ $(function () {
     }
 
     var pipLabels = {
-        60: "1 minute",
-        1800: "30 minutes",
-        3600: "1 hour",
-        43200: "12 hours",
-        86400: "1 day",
-        604800: "1 week",
-        2592000: "30 days",
-        31536000: "365 days"
+        60: "1 分钟",
+        1800: "30 分钟",
+        3600: "1 小时",
+        43200: "12 小时",
+        86400: "1 天",
+        604800: "1 周",
+        2592000: "30 天",
+        31536000: "365 天"
     }
 
     var periodSlider = document.getElementById("period-slider");
@@ -129,7 +129,7 @@ $(function () {
     // Update the slider and the hidden field when user changes period inputs
     $("#update-timeout-modal .period-input").on("keyup change", function() {
         var secs = Math.round(period.value * periodUnit.value);
-        period.setCustomValidity(secs <= 31536000 ? "" : "Must not exceed 365 days");
+        period.setCustomValidity(secs <= 31536000 ? "" : "不能超过 365 天");
 
         if (secs >= 60) {
             periodSlider.noUiSlider.set(secs);
@@ -183,7 +183,7 @@ $(function () {
     // Update the slider and the hidden field when user changes grace inputs
     $("#update-timeout-modal .grace-input").on("keyup change", function() {
         var secs = Math.round(grace.value * graceUnit.value);
-        grace.setCustomValidity(secs <= 31536000 ? "" : "Must not exceed 365 days");
+        grace.setCustomValidity(secs <= 31536000 ? "" : "不能超过 365 天");
 
         if (secs >= 60) {
             graceSlider.noUiSlider.set(secs);
@@ -209,7 +209,7 @@ $(function () {
 
         // OK, we're good
         cronPreviewHash = hash;
-        $("#cron-preview-title").text("Updating...");
+        $("#cron-preview-title").text("更新中...");
 
         var token = $('input[name=csrfmiddlewaretoken]').val();
         $.ajax({
@@ -241,7 +241,7 @@ $(function () {
 
         // OK, we're good
         onCalendarPreviewHash = hash;
-        $("#oncalendar-preview-title").text("Updating...");
+        $("#oncalendar-preview-title").text("更新中...");
 
         var token = $('input[name=csrfmiddlewaretoken]').val();
         $.ajax({
@@ -263,7 +263,7 @@ $(function () {
 
     $("#update-timeout-modal .update-timeout-grace-cron-input").on("keyup change", function() {
         var secs = Math.round(graceCron.value * graceCronUnit.value);
-        graceCron.setCustomValidity(secs <= 31536000 ? "" : "Must not exceed 365 days");
+        graceCron.setCustomValidity(secs <= 31536000 ? "" : "不能超过 365 天");
 
         if (secs >= 60) {
             $("#update-cron-grace").val(secs);
@@ -272,7 +272,7 @@ $(function () {
 
     $("#update-timeout-modal .update-timeout-grace-oncalendar-input").on("keyup change", function() {
         var secs = Math.round(graceOncalendar.value * graceOncalendarUnit.value);
-        graceOncalendar.setCustomValidity(secs <= 31536000 ? "" : "Must not exceed 365 days");
+        graceOncalendar.setCustomValidity(secs <= 31536000 ? "" : "不能超过 365 天");
 
         if (secs >= 60) {
             $("#update-oncalendar-grace").val(secs);

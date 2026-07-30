@@ -9,17 +9,17 @@
     class="col-sm-6 col-sm-offset-3"
     method="post"
     encrypt="multipart/form-data">
-    <h1>Two-factor Authentication</h1>
+    <h1>双重身份验证</h1>
 
     {% if totp_url %}
     <div id="pick-method">
-        <p>Please select how you want to authenticate.</p>
+        <p>请选择身份验证方式。</p>
         <button
             id="use-key-btn"
             type="button"
-            class="btn btn-primary">Use security key</button>
+            class="btn btn-primary">使用安全密钥</button>
         <a href="{{ totp_url }}" class="btn btn-default">
-            Use authenticator app
+            使用身份验证器应用
         </a>
     </div>
     {% endif %}
@@ -28,9 +28,9 @@
     <input id="response" type="hidden" name="response">
 
     <div id="waiting" {% if totp_url %}class="hide"{% endif %}>
-        <h2>Waiting for security key</h2>
+        <h2>等待安全密钥</h2>
         <p>
-            Follow your browser's steps to authenticate with your security key.
+            按照浏览器的步骤使用您的安全密钥进行身份验证。
         </p>
 
         <div class="spinner started"></div>
@@ -38,21 +38,21 @@
 
     <div id="error" class="alert alert-danger hide">
         <p>
-            <strong>Something went wrong.</strong>
+            <strong>出了点问题。</strong>
         </p>
         <p id="error-text"></p>
 
         <div class="text-right">
             <button id="retry" type="button" class="btn btn-danger">
-                Try Again
+                重试
             </button>
         </div>
     </div>
 
     <div id="success" class="hide">
         <div class="alert alert-success">
-            <strong>Success!</strong>
-            Credential acquired.
+            <strong>成功！</strong>
+            凭证已获取。
         </div>
     </div>
 </form>

@@ -1,50 +1,50 @@
 {% load hc_extras humanize linemode %}{% linemode %}
 {% if status == "down" and flip.reason %}
-    {% line %}Reason: {{ flip.reason_long }}.{% endline %}
+    {% line %}原因：{{ flip.reason_long }}。{% endline %}
     {% line %}{% endline %}
 {% elif status == "up" and flip.down_duration %}
-    {% line %}The downtime lasted {{ flip.down_duration|hc_duration_for_sentence }}.{% endline %}
+    {% line %}宕机持续了 {{ flip.down_duration|hc_duration_for_sentence }}。{% endline %}
     {% line %}{% endline %}
 {% endif %}
 
 {% if check.project.name %}
-{% line %}**Project:** {{ check.project.name }}{% endline %}
+{% line %}**项目：** {{ check.project.name }}{% endline %}
 {% endif %}
 
 {% if check.tags_list %}
-{% line %}**Tags:** {{ check.tags_list|join:", " }}{% endline %}
+{% line %}**标签：** {{ check.tags_list|join:", " }}{% endline %}
 {% endif %}
 
 {% if check.kind == "simple" %}
-{% line %}**Period:** {{ check.timeout|hc_duration }}{% endline %}
+{% line %}**周期：** {{ check.timeout|hc_duration }}{% endline %}
 {% endif %}
 
 {% if check.kind == "cron" or check.kind == "oncalendar" %}
-{% line %}**Schedule:** `{{ check.schedule }}`{% endline %}
-{% line %}**Time Zone:** {{ check.tz }}{% endline %}
+{% line %}**计划：** `{{ check.schedule }}`{% endline %}
+{% line %}**时区：** {{ check.tz }}{% endline %}
 {% endif %}
 
-{% line %}**Total Pings:** {% if ping %}{{ ping.n }}{% else %}0{% endif %}{% endline %}
+{% line %}**总 Ping 数：** {% if ping %}{{ ping.n }}{% else %}0{% endif %}{% endline %}
 
 {% if ping is None %}
-{% line %}**Last Ping:** Never{% endline %}
+{% line %}**上次 Ping：** 从未{% endline %}
 {% else %}
-{% line %}**Last Ping:** {{ ping.get_kind_display }}, {{ ping.created|naturaltime }}{% endline %}
+{% line %}**上次 Ping：** {{ ping.get_kind_display }}，{{ ping.created|naturaltime }}{% endline %}
 {% endif %}
 
 {% if down_checks is not None %}
     {% line %}{% endline %}
     {% if down_checks %}
         {% if down_checks|length > 10 %}
-            {% line %}{{ down_checks|length }} other checks are {% if status == "down" %}also{% else %}still{% endif %} down.{% endline %}
+            {% line %}其他 {{ down_checks|length }} 个检查项{% if status == "down" %}也{% else %}仍然{% endif %}宕机。{% endline %}
         {% else %}
-            {% line %}The following checks are {% if status == "down" %}also{% else %}still{% endif %} down:{% endline %}
+            {% line %}以下检查项{% if status == "down" %}也{% else %}仍然{% endif %}宕机：{% endline %}
             {% for c in down_checks %}
                 {% line %}• **{{ c.name_then_code }}** (last ping: {{ c.last_ping|naturaltime|default:"never" }}){% endline %}
             {% endfor %}
         {% endif %}
     {% else %}
-        {% line %}All the other checks are up.{% endline %}
+        {% line %}所有其他检查项均已恢复。{% endline %}
     {% endif %}
 {% endif %}
 {% endlinemode %}

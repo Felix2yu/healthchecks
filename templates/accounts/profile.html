@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load compress static hc_extras %}
 
-{% block title %}Account Settings - {{ site_name }}{% endblock %}
+{% block title %}账户设置 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
         <h1 class="settings-title">
-            Settings
+            设置
             <small>{{ request.user.email }}</small>
         </h1>
     </div>
@@ -24,12 +24,12 @@
 <div class="row">
     <div class="col-sm-3">
         <ul class="nav nav-pills nav-stacked">
-            <li class="active"><a href="{% url 'hc-profile' %}">Account</a></li>
-            <li><a href="{% url 'hc-appearance' %}">Appearance</a></li>
+            <li class="active"><a href="{% url 'hc-profile' %}">账户</a></li>
+            <li><a href="{% url 'hc-appearance' %}">外观</a></li>
             {% if show_pricing %}
-            <li><a href="{% url 'hc-billing' %}">Billing</a></li>
+            <li><a href="{% url 'hc-billing' %}">账单</a></li>
             {% endif %}
-            <li><a href="{% url 'hc-notifications' %}">Email Reports</a></li>
+            <li><a href="{% url 'hc-notifications' %}">邮件报告</a></li>
         </ul>
     </div>
 
@@ -38,36 +38,36 @@
             <div class="panel-body settings-block">
                 <form method="post">
                     {% csrf_token %}
-                    <h2>Email and Password</h2>
+                    <h2>邮箱与密码</h2>
                     <p class="settings-bar">
-                        Your account's email address is
+                        您账户的邮箱地址是
                         <code>{{ request.user.email }}</code>
 
                         <a
                             href="{% url 'hc-change-email' %}"
-                            class="btn btn-default pull-right">Change Email</a>
+                            class="btn btn-default pull-right">修改邮箱</a>
                     </p>
                     <p class="clearfix"></p>
                     {% if request.user.has_usable_password %}
                     <p class="settings-bar">
-                        Password authentication is enabled.
+                        密码认证已启用。
                         <a
                             href="{% url 'hc-set-password' %}"
-                            class="btn btn-default pull-right">Change Password</a>
+                            class="btn btn-default pull-right">修改密码</a>
                     </p>
                     {% else %}
                     <p class="settings-bar">
-                        Attach a password to your {{ site_name }} account.
+                        为您的 {{ site_name }} 账户设置密码。
                         <a
                             href="{% url 'hc-set-password' %}"
-                            class="btn btn-default pull-right">Set Password</a>
+                            class="btn btn-default pull-right">设置密码</a>
                     </p>
                     {% endif %}
                 </form>
             </div>
             {% if changed_password %}
             <div class="panel-footer">
-                Your new password has been set!
+                您的新密码已设置成功！
             </div>
             {% endif %}
         </div>
@@ -76,12 +76,12 @@
             <div class="panel-body settings-block">
                 <form method="post">
                     {% csrf_token %}
-                    <h2>Two-factor Authentication</h2>
+                    <h2>双重身份验证</h2>
 
                     <table id="my-keys" class="table">
                         {% if use_webauthn %}
                         <tr>
-                            <th>Security keys</th>
+                            <th>安全密钥</th>
                             <th></th>
                         </tr>
                         {% for credential in credentials %}
@@ -89,39 +89,39 @@
                             <td>
                                 {{ credential.name|default:"unnamed" }}
                                 <span class="text-muted">
-                                – registered on {{ credential.created|date:"M j, Y" }}
+                                    – 注册于 {{ credential.created|date:"M j, Y" }}
                                 </span>
                             </td>
                             <td class="text-right">
-                                <a href="{% url 'hc-remove-credential' credential.code  %}">Remove</a>
+                                <a href="{% url 'hc-remove-credential' credential.code  %}">移除</a>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td class="missing" colspan="2">No registered security keys</td>
+                            <td class="missing" colspan="2">未注册安全密钥</td>
                         </tr>
                         {% endfor %}
                         {% endif %}
 
                         <tr>
-                            <th>Authenticator app</th>
+                            <th>身份验证器应用</th>
                             <th></th>
                         </tr>
                         {% if profile.totp %}
                         <tr>
                             <td>
-                                Enabled
+                                已启用
                                 <span class="text-muted">
-                                – configured on {{ profile.totp_created|date:"M j, Y" }}
+                                – 配置于 {{ profile.totp_created|date:"M j, Y" }}
                                 </span>
                             </td>
                             <td class="text-right">
-                                <a href="{% url 'hc-remove-totp' %}">Remove</a>
+                                <a href="{% url 'hc-remove-totp' %}">移除</a>
                             </td>
                         </tr>
                         {% else %}
                         <tr>
-                            <td class="missing" colspan="2">Not configured</td>
+                            <td class="missing" colspan="2">未配置</td>
                         </tr>
                         {% endif %}
                     </table>
@@ -129,13 +129,13 @@
                     {% if credentials|length == 1 and not profile.totp %}
                     <div class="alert alert-warning">
                         <p>
-                        <strong>The key "{% for c in credentials%}{{ c.name }}{% endfor %}" is currently your only second factor.</strong>
-                        If you lose this key, or it stops working, you will lose
-                        access to your {% site_name %} account.
+                        <strong>密钥"{% for c in credentials%}{{ c.name }}{% endfor %}"目前是您唯一的第二重身份验证。</strong>
+                        如果您丢失此密钥或它停止工作，您将失去
+                        对 {% site_name %} 账户的访问权限。
                         </p>
                         <p>
-                        Register a second security key, to be used
-                        as a backup second factor.
+                        注册第二个安全密钥，用作
+                        备份的第二重身份验证。
                         </p>
                     </div>
                     {% endif %}
@@ -143,22 +143,21 @@
                     {% if not credentials and profile.totp %}
                     <div class="alert alert-warning">
                         <p>
-                        <strong>The Authenticator app is currently your only second factor.</strong>
-                        If you lose access to it, you will lose access to your
-                        {% site_name %} account.
+                        <strong>身份验证器应用目前是您唯一的第二重身份验证。</strong>
+                        如果您无法访问它，您将失去对
+                        {% site_name %} 账户的访问权限。
                         </p>
                         <p>
-                        Make sure you have a backup of the Authenticator app's TOTP
-                        seed{% if use_webauthn %}, or register a Security Key to be used as a backup second factor{% endif %}.
+                        请确保您备份了身份验证器应用的 TOTP
+                        种子{% if use_webauthn %}，或注册一个安全密钥作为备份的第二重身份验证{% endif %}。
                         </p>
                     </div>
                     {% endif %}
 
                     {% if not credentials and not profile.totp %}
                     <p class="alert alert-info">
-                    Two-factor authentication is currently <strong>inactive</strong>.
-                    Your account does not have any configured two-factor authentication
-                    methods.
+                    双重身份验证当前<strong>未启用</strong>。
+                    您的账户未配置任何双重身份验证方法。
                     </p>
                     {% endif %}
 
@@ -167,14 +166,14 @@
                         <a
                             href="{% url 'hc-add-totp' %}"
                             class="btn btn-default">
-                            Set Up Authenticator App
+                            设置身份验证器应用
                         </a>
                         {% endif %}
                         {% if use_webauthn %}
                         <a
                             href="{% url 'hc-add-webauthn' %}"
                             class="btn btn-default">
-                            Add Security Key
+                            添加安全密钥
                         </a>
                         {% endif %}
                     </div>
@@ -183,25 +182,25 @@
 
             {% if added_credential_name %}
             <div class="panel-footer">
-                Added security key <strong>{{ added_credential_name }}</strong>.
+                已添加安全密钥 <strong>{{ added_credential_name }}</strong>。
             </div>
             {% endif %}
 
             {% if removed_credential_name %}
             <div class="panel-footer">
-                Removed security key <strong>{{ removed_credential_name }}</strong>.
+                已移除安全密钥 <strong>{{ removed_credential_name }}</strong>。
             </div>
             {% endif %}
 
             {% if enabled_totp %}
             <div class="panel-footer">
-                Successfully set up the Authenticator app.
+                成功设置身份验证器应用。
             </div>
             {% endif %}
 
             {% if disabled_totp %}
             <div class="panel-footer">
-                Disabled the authenticator app.
+                已禁用身份验证器应用。
             </div>
             {% endif %}
         </div>
@@ -209,13 +208,13 @@
         <div class="panel panel-{{ my_projects_status }}">
             <div class="panel-body settings-block">
                     {% csrf_token %}
-                    <h2>My Projects</h2>
+                    <h2>我的项目</h2>
 
                     {% if ownerships or memberships %}
                     <table id="my-projects" class="table">
                         <tr>
-                            <th>Project</th>
-                            <th>My role</th>
+                            <th>项目</th>
+                            <th>我的角色</th>
                             <th></th>
                         </tr>
                         {% for project in ownerships %}
@@ -227,11 +226,11 @@
                                     </a>
                                 </div>
                             </td>
-                            <td>Owner</td>
+                            <td>所有者</td>
                             <td>
                                 <a
                                     href="{% url 'hc-project-settings' project.code %}"
-                                    class="pull-right">Settings</a>
+                                        class="pull-right">设置</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -251,13 +250,13 @@
                                     href="#"
                                     data-name="{{ m.project }}"
                                     data-code="{{ m.project.code }}"
-                                    class="pull-right leave-project">Leave</a>
+                                    class="pull-right leave-project">离开</a>
                             </td>
                         </tr>
                         {% endfor %}
                     </table>
                     {% else %}
-                        <p>You do not have any projects. Create one!</p>
+                        <p>您还没有任何项目。创建一个！</p>
                     {% endif %}
 
                     <a
@@ -265,12 +264,12 @@
                         href="#"
                         class="btn btn-default pull-right"
                         data-toggle="modal"
-                        data-target="#add-project-modal">Create a New Project</a>
+                        data-target="#add-project-modal">创建新项目</a>
             </div>
 
             {% if left_project %}
             <div class="panel-footer">
-                Left project <strong>{{ left_project }}</strong>.
+                已离开项目 <strong>{{ left_project }}</strong>。
             </div>
             {% endif %}
         </div>
@@ -279,7 +278,7 @@
             <div id="tz-settings" class="panel-body settings-block">
                 <form method="post">
                     {% csrf_token %}
-                    <h2>Preferred Time Zone</h2>
+                    <h2>首选时区</h2>
                     <select id="tz" name="tz" class="form-control" value="{{ profile.tz }}">
                         <option{% if profile.tz == "UTC" %} selected{% endif %}>UTC</option>
                         {% for tz in timezones %}
@@ -291,36 +290,36 @@
 
                     <br />
                     <p id="browser-tz-hint" class="hide">
-                        Tip: your browser's time zone is <b>FIXME</b>.
-                        <a href="#">Use it instead?</a>
+                        提示：您浏览器的时区是 <b>FIXME</b>。
+                        <a href="#">使用它吗？</a>
                     </p>
 
-                    <p>{% site_name %} will use your preferred time zone to:</p>
+                    <p>{% site_name %} 将使用您的首选时区来：</p>
                     <ul>
-                        <li>Format dates and times here in the web interface.</li>
-                        <li>Format dates and times in monitoring alerts.</li>
+                        <li>在网页界面中格式化日期和时间。</li>
+                        <li>在监控警报中格式化日期和时间。</li>
                         <li>
-                            Deliver <a href="{% url 'hc-profile' %}">email reports</a>
-                            (if enabled) between 9:00 and 11:00 local time.
+                            在本地时间 9:00 至 11:00 之间
+                            发送<a href="{% url 'hc-profile' %}">邮件报告</a>（如果已启用）。
                         </li>
                     </ul>
                     <br />
-                    <button type="submit" class="btn btn-default pull-right">Save Changes</button>
+                    <button type="submit" class="btn btn-default pull-right">保存更改</button>
                 </form>
             </div>
             {% if tz_updated %}
             <div class="panel-footer">
-                Time zone updated!
+                时区已更新！
             </div>
             {% endif %}
         </div>
 
         <div class="panel panel-default">
             <div class="panel-body settings-block">
-                <h2>Close Account</h2>
-                <p>This will permanently remove your {{ site_name }} account.</p>
+                <h2>关闭账户</h2>
+                <p>这将永久删除您的 {{ site_name }} 账户。</p>
                 <div class="text-right">
-                    <a href="{% url 'hc-close' %}" class="btn btn-remove">Close Account</a>
+                    <a href="{% url 'hc-close' %}" class="btn btn-remove">关闭账户</a>
                 </div>
             </div>
         </div>
@@ -334,25 +333,25 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Leave This Project?</h4>
+                    <h4>离开此项目？</h4>
                 </div>
                 <div class="modal-body">
                     <p>
-                        You are about to leave the project <strong id="leave-project-name"></strong>.
-                        You will lose access to its checks and integrations.
+                        您即将离开项目 <strong id="leave-project-name"></strong>。
+                        您将无法访问其监控点和集成。
                     </p>
-                    <p>Are you sure?</p>
+                    <p>确定吗？</p>
                     <input
                         type="hidden"
                         name="code"
                         id="leave-project-code" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button
                         type="submit"
                         name="leave_project"
-                        class="btn btn-danger">Leave Project</button>
+                        class="btn btn-danger">离开项目</button>
                 </div>
             </div>
         </form>

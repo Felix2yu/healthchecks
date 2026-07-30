@@ -84,7 +84,7 @@ class FilteringRulesForm(forms.Form):
     start_kw = forms.CharField(required=False, max_length=200)
     success_kw = forms.CharField(required=False, max_length=200)
     failure_kw = forms.CharField(required=False, max_length=200)
-    methods = forms.ChoiceField(required=False, choices=(("", "Any"), ("POST", "POST")))
+    methods = forms.ChoiceField(required=False, choices=(("", "任意"), ("POST", "POST")))
     manual_resume = forms.BooleanField(required=False)
 
 
@@ -139,7 +139,7 @@ class PhoneNumberForm(forms.Form):
         stripped = v.encode("ascii", "ignore").decode("ascii")
         stripped = stripped.replace(" ", "").replace("-", "")
         if not re.match(r"^\+\d{5,15}$", stripped):
-            raise forms.ValidationError("Invalid phone number format.")
+            raise forms.ValidationError("无效的手机号码格式。")
 
         return stripped
 
@@ -158,7 +158,7 @@ class PhoneUpDownForm(PhoneNumberForm):
         up = self.cleaned_data.get("up")
 
         if not down and not up:
-            self.add_error("down", "Please select at least one.")
+            self.add_error("down", "请至少选择一项。")
 
     def get_json(self) -> str:
         return json.dumps(

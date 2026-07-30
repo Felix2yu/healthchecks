@@ -57,7 +57,7 @@ def select(request: HttpRequest) -> HttpResponse:
             return HttpResponseForbidden()
 
         if request.GET.get("error") == "access_denied":
-            messages.warning(request, "GitHub setup was cancelled.")
+            messages.warning(request, "GitHub 设置已取消。")
             return redirect("hc-channels", project.code)
 
         if "code" not in request.GET:
@@ -73,7 +73,7 @@ def select(request: HttpRequest) -> HttpResponse:
     try:
         repos = client.get_repos(request.session["add_github_token"])
     except client.BadCredentials:
-        messages.warning(request, "GitHub setup failed, GitHub access was revoked.")
+        messages.warning(request, "GitHub 设置失败，GitHub 访问已被撤销。")
         request.session.pop("add_github_project")
         request.session.pop("add_github_token")
         return redirect("hc-channels", project.code)
@@ -109,7 +109,7 @@ def save(request: HttpRequest, code: UUID) -> HttpResponse:
         # still has access to the repo we are about to use in the integration.
         repos = client.get_repos(token)
     except client.BadCredentials:
-        messages.warning(request, "GitHub setup failed, GitHub access was revoked.")
+        messages.warning(request, "GitHub 设置失败，GitHub 访问已被撤销。")
         return redirect("hc-channels", project.code)
 
     repo_name = form.cleaned_data["repo_name"]
@@ -128,5 +128,5 @@ def save(request: HttpRequest, code: UUID) -> HttpResponse:
     channel.save()
     channel.assign_all_checks()
 
-    messages.success(request, "Success, integration added!")
+    messages.success(request, "集成添加成功！")
     return redirect("hc-channels", project.code)

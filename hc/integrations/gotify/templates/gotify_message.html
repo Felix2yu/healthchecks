@@ -1,11 +1,11 @@
 {% load hc_extras humanize linemode %}{% linemode %}
 {% if status == "down" %}
-    {% line %}🔴 The check [{{ check.name_then_code }}]({{ check.cloaked_url }}) is **DOWN**{% if flip.reason %} ({{ flip.reason_long }}){% endif %}.{% endline %}
+    {% line %}🔴 检查项 [{{ check.name_then_code }}]({{ check.cloaked_url }}) **已宕机**{% if flip.reason %}（{{ flip.reason_long }}）{% endif %}。{% endline %}
 {% else %}
-    {% line %}🟢 The check [{{ check.name_then_code }}]({{ check.cloaked_url }}) is now **UP**.{% endline %}
+    {% line %}🟢 检查项 [{{ check.name_then_code }}]({{ check.cloaked_url }}) **已恢复**。{% endline %}
     {% if flip.down_duration %}
     {% line %}{% endline %}
-    {% line %}The downtime lasted {{ flip.down_duration|hc_duration_for_sentence }}.{% endline %}
+    {% line %}宕机持续了 {{ flip.down_duration|hc_duration_for_sentence }}。{% endline %}
     {% endif %}
 {% endif %}
 
@@ -13,15 +13,15 @@
     {% line %}{% endline %}
     {% if down_checks %}
         {% if down_checks|length > 10 %}
-            {% line %}{{ down_checks|length }} other checks are {% if status == "down" %}also{% else %}still{% endif %} down.{% endline %}
+            {% line %}其他 {{ down_checks|length }} 个检查项{% if status == "down" %}也{% else %}仍然{% endif %}宕机。{% endline %}
         {% else %}
-            {% line %}The following checks are {% if status == "down" %}also{% else %}still{% endif %} down:{% endline %}
+            {% line %}以下检查项{% if status == "down" %}也{% else %}仍然{% endif %}宕机：{% endline %}
             {% for c in down_checks %}
-                {% line %}- [{{ c.name_then_code }}]({{ c.cloaked_url }}) (last ping: {{ c.last_ping|naturaltime|default:"never" }}){% endline %}
+                {% line %}- [{{ c.name_then_code }}]({{ c.cloaked_url }})（上次 Ping：{{ c.last_ping|naturaltime|default:"从未" }}）{% endline %}
             {% endfor %}
         {% endif %}
     {% else %}
-        {% line %}All the other checks are up.{% endline %}
+        {% line %}所有其他检查项均已恢复。{% endline %}
     {% endif %}
 {% endif %}
 {% endlinemode %}

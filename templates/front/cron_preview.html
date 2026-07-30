@@ -2,16 +2,16 @@
 
 {% if form.schedule.errors %}
 <p id="invalid-arguments">
-    Invalid cron expression. <br />
-    Please check the <a href="{% url 'hc-docs-cron' %}">supported cron syntax features</a>.
+    无效的 Cron 表达式。<br />
+    请查看<a href="{% url 'hc-docs-cron' %}">支持的 Cron 语法功能</a>。
 
 </p>
 {% elif form.tz.errors %}
-<p id="invalid-arguments">Invalid timezone.</p>
+<p id="invalid-arguments">无效的时区。</p>
 {% else %}
 {% if desc %}<div id="cron-description">“{{ desc }}”</div>{% endif %}
 <table id="cron-preview-table" class="table">
-    <tr><th id="cron-preview-title" colspan="3">Expected Ping Dates</th></tr>
+    <tr><th id="cron-preview-title" colspan="3">预期的 Ping 日期</th></tr>
     {% for d in dates %}
     <tr>
         {% timezone tz %}

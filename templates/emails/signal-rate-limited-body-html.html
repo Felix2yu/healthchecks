@@ -2,11 +2,10 @@
 {% load hc_extras %}
 
 {% block content %}
-Hello,<br />
+您好，<br />
 <p>
-We could not deliver a Signal notification to <strong>{{ recipient|mask_phone }}</strong> due to
-hitting a rate-limit on the Signal network, so we are sending it via email
-instead:
+由于 Signal 网络达到速率限制，我们无法向 <strong>{{ recipient|mask_phone }}</strong> 发送 Signal 通知，
+因此改为通过电子邮件发送：
 </p>
 
 <div style="background: #F2F4F6; padding: 20px;">
@@ -16,6 +15,6 @@ instead:
 {% endblock %}
 
 {% block content_more %}
-Regards,<br />
-The {% site_name %} Team
+此致，<br />
+{% site_name %} 团队
 {% endblock %}

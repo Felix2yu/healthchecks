@@ -27,15 +27,15 @@
                 <tr>
                 {% with check.get_status as status %}
                     {% if status == "new" %}
-                        <td style="background: #AAA; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; margin: 0; border-radius: 3px;">NEW</td>
+                        <td style="background: #AAA; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; margin: 0; border-radius: 3px;">新建</td>
                     {% elif status == "paused" %}
-                        <td style="background: #AAA; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">PAUSED</td>
+                        <td style="background: #AAA; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">已暂停</td>
                     {% elif status == "grace" %}
-                        <td style="background: #f0ad4e; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">LATE</td>
+                        <td style="background: #f0ad4e; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">延迟</td>
                     {% elif status == "up" %}
-                        <td style="background: #5cb85c; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">UP</td>
+                        <td style="background: #5cb85c; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">正常</td>
                     {% elif status == "down" %}
-                        <td style="background: #d9534f; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">DOWN</td>
+                        <td style="background: #d9534f; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 10px; line-height: 10px; color: white; padding: 6px; border-radius: 3px;">宕机</td>
                     {% endif %}
                 {% endwith %}
                 </tr>
@@ -45,7 +45,7 @@
             {% if check.name %}
                 {{ check.name|mangle_link }}
             {% else %}
-                <span style="color: #74787E; font-style: italic;">unnamed</span>
+                <span style="color: #74787E; font-style: italic;">未命名</span>
             {% endif %}
             {% if check.tags %}
                 <br />
@@ -69,16 +69,16 @@
         {% for d in check.past_downtimes %}
         {% if d.count %}
             <td style="border-top: 1px solid #EDEFF2; padding: 16px 8px; font-family: Helvetica, Arial, sans-serif;">
-                {{ d.count }}&nbsp;downtime{{ d.count|pluralize }},
+                {{ d.count }}&nbsp;次宕机，
                 <br />
-                {{ d.duration|hc_approx_duration }} total
+                共计 {{ d.duration|hc_approx_duration }}
             </td>
         {% else %}
             <td style="border-top: 1px solid #EDEFF2; padding: 16px 8px; font-family: Helvetica, Arial, sans-serif; color: #9BA2AB;">
                 {% if d.no_data %}
                     {% comment %} The check didn't exist yet {% endcomment %}
                 {% else %}
-                    All good!
+                    一切正常！
                 {% endif %}
             </td>
         {% endif %}

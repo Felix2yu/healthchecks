@@ -1,22 +1,22 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Group Integration for {{ site_name }}{% endblock %}
+{% block title %}分组集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
         <h1>Group</h1>
-        <p>Dispatch a notification to multiple integrations at once.</p>
+        <p>将通知同时分发给多个集成。</p>
 
-        <h2>Integration Settings</h2>
+        <h2>集成设置</h2>
 
         <form method="post" class="form-horizontal">
             {% csrf_token %}
 
             <div class="form-group {{ form.label.css_classes }}">
-                <label for="id_label" class="col-sm-2 control-label">Label</label>
+                <label for="id_label" class="col-sm-2 control-label">标签</label>
                 <div class="col-sm-6">
                     <input
                         id="id_label"
@@ -32,14 +32,13 @@
                     </div>
                     {% else %}
                     <span class="help-block">
-                        Optional. If you add multiple groups,
-                        the labels will help you tell them apart.
+                        可选。如果添加多个分组，标签可帮助区分。
                     </span>
                     {% endif %}
                 </div>
             </div>
             <div class="form-group {{ form.channels.css_classes }}">
-                <label for="channels" class="col-sm-2 control-label">Integrations</label>
+                <label for="channels" class="col-sm-2 control-label">集成</label>
                 <div id="channel-choices" class="col-sm-6">
                     {% for code, ch in form.channels.field.choices %}
                     <label class="checkbox-container">
@@ -55,7 +54,7 @@
                             {% if ch.name %}
                             {{ ch.name }}
                             {% else %}
-                            <div class="unnamed">unnamed</div>
+                            <div class="unnamed">未命名</div>
                             {% endif %}
                             <div class="channel-details-mini">
                             {% include "front/channel_description.html" with ch=ch %}
@@ -73,7 +72,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary">Save Group</button>
+                    <button type="submit" class="btn btn-primary">保存分组</button>
                 </div>
             </div>
         </form>

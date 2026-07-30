@@ -1,17 +1,17 @@
 {% load humanize tz %}
 
 {% if bad_schedule %}
-<p id="invalid-oncalendar-arguments">Invalid OnCalendar expression.</p>
+<p id="invalid-oncalendar-arguments">无效的 OnCalendar 表达式。</p>
 {% elif bad_tz %}
-<p id="invalid-oncalendar-arguments">Invalid timezone.</p>
+<p id="invalid-oncalendar-arguments">无效的时区。</p>
 {% else %}
 <table class="table">
-    <tr><th id="oncalendar-preview-title" colspan="2">Expected Ping Dates</th></tr>
+    <tr><th id="oncalendar-preview-title" colspan="2">预期的 Ping 日期</th></tr>
     {% for d in dates %}
     <tr>
         <td>
             {% if forloop.first %}
-            Next elapse:
+            下次触发：
             {% else %}
             #{{ forloop.counter }}:
             {% endif %}
@@ -24,7 +24,7 @@
     </tr>
     {% if tz != 'UTC' %}
     <tr class="in-utc">
-        <td>(in UTC):</td>
+        <td>（UTC 时间）：</td>
         <td><code>{{ d|date:"D Y-m-d H:i:s T" }}</code></td>
     </tr>
     {% endif %}

@@ -1,28 +1,25 @@
-<h1>How to Monitor Systemd Tasks with SITE_NAME</h1>
-<p>SITE_NAME can monitor your Systemd scheduled tasks and notify you when they don't run
-at expected times. Assuming curl or wget is available, you will not need to install
-new software on your servers.</p>
-<p>SITE_NAME monitoring works by listening for "start" and "success" signals sent as HTTP
-requests by the monitored task. When SITE_NAME does not receive the HTTP request at the
-expected time, it notifies you. This monitoring technique, also called
-"heartbeat monitoring", can detect various failure modes:</p>
+<h1>如何使用 SITE_NAME 监控 Systemd 任务</h1>
+<p>SITE_NAME 可以监控你的 Systemd 计划任务，并在它们未按预期时间运行时通知你。
+假设 curl 或 wget 可用，你不需要在服务器上安装新软件。</p>
+<p>SITE_NAME 通过监听被监控任务发送的 HTTP "start"和"success"信号来工作。
+当 SITE_NAME 在预期时间未收到 HTTP 请求时，它会通知你。
+这种监控技术也称为"心跳监控"，可以检测各种故障模式：</p>
 <ul>
-<li>The whole machine goes down (power outage, hardware failure, somebody trips on
-  cables, etc.).</li>
-<li>Systemd does not start the task because of an invalid configuration.</li>
-<li>The task exits with a non-zero exit code.</li>
-<li>The task runs at the wrong time or keeps running for an abnormally long time.</li>
+<li>整个机器宕机（断电、硬件故障、有人绊到线缆等）。</li>
+<li>Systemd 因配置无效而未启动任务。</li>
+<li>任务以非零退出码退出。</li>
+<li>任务在错误时间运行或运行时间异常长。</li>
 </ul>
-<p>Each Systemd scheduled task is defined by two files:</p>
+<p>每个 Systemd 计划任务由两个文件定义：</p>
 <ul>
-<li>The <code>.service</code> file describes the command to run, the system user to run it as,
-  the environment variables to set, and what other services must already be running.</li>
-<li>The <code>.timer</code> file contains the task's schedule.</li>
+<li><code>.service</code> 文件描述要运行的命令、以哪个系统用户身份运行、
+  要设置的环境变量，以及哪些其他服务必须已运行。</li>
+<li><code>.timer</code> 文件包含任务的计划。</li>
 </ul>
-<h2>Using curl</h2>
-<p>To monitor a task with SITE_NAME, you will need to make changes in the <code>.service</code> file.
-Let's consider a service "copy-media.service" which copies <code>/opt/media</code> directory to a
-remote host:</p>
+<h2>使用 curl</h2>
+<p>要使用 SITE_NAME 监控任务，你需要在 <code>.service</code> 文件中进行更改。
+让我们考虑一个服务 "copy-media.service"，它将 <code>/opt/media</code> 目录复制到
+远程主机：</p>
 <div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Copy /opt/media to remote_host</span>
 <span class="na">Requires</span><span class="o">=</span><span class="s">network-online.target</span>
@@ -32,9 +29,8 @@ remote host:</p>
 <span class="na">ExecStart</span><span class="o">=</span><span class="s">rsync -a /opt/media/ remote_user@remote_host:/opt/media/</span>
 </code></pre></div>
 
-<p>Here's the same service, extended to send a start signal to SITE_NAME before the
-main command runs, and to report the command's exit status to SITE_NAME after it
-completes:</p>
+<p>以下是相同的服务，扩展为在主命令运行前向 SITE_NAME 发送 start 信号，
+并在完成后向 SITE_NAME 报告命令的退出状态：</p>
 <div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Copy /opt/media to remote_host, with SITE_NAME monitoring</span>
 <span class="na">Requires</span><span class="o">=</span><span class="s">network-online.target</span>
@@ -46,29 +42,28 @@ completes:</p>
 <span class="na">ExecStopPost</span><span class="o">=</span><span class="s">curl -sS -m 10 --retry 5 PING_URL/${EXIT_STATUS}</span>
 </code></pre></div>
 
-<p>The <code>ExecStartPre</code> command runs before the main process. The "-" prefix in front of the
-command is important and tells Systemd to ignore curl failure (timeout or non-zero exit
-status), which could otherwise prevent the main command from running.</p>
-<p>The <code>ExecStopPost</code> command runs after the main process finishes. Systemd provides an
-<code>$EXIT_STATUS</code> variable with the exit status of the main process (a 0-255 number).
-SITE_NAME will consider exit status 0 as success, and anything above 0 as failure.</p>
-<p>curl flags:</p>
+<p><code>ExecStartPre</code> 命令在主进程之前运行。命令前面的 "-" 前缀
+很重要，它告诉 Systemd 忽略 curl 失败（超时或非零退出状态），
+否则可能会阻止主命令运行。</p>
+<p><code>ExecStopPost</code> 命令在主进程完成后运行。Systemd 提供了一个
+<code>$EXIT_STATUS</code> 变量，包含主进程的退出状态（0-255 的数字）。
+SITE_NAME 将退出状态 0 视为成功，高于 0 的任何值视为失败。</p>
+<p>curl 标志：</p>
 <ul>
-<li><code>-sS</code> means "suppress output except errors". This is so that if the curl call fails,
-  the error is printed in system logs.</li>
-<li><code>-m &lt;seconds&gt;</code> is the maximum in seconds that the HTTP request is allowed to take.</li>
-<li><code>--retry &lt;num&gt;</code> is how many times curl will retry transient failures
-  (timeouts, HTTP 5xx status codes).</li>
+<li><code>-sS</code> 表示"抑制输出，错误除外"。这样如果 curl 调用失败，
+  错误会打印到系统日志中。</li>
+<li><code>-m &lt;seconds&gt;</code> 是允许 HTTP 请求花费的最长时间（秒）。</li>
+<li><code>--retry &lt;num&gt;</code> 是 curl 重试瞬时失败的次数
+  （超时、HTTP 5xx 状态码）。</li>
 </ul>
-<p>This example only requires curl to be installed on the system but does not capture
-the command's output.</p>
-<p>Read more about <a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#ExecStartPre=">ExecStartPre</a>
-and <a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#ExecStopPost=">ExecStopPost</a>
-in Systemd documentation.</p>
-<h2>Using runitor</h2>
-<p>An alternative is to use <a href="https://github.com/bdd/runitor">runitor</a> which takes care of
-sending the start, success, and failure signals, and also captures and truncates
-command's output:</p>
+<p>此示例仅要求系统上安装了 curl，但不会捕获命令的输出。</p>
+<p>在 Systemd 文档中阅读更多关于
+<a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#ExecStartPre=">ExecStartPre</a>
+和 <a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#ExecStopPost=">ExecStopPost</a>
+的信息。</p>
+<h2>使用 runitor</h2>
+<p>另一种选择是使用 <a href="https://github.com/bdd/runitor">runitor</a>，它负责
+发送 start、success 和 failure 信号，并捕获和截断命令的输出：</p>
 <div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Copy /opt/media to remote_host, with runitor</span>
 <span class="na">Requires</span><span class="o">=</span><span class="s">network-online.target</span>
@@ -78,13 +73,12 @@ command's output:</p>
 <span class="na">ExecStart</span><span class="o">=</span><span class="s">runitor -uuid your-uuid-here -- rsync -a /opt/media/ remote_user@remote_host:/opt/media/</span>
 </code></pre></div>
 
-<p>Of course, the above example relies on the runitor binary being available in the
-system PATH.</p>
-<h2>OnCalendar Schedules</h2>
-<p>Inside the <code>.timer</code> file, the task's schedule is set using the <code>OnCalendar</code> option
-which takes a calendar event expression:</p>
+<p>当然，上述示例依赖于 runitor 二进制文件在系统 PATH 中可用。</p>
+<h2>OnCalendar 计划</h2>
+<p>在 <code>.timer</code> 文件内部，任务的计划使用 <code>OnCalendar</code> 选项设置，
+该选项接受一个日历事件表达式：</p>
 <div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Run copy-media.service every 4 hours on workdays</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">在工作日每 4 小时运行 copy-media.service</span>
 
 <span class="k">[Timer]</span>
 <span class="na">OnCalendar</span><span class="o">=</span><span class="s">Mon-Fri *-*-* 0/4:00</span>
@@ -93,9 +87,10 @@ which takes a calendar event expression:</p>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">timers.target</span>
 </code></pre></div>
 
-<p>The calendar event expressions are different from cron expressions. SITE_NAME supports
-them natively–you can specify a check's schedule using
-the same expression you use in the <code>.timer</code> file:</p>
-<p><img alt="Editing OnCalendar schedule" src="IMG_URL/edit_oncalendar_schedule.png" /></p>
-<p>Read more about <a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html#Calendar%20Events">calendar event expressions</a>
-in Systemd docs.</p>
+<p>日历事件表达式与 cron 表达式不同。SITE_NAME 原生支持它们——
+你可以使用与 <code>.timer</code> 文件中相同的表达式来指定检查项的
+计划：</p>
+<p><img alt="编辑 OnCalendar 计划" src="IMG_URL/edit_oncalendar_schedule.png" /></p>
+<p>在 Systemd 文档中阅读更多关于
+<a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html#Calendar%20Events">日历事件表达式</a>
+的信息。</p>

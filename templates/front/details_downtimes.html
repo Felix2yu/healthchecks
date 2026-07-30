@@ -8,10 +8,10 @@
             {% if d.no_data %}
                 –
             {% elif d.count %}
-                {{ d.count }} downtime{{ d.count|pluralize }}, {{ d.duration|hc_approx_duration }} total
+                宕机 {{ d.count }} 次，共 {{ d.duration|hc_approx_duration }}
                 <span class="uptime">{{ d.monthly_uptime|pct }}% uptime</span>
             {% else %}
-                All good!
+                一切正常！
             {% endif %}
         </td>
     </tr>

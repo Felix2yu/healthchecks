@@ -1,6 +1,6 @@
 {% load hc_extras %}
 {% if membership %}
-    You have been invited to join {{ membership.project|safe }} on {% site_name %}
+    您已被邀请加入 {{ membership.project|safe }}（{% site_name %}）
 {% else %}
-    Log in to {% site_name %}
+    登录 {% site_name %}
 {% endif %}

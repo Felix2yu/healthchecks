@@ -2,19 +2,19 @@
 {% load hc_extras %}
 
 {% block content %}
-Hello,<br />
+您好，<br />
 
-We’re sending this email to notify you that your {% site_name %} account, registered to {{ email }} has been inactive for 1 year or more.  If you no longer wish to keep your {% site_name %} account active then we will make sure that your account is closed and any data associated with your account is permanently deleted from our systems.<br /><br />
+我们发送此邮件是为了通知您，您在 {% site_name %} 上注册于 {{ email }} 的账户已处于非活动状态一年或更长时间。如果您不再希望保留 {% site_name %} 账户，我们将确保您的账户关闭，并且与您账户相关的所有数据将从我们的系统中永久删除。<br /><br />
 
-If you wish to keep your account, simply log in within 30 days. If you continue to be inactive, <strong>your account will be permanently deleted after the 30 day period</strong>.<br /><br />
+如果您希望保留账户，只需在 30 天内登录即可。如果您继续保持非活动状态，<strong>您的账户将在 30 天后被永久删除</strong>。<br /><br />
 
-If you have issues logging in, or have any questions, please reach out to us at {{ support_email }}.<br /><br />
+如果您在登录时遇到问题或有任何疑问，请通过 {{ support_email }} 联系我们。<br /><br />
 
-Sincerely,<br />
-The {% site_name %} Team
+此致，<br />
+{% site_name %} 团队
 {% endblock %}
 
 {% block unsub %}
 <br />
-This is a one-time message we're sending out to notify you about your account closure.
+这是一次性消息，我们发送此消息是为了通知您账户关闭事宜。
 {% endblock %}

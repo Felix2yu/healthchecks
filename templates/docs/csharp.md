@@ -1,6 +1,6 @@
 # C\#
 
-Below is an example of making an HTTP request to SITE_NAME from C#.
+以下是从 C# 向 SITE_NAME 发起 HTTP 请求的示例。
 
 ```csharp
 try

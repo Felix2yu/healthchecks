@@ -1,91 +1,88 @@
-<h1>Shell Scripts</h1>
-<p>You can easily add SITE_NAME monitoring to a shell script. All you
-have to do is make an HTTP request at an appropriate place in the script.
-<a href="https://curl.haxx.se/docs/manpage.html">curl</a> and
+<h1>Shell 脚本</h1>
+<p>你可以轻松地为 shell 脚本添加 SITE_NAME 监控。只需在脚本中的适当位置发起 HTTP 请求即可。
+<a href="https://curl.haxx.se/docs/manpage.html">curl</a> 和
 <a href="https://www.gnu.org/software/wget/manual/wget.html">wget</a>
-are two common command-line HTTP clients you can use.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Sends an HTTP GET request with curl:</span>
+是两种常用的命令行 HTTP 客户端。</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 使用 curl 发送 HTTP GET 请求：</span>
 curl<span class="w"> </span>-m<span class="w"> </span><span class="m">10</span><span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>PING_URL
 
-<span class="c1"># Silent version (no stdout/stderr output unless curl hits an error):</span>
+<span class="c1"># 静默版本（除非 curl 遇到错误，否则不输出 stdout/stderr）：</span>
 curl<span class="w"> </span>-fsS<span class="w"> </span>-m<span class="w"> </span><span class="m">10</span><span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>PING_URL
 </code></pre></div>
 
-<p>Here's what each curl parameter does:</p>
+<p>以下是每个 curl 参数的作用：</p>
 <dl>
 <dt><strong>-m &lt;seconds&gt;</strong></dt>
-<dd>Maximum time in seconds that you allow the HTTP request to take.
-If you use the <code>--retry</code> parameter, then the time counter is reset
-at the start of each retry.</dd>
+<dd>允许 HTTP 请求花费的最长时间（秒）。
+如果使用了 <code>--retry</code> 参数，则每次重试开始时计时器会重置。</dd>
 <dt><strong>--retry &lt;num&gt;</strong></dt>
-<dd>On transient errors, retry up to this many times. By default, curl
-uses an increasing delay between each retry (1s, 2s, 4s, 8s, ...).
-See also <a href="https://curl.haxx.se/docs/manpage.html#--retry-delay">--retry-delay</a>.
-Transient errors are: timeouts, HTTP status codes 408, 429, 500, 502, 503, 504.</dd>
+<dd>对于瞬时错误，最多重试这么多次。默认情况下，curl
+会在每次重试之间使用递增的延迟（1s、2s、4s、8s...）。
+另请参阅 <a href="https://curl.haxx.se/docs/manpage.html#--retry-delay">--retry-delay</a>。
+瞬时错误包括：超时、HTTP 状态码 408、429、500、502、503、504。</dd>
 <dt><strong>-f, --fail</strong></dt>
-<dd>Makes curl treat non-200 responses as errors, and
-<a href="https://curl.se/docs/manpage.html#-f">return error 22</a>.</dd>
+<dd>使 curl 将非 200 的响应视为错误，并
+<a href="https://curl.se/docs/manpage.html#-f">返回错误码 22</a>。</dd>
 <dt><strong>-s, --silent</strong></dt>
-<dd>Silent or quiet mode. Hides the progress meter, but also
-hides error messages.</dd>
+<dd>静默或安静模式。隐藏进度条，但也会
+隐藏错误消息。</dd>
 <dt><strong>-S, --show-error</strong></dt>
-<dd>Re-enables error messages when -s is used.</dd>
+<dd>在使用 -s 时重新启用错误消息。</dd>
 <dt><strong>-o /dev/null</strong></dt>
-<dd>Redirects curl's stdout to /dev/null (error messages still go to stderr).</dd>
+<dd>将 curl 的 stdout 重定向到 /dev/null（错误消息仍会发送到 stderr）。</dd>
 </dl>
-<h2>Signaling Failure from Shell Scripts</h2>
-<p>You can append <code>/fail</code> or <code>/{exit-status}</code> to any ping URL and use the resulting URL
-to actively signal a failure. The exit status should be a 0-255 integer.
-SITE_NAME will interpret exit status 0 as success and all non-zero values as failures.</p>
-<p>The following example runs <code>/usr/bin/certbot renew</code>, and uses the <code>$?</code> variable to
-look up its exit status:</p>
+<h2>从 Shell 脚本发送故障信号</h2>
+<p>你可以将 <code>/fail</code> 或 <code>/{exit-status}</code> 附加到任何 ping URL，并使用生成的 URL
+主动发送故障信号。退出状态应为 0-255 的整数。
+SITE_NAME 将退出状态 0 解释为成功，所有非零值解释为失败。</p>
+<p>以下示例运行 <code>/usr/bin/certbot renew</code>，并使用 <code>$?</code> 变量来
+获取其退出状态：</p>
 <div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
 
-<span class="c1"># Payload here:</span>
+<span class="c1"># 此处为实际任务：</span>
 /usr/bin/certbot<span class="w"> </span>renew
 <span class="c1"># Ping SITE_NAME</span>
 curl<span class="w"> </span>-m<span class="w"> </span><span class="m">10</span><span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>PING_URL/<span class="nv">$?</span>
 </code></pre></div>
 
-<p>Note on pipelines (<code>command1 | command2 | command3</code>) in Bash scripts: by default, a
-pipeline's exit status is the exit status of the rightmost command in the pipeline.
-Use <code>set -o pipefail</code> if you need the pipeline to return non-zero exit status if <em>any</em>
-part of the pipeline fails:</p>
+<p>关于 Bash 脚本中管道（<code>command1 | command2 | command3</code>）的说明：默认情况下，管道的
+退出状态是管道中最右侧命令的退出状态。
+如果你需要管道在<em>任何</em>部分失败时返回非零退出状态，请使用 <code>set -o pipefail</code>：</p>
 <div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
 
 <span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>pipefail
 pg_dump<span class="w"> </span>somedb<span class="w"> </span><span class="p">|</span><span class="w"> </span>gpg<span class="w"> </span>--encrypt<span class="w"> </span>--recipient<span class="w"> </span>alice@example.org<span class="w"> </span>--output<span class="w"> </span>somedb.sql.gpg
-<span class="c1"># Without pipefail, if pg_dump command fails, but gpg succeeds, $? will be 0,</span>
-<span class="c1"># and the script will report success.</span>
-<span class="c1"># With pipefail, if pg_dump fails, the script will report the exit code returned by pg_dump.</span>
+<span class="c1"># 如果没有 pipefail，如果 pg_dump 命令失败但 gpg 成功，$? 将为 0，</span>
+<span class="c1"># 脚本将报告成功。</span>
+<span class="c1"># 使用 pipefail 后，如果 pg_dump 失败，脚本将报告 pg_dump 返回的退出码。</span>
 curl<span class="w"> </span>-m<span class="w"> </span><span class="m">10</span><span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>PING_URL/<span class="nv">$?</span>
 </code></pre></div>
 
-<h2>Logging Command Output</h2>
-<p>When pinging with HTTP POST, you can put extra diagnostic information in the request
-body. If the request body looks like a valid UTF-8 string, SITE_NAME
-will accept and store the first PING_BODY_LIMIT_FORMATTED of the request body.</p>
-<p>In the below example, certbot's output is captured and submitted via HTTP POST:</p>
+<h2>记录命令输出</h2>
+<p>使用 HTTP POST 进行 ping 时，可以在请求体中放入额外的诊断信息。
+如果请求体看起来是有效的 UTF-8 字符串，SITE_NAME
+将接受并存储请求体的前 PING_BODY_LIMIT_FORMATTED。</p>
+<p>在下面的示例中，certbot 的输出被捕获并通过 HTTP POST 提交：</p>
 <div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
 
 <span class="nv">m</span><span class="o">=</span><span class="k">$(</span>/usr/bin/certbot<span class="w"> </span>renew<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="k">)</span>
 curl<span class="w"> </span>-fsS<span class="w"> </span>-m<span class="w"> </span><span class="m">10</span><span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>--data-raw<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$m</span><span class="s2">&quot;</span><span class="w"> </span>PING_URL
 </code></pre></div>
 
-<h2>Auto Provisioning New Checks</h2>
-<p>This example uses SITE_NAME <a href="../autoprovisioning/">auto provisioning feature</a> to
-create a check "on the fly" if it does not already exist. Using this technique, you can
-write services that automatically register with SITE_NAME the first time they run.</p>
+<h2>自动配置新检查项</h2>
+<p>此示例使用 SITE_NAME 的<a href="../autoprovisioning/">自动配置功能</a>来
+在检查项尚不存在时"即时"创建。使用此技术，你可以
+编写在首次运行时自动向 SITE_NAME 注册的服务。</p>
 <div class="highlight"><pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="nv">PING_KEY</span><span class="o">=</span>fixme-your-ping-key-here
 
-<span class="c1"># Use system&#39;s hostname as check&#39;s slug</span>
+<span class="c1"># 使用系统的主机名作为检查项的标识</span>
 <span class="nv">SLUG</span><span class="o">=</span><span class="k">$(</span>hostname<span class="k">)</span>
 
-<span class="c1"># Construct a ping URL and append &quot;?create=1&quot; at the end:</span>
+<span class="c1"># 构造 ping URL 并在末尾追加 &quot;?create=1&quot;：</span>
 <span class="nv">URL</span><span class="o">=</span>PING_ENDPOINT<span class="nv">$PING_KEY</span>/<span class="nv">$SLUG</span>?create<span class="o">=</span><span class="m">1</span>
 
-<span class="c1"># Send a ping:</span>
+<span class="c1"># 发送 ping：</span>
 curl<span class="w"> </span>-m<span class="w"> </span><span class="m">10</span><span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="nv">$URL</span>
 </code></pre></div>

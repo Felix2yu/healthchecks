@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Google Chat Integration for {{ site_name }}{% endblock %}
+{% block title %}Google Chat 集成 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -9,45 +9,44 @@
     <h1>Google Chat</h1>
     <div class="jumbotron">
         {% if request.user.is_authenticated %}
-        <p>If your team uses <a href="https://chat.google.com/">Google Chat</a>, you can set
-        up {{ site_name }} to post alerts directly to an appropriate
-        Google Chat space when a check goes <strong>up</strong>
-            or <strong>down</strong>.
+        <p>如果您的团队使用 <a href="https://chat.google.com/">Google Chat</a>，您可以设置
+        {{ site_name }} 在检查项<strong>恢复</strong>
+        或<strong>宕机</strong>时直接发布告警到指定的 Google Chat 空间。
         </p>
         {% else %}
         <p>
-            {{ site_name }} is a free and
-            <a href="https://github.com/healthchecks/healthchecks">open source</a>
-            service for monitoring <strong>cron jobs</strong>, <strong>background processes</strong> and
-            <strong>scheduled tasks</strong>. When {% site_name %} detects a problem, it can notify
-            you by posting to a Google Chat space. To set up the Google Chat
-            integration, please log into {{ site_name }}:
+            {{ site_name }} 是一个免费且
+            <a href="https://github.com/healthchecks/healthchecks">开源</a>
+            的服务，用于监控 <strong>cron 任务</strong>、<strong>后台进程</strong>和
+            <strong>计划任务</strong>。当 {% site_name %} 检测到问题时，可以通过
+            向 Google Chat 空间发布消息来通知您。要设置 Google Chat
+            集成，请登录 {{ site_name }}：
         </p>
 
         <div class="text-center">
             <a href="{% url 'hc-login' %}"
-               class="btn btn-primary btn-lg">Log In</a>
+               class="btn btn-primary btn-lg">登录</a>
         </div>
         {% endif %}
     </div>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
 
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                From a browser, log into your Google Chat account, and go to the space
-                where you want to post {% site_name %} notifications.
+                在浏览器中登录您的 Google Chat 账号，进入要发布
+                {% site_name %} 通知的空间。
             </p>
             <p>
-                Next to the space title, click the down arrow, and then click <strong>Apps & integrations</strong>.
+                在空间标题旁，点击向下箭头，然后点击 <strong>应用与集成</strong>。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_googlechat_1.png' %}">
         </div>
     </div>
@@ -55,13 +54,13 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Click <strong>+ Add webhooks</strong>.
+                点击 <strong>+ 添加 Webhook</strong>。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_googlechat_2.png' %}">
         </div>
     </div>
@@ -69,17 +68,17 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                In the <strong>Name</strong> field, enter
-                <strong>{% site_name %}</strong>.
+                在<strong>名称</strong>字段中输入
+                <strong>{% site_name %}</strong>。
             </p>
             <p>
-                Click <strong>Save</strong>.
+                点击<strong>保存</strong>。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_googlechat_3.png' %}">
         </div>
     </div>
@@ -87,25 +86,25 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Copy the the webhook URL and paste it in the form. Done!
+                复制 Webhook 链接并粘贴到表单中。完成！
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_googlechat_4.png' %}">
         </div>
     </div>
 
 
     {% if project %}
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
     <form method="post" class="form-horizontal">
         {% csrf_token %}
 
         <div class="form-group {{ form.room_id.css_classes }}">
-            <label for="url" class="col-sm-2 control-label">Webhook URL</label>
+            <label for="url" class="col-sm-2 control-label">Webhook 链接</label>
             <div class="col-sm-6">
                 <input
                     id="url"
@@ -123,7 +122,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

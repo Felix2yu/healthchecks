@@ -1,109 +1,108 @@
-# Projects and Teams
+# 项目和团队
 
-Use Projects to organize checks in your SITE_NAME account. Your account initially
-has a single default project. You can create additional projects and transfer
-your checks between them as your usage grows.
+使用项目来组织 SITE_NAME 帐户中的检查项。您的帐户最初
+有一个默认项目。随着使用量的增长，您可以创建其他项目并在它们之间
+转移检查项。
 
-![An overview of projects](IMG_URL/projects.png)
+![项目概览](IMG_URL/projects.png)
 
-Checks and integrations are project-scoped: each check and each configured
-integration always belongs to a particular project.
+检查项和集成是项目作用域的：每个检查项和每个已配置的
+集成始终属于特定项目。
 
-## Team Access
+## 团队访问
 
-You can grant your colleagues access to a project by inviting them into
-the project's team. Each project has its separate team, so you can grant access
-selectively. Inviting team members is **more convenient and more
-secure** than sharing a password to a single account.
+您可以通过邀请同事加入项目团队来授予他们对项目的
+访问权限。每个项目都有其独立的团队，因此您可以选择性地
+授予访问权限。邀请团队成员**比共享单个帐户的密码更方便、更
+安全**。
 
-You can manage each project's team from its Settings page:
+您可以从其 Settings 页面管理每个项目的团队：
 
-![Team access section](IMG_URL/team_access.png)
+![团队访问部分](IMG_URL/team_access.png)
 
-The user who created the project is listed as **Owner**. When you invite a user
-to the project, you can select one of the three roles for their membership:
-**Team Member** (what you usually want), **Manager** or **Read-only**.
+创建项目的用户被列为 **Owner**。当您邀请用户
+加入项目时，您可以为他们的成员身份选择三个角色之一：
+**Team Member**（您通常想要的）、**Manager** 或 **Read-only**。
 
-Team Members can:
+团队成员可以：
 
-* create, edit and remove checks
-* create and remove integrations
-* rename the project
-* view and regenerate project's API keys
-* give up their membership
-(from their [Account Settings](../../accounts/profile/) page)
+* 创建、编辑和删除检查项
+* 创建和删除集成
+* 重命名项目
+* 查看和重新生成项目的 API 密钥
+* 放弃其成员身份
+（从他们的[帐户设置](../../accounts/profile/)页面）
 
-Team Members can not:
+团队成员不能：
 
-* invite new members to the project
-* change project's owner
-* manage project owner's billing settings
-* remove the project
+* 邀请新成员加入项目
+* 更改项目的所有者
+* 管理项目所有者的计费设置
+* 删除项目
 
-**Managers** have the same permissions as Team Members, with one exception:
-Managers can invite new members and remove existing members from the project's team.
-Managers still can not change or remove the project's owner, or manage billing.
+**Manager** 拥有与 Team Member 相同的权限，只有一个例外：
+Manager 可以邀请新成员并从项目团队中移除现有成员。
+Manager 仍然不能更改或删除项目的所有者，或管理计费。
 
-**Read-only** members can:
+**Read-only** 成员可以：
 
-* view checks, including check details and ping logs
-* view integrations
-* give up their membership
+* 查看检查项，包括检查项详细信息和 ping 日志
+* 查看集成
+* 放弃其成员身份
 
-Read-only members can not modify checks, integrations, or project settings.
-They also cannot access the project's API keys, as that would effectively give them
-read-write access through API.
+Read-only 成员不能修改检查项、集成或项目设置。
+他们也不能访问项目的 API 密钥，因为那将实际上通过 API
+授予他们读写访问权限。
 
-## Transferring Checks Between Projects {: #transferring-checks }
+## 在项目之间转移检查项 {: #transferring-checks }
 
-You can transfer a check between projects, **and keep its ping address**. To transfer
-a check, go to its details page, and look for the "Transfer to Another Project&hellip;"
-button.
+您可以在项目之间转移检查项，**并保留其 ping 地址**。要转移
+检查项，请转到其详情页面，查找"Transfer to Another Project&hellip;"
+按钮。
 
-![The transfer dialog](IMG_URL/transfer_check.png)
+![转移对话框](IMG_URL/transfer_check.png)
 
-The transfer dialog will list all projects you have access to (with the Team Member
-or Manager role). If you do not see a particular project in the dialog, make sure
-you are logged into the correct user account, and your user account belongs to the
-project's team.
+转移对话框将列出您有权访问的所有项目（具有 Team Member
+或 Manager 角色）。如果您在对话框中看不到特定项目，请确保
+您已登录到正确的用户帐户，并且您的用户帐户属于该
+项目的团队。
 
-## Transferring Projects Between Accounts {: #transferring-projects }
+## 在帐户之间转移项目 {: #transferring-projects }
 
-You can transfer entire projects between SITE_NAME accounts. This is particularly
-useful when consolidating multiple accounts into one account.
-To transfer a project, go to its settings page, and look for the
-"Transfer Project&hellip;" button. Only project's owner can transfer the project to
-another account–if you are not the owner, you will not see the button.
+您可以在 SITE_NAME 帐户之间转移整个项目。这在将多个帐户合并到一
+个帐户时特别有用。
+要转移项目，请转到其设置页面，查找
+"Transfer Project&hellip;"按钮。只有项目的所有者才能将项目转移到
+另一个帐户——如果您不是所有者，您将看不到该按钮。
 
-![The transfer dialog](IMG_URL/transfer_project.png)
+![转移对话框](IMG_URL/transfer_project.png)
 
-The transfer dialog will list the current team members. Select the desired new
-owner, and click "Initiate Transfer". The chosen team member will receive
-an email asking to confirm the ownership change. After they confirm,
-they will become the project's owner, and you will become a Team Member.
+转移对话框将列出当前的团队成员。选择所需的新
+所有者，然后点击"Initiate Transfer"。被选中的团队成员将收到
+一封要求确认所有权变更的电子邮件。在他们确认后，
+他们将成为项目的所有者，而您将成为 Team Member。
 
-## Check Limits
+## 检查项限制
 
-**Check Limit** is the total number of checks your account can have. The specific
-limit depends on the account's billing plan. When you reach the Check Limit,
-you will not be able to create new checks.
+**检查项限制**是您的帐户可以拥有的检查项总数。具体
+限制取决于帐户的计费计划。当您达到检查项限制时，
+您将无法创建新的检查项。
 
-All projects owned by your account shares your account's Check Limit.
-For example, consider a Business account with two projects,
-"Project A" and "Project B." If A has 70 checks, then B cannot have more than
-30 checks in order to not exceed the Business account's total limit of 100.
+您帐户拥有的所有项目共享您帐户的检查项限制。
+例如，考虑一个具有两个项目的 Business 帐户，
+"Project A"和"Project B"。如果 A 有 70 个检查项，那么 B 不能超过
+30 个检查项，以免超过 Business 帐户的总限制 100。
 
-However, only checks from your own projects count towards your account's
-quota. If you get invited to somebody else's project, that does not change
-the number of checks you can create in your projects.
+但是，只有您自己项目中的检查项会计入您帐户的
+配额。如果您被邀请加入其他人的项目，那不会改变
+您可以在自己项目中创建的检查项数量。
 
-## Monthly / Weekly / Daily Email Reports
+## 月度 / 每周 / 每日电子邮件报告
 
-SITE_NAME can optionally send periodic email reports with a summary of checks
-from **all projects you have access to** – both the projects you own and the projects
-you are a member of. For each check, the reports show the check's current status
-and its downtime statistics.
+SITE_NAME 可以选择性地发送定期电子邮件报告，摘要显示
+**您有权访问的所有项目**中的检查项——包括您拥有的项目和您
+是其成员的项目。对于每个检查项，报告显示检查项的当前状态
+及其停机统计信息。
 
-You can configure the frequency of the reports (monthly, on the 1st of every month,
-or weekly, on Mondays, or daily) or turn them off altogether in
-[Account Settings › Email Reports](../../accounts/profile/notifications/).
+您可以在[帐户设置 › 电子邮件报告](../../accounts/profile/notifications/)中配置报告的频率
+（每月（每月1日）、每周（周一）或每日）或完全关闭它们。

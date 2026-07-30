@@ -14,11 +14,11 @@ class TimestampField(forms.Field):
         try:
             value_int = int(value)
         except ValueError:
-            raise ValidationError(message="Must be an integer")
+            raise ValidationError(message="必须为整数")
 
         # 10000000000 is year 2286 (a sanity check)
         if value_int < 0 or value_int > 10000000000:
-            raise ValidationError(message="Out of bounds")
+            raise ValidationError(message="超出范围")
 
         return datetime.fromtimestamp(value_int, timezone.utc)
 

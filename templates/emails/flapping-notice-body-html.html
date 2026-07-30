@@ -2,30 +2,26 @@
 {% load hc_extras %}
 
 {% block content %}
-Hello,<br /><br />
+您好，<br /><br />
 
-The check <a href="{{ check.cloaked_url }}"><strong>{{ check.name }}</strong></a>
-in project <strong>{{ check.project.name }}</strong> is currently flapping.
-It has changed between the "up" and "down" states <strong>{{ num_flips }}</strong>
-times in the last 24 hours.<br /><br />
+项目 <strong>{{ check.project.name }}</strong> 中的检查项 <a href="{{ check.cloaked_url }}"><strong>{{ check.name }}</strong></a>
+当前处于抖动状态。
+在过去 24 小时内，它在"正常"和"宕机"状态之间切换了 <strong>{{ num_flips }}</strong>
+次。<br /><br />
 
-Common reasons for a check changing its state frequently are:<br />
+检查项频繁变更状态的常见原因有：<br />
 
-&bull; The monitored system is misbehaving and changing between healthy and unhealthy
-states frequently.<br />
-&bull; The check is configured incorrectly: either its schedule is wrong, or its
-grace time is too short.<br /><br />
+&bull; 被监控系统行为异常，频繁在健康与不健康状态之间切换。<br />
+&bull; 检查项配置不正确：调度有误，或者宽限期过短。<br /><br />
 
-Please look into the cause of the frequent state changes and see if anything needs to
-be fixed. If you have trouble accessing your {% site_name %} account, or have any
-questions, please reach out to us at {{ support_email }}.<br /><br />
+请排查频繁状态变更的原因，看看是否需要修复。如果您在访问 {% site_name %} 账户时遇到问题，
+或有任何疑问，请通过 {{ support_email }} 联系我们。<br /><br />
 
-Sincerely,<br />
-The {% site_name %} Team
+此致，<br />
+{% site_name %} 团队
 {% endblock %}
 
 {% block unsub %}
 <br />
-This is a mandatory message we're sending out to notify you about an issue with
-your {% site_name %} account.
+这是一条强制性消息，我们发送此消息是为了通知您 {% site_name %} 账户的问题。
 {% endblock %}

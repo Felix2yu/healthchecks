@@ -14,11 +14,16 @@ class Unit:
         self.nsecs = nsecs
 
 
-SECOND = Unit("second", 1)
-MINUTE = Unit("minute", 60)
-HOUR = Unit("hour", MINUTE.nsecs * 60)
-DAY = Unit("day", HOUR.nsecs * 24)
-WEEK = Unit("week", DAY.nsecs * 7)
+SECOND = Unit("秒", 1)
+SECOND.plural = "秒"
+MINUTE = Unit("分钟", 60)
+MINUTE.plural = "分钟"
+HOUR = Unit("小时", MINUTE.nsecs * 60)
+HOUR.plural = "小时"
+DAY = Unit("天", HOUR.nsecs * 24)
+DAY.plural = "天"
+WEEK = Unit("周", DAY.nsecs * 7)
+WEEK.plural = "周"
 
 
 def format_duration(duration: timedelta) -> str:
@@ -43,7 +48,7 @@ def format_duration(duration: timedelta) -> str:
 def format_hms(duration: timedelta) -> str:
     total_seconds = duration.total_seconds()
     if 0.01 <= total_seconds < 1:
-        return f"{total_seconds:.2f} sec"
+        return f"{total_seconds:.2f} 秒"
 
     total_seconds = int(total_seconds)
     result = []
@@ -52,12 +57,12 @@ def format_hms(duration: timedelta) -> str:
     h, mins = divmod(mins, 60)
 
     if h:
-        result.append(f"{h} h")
+        result.append(f"{h} 小时")
 
     if h or mins:
-        result.append(f"{mins} min")
+        result.append(f"{mins} 分钟")
 
-    result.append(f"{secs} sec")
+    result.append(f"{secs} 秒")
 
     return " ".join(result)
 
@@ -70,15 +75,15 @@ def format_approx_duration(duration: timedelta) -> str:
     days, hours = divmod(hours, 24)
 
     if days == 1:
-        return f"1 day {hours} h"
+        return f"1 天 {hours} 小时"
 
     if days:
-        return f"{days} days {hours} h"
+        return f"{days} 天 {hours} 小时"
 
     if hours:
-        return f"{hours} h {mins} min"
+        return f"{hours} 小时 {mins} 分钟"
 
-    return f"{mins} min {secs} sec"
+    return f"{mins} 分钟 {secs} 秒"
 
 
 def format_duration_for_sentence(duration: timedelta) -> str:
@@ -89,15 +94,15 @@ def format_duration_for_sentence(duration: timedelta) -> str:
     days, hours = divmod(hours, 24)
 
     if days:
-        return f"{days} day{pluralize(days)}, {hours} hour{pluralize(hours)}"
+        return f"{days} 天, {hours} 小时"
 
     if hours:
-        return f"{hours} hour{pluralize(hours)}, {mins} minute{pluralize(mins)}"
+        return f"{hours} 小时, {mins} 分钟"
 
     if mins:
-        return f"{mins} minute{pluralize(mins)}, {secs} second{pluralize(secs)}"
+        return f"{mins} 分钟, {secs} 秒"
 
-    return f"{secs} second{pluralize(secs)}"
+    return f"{secs} 秒"
 
 
 def month_boundaries(months: int, tzstr: str) -> list[datetime]:

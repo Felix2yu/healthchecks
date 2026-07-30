@@ -5,11 +5,11 @@
 
 <div class="row">
 <form class="col-sm-6 col-sm-offset-3" method="post">
-    <h1>Two-factor Authentication</h1>
+    <h1>双重身份验证</h1>
     {% csrf_token %}
 
     <p>
-        Please enter the six-digit code from your authenticator app.
+        请输入您身份验证器应用中的六位数字验证码。
     </p>
 
     <div class="form-group {{ form.code.css_classes }}">
@@ -18,8 +18,8 @@
             type="text"
             name="code"
             pattern="[0-9]{6}"
-            title="6-digit code"
-            placeholder="6-digit code"
+            title="六位数字验证码"
+            placeholder="六位验证码"
             data-auto-submit="1"
             class="form-control input-lg"
             required
@@ -37,7 +37,7 @@
             class="btn btn-primary"
             type="submit"
             name=""
-            value="Continue">
+            value="继续">
     </div>
 </form>
 </div>

@@ -2,33 +2,33 @@
 {% load humanize hc_extras %}
 
 {% block content %}
-Hello,<br />
+您好，<br />
 
-This is a
-{% if nag_period == 3600 %}hourly{% endif %}
-{% if nag_period == 86400 %}daily{% endif %}
-reminder sent by <a href="{% site_root %}">{% site_name %}</a>.<br />
+这是由 <a href="{% site_root %}">{% site_name %}</a> 发送的
+{% if nag_period == 3600 %}每小时{% endif %}
+{% if nag_period == 86400 %}每日{% endif %}
+提醒。<br />
 
 {% if num_down == 1%}
-One check is currently <strong>DOWN</strong>:<br />
+当前有 <strong>1</strong> 个检查项<strong>宕机</strong>：<br />
 {% else %}
-{{ num_down }} checks are currently <strong>DOWN</strong>:<br />
+当前有 <strong>{{ num_down }}</strong> 个检查项<strong>宕机</strong>：<br />
 {% endif %}
 
 {% include "emails/nag-summary-html.html" %}
 
-<strong>Too many notifications?</strong>
-Visit the <a href="{{ notifications_url }}">Email Reports</a>
-page on {% site_name %} to set your notification preferences.
+<strong>通知太多？</strong>
+请在 {% site_name %} 上访问<a href="{{ notifications_url }}">邮件报告</a>
+页面设置您的通知偏好。
 <br /><br />
 
-Cheers,<br>
-The {% site_name %} Team
+此致，<br>
+{% site_name %} 团队
 {% endblock %}
 
 {% block unsub %}
 <br>
 <a href="{{ unsub_link }}" target="_blank" style="color: #666666; text-decoration: underline;">
-    Unsubscribe
+    取消订阅
 </a>
 {% endblock %}

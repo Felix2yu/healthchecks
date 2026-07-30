@@ -45,7 +45,7 @@ $(function () {
         return false;
     });
 
-    $("code[data-plaintext]").tooltip({"title": "Click to reveal"});
+    $("code[data-plaintext]").tooltip({"title": "点击显示"});
     $("code[data-plaintext]").click(function () {
         $(this).text(this.dataset.plaintext).tooltip("destroy");
     });

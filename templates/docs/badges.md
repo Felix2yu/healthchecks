@@ -1,39 +1,37 @@
-# Status Badges
+# 状态徽章
 
-SITE_NAME provides status badges that you can embed in your READMEs, internal
-dashboards, or public status pages. Each SITE_NAME badge reports the combined status of
-all checks in the project, the status of checks tagged with a specific tag, or the
-status of a single specific check.
+SITE_NAME 提供状态徽章，您可以嵌入到 README、内部
+仪表板或公共状态页面中。每个 SITE_NAME 徽章报告项目中所有检查项的
+组合状态、标记了特定标签的检查项的状态，
+或单个特定检查项的状态。
 
-![The "Badges" page](IMG_URL/badges.png)
+!["Badges"页面](IMG_URL/badges.png)
 
-The badges have public but hard-to-guess URLs. Badges do not expose information
-other than the badge label and the aggregate status of their corresponding checks.
-It is not possible to reverse-engineer ping URLs from badge URLs.
+徽章具有公开但难以猜测的 URL。徽章不会透露除
+徽章标签及其对应检查项的聚合状态之外的信息。
+无法从徽章 URL 反向工程出 ping URL。
 
-## Badge States
+## 徽章状态
 
-Each badge can be in one of the following three states:
+每个徽章可以处于以下三种状态之一：
 
-* **up** (green) – all matching checks are up.
-* **late** (orange) – at least one check is running late (but has not exceeded its grace time yet).
-* **down** (red) – at least one check is currently down.
+* **up**（绿色）——所有匹配的检查项均正常。
+* **late**（橙色）——至少有一个检查项运行延迟（但尚未超过其宽限期）。
+* **down**（红色）——至少有一个检查项当前宕机。
 
-By default, SITE_NAME displays badge URLs that only report the
-**up** and **down** states (and treat **late** as **up**). Using the "Badge states"
-radio buttons, you can switch to alternate URLs that report all three states.
+默认情况下，SITE_NAME 显示仅报告 **up** 和 **down** 状态（并将 **late** 视为 **up**）的徽章 URL。使用"Badge states"
+单选按钮，您可以切换到报告所有三种状态的替代 URL。
 
-## Badge Formats
+## 徽章格式
 
-SITE_NAME offers badges in three different formats:
+SITE_NAME 提供三种不同格式的徽章：
 
-* SVG: returns an SVG document that you can use directly in an `<img>` element or
-  a Markdown document.
-* JSON: returns the badge label and the current status as a JSON document. Use this
-  if you want to render the badge yourself. This can also serve as an integration
-  point with a hosted status page: instruct your status page provider to monitor the
-  badge URL and look for the keyword "up" in the returned data.
-* Shields.io: returns the badge label and the current status as a
-  Shields.io-compatible JSON document. See [Shields.io documentation](https://shields.io/endpoint)
-  on how to use it. The main benefit of using Shields.io to generate badges is
-  the extra visual styles and customization options that Shields.io supports.
+* SVG：返回一个 SVG 文档，您可以直接在 `<img>` 元素或
+  Markdown 文档中使用。
+* JSON：返回徽章标签和当前状态作为 JSON 文档。如果您想自己渲染徽章，
+  请使用此格式。这也可以作为与托管状态页面的集成
+  点：指示您的状态页面提供商监控徽章 URL 并在返回的数据中查找关键字"up"。
+* Shields.io：返回徽章标签和当前状态作为
+  Shields.io 兼容的 JSON 文档。请参阅 [Shields.io 文档](https://shields.io/endpoint)
+  了解如何使用。使用 Shields.io 生成徽章的主要好处是
+  Shields.io 支持的额外视觉样式和自定义选项。

@@ -7,29 +7,29 @@
     {% csrf_token %}
     <div class="panel panel-default">
         <div class="panel-body settings-block">
-            <h2>Disable Authenticator App</h2>
+            <h2>禁用身份验证器应用</h2>
             <p></p>
-            <p>You are about to remove the authenticator app from your
-               {% site_name %} account.
+            <p>您即将从您的 {% site_name %} 账户中
+               移除身份验证器应用。
             </p>
 
             {% if is_last %}
             <p>
-                After removing the authenticator app,
-                <strong>two-factor authentication will no longer be active.</strong>
+                移除身份验证器应用后，
+                <strong>双重身份验证将不再生效。</strong>
             </p>
             {% endif %}
 
-            <p>Are you sure you want to continue?</p>
+            <p>确定要继续吗？</p>
 
             <div class="text-right">
                 <a
                     href="{% url 'hc-profile' %}"
-                    class="btn btn-default">Cancel</a>
+                    class="btn btn-default">取消</a>
                 <button
                     type="submit"
                     name="disable_totp"
-                    class="btn btn-danger">Disable Authenticator App</button>
+                    class="btn btn-danger">禁用身份验证器应用</button>
             </div>
         </div>
     </div>

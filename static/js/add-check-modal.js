@@ -52,7 +52,7 @@ $(function () {
     // Update the hidden field when user changes period inputs
     $("#add-check-modal .period-input").on("keyup change", function() {
         var secs = Math.round(period.value * periodUnit.value);
-        period.setCustomValidity(secs <= 31536000 ? "" : "Must not exceed 365 days");
+        period.setCustomValidity(secs <= 31536000 ? "" : "不能超过 365 天");
 
         if (secs >= 60) {
             $("#add-check-modal input[name=timeout]").val(secs);
@@ -62,7 +62,7 @@ $(function () {
     // Update the hidden field when user changes grace inputs
     $("#add-check-modal .grace-input").on("keyup change", function() {
         var secs = Math.round(grace.value * graceUnit.value);
-        grace.setCustomValidity(secs <= 31536000 ? "" : "Must not exceed 365 days");
+        grace.setCustomValidity(secs <= 31536000 ? "" : "不能超过 365 天");
 
         if (secs >= 60) {
             $("#add-check-modal input[name=grace]").val(secs);
@@ -87,7 +87,7 @@ $(function () {
             if (field.value != currentSchedule)
                 return;  // ignore stale results
 
-            field.setCustomValidity(data.result ? "" : "Please enter a valid expression");
+            field.setCustomValidity(data.result ? "" : "请输入有效的表达式");
         });
     }
 

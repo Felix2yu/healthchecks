@@ -1,13 +1,13 @@
 # Arduino
 
-The easiest way to send pings from Arduino projects is by using the
-[ArduinoHttpClient](https://github.com/arduino-libraries/ArduinoHttpClient) library.
+从 Arduino 项目发送 ping 最简单的方式是使用
+[ArduinoHttpClient](https://github.com/arduino-libraries/ArduinoHttpClient) 库。
 
-The below code uses the [WiFiNINA](https://www.arduino.cc/reference/en/libraries/wifinina/)
-network library and is tested with the Arduino Nano 33 IoT board. The
-ArduinoHttpClient also works with many other network libraries,
-including [Ethernet](https://github.com/arduino-libraries/Ethernet) and
-[ESP8266WiFi](https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/readme.html).
+以下代码使用 [WiFiNINA](https://www.arduino.cc/reference/en/libraries/wifinina/)
+网络库，并在 Arduino Nano 33 IoT 板上测试通过。
+ArduinoHttpClient 也适用于许多其他网络库，
+包括 [Ethernet](https://github.com/arduino-libraries/Ethernet) 和
+[ESP8266WiFi](https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/readme.html)。
 
 ```c
 #include <ArduinoHttpClient.h>
@@ -20,21 +20,21 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
 
-  Serial.print("Connecting ...");
+  Serial.print("正在连接...");
   WiFi.begin("your-network-ssid", "your-network-password");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
 
-  Serial.print("\nConnected, IP address: ");
+  Serial.print("\n已连接，IP 地址：");
   Serial.println(WiFi.localIP());
 
-  // Make a HTTPS request:
+  // 发起 HTTPS 请求：
   client.get("/your-uuid-here");
-  Serial.print("Status code: ");
+  Serial.print("状态码：");
   Serial.println(client.responseStatusCode());
-  Serial.print("Response: ");
+  Serial.print("响应：");
   Serial.println(client.responseBody());
 }
 
@@ -42,6 +42,6 @@ void loop() {
 }
 ```
 
-Note: For simplicity, the network SSID, password and the
-check's code are hardcoded in this example. In a real-world code, consider
-[storing them in the SECRET_ fields](https://docs.arduino.cc/arduino-cloud/tutorials/store-your-sensitive-data-safely-when-sharing).
+注意：为简便起见，此示例中网络 SSID、密码和
+检查项的代码是硬编码的。在实际代码中，建议
+[将它们存储在 SECRET_ 字段中](https://docs.arduino.cc/arduino-cloud/tutorials/store-your-sensitive-data-safely-when-sharing)。

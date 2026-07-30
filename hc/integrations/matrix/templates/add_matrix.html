@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Matrix Integration for {{ site_name }}{% endblock %}
+{% block title %}Matrix 集成 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -9,26 +9,24 @@
     <h1>Matrix</h1>
 
     <p>
-    If your team uses <a href="https://matrix.org/">Matrix</a>,
-    you can set up {{ site_name }} to post notifications
-    to an appropriate Matrix room.
+    如果您的团队使用 <a href="https://matrix.org/">Matrix</a>，
+    您可以设置 {{ site_name }} 将通知发布到指定的 Matrix 房间。
     </p>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
             <div>
                 <p>
-                Invite <strong>{{ matrix_user_id }}</strong>
-                into your Matrix room.
+                将 <strong>{{ matrix_user_id }}</strong>
+                邀请到您的 Matrix 房间。
                 </p>
                 <p>
-                    <strong>Note:</strong> after joining the room,
-                    {{ matrix_user_id }} will be
-                    able to read its messages.
-                    Do not invite to rooms with sensitive content.
-                    Consider creating a dedicated room for notifications.
+                    <strong>注意：</strong>加入房间后，
+                    {{ matrix_user_id }} 将能够读取房间消息。
+                    请勿邀请到包含敏感内容的房间。
+                    建议创建一个专门用于通知的房间。
                 </p>
             </div>
         </div>
@@ -44,8 +42,8 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Navigate to the <strong>Room Settings › General</strong> screen
-                and look up the room's <strong>Published Address</strong>.
+                进入<strong>房间设置 › 通用</strong>界面
+                并查找房间的<strong>已发布地址</strong>。
             </p>
         </div>
         <div class="col-sm-6">
@@ -60,9 +58,9 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                If the room does not have a Published Address,
-                look up its <strong>Internal Room ID</strong>
-                from the <strong>Room Settings › Advanced</strong> screen instead.
+                如果房间没有已发布地址，
+                请从<strong>房间设置 › 高级</strong>界面
+                查找其<strong>内部房间 ID</strong>。
             </p>
         </div>
         <div class="col-sm-6">
@@ -77,13 +75,13 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Enter the Published Address or the Internal Room ID
-                in the form below and save the integration.
+                在下方表单中输入已发布地址或内部房间 ID，
+                然后保存集成。
             </p>
             <p>
-                {{ matrix_user_id }} will shortly join your room. After that,
-                you are all set! From now on {{ site_name }} will post notifications
-                to your room when checks go down or up.
+                {{ matrix_user_id }} 将很快加入您的房间。之后，
+                就全部完成了！从现在起，{{ site_name }} 将在检查项
+                宕机或恢复时向您的房间发布通知。
             </p>
         </div>
         <div class="col-sm-6">
@@ -94,13 +92,13 @@
         </div>
     </div>
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
 
         <div class="form-group {{ form.alias.css_classes }}">
-            <label for="alias" class="col-sm-2 control-label">Address or Internal ID</label>
+            <label for="alias" class="col-sm-2 control-label">地址或内部 ID</label>
             <div class="col-sm-6">
                 <input
                     id="alias"
@@ -119,7 +117,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

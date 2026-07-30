@@ -1,45 +1,44 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Opsgenie Integration for {{ site_name }}{% endblock %}
+{% block title %}Opsgenie 集成 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
 <div class="col-sm-12">
     <h1>Opsgenie</h1>
 
-    <p><a href="https://www.opsgenie.com/">Opsgenie</a> provides
-    alerting, on-call scheduling, escalation policies, and incident tracking.
-    You can integrate it with your {{ site_name }} account in a few
-    simple steps.</p>
+    <p><a href="https://www.opsgenie.com/">Opsgenie</a> 提供
+    警报、值班排班、升级策略和事件跟踪功能。
+    您只需几个简单步骤即可将其集成到您的 {{ site_name }} 帐户中。</p>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Log into your Opsgenie account,
-                select a team, and go to the team's
-                <strong>Integrations</strong> page and click
-                <strong>Add integration</strong>.
+                登录您的 Opsgenie 帐户，
+                选择一个团队，进入该团队的
+                <strong>集成</strong>页面，点击
+                <strong>添加集成</strong>。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_opsgenie_1.png' %}">
         </div>
     </div>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            Select <strong>API</strong> in the grid of offered integration types.
+            在提供的集成类型网格中选择 <strong>API</strong>。
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_opsgenie_2.png' %}">
         </div>
     </div>
@@ -47,12 +46,12 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            Give the integration a descriptive name.
+            为集成起一个描述性的名称。
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_opsgenie_3.png' %}">
         </div>
     </div>
@@ -60,14 +59,14 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Copy the displayed API key, then click on
-               <strong>Turn on integration</strong>.
+            <p>复制显示的 API 密钥，然后点击
+               <strong>开启集成</strong>。
             </p>
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_opsgenie_4.png' %}">
         </div>
     </div>
@@ -75,19 +74,19 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Paste the API key in the form below, and make sure the correct
-                <strong>service region</strong> is selected.
-                Save the integration, and you are done!
+            <p>将 API 密钥粘贴到下面的表单中，并确保选择了正确的
+                <strong>服务区域</strong>。
+                保存集成，大功告成！
             </p>
         </div>
     </div>
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {{ form.key.css_classes }}">
-            <label for="api-key" class="col-sm-2 control-label">API Key</label>
+            <label for="api-key" class="col-sm-2 control-label">API 密钥</label>
             <div class="col-sm-4">
                 <input
                     id="api-key"
@@ -105,7 +104,7 @@
             </div>
         </div>
         <div class="form-group {{ form.region.css_classes }}">
-            <label for="api-key" class="col-sm-2 control-label">Region</label>
+            <label for="api-key" class="col-sm-2 control-label">区域</label>
             <div class="col-sm-4">
                 <label class="radio-container">
                     <input
@@ -114,7 +113,7 @@
                         value="us"
                         {% if form.region.value == "us" %} checked {% endif %}>
                     <span class="radiomark"></span>
-                    US (default)
+                    美国（默认）
                 </label>
                 <label class="radio-container">
                     <input
@@ -135,7 +134,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

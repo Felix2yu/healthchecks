@@ -9,57 +9,56 @@
 
                 <div class="modal-body">
                     <div class="interval-controls">
-                        <label for="period-value">Period</label>
+                        <label for="period-value">周期</label>
                         <input
                             id="period-value"
                             type="number"
                             min="1"
                             class="period-input form-control input-lg" />
                         <select id="period-unit" class="period-input form-control input-lg">
-                            <option value="60">minutes</option>
-                            <option value="3600">hours</option>
-                            <option value="86400">days</option>
+                                <option value="60">分钟</option>
+                                <option value="3600">小时</option>
+                                <option value="86400">天</option>
                         </select>
                     </div>
                     <div id="period-slider"></div>
 
                     <div class="interval-controls">
-                        <label for="grace-value">Grace Time</label>
+                        <label for="grace-value">宽限期</label>
                         <input
                             id="grace-value"
                             type="number"
                             min="1"
                             class="grace-input form-control input-lg" />
                         <select id="grace-unit" class="grace-input form-control input-lg">
-                            <option value="60">minutes</option>
-                            <option value="3600">hours</option>
-                            <option value="86400">days</option>
+                                <option value="60">分钟</option>
+                                <option value="3600">小时</option>
+                                <option value="86400">天</option>
                         </select>
                     </div>
                     <div id="grace-slider"></div>
 
                     <div class="update-timeout-terms">
                         <p>
-                            <span>Period</span>
-                            – The expected time between pings.
+                            <span>周期</span>
+                            – 预期的两次 Ping 间隔时间。
                         </p>
                         <p>
-                            <span>Grace Time</span>
-                            – When a check is late, <strong>or</strong> has
-                            received a "start" signal, how long to wait to send an alert.
+                            <span>宽限期</span>
+                            – 当检查项延迟，<strong>或</strong>收到"开始"信号时，等待多久发送告警。
                         </p>
                     </div>
                 </div>
 
                 <div class="modal-footer">
                     <div class="btn-group pull-left">
-                        <label class="btn btn-default kind-simple active">Simple</label>
+                        <label class="btn btn-default kind-simple active">简单</label>
                         <label class="btn btn-default kind-cron">Cron</label>
                         <label class="btn btn-default kind-oncalendar">OnCalendar</label>
                     </div>
 
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </form>
 
@@ -71,7 +70,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="schedule">Cron Expression</label>
+                                <label for="schedule">Cron 表达式</label>
                                 <input
                                     type="text"
                                     class="form-control"
@@ -81,20 +80,20 @@
                                     maxlength="100">
                                 <div class="schedule-hint">
                                     m h dom mon dow
-                                    <a href="{% url 'hc-docs-cron' %}" target="_blank">(cheatsheet)</a>
+                                    <a href="{% url 'hc-docs-cron' %}" target="_blank">（速查表）</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="tz">Server's Time Zone</label>
+                                <label for="tz">服务器时区</label>
                                 <br />
                                 <select id="tz" name="tz" class="form-control"></select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="update-timeout-grace-cron">Grace Time</label>   
+                                <label for="update-timeout-grace-cron">宽限期</label>   
                                 <div class="input-group select-group">
                                     <input
                                         type="number"
@@ -121,14 +120,14 @@
 
                 <div class="modal-footer">
                     <div class="btn-group pull-left">
-                        <label class="btn btn-default kind-simple">Simple</label>
+                        <label class="btn btn-default kind-simple">简单</label>
                         <label class="btn btn-default active kind-cron">Cron</label>
                         <label class="btn btn-default kind-oncalendar">OnCalendar</label>
                     </div>
 
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button id="update-cron-submit" type="submit" class="btn btn-primary" {% if not rw %}disabled{% endif %}>
-                        Save
+                        保存
                     </button>
                 </div>
             </form>
@@ -141,7 +140,7 @@
                     <div class="row">
                         <div id="oncalendar-controls" class="col-md-6">
                             <div class="form-group">
-                                <label for="schedule-oncalendar">OnCalendar Expression(s)</label>
+                                <label for="schedule-oncalendar">OnCalendar 表达式</label>
                                 <textarea
                                     id="schedule-oncalendar"
                                     name="schedule"
@@ -155,12 +154,12 @@
 
                             </div>
                             <div class="form-group">
-                                <label for="tz-oncalendar">Server's Time Zone</label>
+                                <label for="tz-oncalendar">服务器时区</label>
                                 <br />
                                 <select id="tz-oncalendar" name="tz" class="form-control"></select>
                             </div>
                             <div class="form-group">
-                                <label for="update-timeout-grace-oncalendar">Grace Time</label>
+                                <label for="update-timeout-grace-oncalendar">宽限期</label>
                                 <div class="input-group select-group">
                                     <input
                                         type="number"
@@ -182,14 +181,14 @@
 
                 <div class="modal-footer">
                     <div class="btn-group pull-left">
-                        <label class="btn btn-default kind-simple">Simple</label>
+                        <label class="btn btn-default kind-simple">简单</label>
                         <label class="btn btn-default kind-cron">Cron</label>
                         <label class="btn btn-default active kind-oncalendar">OnCalendar</label>
                     </div>
 
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button id="update-oncalendar-submit" type="submit" class="btn btn-primary" {% if not rw %}disabled{% endif %}>
-                        Save
+                        保存
                     </button>
                 </div>
             </form>

@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Pushbullet Integration for {{ site_name }}{% endblock %}
+{% block title %}Pushbullet 集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -11,17 +11,16 @@
 
     <div class="jumbotron">
         <p>
-            With this integration, {{ site_name }} will send
-            a <a href="http://pushbullet.com/">Pushbullet</a>
-            notification when a check
-            goes <strong>up</strong> or <strong>down</strong>.
+            通过此集成，{{ site_name }} 将在检查项
+            <strong>恢复</strong>或<strong>宕机</strong>时发送
+            <a href="http://pushbullet.com/">Pushbullet</a> 通知。
         </p>
 
         <form method="post" class="text-center">
             {% csrf_token %}
             <a href="{{ authorize_url }}" class="btn btn-lg btn-default">
                 <img class="ai-icon" src="{% static 'img/pushbullet.png' %}" alt="Pushbullet" />
-                Connect Pushbullet
+                连接 Pushbullet
             </a>
         </form>
     </div>

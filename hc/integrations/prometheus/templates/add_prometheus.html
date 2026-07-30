@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}Prometheus Integration for {{ site_name }}{% endblock %}
+{% block title %}Prometheus 集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -10,33 +10,32 @@
       <h1>Prometheus</h1>
 
       <p>
-          {{ site_name }} provides a
-          <a href="https://prometheus.io">Prometheus</a>-compatible metrics endpoint
-          for each project. The endpoints are secured using each project's
-          read-only API key.
+          {{ site_name }} 为每个项目提供一个
+          兼容 <a href="https://prometheus.io">Prometheus</a> 的指标端点。
+          这些端点使用每个项目的只读 API 密钥进行保护。
 
-          If your team uses Prometheus, you can configure it to scrape {{ site_name }}
-          and have up-to-date check and tag status values available in Prometheus.
+          如果您的团队使用 Prometheus，您可以配置它来抓取 {{ site_name }}
+          的数据，并在 Prometheus 中获取最新的检查项和标签状态值。
       </p>
 
-      <h2>Setup Guide</h2>
+      <h2>设置指南</h2>
 
       <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
                 <p>
-                    Create a read-only API key in
-                    <strong>Project Settings › API Access</strong>.
+                    在 <strong>项目设置 › API 访问</strong> 中
+                    创建一个只读 API 密钥。
                 </p>
                 <p>
-                    Note: make sure to use a <strong>read-only</strong> API key.
-                    Prometheus does not need read-write API access.
+                    注意：请确保使用<strong>只读</strong> API 密钥。
+                    Prometheus 不需要读写 API 访问权限。
                 </p>
         </div>
         <div class="col-sm-6">
           <img
               class="ai-guide-screenshot"
-              alt="Click create integration button"
+              alt="点击创建集成按钮"
               src="{% static 'img/setup_prometheus_1.png' %}" />
         </div>
       </div>
@@ -45,28 +44,26 @@
           <div class="col-sm-12">
               <span class="step-no"></span>
                 <p>
-                    Edit Prometheus configuration and add a new section in the
-                    <code>scrape_configs</code> section.
+                    编辑 Prometheus 配置，在
+                    <code>scrape_configs</code> 部分添加新配置。
                 </p>
                 <pre>
 - job_name: 'healthchecks-{{ project|slugify }}'
   scheme: {{ site_scheme }}
-  metrics_path: /projects/{{ project.code }}/metrics/<strong>YOUR-READ-ONLY-API-KEY</strong>
+  metrics_path: /projects/{{ project.code }}/metrics/<strong>你的只读 API 密钥</strong>
   static_configs:
   - targets: ['{% site_hostname %}']</pre>
                 <p>
-                    <strong>Note for Grafana Cloud users:</strong> Grafana Cloud
-                    requires the metrics endpoints to be authenticated using either
-                    HTTP "Basic" or "Bearer" authentication scheme. It refuses to
-                    scrape public endpoints. To fulfil this requirement,
-                    {% site_name %} provides an alternate metrics endpoint which
-                    requires "Bearer" authentication. Use the following settings
-                    with Grafana Cloud:
+                    <strong>Grafana Cloud 用户注意事项：</strong> Grafana Cloud
+                    要求指标端点使用 HTTP "Basic" 或 "Bearer" 认证方案进行身份验证。
+                    它拒绝抓取公共端点。为了满足此要求，
+                    {% site_name %} 提供了一个需要 "Bearer" 认证的
+                    替代指标端点。在 Grafana Cloud 中使用以下设置：
                 </p>
                 <ul>
-                    <li>Scrape Job URL: <code>{{ project.auth_metrics_url }}</code></li>
-                    <li>Authentication type: Bearer</li>
-                    <li>Bearer token: the read-only API key</li>
+                    <li>抓取任务链接：<code>{{ project.auth_metrics_url }}</code></li>
+                    <li>认证类型：Bearer</li>
+                    <li>Bearer 令牌：只读 API 密钥</li>
                 </ul>
           </div>
       </div>
@@ -75,8 +72,8 @@
         <div class="col-sm-6">
             <span class="step-no"></span>
               <p>
-                Reload Prometheus' configuration. You should now start seeing
-                {{ site_name }} data appear in Prometheus.
+                重新加载 Prometheus 配置。您现在应该开始看到
+                {{ site_name }} 的数据出现在 Prometheus 中。
               </p>
         </div>
       </div>

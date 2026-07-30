@@ -1,127 +1,108 @@
-# Management API v3
+# 管理 API v3
 
-Version:
+版本:
 <select onchange="document.location = this.value">
     <option value="../apiv1/">v1</option>
     <option value="../apiv2/">v2</option>
     <option value="../api/" selected>v3</option>
 </select>
 
-With the Management API, you can programmatically manage checks and integrations
-in your account.
+通过管理 API，您可以在账户中以编程方式管理检查项和集成。
 
-## API Endpoints
+## API 端点
 
 <div id="api-toc"></div>
 
-Endpoint Name                                         | Endpoint Address
-------------------------------------------------------|-----------------
-**Checks**                                            |
-[List existing checks](#list-checks)                  | `GET SITE_ROOT/api/v3/checks/`
-[Get a single check](#get-check)                      | `GET SITE_ROOT/api/v3/checks/<uuid>`<br>`GET SITE_ROOT/api/v3/checks/<unique_key>`
-[Create a new check](#create-check)                   | `POST SITE_ROOT/api/v3/checks/`
-[Update an existing check](#update-check)             | `POST SITE_ROOT/api/v3/checks/<uuid>`
-[Pause monitoring of a check](#pause-check)           | `POST SITE_ROOT/api/v3/checks/<uuid>/pause`
-[Resume monitoring of a check](#resume-check)         | `POST SITE_ROOT/api/v3/checks/<uuid>/resume`
-[Delete check](#delete-check)                         | `DELETE SITE_ROOT/api/v3/checks/<uuid>`
-**Pings**                                             |
-[List check's logged pings](#list-pings)              | `GET SITE_ROOT/api/v3/checks/<uuid>/pings/`
-[Get a ping's logged body](#ping-body)                | `GET SITE_ROOT/api/v3/checks/<uuid>/pings/<n>/body`
-**Flips**                                             |
-[List check's status changes](#list-flips)            | `GET SITE_ROOT/api/v3/checks/<uuid>/flips/`<br>`GET SITE_ROOT/api/v3/checks/<unique_key>/flips/`
-**Integrations**                                      |
-[List existing integrations](#list-channels)          | `GET SITE_ROOT/api/v3/channels/`
-**Badges**                                            |
-[List project's badges](#list-badges)                 | `GET SITE_ROOT/api/v3/badges/`
-**Service status**                                    |
-[Check database connectivity](#status)                | `GET SITE_ROOT/api/v3/status/`
+端点名称                                               | 端点地址
+-------------------------------------------------------|-----------------
+**检查项**                                              |
+[列出已有检查项](#list-checks)                          | `GET SITE_ROOT/api/v3/checks/`
+[获取单个检查项](#get-check)                            | `GET SITE_ROOT/api/v3/checks/<uuid>`<br>`GET SITE_ROOT/api/v3/checks/<unique_key>`
+[创建新检查项](#create-check)                           | `POST SITE_ROOT/api/v3/checks/`
+[更新已有检查项](#update-check)                         | `POST SITE_ROOT/api/v3/checks/<uuid>`
+[暂停监控检查项](#pause-check)                          | `POST SITE_ROOT/api/v3/checks/<uuid>/pause`
+[恢复监控检查项](#resume-check)                         | `POST SITE_ROOT/api/v3/checks/<uuid>/resume`
+[删除检查项](#delete-check)                             | `DELETE SITE_ROOT/api/v3/checks/<uuid>`
+**Ping**                                                |
+[列出检查项的已记录 ping](#list-pings)                  | `GET SITE_ROOT/api/v3/checks/<uuid>/pings/`
+[获取 ping 的请求体](#ping-body)                        | `GET SITE_ROOT/api/v3/checks/<uuid>/pings/<n>/body`
+**状态变更**                                            |
+[列出检查项的状态变更](#list-flips)                     | `GET SITE_ROOT/api/v3/checks/<uuid>/flips/`<br>`GET SITE_ROOT/api/v3/checks/<unique_key>/flips/`
+**集成**                                                |
+[列出已有集成](#list-channels)                          | `GET SITE_ROOT/api/v3/channels/`
+**徽章**                                                |
+[列出项目的徽章](#list-badges)                          | `GET SITE_ROOT/api/v3/badges/`
+**服务状态**                                            |
+[检查数据库连接](#status)                               | `GET SITE_ROOT/api/v3/status/`
 
-## Changes From v2
+## 与 v2 的区别
 
-Management API v3 adds the ability to specify custom check slugs, instead of
-auto-generating them from check names. The [Create a new check](#create-check)
-and [Update an existing check](#update-check) calls accept a new `slug`
-parameter, and use it instead of generating the slug from the check's name.
+管理 API v3 增加了指定自定义检查项 slug 的功能，取代了从检查项名称自动生成 slug 的方式。[创建新检查项](#create-check)和[更新已有检查项](#update-check)接口现在接受一个新的 `slug` 参数，并使用它而非从检查项名称生成 slug。
 
-## Authentication
+## 认证
 
-Your requests to SITE_NAME Management API must authenticate using an
-API key. All API keys are project-specific. There are no account-wide API keys.
-By default, a project on SITE_NAME doesn't have an API key. You can create read-write
-and read-only API keys on the **Project Settings** page.
+您向 SITE_NAME 管理 API 发出的请求必须使用 API 密钥进行认证。所有 API 密钥都是项目级别的，没有账户级别的 API 密钥。默认情况下，SITE_NAME 上的项目没有 API 密钥。您可以在**项目设置**页面上创建读写和只读 API 密钥。
 
-read-write key
-:   Has full access to all documented API endpoints.
+读写密钥
+:   对所有文档化的 API 端点具有完全访问权限。
 
-read-only key
-:   Only works with the following API endpoints:
+只读密钥
+:   仅适用于以下 API 端点：
 
-    * [List existing checks](#list-checks)
-    * [Get a single check](#get-check)
-    * [List check's status changes](#list-flips)
-    * [List project's badges](#list-badges)
+    * [列出已有检查项](#list-checks)
+    * [获取单个检查项](#get-check)
+    * [列出检查项的状态变更](#list-flips)
+    * [列出项目的徽章](#list-badges)
 
-    Omits sensitive information from the API responses. See the documentation of
-    individual API endpoints for details.
+    在 API 响应中省略敏感信息。详情请参阅各 API 端点的文档。
 
-The client can authenticate itself by including an `X-Api-Key: <your-api-key>`
-header in an HTTP request. Alternatively, for POST requests with a JSON request body,
-the client can put an `api_key` field in the JSON document.
-See the [Create a new check](#create-check) section for an example.
+客户端可以通过在 HTTP 请求中包含 `X-Api-Key: <your-api-key>` 头进行认证。或者，对于带有 JSON 请求体的 POST 请求，客户端可以在 JSON 文档中放入 `api_key` 字段。请参阅[创建新检查项](#create-check)部分的示例。
 
-## API Requests
+## API 请求
 
-For POST requests, the SITE_NAME API expects the request body to be
-a JSON document (*not* a `multipart/form-data` encoded form data).
+对于 POST 请求，SITE_NAME API 期望请求体为 JSON 文档（*不是* `multipart/form-data` 编码的表单数据）。
 
-## API Responses
+## API 响应
 
-SITE_NAME uses HTTP status codes wherever possible.
-In general, 2xx class indicates success, 4xx indicates a client error,
-and 5xx indicates a server error.
+SITE_NAME 尽可能使用 HTTP 状态码。通常，2xx 表示成功，4xx 表示客户端错误，5xx 表示服务器错误。
 
-The response may contain a JSON document with additional data.
+响应可能包含带有额外数据的 JSON 文档。
 
-## Rate Limits
+## 速率限制
 
-Avoid making more than 100 API requests per minute. If you exceed this limit, you will
-eventually see HTTP 429 errors.
+每分钟不要超过 100 次 API 请求。如果超过此限制，您最终会看到 HTTP 429 错误。
 
-## List Existing Checks {: #list-checks .rule }
+## 列出已有检查项 {: #list-checks .rule }
 
 `GET SITE_ROOT/api/v3/checks/`
 
-Returns a list of checks belonging to the user, optionally filtered by
-one or more tags.
+返回用户所属的检查项列表，可选择按一个或多个标签进行过滤。
 
-### Query Parameters
+### 查询参数
 
 slug=&lt;value&gt;
-:   Filters the checks and returns only the checks with the specified slug.
-    If there are no matching checks, returns an empty list. If there are
-    multiple matching checks, returns all of them.
+:   过滤检查项，仅返回具有指定 slug 的检查项。如果没有匹配的检查项，则返回空列表。如果有多个匹配的检查项，则返回所有匹配项。
 
-    Example:
+    示例：
 
     `SITE_ROOT/api/v3/checks/?slug=backups`
 
 tag=&lt;value&gt;
-:   Filters the checks and returns only the checks that are tagged with the
-    specified value.
+:   过滤检查项，仅返回标记了指定值的检查项。
 
-    This parameter can be repeated multiple times.
+    此参数可以重复多次。
 
-    Example:
+    示例：
 
     `SITE_ROOT/api/v3/checks/?tag=foo&tag=bar`
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 ### Example Request
 
@@ -197,14 +178,9 @@ curl --header "X-Api-Key: your-api-key" SITE_ROOT/api/v3/checks/
 }
 ```
 
-The possible values for the `status` field are: `new`, `up`, `grace`, `down`,
-and `paused`.
+`status` 字段的可能值为：`new`、`up`、`grace`、`down` 和 `paused`。
 
-When using the read-only API key, SITE_NAME omits the following fields from responses:
-`uuid`, `ping_url`, `update_url`, `pause_url`, `resume_url`, `channels`.  It adds an
-extra `unique_key` field. The `unique_key` identifier is stable across API calls, and
-you can use it in the [Get a single check](#get-check)
-and [List check's status changes](#list-flips) API calls.
+当使用只读 API 密钥时，SITE_NAME 会从响应中省略以下字段：`uuid`、`ping_url`、`update_url`、`pause_url`、`resume_url`、`channels`。它会额外添加一个 `unique_key` 字段。`unique_key` 标识符在 API 调用之间是稳定的，您可以在[获取单个检查项](#get-check)和[列出检查项的状态变更](#list-flips) API 调用中使用它。
 
 Example:
 
@@ -264,30 +240,28 @@ Example:
 }
 ```
 
-## Get a Single Check {: #get-check .rule }
+## 获取单个检查项 {: #get-check .rule }
 `GET SITE_ROOT/api/v3/checks/<uuid>`<br>
 `GET SITE_ROOT/api/v3/checks/<unique_key>`
 
-Returns a JSON representation of a single check. Accepts either check's UUID or
-the `unique_key` (a field derived from UUID and returned by API responses when
-using the read-only API key) as an identifier.
+返回单个检查项的 JSON 表示。接受检查项的 UUID 或 `unique_key`（从 UUID 派生并在使用只读 API 密钥时由 API 响应返回的字段）作为标识符。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The specified check does not exist.
+:   指定的检查项不存在。
 
 
-### Example Request
+### 示例请求
 
 ```bash
 curl --header "X-Api-Key: your-api-key" SITE_ROOT/api/v3/checks/<uuid>
@@ -328,17 +302,13 @@ curl --header "X-Api-Key: your-api-key" SITE_ROOT/api/v3/checks/<uuid>
 }
 ```
 
-The possible values for the `status` field are: `new`, `up`, `grace`, `down`,
-and `paused`.
+`status` 字段的可能值为：`new`、`up`、`grace`、`down` 和 `paused`。
 
-### Example Read-Only Response
+### 示例只读响应
 
-When using the read-only API key, SITE_NAME omits the following fields from responses:
-`uuid`, `ping_url`, `update_url`, `pause_url`, `resume_url`, `channels`.  It adds an
-extra `unique_key` field. This identifier is stable across API calls.
+当使用只读 API 密钥时，SITE_NAME 会从响应中省略以下字段：`uuid`、`ping_url`、`update_url`、`pause_url`、`resume_url`、`channels`。它会额外添加一个 `unique_key` 字段。此标识符在 API 调用之间是稳定的。
 
-Note: although API omits the `*_url` fields in read-only API responses, the client can
-easily construct these URLs themselves *if* they know the check's unique UUID.
+注意：尽管 API 在只读响应中省略了 `*_url` 字段，但客户端如果知道检查项的唯一 UUID，可以轻松自行构造这些 URL。
 
 ```json
 {
@@ -369,260 +339,212 @@ easily construct these URLs themselves *if* they know the check's unique UUID.
 ```
 
 
-## Create a Check {: #create-check .rule }
+## 创建检查项 {: #create-check .rule }
 `POST SITE_ROOT/api/v3/checks/`
 
-Creates a new check and returns its ping URL.
-All request parameters are optional and will use their default
-values if omitted.
+创建一个新的检查项并返回其 ping URL。
+所有请求参数都是可选的，如果省略将使用默认值。
 
-With this API call, you can create both Simple and Cron checks:
+通过此 API 调用，您可以创建简单检查项和 Cron 检查项：
 
-* To create a Simple check, specify the `timeout` parameter.
-* To create a Cron check, specify the `schedule` and `tz` parameters.
+* 要创建简单检查项，请指定 `timeout` 参数。
+* 要创建 Cron 检查项，请指定 `schedule` 和 `tz` 参数。
 
-### Request Parameters
+### 请求参数
 
 name
-:   string, optional, default value: ""
+:   字符串，可选，默认值：""
 
-    Name for the new check.
+    新检查项的名称。
 
-    Changed in API v3: the check's slug is no longer automatically generated
-    from the check's name. Instead, the client can specify the slug explicitly
-    via the `slug` field.
+    API v3 中的变更：检查项的 slug 不再从名称自动生成。客户端可以通过 `slug` 字段显式指定 slug。
 
 slug
-:   string, optional, default value: ""
+:   字符串，可选，默认值：""
 
-    Slug for the new check. The slug should only contain the following
-    characters: `a-z`, `0-9`, hyphens, underscores. Example:
+    新检查项的 slug。slug 只能包含以下字符：`a-z`、`0-9`、连字符、下划线。示例：
 
     <pre>{"slug": "my-custom-slug"}</pre>
 
 tags
-:   string, optional, default value: ""
+:   字符串，可选，默认值：""
 
-    A space-delimited list of tags for the new check.
-    Example:
+    新检查项的以空格分隔的标签列表。示例：
 
     <pre>{"tags": "reports staging"}</pre>
 
 desc
-:   string, optional.
+:   字符串，可选。
 
-    Description of the check.
+    检查项的描述。
 
 timeout
-:   number, optional, default value: {{ default_timeout }}.
+:   数字，可选，默认值：{{ default_timeout }}。
 
-    The expected period of this check in seconds.
+    检查项的期望周期（秒）。
 
-    Minimum: 60 (one minute), maximum: 31536000 (365 days).
+    最小值：60（一分钟），最大值：31536000（365 天）。
 
-    Example for a 5-minute timeout:
+    5 分钟超时的示例：
 
     <pre>{"timeout": 300}</pre>
 
 grace
-:   number, optional, default value: {{ default_grace }}.
+:   数字，可选，默认值：{{ default_grace }}。
 
-    The grace period for this check in seconds.
+    检查项的宽限期（秒）。
 
-    Minimum: 60 (one minute), maximum: 31536000 (365 days).
+    最小值：60（一分钟），最大值：31536000（365 天）。
 
 schedule
-:   string, optional.
+:   字符串，可选。
 
-    A cron or systemd OnCalendar expression defining this check's schedule.
-    SITE_NAME will detect the expression type (cron or OnCalendar) automatically.
+    定义检查项调度周期的 cron 或 systemd OnCalendar 表达式。SITE_NAME 会自动检测表达式类型（cron 或 OnCalendar）。
 
-    The `schedule` parameter takes precedence over the `timeout` field: if you specify
-    both the `timeout` and the `schedule` parameters, SITE_NAME will save the
-    `schedule` and ignore the `timeout`.
+    `schedule` 参数优先于 `timeout` 字段：如果同时指定了 `timeout` 和 `schedule` 参数，SITE_NAME 将保存 `schedule` 并忽略 `timeout`。
 
-    Example using a cron expression ("run every half-hour"):
+    使用 cron 表达式的示例（"每半小时运行一次"）：
 
     <pre>{"schedule": "0,30 * * * *"}</pre>
 
-    Example using an OnCalendar expression ("run at 12:00 of the last day of every
-    month"):
+    使用 OnCalendar 表达式的示例（"每月最后一天 12:00 运行"）：
 
     <pre>{"schedule": "\*-\*~1 12:00"}</pre>
 
 tz
-:   string, optional, default value: "UTC".
+:   字符串，可选，默认值："UTC"。
 
-    Server's timezone. This setting only has an effect in combination with the
-    `schedule` parameter.
+    服务器的时区。此设置仅在结合 `schedule` 参数时生效。
 
-    Example:
+    示例：
 
     <pre>{"tz": "Europe/Riga"}</pre>
 
 manual_resume
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Controls whether a paused check automatically resumes when pinged (the default)
-    or not. If set to false, a paused check will leave the paused state when it receives
-    a ping. If set to true, a paused check will ignore pings and stay paused until
-    you manually resume it from the web dashboard.
+    控制暂停的检查项在收到 ping 时是否自动恢复（默认行为），或者不自动恢复。如果设置为 false，暂停的检查项在收到 ping 时将退出暂停状态。如果设置为 true，暂停的检查项将忽略 ping 并保持暂停状态，直到您从 Web 仪表盘手动恢复它。
 
 methods
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the allowed HTTP methods for making ping requests.
-    Must be one of the two values: "" (an empty string) or "POST".
+    指定允许用于发送 ping 请求的 HTTP 方法。必须是以下两个值之一：""（空字符串）或 "POST"。
 
-    Set this field to "" (an empty string) to allow HEAD, GET,
-    and POST requests.
+    将此字段设置为 ""（空字符串）以允许 HEAD、GET 和 POST 请求。
 
-    Set this field to "POST" to allow only POST requests.
+    将此字段设置为 "POST" 以仅允许 POST 请求。
 
-    Example:
+    示例：
 
     <pre>{"methods": "POST"}</pre>
 
 channels
-:   string, optional.
+:   字符串，可选。
 
-    By default, this API call assigns no integrations to the newly created
-    check.
+    默认情况下，此 API 调用不会为新创建的检查项分配任何集成。
 
-    Set this field to a special value "*" to automatically assign all existing
-    integrations. Example:
+    将此字段设置为特殊值 "*" 以自动分配所有已有集成。示例：
 
     <pre>{"channels": "*"}</pre>
 
-    To assign specific integrations, use a comma-separated list of integration
-    UUIDs. You can look up integration UUIDs using the
-    [List Existing Integrations](#list-channels) API call.
+    要分配特定的集成，请使用逗号分隔的集成 UUID 列表。您可以使用[列出已有集成](#list-channels) API 调用来查找集成 UUID。
 
-    Example:
+    示例：
 
     <pre>{"channels":
      "4ec5a071-2d08-4baa-898a-eb4eb3cd6941,746a083e-f542-4554-be1a-707ce16d3acc"}</pre>
 
-    Alternatively, if you have named your integrations in SITE_NAME dashboard,
-    you can specify integrations by their names. For this to work, your integrations
-    need non-empty unique names, and they must not contain commas.
-    The names must match exactly, whitespace is significant.
+    或者，如果您在 SITE_NAME 仪表盘中为集成命名了名称，则可以通过名称指定集成。为此，您的集成需要有非空的唯一名称，且不能包含逗号。名称必须完全匹配，空格有效。
 
-    Example:
+    示例：
 
     <pre>{"channels": "Email to Alice,SMS to Alice"}</pre>
 
 unique
-:   array of string values, optional, default value: [].
+:   字符串数组，可选，默认值：[]。
 
-    Enables "upsert" functionality. Before creating a check, SITE_NAME looks for
-    existing checks, filtered by fields listed in `unique`.
+    启用"upsert"功能。在创建检查项之前，SITE_NAME 会查找已有的检查项，按 `unique` 中列出的字段进行过滤。
 
-    If SITE_NAME does not find a matching check, it creates a new check and returns it
-    with the HTTP status code 201.
+    如果 SITE_NAME 没有找到匹配的检查项，它会创建一个新的检查项并以 HTTP 状态码 201 返回。
 
-    If SITE_NAME finds a matching check, it updates the existing check and
-    returns it with HTTP status code 200.
+    如果 SITE_NAME 找到匹配的检查项，它会更新已有的检查项并以 HTTP 状态码 200 返回。
 
-    The accepted values for the `unique` field are
-    `name`, `slug`, `tags`, `timeout`, and `grace`.
+    `unique` 字段可接受的值有 `name`、`slug`、`tags`、`timeout` 和 `grace`。
 
-    Example:
+    示例：
 
     <pre>{"name": "Backups", unique: ["name"]}</pre>
 
-    In this example, if a check named "Backups" exists, it will be returned.
-    Otherwise, a new check will be created and returned.
+    在此示例中，如果名为"Backups"的检查项已存在，则返回该检查项。否则，将创建并返回一个新的检查项。
 
 start_kw
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the keywords for classifying inbound email messages and HTTP pings as
-    start signals. Separate multiple keywords using commas. Keywords are
-    case-sensitive.
+    指定用于将入站电子邮件和 HTTP ping 分类为 start 信号的关键词。多个关键词用逗号分隔。关键词区分大小写。
 
-    Use this field in combination with the `filter_subject`, `filter_body`,
-    and `filter_http_body` fields.
+    将此字段与 `filter_subject`、`filter_body` 和 `filter_http_body` 字段结合使用。
 
-    Example:
+    示例：
 
     <pre>{"filter_subject": true, "start_kw": "STARTED"}</pre>
 
-    In this example, SITE_NAME classifies an inbound email as a start signal if the
-    Subject line contains the word "STARTED".
+    在此示例中，如果主题行包含单词"STARTED"，SITE_NAME 将入站电子邮件分类为 start 信号。
 
 success_kw
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the keywords for classifying inbound email messages and HTTP pings as
-    success signals. Separate multiple keywords using commas. Keywords are
-    case-sensitive.
+    指定用于将入站电子邮件和 HTTP ping 分类为 success 信号的关键词。多个关键词用逗号分隔。关键词区分大小写。
 
-    Use this field in combination with the `filter_subject`, `filter_body`,
-    and `filter_http_body` fields.
+    将此字段与 `filter_subject`、`filter_body` 和 `filter_http_body` 字段结合使用。
 
-    Example:
+    示例：
 
     <pre>{"filter_subject": true, "success_kw": "SUCCESS,COMPLETED"}</pre>
 
-    In this example, an inbound email message counts as success if the Subject line
-    contains either the word "SUCCESS" or the word "COMPLETED".
+    在此示例中，如果主题行包含"SUCCESS"或"COMPLETED"中的任一单词，则入站电子邮件计为 success。
 
 failure_kw
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the keywords for classifying inbound email messages and HTTP pings as
-    failure signals. Separate multiple keywords using commas. Keywords are
-    case-sensitive.
+    指定用于将入站电子邮件和 HTTP ping 分类为 failure 信号的关键词。多个关键词用逗号分隔。关键词区分大小写。
 
-    Use this field in combination with the `filter_subject`, `filter_body`,
-    and `filter_http_body` fields.
+    将此字段与 `filter_subject`、`filter_body` 和 `filter_http_body` 字段结合使用。
 
-    Example:
+    示例：
 
     <pre>{"filter_subject": true, "failure_kw": "FAILED,ERROR"}</pre>
 
-    In this example, an inbound email message counts as failure if the Subject line
-    contains either the word "FAILED" or the word "ERROR".
+    在此示例中，如果主题行包含"FAILED"或"ERROR"中的任一单词，则入站电子邮件计为 failure。
 
 filter_subject
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Enables filtering of inbound email messages by looking for keywords in their
-    subject lines. See also the `start_kw`, `success_kw`, and `failure_kw` fields.
+    启用在入站电子邮件的主题行中查找关键词的过滤功能。另请参阅 `start_kw`、`success_kw` 和 `failure_kw` 字段。
 
 filter_body
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Enables filtering of inbound email messages by looking for keywords in the
-    message body. See also the `start_kw`, `success_kw`, and `failure_kw` fields.
+    启用在入站电子邮件的正文中查找关键词的过滤功能。另请参阅 `start_kw`、`success_kw` 和 `failure_kw` 字段。
 
-    SITE_NAME supports both plain text and HTML email messages, and looks for
-    keywords both in the plain text and the HTML message contents.
+    SITE_NAME 支持纯文本和 HTML 格式的电子邮件，并在纯文本和 HTML 邮件内容中查找关键词。
 
 filter_http_body
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Enables filtering of HTTP pings by looking for keywords in the first
-    PING_BODY_LIMIT_FORMATTED of the HTTP request body. See also the
-    `start_kw`, `success_kw`, and `failure_kw` fields.
+    启用在 HTTP 请求体的前 PING_BODY_LIMIT_FORMATTED 字节中查找关键词的 HTTP ping 过滤功能。另请参阅 `start_kw`、`success_kw` 和 `failure_kw` 字段。
 
 filter_default_fail
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Determines the handling of email and HTTP pings when keyword filtering is enabled,
-    but no keywords match.
+    确定在启用关键词过滤但没有关键词匹配时如何处理电子邮件和 HTTP ping。
 
-    Keyword filtering is enabled for inbound email messages if either `filter_subject`
-    or `filter_body` (or both) is set to `true`. Keyword filtering is enabled for HTTP
-    pings if `filter_http_body` is set to `true`.
+    如果 `filter_subject` 或 `filter_body`（或两者）设置为 `true`，则入站电子邮件启用关键词过滤。如果 `filter_http_body` 设置为 `true`，则 HTTP ping 启用关键词过滤。
 
-    If `filter_default_fail=false`, and no keywords match, the ping will be ignored.
+    如果 `filter_default_fail=false`，且没有关键词匹配，则 ping 将被忽略。
 
-    If `filter_default_fail=true`, and no keywords match, the ping will be
-    classified as a failure signal.
+    如果 `filter_default_fail=true`，且没有关键词匹配，则 ping 将被分类为 failure 信号。
 
-    Example:
+    示例：
 
     <pre>{
         "filter_http_body": true,
@@ -630,29 +552,24 @@ filter_default_fail
         "success_kw": "Backup successful"
     }</pre>
 
-    In this example, an HTTP ping will be classified as a success signal if and only if
-    the request body contains the string "Backup successful". In all other cases,
-    including HTTP GET requests with an empty request body, the ping will be classified
-    as a failure signal.
+    在此示例中，HTTP ping 只有在且仅在请求体包含字符串"Backup successful"时才被分类为 success 信号。在所有其他情况下，包括带有空请求体的 HTTP GET 请求，ping 将被分类为 failure 信号。
 
-### Response Codes
+### 响应码
 
 201 Created
-:   A new check was successfully created.
+:   新检查项成功创建。
 
 200 OK
-:   An existing check was found and updated.
+:   找到了已有的检查项并已更新。
 
 400 Bad Request
-:   The request is not well-formed, violates schema, or uses invalid
-    field values.
+:   请求格式不正确、违反模式或使用了无效的字段值。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   The account has hit its check limit. For free accounts,
-    the limit is 20 checks per account.
+:   账户已达到检查项数量限制。对于免费账户，限制为每个账户 20 个检查项。
 
 ### Example Request
 
@@ -705,236 +622,192 @@ curl SITE_ROOT/api/v3/checks/ \
 }
 ```
 
-## Update an Existing Check {: #update-check .rule }
+## 更新已有检查项 {: #update-check .rule }
 
 `POST SITE_ROOT/api/v3/checks/<uuid>`
 
-Updates an existing check. All request parameters are optional. If you omit any
-parameter, SITE_NAME will leave its value unchanged.
+更新已有的检查项。所有请求参数都是可选的。如果省略任何参数，SITE_NAME 将保持其值不变。
 
-### Request Parameters
+### 请求参数
 
 name
-:   string, optional.
+:   字符串，可选。
 
-    Name for the check.
+    检查项的名称。
 
-    Changed in API v3: the check's slug is no longer automatically generated
-    from the check's name. Instead, the client can specify the slug explicitly
-    via the `slug` field.
+    API v3 中的变更：检查项的 slug 不再从名称自动生成。客户端可以通过 `slug` 字段显式指定 slug。
 
 slug
-:   string, optional
+:   字符串，可选。
 
-    Slug for the new check. The slug should only contain the following
-    characters: `a-z`, `0-9`, hyphens, underscores. Example:
+    检查项的 slug。slug 只能包含以下字符：`a-z`、`0-9`、连字符、下划线。示例：
 
     <pre>{"slug": "my-custom-slug"}</pre>
 
 tags
-:   string, optional.
+:   字符串，可选。
 
-    A space-delimited list of tags for the check.
-
-    Example:
+    检查项的以空格分隔的标签列表。示例：
 
     <pre>{"tags": "reports staging"}</pre>
 
 desc
-:   string, optional.
+:   字符串，可选。
 
-    Description of the check.
+    检查项的描述。
 
 timeout
-:   number, optional.
+:   数字，可选。
 
-    The expected period of this check in seconds.
+    检查项的期望周期（秒）。
 
-    Minimum: 60 (one minute), maximum: 31536000 (365 days).
+    最小值：60（一分钟），最大值：31536000（365 天）。
 
-    Example for a 5-minute timeout:
+    5 分钟超时的示例：
 
     <pre>{"timeout": 300}</pre>
 
 grace
-:   number, optional.
+:   数字，可选。
 
-    The grace period for this check in seconds.
+    检查项的宽限期（秒）。
 
-    Minimum: 60 (one minute), maximum: 31536000 (365 days).
+    最小值：60（一分钟），最大值：31536000（365 天）。
 
 schedule
-:   string, optional.
+:   字符串，可选。
 
-    A cron or systemd OnCalendar expression defining this check's schedule.
-    SITE_NAME will detect the expression type (cron or OnCalendar) automatically.
+    定义检查项调度周期的 cron 或 systemd OnCalendar 表达式。SITE_NAME 会自动检测表达式类型（cron 或 OnCalendar）。
 
-    The `schedule` parameter takes precedence over the `timeout` field: If you specify
-    both the `timeout` and the `schedule` parameters, SITE_NAME will save the
-    `schedule` and ignore the `timeout`.
+    `schedule` 参数优先于 `timeout` 字段：如果同时指定了 `timeout` 和 `schedule` 参数，SITE_NAME 将保存 `schedule` 并忽略 `timeout`。
 
-    Example using a cron expression ("run every half-hour"):
+    使用 cron 表达式的示例（"每半小时运行一次"）：
 
     <pre>{"schedule": "0,30 * * * *"}</pre>
 
-    Example using an OnCalendar expression ("run at 12:00 of the last day of every
-    month"):
+    使用 OnCalendar 表达式的示例（"每月最后一天 12:00 运行"）：
 
     <pre>{"schedule": "\*-\*~1 12:00"}</pre>
 
  tz
-:   string, optional.
+:   字符串，可选。
 
-    Server's timezone. This setting only has an effect in combination with the
-    "schedule" parameter.
+    服务器的时区。此设置仅在结合"schedule"参数时生效。
 
-    Example:
+    示例：
 
     <pre>{"tz": "Europe/Riga"}</pre>
 
 manual_resume
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Controls whether a paused ping automatically resumes when pinged (the default),
-    or not. If set to false, a paused check will leave the paused state when it receives
-    a ping. If set to true, a paused check will ignore pings and stay paused until
-    you manually resume it from the web dashboard.
+    控制暂停的检查项在收到 ping 时是否自动恢复（默认行为），或者不自动恢复。如果设置为 false，暂停的检查项在收到 ping 时将退出暂停状态。如果设置为 true，暂停的检查项将忽略 ping 并保持暂停状态，直到您从 Web 仪表盘手动恢复它。
 
 methods
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the allowed HTTP methods for making ping requests.
-    Must be one of the two values: "" (an empty string) or "POST".
+    指定允许用于发送 ping 请求的 HTTP 方法。必须是以下两个值之一：""（空字符串）或 "POST"。
 
-    Set this field to "" (an empty string) to allow HEAD, GET,
-    and POST requests.
+    将此字段设置为 ""（空字符串）以允许 HEAD、GET 和 POST 请求。
 
-    Set this field to "POST" to allow only POST requests.
+    将此字段设置为 "POST" 以仅允许 POST 请求。
 
-    Example:
+    示例：
 
     <pre>{"methods": "POST"}</pre>
 
 channels
-:   string, optional.
+:   字符串，可选。
 
-    Set this field to a special value "*" to automatically assign all existing
-    integrations. Example:
+    将此字段设置为特殊值 "*" 以自动分配所有已有集成。示例：
 
     <pre>{"channels": "*"}</pre>
 
-    Set this field to a special value "" (empty string) to automatically *unassign*
-    all existing integrations. Example:
+    将此字段设置为特殊值 ""（空字符串）以自动*取消分配*所有已有集成。示例：
 
     <pre>{"channels": ""}</pre>
 
-    To assign specific integrations, use a comma-separated list of integration
-    UUIDs. You can look up integration UUIDs using the
-    [List Existing Integrations](#list-channels) API call.
+    要分配特定的集成，请使用逗号分隔的集成 UUID 列表。您可以使用[列出已有集成](#list-channels) API 调用来查找集成 UUID。
 
-    Example:
+    示例：
 
     <pre>{"channels":
      "4ec5a071-2d08-4baa-898a-eb4eb3cd6941,746a083e-f542-4554-be1a-707ce16d3acc"}</pre>
 
-    Alternatively, if you have named your integrations in SITE_NAME dashboard,
-    you can specify integrations by their names. For this to work, your integrations
-    need non-empty and unique names, and they must not contain commas. The names
-    must match exactly, whitespace is significant.
+    或者，如果您在 SITE_NAME 仪表盘中为集成命名了名称，则可以通过名称指定集成。为此，您的集成需要有非空的唯一名称，且不能包含逗号。名称必须完全匹配，空格有效。
 
-    Example:
+    示例：
 
     <pre>{"channels": "Email to Alice,SMS to Alice"}</pre>
 
 start_kw
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the keywords for classifying inbound email messages and HTTP pings as
-    start signals. Separate multiple keywords using commas. Keywords are
-    case-sensitive.
+    指定用于将入站电子邮件和 HTTP ping 分类为 start 信号的关键词。多个关键词用逗号分隔。关键词区分大小写。
 
-    Use this field in combination with the `filter_subject`, `filter_body`,
-    and `filter_http_body` fields.
+    将此字段与 `filter_subject`、`filter_body` 和 `filter_http_body` 字段结合使用。
 
-    Example:
+    示例：
 
     <pre>{"filter_subject": true, "start_kw": "STARTED"}</pre>
 
-    In this example, SITE_NAME classifies an inbound email as a start signal if the
-    Subject line contains the word "STARTED".
+    在此示例中，如果主题行包含单词"STARTED"，SITE_NAME 将入站电子邮件分类为 start 信号。
 
 success_kw
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the keywords for classifying inbound email messages and HTTP pings as
-    success signals. Separate multiple keywords using commas. Keywords are
-    case-sensitive.
+    指定用于将入站电子邮件和 HTTP ping 分类为 success 信号的关键词。多个关键词用逗号分隔。关键词区分大小写。
 
-    Use this field in combination with the `filter_subject`, `filter_body`,
-    and `filter_http_body` fields.
+    将此字段与 `filter_subject`、`filter_body` 和 `filter_http_body` 字段结合使用。
 
-    Example:
+    示例：
 
     <pre>{"filter_subject": true, "success_kw": "SUCCESS,COMPLETED"}</pre>
 
-    In this example, an inbound email message counts as success if the Subject line
-    contains either the word "SUCCESS" or the word "COMPLETED".
+    在此示例中，如果主题行包含"SUCCESS"或"COMPLETED"中的任一单词，则入站电子邮件计为 success。
 
 failure_kw
-:   string, optional, default value: "".
+:   字符串，可选，默认值：""。
 
-    Specifies the keywords for classifying inbound email messages and HTTP pings as
-    failure signals. Separate multiple keywords using commas. Keywords are
-    case-sensitive.
+    指定用于将入站电子邮件和 HTTP ping 分类为 failure 信号的关键词。多个关键词用逗号分隔。关键词区分大小写。
 
-    Use this field in combination with the `filter_subject`, `filter_body`,
-    and `filter_http_body` fields.
+    将此字段与 `filter_subject`、`filter_body` 和 `filter_http_body` 字段结合使用。
 
-    Example:
+    示例：
 
     <pre>{"filter_subject": true, "failure_kw": "FAILED,ERROR"}</pre>
 
-    In this example, an inbound email message counts as failure if the Subject line
-    contains either the word "FAILED" or the word "ERROR".
+    在此示例中，如果主题行包含"FAILED"或"ERROR"中的任一单词，则入站电子邮件计为 failure。
 
 filter_subject
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Enables filtering of inbound email messages by looking for keywords in their
-    subject lines. See also the `start_kw`, `success_kw`, and `failure_kw` fields.
+    启用在入站电子邮件的主题行中查找关键词的过滤功能。另请参阅 `start_kw`、`success_kw` 和 `failure_kw` 字段。
 
 filter_body
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Enables filtering of inbound email messages by looking for keywords in the
-    message body. See also the `start_kw`, `success_kw`, and `failure_kw` fields.
+    启用在入站电子邮件的正文中查找关键词的过滤功能。另请参阅 `start_kw`、`success_kw` 和 `failure_kw` 字段。
 
-    SITE_NAME supports both plain text and HTML email messages, and looks for
-    keywords both in the plain text and the HTML message contents.
+    SITE_NAME 支持纯文本和 HTML 格式的电子邮件，并在纯文本和 HTML 邮件内容中查找关键词。
 
 filter_http_body
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Enables filtering of HTTP pings by looking for keywords in the first
-    PING_BODY_LIMIT_FORMATTED of the HTTP request body. See also the
-    `start_kw`, `success_kw`, and `failure_kw` fields.
+    启用在 HTTP 请求体的前 PING_BODY_LIMIT_FORMATTED 字节中查找关键词的 HTTP ping 过滤功能。另请参阅 `start_kw`、`success_kw` 和 `failure_kw` 字段。
 
 filter_default_fail
-:   boolean, optional, default value: false.
+:   布尔值，可选，默认值：false。
 
-    Determines the handling of email and HTTP pings when keyword filtering is enabled,
-    but no keywords match.
+    确定在启用关键词过滤但没有关键词匹配时如何处理电子邮件和 HTTP ping。
 
-    Keyword filtering is enabled for inbound email messages if either `filter_subject`
-    or `filter_body` (or both) is set to `true`. Keyword filtering is enabled for HTTP
-    pings if `filter_http_body` is set to `true`.
+    如果 `filter_subject` 或 `filter_body`（或两者）设置为 `true`，则入站电子邮件启用关键词过滤。如果 `filter_http_body` 设置为 `true`，则 HTTP ping 启用关键词过滤。
 
-    If `filter_default_fail=false`, and no keywords match, the ping will be ignored.
+    如果 `filter_default_fail=false`，且没有关键词匹配，则 ping 将被忽略。
 
-    If `filter_default_fail=true`, and no keywords match, the ping will be
-    classified as a failure signal.
+    如果 `filter_default_fail=true`，且没有关键词匹配，则 ping 将被分类为 failure 信号。
 
-    Example:
+    示例：
 
     <pre>{
         "filter_http_body": true,
@@ -942,28 +815,24 @@ filter_default_fail
         "success_kw": "Backup successful"
     }</pre>
 
-    In this example, an HTTP ping will be classified as a success signal if and only if
-    the request body contains the string "Backup successful". In all other cases,
-    including HTTP GET requests with an empty request body, the ping will be classified
-    as a failure signal.
+    在此示例中，HTTP ping 只有在且仅在请求体包含字符串"Backup successful"时才被分类为 success 信号。在所有其他情况下，包括带有空请求体的 HTTP GET 请求，ping 将被分类为 failure 信号。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The check was successfully updated.
+:   检查项成功更新。
 
 400 Bad Request
-:   The request is not well-formed, violates schema, or uses invalid
-    field values.
+:   请求格式不正确、违反模式或使用了无效的字段值。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The specified check does not exist.
+:   指定的检查项不存在。
 
 
 ### Example Request
@@ -1017,29 +886,27 @@ curl SITE_ROOT/api/v3/checks/7918b17b-a745-4db1-8575-9d2e07c97f79 \
 }
 ```
 
-## Pause Monitoring of a Check {: #pause-check .rule }
+## 暂停监控检查项 {: #pause-check .rule }
 
 `POST SITE_ROOT/api/v3/checks/<uuid>/pause`
 
-Disables monitoring for a check without removing it. The check goes into a "paused"
-state. You can resume monitoring of the check by pinging it, or by running
-the [Resume](#resume-check) API call (useful when check's `manual_resume=True`).
+禁用检查项的监控而不删除它。检查项进入"paused"状态。您可以通过发送 ping 来恢复检查项的监控，或者运行[恢复](#resume-check) API 调用（当检查项的 `manual_resume=True` 时有用）。
 
-This API call has no request parameters.
+此 API 调用没有请求参数。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The check was successfully paused.
+:   检查项成功暂停。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The specified check does not exist.
+:   指定的检查项不存在。
 
 ### Example Request
 
@@ -1048,9 +915,7 @@ curl SITE_ROOT/api/v3/checks/7918b17b-a745-4db1-8575-9d2e07c97f79/pause \
     --request POST --header "X-Api-Key: your-api-key" --data ""
 ```
 
-Note: the `--data ""` argument forces curl to send a `Content-Length` request header
-even though the request body is empty. For HTTP POST requests, the `Content-Length`
-header is sometimes required by some network proxies and web servers.
+注意：`--data ""` 参数强制 curl 发送 `Content-Length` 请求头，即使请求体为空。对于 HTTP POST 请求，某些网络代理和 Web 服务器有时需要 `Content-Length` 头。
 
 ### Example Response
 
@@ -1088,32 +953,30 @@ header is sometimes required by some network proxies and web servers.
 }
 ```
 
-## Resume Monitoring of a Check {: #resume-check .rule }
+## 恢复监控检查项 {: #resume-check .rule }
 
 `POST SITE_ROOT/api/v3/checks/<uuid>/resume`
 
-Resumes a check. The check goes into the "new" state. Use this API call to resume
-the monitoring of checks that are in the paused state, and have the `manual_resume`
-configuration parameter set to `True`.
+恢复检查项。检查项进入"new"状态。使用此 API 调用来恢复处于暂停状态且 `manual_resume` 配置参数设置为 `True` 的检查项的监控。
 
-This API call has no request parameters.
+此 API 调用没有请求参数。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The operation was successful.
+:   操作成功。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The specified check does not exist.
+:   指定的检查项不存在。
 
 409 Conflict
-:   The specified check is currently not in a paused state.
+:   指定的检查项当前不处于暂停状态。
 
 ### Example Request
 
@@ -1122,9 +985,7 @@ curl SITE_ROOT/api/v3/checks/7918b17b-a745-4db1-8575-9d2e07c97f79/resume \
     --request POST --header "X-Api-Key: your-api-key" --data ""
 ```
 
-Note: the `--data ""` argument forces curl to send a `Content-Length` request header
-even though the request body is empty. For HTTP POST requests, the `Content-Length`
-header is sometimes required by some network proxies and web servers.
+注意：`--data ""` 参数强制 curl 发送 `Content-Length` 请求头，即使请求体为空。对于 HTTP POST 请求，某些网络代理和 Web 服务器有时需要 `Content-Length` 头。
 
 ### Example Response
 
@@ -1163,28 +1024,27 @@ header is sometimes required by some network proxies and web servers.
 ```
 
 
-## Delete Check {: #delete-check .rule }
+## 删除检查项 {: #delete-check .rule }
 
 `DELETE SITE_ROOT/api/v3/checks/<uuid>`
 
-Permanently deletes the check from the user's account. Returns JSON representation of the
-check that was just deleted.
+从用户账户中永久删除检查项。返回刚刚被删除的检查项的 JSON 表示。
 
-This API call has no request parameters.
+此 API 调用没有请求参数。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The check was successfully deleted.
+:   检查项成功删除。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The specified check does not exist.
+:   指定的检查项不存在。
 
 ### Example Request
 
@@ -1229,29 +1089,27 @@ curl SITE_ROOT/api/v3/checks/7918b17b-a745-4db1-8575-9d2e07c97f79 \
 }
 ```
 
-## List check's logged pings {: #list-pings .rule }
+## 列出检查项的已记录 ping {: #list-pings .rule }
 
 `GET SITE_ROOT/api/v3/checks/<uuid>/pings/`
 
-Returns a list of pings this check has received.
+返回此检查项已接收到的 ping 列表。
 
-This endpoint returns pings in reverse order (most recent first), and the total
-number of returned pings depends on the account's billing plan: 100 for free accounts,
-1000 for paid accounts.
+此端点按倒序返回 ping（最新的在前），返回的 ping 总数取决于账户的计费方案：免费账户 100 条，付费账户 1000 条。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The specified check does not exist.
+:   指定的检查项不存在。
 
 ### Example Request
 
@@ -1316,26 +1174,25 @@ curl SITE_ROOT/api/v3/checks/f618072a-7bde-4eee-af63-71a77c5723bc/pings/ \
 ```
 
 
-## Get a ping's logged body {: #ping-body .rule }
+## 获取 ping 的请求体 {: #ping-body .rule }
 
 `GET SITE_ROOT/api/v3/checks/<uuid>/pings/<n>/body`
 
-Returns a ping's logged body. The response always has the `Content-Type: text/plain`
-response header and the ping body is returned verbatim in the response body.
+返回 ping 的已记录请求体。响应的 `Content-Type` 始终为 `text/plain`，ping 的请求体会逐字返回到响应体中。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded and a body is present.
+:   请求成功且存在请求体。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The check does not exist, the ping does not exist, or the ping has no body data.
+:   检查项不存在、ping 不存在或 ping 没有请求体数据。
 
 503 Service Unavailable
-:   External object storage service is unavailable, please try later.
+:   外部对象存储服务不可用，请稍后重试。
 
 
 ### Example Request
@@ -1345,64 +1202,57 @@ curl SITE_ROOT/api/v3/checks/f618072a-7bde-4eee-af63-71a77c5723bc/pings/397/body
     --header "X-Api-Key: your-api-key"
 ```
 
-## List check's status changes {: #list-flips .rule }
+## 列出检查项的状态变更 {: #list-flips .rule }
 
 `GET SITE_ROOT/api/v3/checks/<uuid>/flips/`<br>
 `GET SITE_ROOT/api/v3/checks/<unique_key>/flips/`
 
-Returns a list of "flips" this check has experienced. A flip is a change of status
-(from "down" to "up," or from "up" to "down").
+返回此检查项经历的状态变更列表。状态变更是指状态的变化（从"down"到"up"，或从"up"到"down"）。
 
-This API endpoint supports time filtering via the `seconds`, `start`, and `end` query
-parameters. If no time filters are specified, the API returns all stored
-flips for a given check.
+此 API 端点支持通过 `seconds`、`start` 和 `end` 查询参数进行时间过滤。如果未指定时间过滤器，API 将返回指定检查项的所有已存储状态变更。
 
-Notes about flip retention: SITE_NAME stores historic flips for the current month
-and for two full months prior to the current month. SITE_NAME cleans up older flips
-periodically. At any given time, there may be a low number of flips in the database
-that are due to be removed, but have not been removed yet. This API call will
-return these flips as well.
+关于状态变更保留的说明：SITE_NAME 保留当前月份以及当前月份之前两个整月的历史状态变更。SITE_NAME 会定期清理更早的状态变更。在任何时候，数据库中可能有少量已到期但尚未被删除的状态变更。此 API 调用也会返回这些状态变更。
 
-### Query Parameters
+### 查询参数
 
 seconds=&lt;value&gt;
-:   Returns the flips from the last `value` seconds
+:   返回最近 `value` 秒内的状态变更
 
-    Example:
+    示例：
 
     `SITE_ROOT/api/v3/checks/<uuid|unique_key>/flips/?seconds=3600`
 
 start=&lt;value&gt;
-:   Returns flips that are newer than the specified UNIX timestamp.
+:   返回早于指定 UNIX 时间戳的状态变更。
 
-    Example:
+    示例：
 
     `SITE_ROOT/api/v3/checks/<uuid|unique_key>/flips/?start=1592214380`
 
 end=&lt;value&gt;
-:   Returns flips that are older than the specified UNIX timestamp.
+:   返回晚于指定 UNIX 时间戳的状态变更。
 
-    Example:
+    示例：
 
     `SITE_ROOT/api/v3/checks/<uuid|unique_key>/flips/?end=1592217980`
 
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 400 Bad Request
-:   Invalid query parameters.
+:   无效的查询参数。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 403 Forbidden
-:   Access denied, wrong API key.
+:   访问被拒绝，API 密钥错误。
 
 404 Not Found
-:   The specified check does not exist.
+:   指定的检查项不存在。
 
 ### Example Request
 
@@ -1430,19 +1280,19 @@ curl SITE_ROOT/api/v3/checks/f618072a-7bde-4eee-af63-71a77c5723bc/flips/ \
 ]
 ```
 
-## List Existing Integrations {: #list-channels .rule }
+## 列出已有集成 {: #list-channels .rule }
 
 `GET SITE_ROOT/api/v3/channels/`
 
-Returns a list of integrations belonging to the project.
+返回属于该项目的集成列表。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 ### Example Request
 
@@ -1469,34 +1319,30 @@ curl --header "X-Api-Key: your-api-key" SITE_ROOT/api/v3/channels/
 }
 ```
 
-## List Project's Badges {: #list-badges .rule }
+## 列出项目的徽章 {: #list-badges .rule }
 
 `GET SITE_ROOT/api/v3/badges/`
 
-Returns a map of all tags in the project, with badge URLs for each tag. SITE_NAME
-provides badges in a few different formats:
+返回项目中所有标签的映射，以及每个标签的徽章 URL。SITE_NAME 提供几种不同格式的徽章：
 
-* `svg`: returns the badge as an SVG document.
-* `json`: returns a JSON document which you can use to generate a custom badge
-    yourself.
-* `shields`: returns JSON in a [Shields.io compatible format](https://shields.io/endpoint).
+* `svg`：以 SVG 文档形式返回徽章。
+* `json`：返回一个 JSON 文档，您可以用来自行生成自定义徽章。
+* `shields`：以 [Shields.io 兼容格式](https://shields.io/endpoint)返回 JSON。
 
-In addition, badges have 2-state and 3-state variations:
+此外，徽章有 2 状态和 3 状态的变体：
 
-* `svg`, `json`, `shields`: reports two states: "up" and "down". It
-    considers any checks in the grace period as still "up".
-* `svg3`, `json3`, `shields3`: reports three states: "up", "late", and "down".
+* `svg`、`json`、`shields`：报告两种状态："up"和"down"。它将宽限期内的任何检查项仍视为"up"。
+* `svg3`、`json3`、`shields3`：报告三种状态："up"、"late"和"down"。
 
-The response includes a special `*` entry: this pseudo-tag reports the overall status
-of all checks in the project.
+响应中包含一个特殊的 `*` 条目：此伪标签报告项目中所有检查项的总体状态。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 401 Unauthorized
-:   The API key is either missing or invalid.
+:   API 密钥缺失或无效。
 
 ### Example Request
 
@@ -1545,18 +1391,16 @@ curl --header "X-Api-Key: your-api-key" SITE_ROOT/api/v3/badges/
 }
 ```
 
-## Check Database Connectivity {: #status .rule }
+## 检查数据库连接 {: #status .rule }
 
 `GET SITE_ROOT/api/v3/status/`
 
-Runs a test query and returns HTTP 200 if the query completes successfully.
-Use this endpoint to monitor the uptime of your Healthchecks instance with an
-external uptime monitoring system.
+运行一个测试查询，如果查询成功完成，则返回 HTTP 200。使用此端点通过外部正常运行时间监控系统来监控您的 Healthchecks 实例的运行状态。
 
-### Response Codes
+### 响应码
 
 200 OK
-:   The request succeeded.
+:   请求成功。
 
 500 Internal Server Error
-:   Test database query did not succeed.
+:   测试数据库查询未成功。

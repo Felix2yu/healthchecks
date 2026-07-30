@@ -57,19 +57,19 @@ $(function () {
     $("#ping-now").click(function(e) {
         var button = this;
         $.post(this.dataset.url, function() {
-            button.textContent = "Success!";
+            button.textContent = "成功！";
         });
     });
 
     $("#ping-now").mouseout(function(e) {
         setTimeout(function() {
-            e.target.textContent = "Ping Now!";
+            e.target.textContent = "立即 Ping！";
         }, 300);
     });
 
     $(".details-integrations.rw tr").click(function() {
         var isOn = $(this).toggleClass("on").hasClass("on");
-        $(".label", this).text(isOn ? "ON" : "OFF");
+        $(".label", this).text(isOn ? "开" : "关");
 
         var token = $('input[name=csrfmiddlewaretoken]').val();
         $.ajax({
@@ -161,7 +161,7 @@ $(function () {
         });
     });
 
-    $(".click-to-copy").tooltip({ container: "body", title: "Click to copy" });
+    $(".click-to-copy").tooltip({ container: "body", title: "点击复制" });
     $(".click-to-copy").click(function (e) {
         if (window.getSelection().toString()) {
             // do nothing, selection not empty
@@ -169,7 +169,7 @@ $(function () {
         }
 
         navigator.clipboard.writeText(this.textContent);
-        $(".tooltip-inner").text("Copied!");
+        $(".tooltip-inner").text("已复制！");
     });
 
     // Enable the submit button in transfer form when user selects

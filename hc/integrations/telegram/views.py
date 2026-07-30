@@ -120,7 +120,7 @@ def add(request: AuthenticatedHttpRequest) -> HttpResponse:
         channel.save()
 
         channel.assign_all_checks()
-        messages.success(request, "The Telegram integration has been added!")
+        messages.success(request, "Telegram 集成已添加！")
         return redirect("hc-channels", project.code)
 
     ctx = {

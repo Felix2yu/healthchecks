@@ -48,7 +48,7 @@ def get_ping_body(ping: Ping | None, maxlen: int | None = None) -> str | None:
     if body_bytes := get_ping_body_bytes(ping):
         body = body_bytes.decode(errors="replace")
         if maxlen and len(body) > maxlen:
-            body = body[:maxlen] + "\n[truncated]"
+            body = body[:maxlen] + "\n[已截断]"
 
     return body
 
@@ -133,7 +133,7 @@ class HttpTransport(Transport):
     @classmethod
     def raise_for_response(cls, response: curl.Response) -> NoReturn:
         # Subclasses can override this method to produce a more specific message.
-        raise TransportError(f"Received status code {response.status_code}")
+        raise TransportError(f"收到状态码 {response.status_code}")
 
     @classmethod
     def _request(

@@ -53,7 +53,7 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     project = _get_rw_project_for_user(request, code)
 
     if request.GET.get("error") == "access_denied":
-        messages.warning(request, "Discord setup was cancelled.")
+        messages.warning(request, "Discord 设置已取消。")
         return redirect("hc-channels", project.code)
 
     if request.GET.get("state") != state:
@@ -71,13 +71,13 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     doc = result.json()
     if isinstance(doc, dict) and doc.get("code") == 30007:
         e = "maximum number of webhooks reached"
-        messages.warning(request, f"Response from Discord: {e}. Integration not added.")
+        messages.warning(request, f"来自 Discord 的响应：{e}。集成未添加。")
         return redirect("hc-channels", project.code)
 
     if not isinstance(doc, dict) or "access_token" not in doc:
         messages.warning(
             request,
-            "Received an unexpected response from Discord. Integration not added.",
+            "收到来自 Discord 的意外响应。集成未添加。",
         )
         logger.warning("Unexpected Discord OAuth response: %s", result.content)
         return redirect("hc-channels", project.code)
@@ -86,5 +86,5 @@ def add_complete(request: AuthenticatedHttpRequest) -> HttpResponse:
     channel.value = result.text
     channel.save()
     channel.assign_all_checks()
-    messages.success(request, "The Discord integration has been added!")
+    messages.success(request, "Discord 集成已添加！")
     return redirect("hc-channels", project.code)

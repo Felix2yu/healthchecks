@@ -1,4 +1,4 @@
-// the server returns appropriate CORS headers so cross-domain AJAX requests work:
+// 服务器返回了合适的 CORS 头，因此支持跨域 AJAX 请求：
 var xhr = new XMLHttpRequest();
 xhr.open('GET', 'PING_URL', true);
 xhr.send(null);

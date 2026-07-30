@@ -9,12 +9,12 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4>Transfer to Another Project</h4>
+            <h4>转移到其他项目</h4>
         </div>
         <div class="modal-body">
             <div class="form-group">
                 <label for="update-name-input" class="col-sm-4 control-label">
-                    Check
+                    检查项
                 </label>
                 <div class="col-sm-7">
                     <p class="form-control-static">{{ check.name_then_code }}</p>
@@ -23,7 +23,7 @@
 
             <div class="form-group">
                 <label for="update-name-input" class="col-sm-4 control-label">
-                    Target Project
+                    目标项目
                 </label>
                 <div class="col-sm-7">
                     <select
@@ -34,32 +34,30 @@
                         <option></option>
                         {% for project in request.profile.projects.all %}
                             {% if project == check.project %}
-                                <option disabled>{{ project }} (current project)</option>
+                                <option disabled>{{ project }}（当前项目）</option>
                             {% elif project.owner_id == check.project.owner_id or project.num_checks_available > 0 %}
                                 <option value="{{ project.code }}">{{ project }}</option>
                             {% else %}
-                                <option disabled>{{ project }} (at check limit)</option>
+                                <option disabled>{{ project }}（达到检查项上限）</option>
                             {% endif %}
                         {% endfor %}
                     </select>
                 </div>
             </div>
             <div class="text-warning">
-                <strong>Integrations will get reset.</strong>
-                The check will lose its current notification
-                channels, and will be assigned all notification
-                channels of the target project.
+                <strong>集成将被重置。</strong>
+                检查项将失去当前的通知通道，并将被分配目标项目的所有通知通道。
             </div>
 
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             <button
                 id="transfer-confirm"
                 disabled
                 type="submit"
-                class="btn btn-primary">Transfer</button>
+                class="btn btn-primary">转移</button>
         </div>
     </div>
 </form>

@@ -1,26 +1,26 @@
 {% extends "base_project.html" %}
 {% load humanize static hc_extras %}
 
-{% block title %}PagerTree Integration for {{ site_name }}{% endblock %}
+{% block title %}PagerTree 集成 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
   <div class="col-sm-12">
       <h1>PagerTree</h1>
 
-      <p>If your team uses <a href="https://pagertree.com">PagerTree</a>,
-      you can set up {{ site_name }} to create a PagerTree alert when
-      a check goes down, and resolve it when a check goes back up.</p>
+      <p>如果您的团队使用 <a href="https://pagertree.com">PagerTree</a>，
+      您可以设置 {{ site_name }} 在检查项宕机时创建 PagerTree 警报，
+      并在检查项恢复时将其解决。</p>
 
-      <h2>Setup Guide</h2>
+      <h2>设置指南</h2>
 
       <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Log into your PagerTree account, navigate to the <a href="https://app.pagertree.com/integrations?direction=asc&limit=10&sort=tiny_id" target="_blank">Integrations page</a>.
-                Then click the <strong>New Integration</strong> button and
-                select the <strong>Healthchecks</strong> logo.
+                登录您的 PagerTree 帐户，导航至 <a href="https://app.pagertree.com/integrations?direction=asc&limit=10&sort=tiny_id" target="_blank">集成页面</a>。
+                然后点击 <strong>新建集成</strong> 按钮，
+                选择 <strong>Healthchecks</strong> 徽标。
             </p>
         </div>
         <div class="col-sm-6">
@@ -28,7 +28,7 @@
                 <span style="left: 89%; top: 35%;" class="marker"></span>
                 <img
                     class="ai-guide-screenshot"
-                    alt="Click create integration button"
+                    alt="点击创建集成按钮"
                     src="{% static 'img/setup_pagertree_1.png' %}" />
             </div>
         </div>
@@ -38,13 +38,13 @@
           <div class="col-sm-6">
               <span class="step-no"></span>
               <p>
-                  In the New Integration Form, fill out the details with appropriate values. Then click the <strong>Create</strong> button.
+                  在新建集成表单中，填写合适的详细信息。然后点击 <strong>创建</strong> 按钮。
               </p>
           </div>
           <div class="col-sm-6">
               <img
                   class="ai-guide-screenshot"
-                  alt="Create Healthchecks.io integration with details"
+                  alt="创建 Healthchecks.io 集成详细信息"
                   src="{% static 'img/setup_pagertree_2.png' %}">
           </div>
       </div>
@@ -53,9 +53,9 @@
           <div class="col-sm-6">
               <span class="step-no"></span>
               <p>
-                Copy the <strong>Endpoint URL</strong> and paste it
-                in the form below.
-                Save the integration, and you are done!
+                复制 <strong>端点链接</strong> 并将其粘贴
+                到下面的表单中。
+                保存集成，大功告成！
               </p>
           </div>
           <div class="col-sm-6">
@@ -64,18 +64,18 @@
 
                   <img
                       class="ai-guide-screenshot"
-                      alt="Copy the Webhook URL"
+                      alt="复制 Webhook 链接"
                       src="{% static 'img/setup_pagertree_3.png' %}">
             </div>
           </div>
       </div>
 
-      <h2>Integration Settings</h2>
+      <h2>集成设置</h2>
 
       <form method="post" class="form-horizontal">
           {% csrf_token %}
           <div class="form-group {{ form.value.css_classes }}">
-              <label for="post-url" class="col-sm-2 control-label">Endpoint</label>
+               <label for="post-url" class="col-sm-2 control-label">端点</label>
               <div class="col-sm-10">
                   <input
                       id="post-url"
@@ -94,7 +94,7 @@
           </div>
           <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">Save Integration</button>
+                  <button type="submit" class="btn btn-primary">保存集成</button>
               </div>
           </div>
       </form>

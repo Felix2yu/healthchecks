@@ -2,7 +2,7 @@ $(function() {
     var tzTom = new TomSelect("select[name=tz]", {
         diacritics: false,
         maxOptions: null,
-        placeholder: "Type to search",
+        placeholder: "输入搜索",
         plugins: ["dropdown_input", "no_backspace_delete"],
         refreshThrottle: 0,
     });

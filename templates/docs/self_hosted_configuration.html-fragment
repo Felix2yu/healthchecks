@@ -1,6 +1,6 @@
-<h1>Server Configuration</h1>
-<p>Healthchecks prepares its configuration in <code>hc/settings.py</code>. It reads configuration
-from environment variables. Below is a list of environment variables it reads and uses.</p>
+<h1>服务器配置</h1>
+<p>Healthchecks 在 <code>hc/settings.py</code> 中准备其配置。它从环境变量中读取配置。
+以下是它读取和使用的环境变量列表。</p>
 <ul class="self-hosted-configuration-toc">
 <li><a href="#ADMINS">ADMINS</a></li>
 <li><a href="#ALLOWED_HOSTS">ALLOWED_HOSTS</a></li>
@@ -106,795 +106,559 @@ from environment variables. Below is a list of environment variables it reads an
 </ul>
 
 <h2 id="ADMINS"><code>ADMINS</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>A comma-separated list of email addresses to send code error notifications to.
-When <code>DEBUG=False</code>, Healthchecks will send the details of exceptions raised in the
-request/response cycle to the listed addresses. Example:</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>用于发送代码错误通知的电子邮件地址列表，以逗号分隔。当 <code>DEBUG=False</code> 时，Healthchecks 会将请求/响应周期中引发的异常详情发送到列出的地址。示例：</p>
 <div class="highlight"><pre><span></span><code><span class="na">ADMINS</span><span class="o">=</span><span class="s">alice@example.org,bob@example.org</span>
 </code></pre></div>
 
-<p>Note: for error notifications to work, make sure you have also specified working
-SMTP credentials in the <code>EMAIL_...</code> environment variables.</p>
+<p>注意：要使错误通知生效，请确保你还在 <code>EMAIL_...</code> 环境变量中指定了有效的 SMTP 凭据。</p>
 <h2 id="ALLOWED_HOSTS"><code>ALLOWED_HOSTS</code></h2>
-<p>Default: the domain part of <code>SITE_ROOT</code></p>
-<p>The host/domain names that this site can serve. Healthchecks populates this setting
-automatically with the domain part of <a href="#SITE_ROOT">SITE_ROOT</a>. You do not need
-to set it unless you serve Healthchecks on more than one domain.</p>
-<p>If you do serve the same Healthchecks instance on more than one domain, specify
-them all in <code>ALLOWED_HOSTS</code>, separated by commas:</p>
+<p>默认值：<code>SITE_ROOT</code> 的域名部分</p>
+<p>此站点可以服务的主机/域名。Healthchecks 会自动用 <a href="#SITE_ROOT">SITE_ROOT</a> 的域名部分填充此设置。除非你在多个域名上提供 Healthchecks 服务，否则无需设置。</p>
+<p>如果确实在多个域名上提供同一 Healthchecks 实例的服务，请在 <code>ALLOWED_HOSTS</code> 中指定它们，以逗号分隔：</p>
 <div class="highlight"><pre><span></span><code><span class="na">ALLOWED_HOSTS</span><span class="o">=</span><span class="s">first.example.org,second.example.org</span>
 </code></pre></div>
 
-<p>Aside from the comma-separated syntax, this is a standard Django setting.
-Read more about it in the
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts">Django documentation</a>.</p>
+<p>除了逗号分隔语法之外，这是一个标准的 Django 设置。在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts">Django 文档</a>中了解更多。</p>
 <h2 id="APPRISE_ENABLED"><code>APPRISE_ENABLED</code></h2>
-<p>Default: <code>False</code></p>
-<p>A boolean that turns on/off the <a href="https://github.com/caronc/apprise">Apprise</a>
-integration.</p>
-<p>Before enabling the Apprise integration, make sure the <code>apprise</code> package is installed:</p>
+<p>默认值：<code>False</code></p>
+<p>一个布尔值，用于开启/关闭 <a href="https://github.com/caronc/apprise">Apprise</a> 集成。</p>
+<p>在启用 Apprise 集成之前，请确保已安装 <code>apprise</code> 包：</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>apprise
 </code></pre></div>
 
 <h2 id="DB"><code>DB</code></h2>
-<p>Default: <code>sqlite</code></p>
-<p>The database engine to use. Possible values: <code>sqlite</code>, <code>postgres</code>, <code>mysql</code>.</p>
+<p>默认值：<code>sqlite</code></p>
+<p>要使用的数据库引擎。可能的值：<code>sqlite</code>、<code>postgres</code>、<code>mysql</code>。</p>
 <h2 id="DB_CONN_MAX_AGE"><code>DB_CONN_MAX_AGE</code></h2>
-<p>Default: <code>0</code></p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#conn-max-age">Django documentation</a>.</p>
+<p>默认值：<code>0</code></p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#conn-max-age">Django 文档</a>中了解更多。</p>
 <h2 id="DB_HOST"><code>DB_HOST</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#host">Django documentation</a>.</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#host">Django 文档</a>中了解更多。</p>
 <h2 id="DB_NAME"><code>DB_NAME</code></h2>
-<p>Default: <code>hc</code> (PostgreSQL, MySQL) or <code>/path/to/projectdir/hc.sqlite</code> (SQLite)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#name">Django documentation</a>.</p>
+<p>默认值：<code>hc</code>（PostgreSQL、MySQL）或 <code>/path/to/projectdir/hc.sqlite</code>（SQLite）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#name">Django 文档</a>中了解更多。</p>
 <h2 id="DB_PASSWORD"><code>DB_PASSWORD</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#password">Django documentation</a>.</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#password">Django 文档</a>中了解更多。</p>
 <h2 id="DB_PASSWORD_FILE"><code>DB_PASSWORD_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#DB_PASSWORD">DB_PASSWORD</a> setting.
-If <code>DB_PASSWORD</code> and <code>DB_PASSWORD_FILE</code> are both set, <code>DB_PASSWORD_FILE</code> takes
-precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#DB_PASSWORD">DB_PASSWORD</a> 设置。如果同时设置了 <code>DB_PASSWORD</code> 和 <code>DB_PASSWORD_FILE</code>，则 <code>DB_PASSWORD_FILE</code> 优先。</p>
 <h2 id="DB_PORT"><code>DB_PORT</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#port">Django documentation</a>.</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#port">Django 文档</a>中了解更多。</p>
 <h2 id="DB_SSLMODE"><code>DB_SSLMODE</code></h2>
-<p>Default: <code>prefer</code></p>
-<p>PostgreSQL-specific, <a href="https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-SSLMODE">details</a></p>
+<p>默认值：<code>prefer</code></p>
+<p>PostgreSQL 专用，<a href="https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-SSLMODE">详情</a></p>
 <h2 id="DB_TARGET_SESSION_ATTRS"><code>DB_TARGET_SESSION_ATTRS</code></h2>
-<p>Default: <code>read-write</code></p>
-<p>PostgreSQL-specific, <a href="https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-TARGET-SESSION-ATTRS">details</a></p>
+<p>默认值：<code>read-write</code></p>
+<p>PostgreSQL 专用，<a href="https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-TARGET-SESSION-ATTRS">详情</a></p>
 <h2 id="DB_USER"><code>DB_USER</code></h2>
-<p>Default: <code>postgres</code> (PostgreSQL) or <code>root</code> (MySQL)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#user">Django documentation</a>.</p>
+<p>默认值：<code>postgres</code>（PostgreSQL）或 <code>root</code>（MySQL）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#user">Django 文档</a>中了解更多。</p>
 <h2 id="DEBUG"><code>DEBUG</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off debug mode.</p>
-<p><em>Never run a Healthchecks instance in production with the debug mode turned on!</em></p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#debug">Django documentation</a>.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭调试模式。</p>
+<p><em>切勿在生产环境中以调试模式运行 Healthchecks 实例！</em></p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#debug">Django 文档</a>中了解更多。</p>
 <h2 id="DEFAULT_FROM_EMAIL"><code>DEFAULT_FROM_EMAIL</code></h2>
-<p>Default: <code>healthchecks@example.org</code></p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#default-from-email">Django documentation</a>.</p>
+<p>默认值：<code>healthchecks@example.org</code></p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#default-from-email">Django 文档</a>中了解更多。</p>
 <h2 id="DISCORD_CLIENT_ID"><code>DISCORD_CLIENT_ID</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Discord Client ID, required by the Discord integration.</p>
-<p>To set up the Discord integration:</p>
+<p>默认值：<code>None</code></p>
+<p>Discord 客户端 ID，Discord 集成所需。</p>
+<p>设置 Discord 集成：</p>
 <ul>
-<li>Register a new application at
-  <a href="https://discordapp.com/developers/applications/me">https://discordapp.com/developers/applications/me</a></li>
-<li>Add a Redirect URI to your Discord application. The URI format is
-  <code>SITE_ROOT/integrations/add_discord/</code>. For example, if <code>your SITE_ROOT</code>
-  is <code>https://my-hc.example.org</code> then the Redirect URI would be
-  <code>https://my-hc.example.org/integrations/add_discord/</code></li>
-<li>Look up your Discord app's <em>Client ID</em> and <em>Client Secret</em>. Put them
-  in the <code>DISCORD_CLIENT_ID</code> and <code>DISCORD_CLIENT_SECRET</code> environment
-  variables.</li>
+<li>在 <a href="https://discordapp.com/developers/applications/me">https://discordapp.com/developers/applications/me</a> 注册一个新应用</li>
+<li>为你的 Discord 应用添加重定向 URI。URI 格式为 <code>SITE_ROOT/integrations/add_discord/</code>。例如，如果你的 <code>SITE_ROOT</code> 是 <code>https://my-hc.example.org</code>，则重定向 URI 为 <code>https://my-hc.example.org/integrations/add_discord/</code></li>
+<li>查找你的 Discord 应用的_客户端 ID_ 和_客户端密钥_。将它们放入 <code>DISCORD_CLIENT_ID</code> 和 <code>DISCORD_CLIENT_SECRET</code> 环境变量中。</li>
 </ul>
 <h2 id="DISCORD_CLIENT_SECRET"><code>DISCORD_CLIENT_SECRET</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Discord Client Secret, required by the Discord integration. Look it up at
-<a href="https://discordapp.com/developers/applications/me">https://discordapp.com/developers/applications/me</a>.</p>
+<p>默认值：<code>None</code></p>
+<p>Discord 客户端密钥，Discord 集成所需。在 <a href="https://discordapp.com/developers/applications/me">https://discordapp.com/developers/applications/me</a> 查找。</p>
 <h2 id="DISCORD_CLIENT_SECRET_FILE"><code>DISCORD_CLIENT_SECRET_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#DISCORD_CLIENT_SECRET">DISCORD_CLIENT_SECRET</a>
-setting. If <code>DISCORD_CLIENT_SECRET</code> and <code>DISCORD_CLIENT_SECRET_FILE</code> are both set,
-<code>DISCORD_CLIENT_SECRET_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#DISCORD_CLIENT_SECRET">DISCORD_CLIENT_SECRET</a> 设置。如果同时设置了 <code>DISCORD_CLIENT_SECRET</code> 和 <code>DISCORD_CLIENT_SECRET_FILE</code>，则 <code>DISCORD_CLIENT_SECRET_FILE</code> 优先。</p>
 <h2 id="EMAIL_HOST"><code>EMAIL_HOST</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host">Django documentation</a>.</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_HOST_PASSWORD"><code>EMAIL_HOST_PASSWORD</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-password">Django documentation</a>.</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-password">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_HOST_PASSWORD_FILE"><code>EMAIL_HOST_PASSWORD_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#EMAIL_HOST_PASSWORD">EMAIL_HOST_PASSWORD</a>
-setting. If <code>EMAIL_HOST_PASSWORD</code> and <code>EMAIL_HOST_PASSWORD_FILE</code>
-are both set, <code>EMAIL_HOST_PASSWORD_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#EMAIL_HOST_PASSWORD">EMAIL_HOST_PASSWORD</a> 设置。如果同时设置了 <code>EMAIL_HOST_PASSWORD</code> 和 <code>EMAIL_HOST_PASSWORD_FILE</code>，则 <code>EMAIL_HOST_PASSWORD_FILE</code> 优先。</p>
 <h2 id="EMAIL_HOST_USER"><code>EMAIL_HOST_USER</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-user">Django documentation</a>.</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-user">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_PORT"><code>EMAIL_PORT</code></h2>
-<p>Default: <code>587</code></p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-port">Django documentation</a>.</p>
+<p>默认值：<code>587</code></p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-port">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_USE_TLS"><code>EMAIL_USE_TLS</code></h2>
-<p>Default: <code>True</code></p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-tls">Django documentation</a>.</p>
+<p>默认值：<code>True</code></p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-tls">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_USE_SSL"><code>EMAIL_USE_SSL</code></h2>
-<p>Default: <code>False</code></p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-ssl">Django documentation</a>.</p>
+<p>默认值：<code>False</code></p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-ssl">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_USE_VERIFICATION"><code>EMAIL_USE_VERIFICATION</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off a verification step when adding an email integration.</p>
-<p>If enabled, whenever a user adds an email integration, Healthchecks emails a
-verification link to the new address. The new integration becomes active only
-after the user clicks the verification link.</p>
-<p>If you are setting up a private healthchecks instance where
-you trust your users, you can opt to disable the verification step. In that case,
-set <code>EMAIL_USE_VERIFICATION</code> to <code>False</code>.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭添加电子邮件集成时的验证步骤。</p>
+<p>如果启用，每当用户添加电子邮件集成时，Healthchecks 会向新地址发送一封验证链接邮件。新的集成只有在用户单击验证链接后才会激活。</p>
+<p>如果你在设置一个受信任的私有 Healthchecks 实例，你可以选择禁用验证步骤。在这种情况下，将 <code>EMAIL_USE_VERIFICATION</code> 设置为 <code>False</code>。</p>
 <h2 id="GITHUB_CLIENT_ID"><code>GITHUB_CLIENT_ID</code></h2>
-<p>Default: <code>None</code></p>
-<p>The GitHub Client ID, required by the GitHub Issues integration.</p>
-<p>To set up the GitHub Issues integration:</p>
+<p>默认值：<code>None</code></p>
+<p>GitHub 客户端 ID，GitHub Issues 集成所需。</p>
+<p>设置 GitHub Issues 集成：</p>
 <ul>
-<li><a href="https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app">Register a new GitHub App</a>
-  (not OAuth app).</li>
-<li>In GitHub App settings, under <strong>General › About</strong>, look up the <strong>Client ID</strong> and <strong>Public link</strong> values and put
-  them in the Healthchecks <code>GITHUB_CLIENT_ID</code> and <code>GITHUB_PUBLIC_LINK</code> environment
-  variables respectively.</li>
-<li>Under <strong>General › Client secrets</strong>, generate a client secret, and put it in the
-  Healthchecks <code>GITHUB_CLIENT_SECRET</code> environment variable.</li>
-<li>Under <strong>General › Identifying and authorizing users</strong>, set the <strong>Callback URL</strong>.
-  The URL format is <code>SITE_ROOT/integrations/add_github/</code>.
-  For example, if <code>your SITE_ROOT</code> is <code>https://my-hc.example.org</code> then the
-  Callback URL would be <code>https://my-hc.example.org/integrations/add_github/</code>.</li>
-<li>Under <strong>General › Post installation</strong>, set <strong>Setup URL</strong> to the same value.</li>
-<li>Under <strong>General › Private keys</strong>, generate a private key and put it in the
-  Healthchecks <code>GITHUB_PRIVATE_KEY</code> environment variable.</li>
-<li>Under <strong>Permissions &amp; events › Repository permissions</strong>, set access for permission
-  "Issues" to "Read and write".</li>
+<li><a href="https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app">注册一个新的 GitHub App</a>（不是 OAuth 应用）。</li>
+<li>在 GitHub App 设置中，在 <strong>General › About</strong> 下查找<strong>客户端 ID</strong> 和<strong>公共链接</strong>值，分别放入 Healthchecks 的 <code>GITHUB_CLIENT_ID</code> 和 <code>GITHUB_PUBLIC_LINK</code> 环境变量。</li>
+<li>在 <strong>General › Client secrets</strong> 下生成客户端密钥，放入 Healthchecks 的 <code>GITHUB_CLIENT_SECRET</code> 环境变量。</li>
+<li>在 <strong>General › Identifying and authorizing users</strong> 下设置<strong>回调 URL</strong>。URL 格式为 <code>SITE_ROOT/integrations/add_github/</code>。例如，如果你的 <code>SITE_ROOT</code> 是 <code>https://my-hc.example.org</code>，则回调 URL 为 <code>https://my-hc.example.org/integrations/add_github/</code>。</li>
+<li>在 <strong>General › Post installation</strong> 下，将<strong>设置 URL</strong> 设置为相同的值。</li>
+<li>在 <strong>General › Private keys</strong> 下生成私钥，放入 Healthchecks 的 <code>GITHUB_PRIVATE_KEY</code> 环境变量。</li>
+<li>在 <strong>Permissions &amp; events › Repository permissions</strong> 下，将"Issues"权限设置为"Read and write"。</li>
 </ul>
 <h2 id="GITHUB_CLIENT_SECRET"><code>GITHUB_CLIENT_SECRET</code></h2>
-<p>Default: <code>None</code></p>
-<p>The GitHub App's Client Secret, required by the GitHub Issues integration.</p>
+<p>默认值：<code>None</code></p>
+<p>GitHub App 的客户端密钥，GitHub Issues 集成所需。</p>
 <h2 id="GITHUB_CLIENT_SECRET_FILE"><code>GITHUB_CLIENT_SECRET_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#GITHUB_CLIENT_SECRET">GITHUB_CLIENT_SECRET</a>
-setting. If <code>GITHUB_CLIENT_SECRET</code> and <code>GITHUB_CLIENT_SECRET_FILE</code> are both set,
-<code>GITHUB_CLIENT_SECRET_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#GITHUB_CLIENT_SECRET">GITHUB_CLIENT_SECRET</a> 设置。如果同时设置了 <code>GITHUB_CLIENT_SECRET</code> 和 <code>GITHUB_CLIENT_SECRET_FILE</code>，则 <code>GITHUB_CLIENT_SECRET_FILE</code> 优先。</p>
 <h2 id="GITHUB_PRIVATE_KEY"><code>GITHUB_PRIVATE_KEY</code></h2>
-<p>Default: <code>None</code></p>
-<p>The GitHub App's private key, required by the GitHub Issues integration.</p>
+<p>默认值：<code>None</code></p>
+<p>GitHub App 的私钥，GitHub Issues 集成所需。</p>
 <h2 id="GITHUB_PRIVATE_KEY_FILE"><code>GITHUB_PRIVATE_KEY_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#GITHUB_PRIVATE_KEY">GITHUB_PRIVATE_KEY</a>
-setting. If <code>GITHUB_PRIVATE_KEY</code> and <code>GITHUB_PRIVATE_KEY_FILE</code> are both set,
-<code>GITHUB_PRIVATE_KEY_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#GITHUB_PRIVATE_KEY">GITHUB_PRIVATE_KEY</a> 设置。如果同时设置了 <code>GITHUB_PRIVATE_KEY</code> 和 <code>GITHUB_PRIVATE_KEY_FILE</code>，则 <code>GITHUB_PRIVATE_KEY_FILE</code> 优先。</p>
 <h2 id="GITHUB_PUBLIC_LINK"><code>GITHUB_PUBLIC_LINK</code></h2>
-<p>Default: <code>None</code></p>
-<p>A URL pointing to the  GitHub App's public page on the GitHub website, required by
-the GitHub Issues integration.</p>
+<p>默认值：<code>None</code></p>
+<p>指向 GitHub App 在 GitHub 网站上的公共页面的 URL，GitHub Issues 集成所需。</p>
 <h2 id="http_proxy"><code>http_proxy</code> and <code>https_proxy</code></h2>
-<p>Default: <code>""</code> (empty string)</p>
-<p>Specifies the proxy server to use for outgoing HTTP and HTTPS requests.
-Supports different proxy server types. Examples:</p>
+<p>默认值：<code>""</code>（空字符串）</p>
+<p>指定用于出站 HTTP 和 HTTPS 请求的代理服务器。支持不同的代理服务器类型。示例：</p>
 <div class="highlight"><pre><span></span><code><span class="na">https_proxy</span><span class="o">=</span><span class="s">http://example.org:1234</span>
 <span class="na">https_proxy</span><span class="o">=</span><span class="s">https://example.org:1234</span>
 <span class="na">https_proxy</span><span class="o">=</span><span class="s">socks4://example.org:1234</span>
 <span class="na">https_proxy</span><span class="o">=</span><span class="s">socks5://example.org:1234</span>
 </code></pre></div>
 
-<p>Healthchecks uses libcurl as the HTTP client library for making HTTP(S) requests.
-For more information about the proxy functionality, please see
-<a href="https://curl.se/libcurl/c/CURLOPT_PROXY.html">libcurl documentation</a>.</p>
-<p>Note: If your proxy server has a private IP address, you will also need to
-set the <code>INTEGRATIONS_ALLOW_PRIVATE_IPS</code> setting to <code>True</code> to use it.</p>
+<p>Healthchecks 使用 libcurl 作为 HTTP 客户端库来发出 HTTP(S) 请求。有关代理功能的更多信息，请参阅 <a href="https://curl.se/libcurl/c/CURLOPT_PROXY.html">libcurl 文档</a>。</p>
+<p>注意：如果你的代理服务器具有私有 IP 地址，你还需要将 <code>INTEGRATIONS_ALLOW_PRIVATE_IPS</code> 设置为 <code>True</code> 才能使用它。</p>
 <h2 id="INTEGRATIONS_ALLOW_PRIVATE_IPS"><code>INTEGRATIONS_ALLOW_PRIVATE_IPS</code></h2>
-<p>Default: <code>False</code></p>
-<p>A boolean that controls whether the integrations are allowed to make
-HTTP(S) requests to private IP addresses (127.0.0.1, 192.168.x.x, ...). This setting
-is set to <code>False</code> by default, because allowing users to define webhooks that probe
-internal addresses is a security risk.</p>
-<p>Only enable this setting if you run your Healthchecks instance in a trusted
-environment, and need to integrate with services running in your internal network.</p>
-<p>This setting affects all integration types except Apprise, not just webhooks. For
-example, if you run a Gotify instance on <code>localhost</code>, you will need to enable
-<code>INTEGRATIONS_ALLOW_PRIVATE_IPS</code> to be able to use it via the Gotify integration.</p>
-<p>This setting affects all outbound HTTP requests, including those made
-while setting up new integrations (e.g. during the OAuth2 authorization flow).</p>
-<p>This setting also affects connections to the proxy server when the <code>http_proxy</code> or
-<code>https_proxy</code> environment variables are set. If your proxy server has a private
-IP address, you will need to enable <code>INTEGRATIONS_ALLOW_PRIVATE_IPS</code> to use it.</p>
-<p>This setting <em>does not</em> have effect on the Apprise integration, as the Apprise library
-uses its own HTTP client. Apprise can make requests to private IPs regardless
-of this setting.</p>
+<p>默认值：<code>False</code></p>
+<p>一个布尔值，控制集成是否允许向私有 IP 地址（127.0.0.1、192.168.x.x 等）发出 HTTP(S) 请求。默认情况下此设置为 <code>False</code>，因为允许用户定义探测内部地址的 Webhook 存在安全风险。</p>
+<p>只有在受信任的环境中运行 Healthchecks 实例，并且需要与内部网络中的服务集成时，才启用此设置。</p>
+<p>此设置影响除 Apprise 之外的所有集成类型，而不仅仅是 Webhook。例如，如果你在 <code>localhost</code> 上运行 Gotify 实例，你需要启用 <code>INTEGRATIONS_ALLOW_PRIVATE_IPS</code> 才能通过 Gotify 集成使用它。</p>
+<p>此设置影响所有出站 HTTP 请求，包括在设置新集成时发出的请求（例如在 OAuth2 授权流程期间）。</p>
+<p>此设置也影响在设置 <code>http_proxy</code> 或 <code>https_proxy</code> 环境变量时与代理服务器的连接。如果你的代理服务器具有私有 IP 地址，你需要启用 <code>INTEGRATIONS_ALLOW_PRIVATE_IPS</code> 才能使用它。</p>
+<p>此设置<em>不</em>影响 Apprise 集成，因为 Apprise 库使用自己的 HTTP 客户端。无论此设置如何，Apprise 都可以向私有 IP 发出请求。</p>
 <h2 id="MASTER_BADGE_URL"><code>MASTER_BADGE_LABEL</code></h2>
-<p>Default: same as <code>SITE_NAME</code></p>
-<p>The label for the "Overall Status" status badge.</p>
+<p>默认值：与 <code>SITE_NAME</code> 相同</p>
+<p>"总体状态"状态徽章的标签。</p>
 <h2 id="MATRIX_ACCESS_TOKEN"><code>MATRIX_ACCESS_TOKEN</code></h2>
-<p>Default: <code>None</code></p>
-<p>The <a href="https://matrix.org/">Matrix</a> bot user's access token, required by the Matrix
-integration.</p>
-<p>To set up the Matrix integration:</p>
+<p>默认值：<code>None</code></p>
+<p><a href="https://matrix.org/">Matrix</a> 机器人用户的访问令牌，Matrix 集成所需。</p>
+<p>设置 Matrix 集成：</p>
 <ul>
-<li>Register a bot user (for posting notifications) in your preferred Matrix homeserver.</li>
-<li>Use the <a href="https://www.matrix.org/docs/guides/client-server-api#login">Login API call</a>
-  to retrieve bot user's access token. You can run it as shown in the documentation,
-  using curl in the command shell.</li>
-<li>Set the <code>MATRIX_</code> environment variables. Example:</li>
+<li>在你首选的 Matrix 主服务器上注册一个机器人用户（用于发布通知）。</li>
+<li>使用<a href="https://www.matrix.org/docs/guides/client-server-api#login">登录 API 调用</a>检索机器人用户的访问令牌。你可以按照文档中的说明，使用 curl 在命令 shell 中运行它。</li>
+<li>设置 <code>MATRIX_</code> 环境变量。示例：</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="na">MATRIX_ACCESS_TOKEN</span><span class="o">=</span><span class="s">[a long string of characters returned by the login call]</span>
+<div class="highlight"><pre><span></span><code><span class="na">MATRIX_ACCESS_TOKEN</span><span class="o">=</span><span class="s">[登录调用返回的一长串字符]</span>
 <span class="na">MATRIX_HOMESERVER</span><span class="o">=</span><span class="s">https://matrix.org</span>
 <span class="na">MATRIX_USER_ID</span><span class="o">=</span><span class="s">@mychecks:matrix.org</span>
 </code></pre></div>
 
 <h2 id="MATRIX_ACCESS_TOKEN_FILE"><code>MATRIX_ACCESS_TOKEN_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#MATRIX_ACCESS_TOKEN">MATRIX_ACCESS_TOKEN</a>
-setting. If <code>MATRIX_ACCESS_TOKEN</code> and <code>MATRIX_ACCESS_TOKEN_FILE</code> are both set,
-<code>MATRIX_ACCESS_TOKEN_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#MATRIX_ACCESS_TOKEN">MATRIX_ACCESS_TOKEN</a> 设置。如果同时设置了 <code>MATRIX_ACCESS_TOKEN</code> 和 <code>MATRIX_ACCESS_TOKEN_FILE</code>，则 <code>MATRIX_ACCESS_TOKEN_FILE</code> 优先。</p>
 <h2 id="MATRIX_HOMESERVER"><code>MATRIX_HOMESERVER</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Matrix bot's homeserver address, required by the Matrix integration.</p>
+<p>默认值：<code>None</code></p>
+<p>Matrix 机器人的主服务器地址，Matrix 集成所需。</p>
 <h2 id="MATRIX_USER_ID"><code>MATRIX_USER_ID</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Matrix bot's user identifier, required by the Matrix integration.</p>
+<p>默认值：<code>None</code></p>
+<p>Matrix 机器人的用户标识符，Matrix 集成所需。</p>
 <h2 id="MATTERMOST_ENABLED"><code>MATTERMOST_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Mattermost integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Mattermost 集成。默认启用。</p>
 <h2 id="MSTEAMS_ENABLED"><code>MSTEAMS_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the MS Teams integration. Enabled</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 MS Teams 集成。默认启用。</p>
 <h2 id="NTFY_SH_TOKEN"><code>NTFY_SH_TOKEN</code></h2>
-<p>Default: <code>None</code></p>
-<p>The default access token to use when sending ntfy notifications to the hosted ntfy.sh
-server. This token will be only used when sending to the ntfy server at
-<code>https://ntfy.sh</code> and when the user has not specified their own access token
-when setting up the ntfy integration.</p>
-<p>Use this setting if your Healthchecks instance is hitting ntfy.sh free plan's
-<a href="https://docs.ntfy.sh/publish/#limitations">daily sending limit</a> and you want to ensure
-reliable notification delivery for ntfy integrations that do not bring their own
-access token.</p>
+<p>默认值：<code>None</code></p>
+<p>向托管的 ntfy.sh 服务器发送 ntfy 通知时使用的默认访问令牌。此令牌仅在发送到 <code>https://ntfy.sh</code> 的 ntfy 服务器且用户在设置 ntfy 集成时未指定自己的访问令牌时使用。</p>
+<p>如果你的 Healthchecks 实例达到了 ntfy.sh 免费计划的<a href="https://docs.ntfy.sh/publish/#limitations">每日发送限制</a>，并且你希望确保未自带访问令牌的 ntfy 集成能够可靠地投递通知，请使用此设置。</p>
 <h2 id="NTFY_SH_TOKEN_FILE"><code>NTFY_SH_TOKEN_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#NTFY_SH_TOKEN">NTFY_SH_TOKEN</a> setting.
-If <code>NTFY_SH_TOKEN</code> and <code>NTFY_SH_TOKEN_FILE</code> are both set, <code>NTFY_SH_TOKEN_FILE</code> takes
-precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#NTFY_SH_TOKEN">NTFY_SH_TOKEN</a> 设置。如果同时设置了 <code>NTFY_SH_TOKEN</code> 和 <code>NTFY_SH_TOKEN_FILE</code>，则 <code>NTFY_SH_TOKEN_FILE</code> 优先。</p>
 <h2 id="OPSGENIE_ENABLED"><code>OPSGENIE_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Opsgenie integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Opsgenie 集成。默认启用。</p>
 <h2 id="PAGERTREE_ENABLED"><code>PAGERTREE_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the PagerTree integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 PagerTree 集成。默认启用。</p>
 <h2 id="PD_APP_ID"><code>PD_APP_ID</code></h2>
-<p>Default: <code>None</code></p>
-<p>PagerDuty application ID. If set, enables the PagerDuty
-<a href="https://developer.pagerduty.com/docs/app-integration-development/events-integration/">Simple Install Flow</a>.
-If <code>None</code>, Healthchecks will fall back to the even simpler flow where users manually
-copy integration keys from PagerDuty and paste them in Healthchecks.</p>
-<p>To set up:</p>
+<p>默认值：<code>None</code></p>
+<p>PagerDuty 应用 ID。如果设置，启用 PagerDuty <a href="https://developer.pagerduty.com/docs/app-integration-development/events-integration/">简单安装流程</a>。如果为 <code>None</code>，Healthchecks 将回退到更简单的流程，用户手动从 PagerDuty 复制集成密钥并粘贴到 Healthchecks 中。</p>
+<p>设置步骤：</p>
 <ul>
-<li>Register a PagerDuty app at <a href="https://pagerduty.com/">PagerDuty</a> › Developer Mode › My Apps</li>
-<li>In the newly created app, add the "Events Integration" functionality</li>
-<li>Specify a Redirect URL: <code>https://your-domain.com/integrations/add_pagerduty/</code></li>
-<li>Copy the displayed app_id value (PXXXXX) and put it in the <code>PD_APP_ID</code> environment
-  variable</li>
+<li>在 <a href="https://pagerduty.com/">PagerDuty</a> › 开发者模式 › 我的应用 中注册一个 PagerDuty 应用</li>
+<li>在新创建的应用中，添加"Events Integration"功能</li>
+<li>指定重定向 URL：<code>https://your-domain.com/integrations/add_pagerduty/</code></li>
+<li>复制显示的 app_id 值（PXXXXX）并放入 <code>PD_APP_ID</code> 环境变量</li>
 </ul>
 <h2 id="PD_ENABLED"><code>PD_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the PagerDuty integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 PagerDuty 集成。默认启用。</p>
 <h2 id="PING_BODY_LIMIT"><code>PING_BODY_LIMIT</code></h2>
-<p>Default: <code>10000</code></p>
-<p>The upper size limit in bytes for logged ping request bodies.
-The default value is 10000 (10 kilobytes). You can adjust the limit or you can remove
-it altogether by setting this value to <code>None</code>.</p>
+<p>默认值：<code>10000</code></p>
+<p>记录的 ping 请求体的最大字节数限制。默认值为 10000（10 KB）。你可以调整限制，或者通过将此值设置为 <code>None</code> 来完全移除限制。</p>
 <h2 id="PING_EMAIL_DOMAIN"><code>PING_EMAIL_DOMAIN</code></h2>
 <p>Default: <code>localhost</code></p>
-<p>The domain to use for generating ping email addresses. Example:</p>
+<p>用于生成 ping 电子邮件地址的域名。示例：</p>
 <div class="highlight"><pre><span></span><code><span class="na">PING_EMAIL_DOMAIN</span><span class="o">=</span><span class="s">hc.example.org</span>
 </code></pre></div>
 
-<p>In this example, Healthchecks would generate ping email addresses similar
-to <code>3f1a7317-8e96-437c-a17d-b0d550b51e86@hc.example.org</code>.</p>
-<p>This setting only controls how the ping email addresses are constructed, and
-does not by itself enable the ping-by-sending-email functionality. To receive
-emails, you will also need:</p>
+<p>在此示例中，Healthchecks 将生成类似于
+<code>3f1a7317-8e96-437c-a17d-b0d550b51e86@hc.example.org</code> 的 ping 电子邮件地址。</p>
+<p>此设置仅控制 ping 电子邮件地址的构建方式，
+其本身不会启用通过发送电子邮件进行 ping 的功能。要接收
+电子邮件，您还需要：</p>
 <ul>
-<li>A DNS record pointing <code>hc.example.org</code> to your Healthchecks
-  instance's IP address.</li>
-<li><code>manage.py smtpd</code> (Healthchecks' SMTP listener service) running, listening
-  on port 25, and reachable from the outside world. If you are using the
-  <a href="https://hub.docker.com/r/healthchecks/healthchecks">official Docker image</a>,
-  see <a href="../self_hosted_docker/#SMTPD_PORT">the instructions here</a> for enabling the SMTP
-  listener service.</li>
+<li>一条将 <code>hc.example.org</code> 指向您的 Healthchecks 实例 IP 地址的 DNS 记录。</li>
+<li><code>manage.py smtpd</code>（Healthchecks 的 SMTP 监听服务）正在运行，监听
+  端口 25，并且可从外部世界访问。如果您使用的是
+  <a href="https://hub.docker.com/r/healthchecks/healthchecks">官方 Docker 镜像</a>，
+  请参阅<a href="../self_hosted_docker/#SMTPD_PORT">此处的说明</a>以了解如何启用 SMTP
+  监听服务。</li>
 </ul>
 <h2 id="PING_ENDPOINT"><code>PING_ENDPOINT</code></h2>
 <p>Default: <code>SITE_ROOT</code> + <code>/ping/</code></p>
-<p>The base URL to use for constructing ping URLs for display. Healthchecks constructs ping
-URLs by appending either an UUID value or <code>&lt;ping-key&gt;/&lt;slug&gt;</code> value to <code>PING_ENDPOINT</code>.</p>
-<p>Notes:</p>
+<p>用于构建显示用 ping URL 的基础 URL。Healthchecks 通过将 UUID 值或 <code>&lt;ping-key&gt;/&lt;slug&gt;</code> 值追加到 <code>PING_ENDPOINT</code> 来构建 ping URL。</p>
+<p>注意：</p>
 <ul>
-<li>Make sure the <code>PING_ENDPOINT</code> value ends with a trailing slash. If a trailing slash
-  is missing, Healthchecks will <em>not</em> add it implicitly.</li>
-<li>Healthchecks uses <code>PING_ENDPOINT</code> for formatting ping URLs for display.
-  The <code>PING_ENDPOINT</code> value does not influence the routing of incoming HTTP requests.
-  If you change the <code>PING_ENDPOINT</code> value, you will likely also need to add matching
-  URL rewriting rules in your reverse proxy configuration.</li>
+<li>确保 <code>PING_ENDPOINT</code> 值以尾部斜杠结尾。如果缺少尾部斜杠，
+  Healthchecks <em>不会</em>隐式添加它。</li>
+<li>Healthchecks 使用 <code>PING_ENDPOINT</code> 来格式化用于显示的 ping URL。
+  <code>PING_ENDPOINT</code> 值不影响传入 HTTP 请求的路由。
+  如果您更改 <code>PING_ENDPOINT</code> 值，您可能还需要在反向代理配置中添加匹配的
+  URL 重写规则。</li>
 </ul>
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="na">PING_ENDPOINT</span><span class="o">=</span><span class="s">https://ping.my-hc.example.org/</span>
 </code></pre></div>
 
-<p>With this setting, Healthchecks will generate ping URLs similar to:</p>
+<p>使用此设置，Healthchecks 将生成类似于以下的 ping URL：</p>
 <div class="highlight"><pre><span></span><code>https://ping.my-hc.example.org/3f1a7317-8e96-437c-a17d-b0d550b51e86
 https://ping.my-hc.example.org/1fj9XWM6Ns8vLGTmnPGk9g/dummy-slug
 </code></pre></div>
 
 <h2 id="PROMETHEUS_ENABLED"><code>PROMETHEUS_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Prometheus integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Prometheus 集成。默认启用。</p>
 <h2 id="PUSHBULLET_CLIENT_ID"><code>PUSHBULLET_CLIENT_ID</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Pushbullet Client ID, required by the Pushbullet integration.</p>
-<p>To set up the Pushbullet integration:</p>
+<p>默认值：<code>None</code></p>
+<p>Pushbullet 客户端 ID，Pushbullet 集成所需。</p>
+<p>设置 Pushbullet 集成：</p>
 <ul>
-<li>Add a new OAuth client at
-  <a href="https://www.pushbullet.com/#settings/clients">https://www.pushbullet.com/#settings/clients</a></li>
-<li>Add a <code>redirect_uri</code> to your OAuth client. The URI format is
-  <code>SITE_ROOT/integrations/add_pushbullet/</code>. For example, if <code>your SITE_ROOT</code>
-  is <code>https://my-hc.example.org</code> then the <code>redirect_uri</code> would be
-  <code>https://my-hc.example.org/integrations/add_pushbullet/</code></li>
-<li>Look up your OAuth client's <code>client_id</code> and <code>client_secret</code> values. Put them
-  in the <code>PUSHBULLET_CLIENT_ID</code> and <code>PUSHBULLET_CLIENT_SECRET</code> environment
-  variables.</li>
+<li>在 <a href="https://www.pushbullet.com/#settings/clients">https://www.pushbullet.com/#settings/clients</a> 添加新的 OAuth 客户端</li>
+<li>为你的 OAuth 客户端添加 <code>redirect_uri</code>。URI 格式为 <code>SITE_ROOT/integrations/add_pushbullet/</code>。例如，如果你的 <code>SITE_ROOT</code> 是 <code>https://my-hc.example.org</code>，则 <code>redirect_uri</code> 为 <code>https://my-hc.example.org/integrations/add_pushbullet/</code></li>
+<li>查找你的 OAuth 客户端的 <code>client_id</code> 和 <code>client_secret</code> 值。将它们放入 <code>PUSHBULLET_CLIENT_ID</code> 和 <code>PUSHBULLET_CLIENT_SECRET</code> 环境变量。</li>
 </ul>
-<p>Read more about setting up a Pushbullet OAuth client in the
-<a href="https://docs.pushbullet.com/#oauth2">Pushbullet OAuth2 guide</a>.</p>
+<p>在 <a href="https://docs.pushbullet.com/#oauth2">Pushbullet OAuth2 指南</a>中阅读有关设置 Pushbullet OAuth 客户端的更多信息。</p>
 <h2 id="PUSHBULLET_CLIENT_SECRET"><code>PUSHBULLET_CLIENT_SECRET</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Pushbullet Client Secret, required by the Pushbullet integration. Look it up at
-<a href="https://www.pushbullet.com/#settings/clients">https://www.pushbullet.com/#settings/clients</a>.</p>
+<p>默认值：<code>None</code></p>
+<p>Pushbullet 客户端密钥，Pushbullet 集成所需。在 <a href="https://www.pushbullet.com/#settings/clients">https://www.pushbullet.com/#settings/clients</a> 查找。</p>
 <h2 id="PUSHBULLET_CLIENT_SECRET_FILE"><code>PUSHBULLET_CLIENT_SECRET_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the
-<a href="#PUSHBULLET_CLIENT_SECRET">PUSHBULLET_CLIENT_SECRET</a> setting. If
-<code>PUSHBULLET_CLIENT_SECRET</code> and <code>PUSHBULLET_CLIENT_SECRET_FILE</code> are both set,
-<code>PUSHBULLET_CLIENT_SECRET_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#PUSHBULLET_CLIENT_SECRET">PUSHBULLET_CLIENT_SECRET</a> 设置。如果同时设置了 <code>PUSHBULLET_CLIENT_SECRET</code> 和 <code>PUSHBULLET_CLIENT_SECRET_FILE</code>，则 <code>PUSHBULLET_CLIENT_SECRET_FILE</code> 优先。</p>
 <h2 id="PUSHOVER_API_TOKEN"><code>PUSHOVER_API_TOKEN</code></h2>
-<p>Default: <code>None</code></p>
-<p>The <a href="https://pushover.net/">Pushover</a> API token, required by the Pushover integration.</p>
-<p>To enable the Pushover integration:</p>
+<p>默认值：<code>None</code></p>
+<p><a href="https://pushover.net/">Pushover</a> API 令牌，Pushover 集成所需。</p>
+<p>启用 Pushover 集成：</p>
 <ul>
-<li>Register a new Pushover application at
-  <a href="https://pushover.net/apps/build">https://pushover.net/apps/build</a>.</li>
-<li>Within the Pushover application configuration, enable subscriptions.
-  Make sure the subscription type is set to "URL". Also make sure the redirect
-  URL is configured to point back to the root of the Healthchecks instance
-  (e.g., <code>https://my-hc.example.org/</code>).</li>
-<li>Put the Pushover application's <em>API Token</em> and the <em>Subscription URL</em> in
-  <code>PUSHOVER_API_TOKEN</code> and <code>PUSHOVER_SUBSCRIPTION_URL</code> environment
-  variables. The Pushover subscription URL should look similar to
-  <code>https://pushover.net/subscribe/yourAppName-randomAlphaNumericData</code>.</li>
+<li>在 <a href="https://pushover.net/apps/build">https://pushover.net/apps/build</a> 注册一个新的 Pushover 应用。</li>
+<li>在 Pushover 应用配置中，启用订阅。确保订阅类型设置为"URL"。同时确保重定向 URL 配置为指向 Healthchecks 实例的根路径（例如 <code>https://my-hc.example.org/</code>）。</li>
+<li>将 Pushover 应用的_API 令牌_和_订阅 URL_ 放入 <code>PUSHOVER_API_TOKEN</code> 和 <code>PUSHOVER_SUBSCRIPTION_URL</code> 环境变量。Pushover 订阅 URL 应类似于 <code>https://pushover.net/subscribe/yourAppName-randomAlphaNumericData</code>。</li>
 </ul>
 <h2 id="PUSHOVER_API_TOKEN_FILE"><code>PUSHOVER_API_TOKEN_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#PUSHOVER_API_TOKEN">PUSHOVER_API_TOKEN</a>
-setting. If <code>PUSHOVER_API_TOKEN</code> and <code>PUSHOVER_API_TOKEN_FILE</code> are both set,
-<code>PUSHOVER_API_TOKEN_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#PUSHOVER_API_TOKEN">PUSHOVER_API_TOKEN</a> 设置。如果同时设置了 <code>PUSHOVER_API_TOKEN</code> 和 <code>PUSHOVER_API_TOKEN_FILE</code>，则 <code>PUSHOVER_API_TOKEN_FILE</code> 优先。</p>
 <h2 id="PUSHOVER_EMERGENCY_EXPIRATION"><code>PUSHOVER_EMERGENCY_EXPIRATION</code></h2>
-<p>Default: <code>86400</code> (24 hours)</p>
-<p>Specifies how many seconds an emergency Pushover notification
-will continue to be retried for.</p>
-<p>More information in <a href="https://pushover.net/api#priority">Pushover API documentation</a>.</p>
+<p>默认值：<code>86400</code>（24 小时）</p>
+<p>指定紧急 Pushover 通知将持续重试的秒数。</p>
+<p>更多信息请参阅 <a href="https://pushover.net/api#priority">Pushover API 文档</a>。</p>
 <h2 id="PUSHOVER_EMERGENCY_RETRY_DELAY"><code>PUSHOVER_EMERGENCY_RETRY_DELAY</code></h2>
-<p>Default: <code>300</code> (5 minutes)</p>
-<p>Specifies how often (in seconds) the Pushover servers will send the same notification
-to the user.</p>
-<p>More information in <a href="https://pushover.net/api#priority">Pushover API documentation</a>.</p>
+<p>默认值：<code>300</code>（5 分钟）</p>
+<p>指定 Pushover 服务器向用户发送相同通知的频率（秒）。</p>
+<p>更多信息请参阅 <a href="https://pushover.net/api#priority">Pushover API 文档</a>。</p>
 <h2 id="PUSHOVER_SUBSCRIPTION_URL"><code>PUSHOVER_SUBSCRIPTION_URL</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Pushover Subscription URL, required by the Pushover integration.</p>
+<p>默认值：<code>None</code></p>
+<p>Pushover 订阅 URL，Pushover 集成所需。</p>
 <h2 id="REGISTRATION_OPEN"><code>REGISTRATION_OPEN</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that controls whether site visitors can create new accounts.
-Set it to <code>False</code> if you are setting up a private Healthchecks instance, but
-it needs to be publicly accessible (so, for example, your cloud services
-can send pings to it).</p>
-<p>If you close new user registration, you can still selectively invite users
-to your team account.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，控制站点访问者是否可以创建新帐户。如果你在设置一个私有 Healthchecks 实例，但它需要公开访问（例如，你的云服务需要向其发送 ping），请将其设置为 <code>False</code>。</p>
+<p>如果你关闭了新用户注册，你仍然可以有选择地邀请用户加入你的团队帐户。</p>
 <h2 id="REMOTE_USER_HEADER"><code>REMOTE_USER_HEADER</code></h2>
-<p>Default: <code>None</code></p>
-<p>Specifies the request header to use for external authentication. If you use
-a reverse proxy that handles user authentication, and the reverse proxy can pass
-the authenticated user's email address in an HTTP request header, you can use this
-setting to integrate Healthchecks with it.</p>
-<p>When <code>REMOTE_USER_HEADER</code> is set, Healthchecks will:</p>
+<p>默认值：<code>None</code></p>
+<p>指定用于外部身份验证的请求标头。如果你使用处理用户身份验证的反向代理，并且反向代理可以在 HTTP 请求标头中传递已验证用户的电子邮件地址，你可以使用此设置将 Healthchecks 与之集成。</p>
+<p>设置了 <code>REMOTE_USER_HEADER</code> 后，Healthchecks 将：</p>
 <ul>
-<li>in views that require authentication, look up the request header
-   specified in <code>REMOTE_USER_HEADER</code></li>
-<li>assume the header contains the user's email address</li>
-<li>automatically log in the user with a matching email address</li>
-<li>automatically create a user account if it does not exist</li>
-<li>disable the default authentication methods (login link to email, password)</li>
+<li>在需要身份验证的视图中，查找 <code>REMOTE_USER_HEADER</code> 中指定的请求标头</li>
+<li>假定该标头包含用户的电子邮件地址</li>
+<li>自动登录具有匹配电子邮件地址的用户</li>
+<li>如果用户帐户不存在，则自动创建</li>
+<li>禁用默认的身份验证方法（登录链接到电子邮件、密码）</li>
 </ul>
-<p>The header name in <code>REMOTE_USER_HEADER</code> must be specified in upper-case,
-with any dashes replaced with underscores, and prefixed with <code>HTTP_</code>. For
-example, if your authentication proxy sets a <code>X-Authenticated-User</code> request
-header, you should set <code>REMOTE_USER_HEADER=HTTP_X_AUTHENTICATED_USER</code>.</p>
-<p><strong>Important:</strong> When this option is enabled, <strong>Healthchecks will trust the header's
-value implicitly</strong>, so it is <strong>very important</strong> to ensure that attackers cannot
-set the value themselves (and thus impersonate any user). How to do this varies by
-your chosen proxy, but generally involves configuring it to strip out headers that
-normalize to the same name as the chosen identity header.</p>
-<p><strong>On using <code>local_settings.py</code>:</strong>
-When Healthchecks reads settings from environment variables and encounters
-the <code>REMOTE_USER_HEADER</code> environment variable, it sets <em>two</em> settings,
-<code>REMOTE_USER_HEADER</code> and <code>AUTHENTICATION_BACKENDS</code>. This logic has already run by the
-time Healthchecks reads <code>local_settings.py</code>. Therefore, if you configure Healthchecks
-using the <code>local_settings.py</code> file instead of environment variables, and specify
-<code>REMOTE_USER_HEADER</code> there, you will also need a line which sets the other setting,
-<code>AUTHENTICATION_BACKENDS</code>:</p>
+<p><code>REMOTE_USER_HEADER</code> 中的标头名称必须使用大写指定，将所有短横线替换为下划线，并加上 <code>HTTP_</code> 前缀。例如，如果你的身份验证代理设置了 <code>X-Authenticated-User</code> 请求标头，则应将 <code>REMOTE_USER_HEADER</code> 设置为 <code>HTTP_X_AUTHENTICATED_USER</code>。</p>
+<p><strong>重要：</strong> 启用此选项后，<strong>Healthchecks 将隐式信任该标头的值</strong>，因此<strong>非常重要的是</strong>确保攻击者无法自行设置该值（从而冒充任何用户）。如何做到这一点因你选择的代理而异，但通常涉及将其配置为剥离与所选身份标头归一化后同名的标头。</p>
+<p><strong>关于使用 <code>local_settings.py</code>：</strong>
+当 Healthchecks 从环境变量读取设置并遇到 <code>REMOTE_USER_HEADER</code> 环境变量时，它会设置<em>两个</em>设置：<code>REMOTE_USER_HEADER</code> 和 <code>AUTHENTICATION_BACKENDS</code>。在 Healthchecks 读取 <code>local_settings.py</code> 时，此逻辑已运行完毕。因此，如果你使用 <code>local_settings.py</code> 文件而不是环境变量来配置 Healthchecks，并在其中指定 <code>REMOTE_USER_HEADER</code>，你还需要一行设置另一个设置 <code>AUTHENTICATION_BACKENDS</code>：</p>
 <div class="highlight"><pre><span></span><code><span class="n">REMOTE_USER_HEADER</span> <span class="o">=</span> <span class="s">&quot;HTTP_X_AUTHENTICATED_USER&quot;</span>
 <span class="n">AUTHENTICATION_BACKENDS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hc.accounts.backends.CustomHeaderBackend&quot;</span><span class="p">]</span>
 </code></pre></div>
 
 <h2 id="ROCKETCHAT_ENABLED"><code>ROCKETCHAT_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Rocket.Chat integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Rocket.Chat 集成。默认启用。</p>
 <h2 id="RP_ID"><code>RP_ID</code></h2>
-<p>Default: <code>None</code></p>
-<p>The <a href="https://www.w3.org/TR/webauthn-2/#relying-party-identifier">Relying Party identifier</a>,
-required by the WebAuthn second-factor authentication feature.</p>
-<p>Healthchecks optionally supports two-factor authentication using the WebAuthn
-standard. To enable WebAuthn support, set the <code>RP_ID</code> setting to a non-null value.
-Set its value to your site's domain without scheme and without port. For example,
-if your site runs on <code>https://my-hc.example.org</code>, set <code>RP_ID</code> to <code>my-hc.example.org</code>.</p>
-<p>Note that WebAuthn requires HTTPS, even if running on localhost. To test WebAuthn
-locally with a self-signed certificate, you can use the <code>runsslserver</code> command
-from the <code>django-sslserver</code> package.</p>
+<p>默认值：<code>None</code></p>
+<p><a href="https://www.w3.org/TR/webauthn-2/#relying-party-identifier">依赖方标识符</a>，WebAuthn 双因素身份验证功能所需。</p>
+<p>Healthchecks 可选地支持使用 WebAuthn 标准的双因素身份验证。要启用 WebAuthn 支持，请将 <code>RP_ID</code> 设置为非空值。将其值设置为站点的域名，不包含协议和端口。例如，如果你的站点运行在 <code>https://my-hc.example.org</code>，将 <code>RP_ID</code> 设置为 <code>my-hc.example.org</code>。</p>
+<p>请注意 WebAuthn 需要 HTTPS，即使在 localhost 上运行也是如此。要在本地使用自签名证书测试 WebAuthn，你可以使用 <code>django-sslserver</code> 包中的 <code>runsslserver</code> 命令。</p>
 <h2 id="S3_ACCESS_KEY"><code>S3_ACCESS_KEY</code></h2>
-<p>Default: <code>None</code></p>
-<p>Access key of an account in S3 service.</p>
-<p>Healthchecks can optionally upload ping request body data to S3-compatible object
-storage instead of storing it in the database. To use this feature, provide valid
-credentials to an S3-compatible service by setting the following environment variables:</p>
+<p>默认值：<code>None</code></p>
+<p>S3 服务中账户的访问密钥。</p>
+<p>Healthchecks 可以选择将 ping 请求体数据上传到兼容 S3 的对象存储，而不是存储在数据库中。要使用此功能，请通过设置以下环境变量向兼容 S3 的服务提供有效凭据：</p>
 <ul>
-<li><code>S3_ACCESS_KEY</code> (example: <code>AKIAFIXMEFIXME</code>)</li>
-<li><code>S3_BUCKET</code> (example: <code>my-bucket</code>)</li>
-<li><code>S3_ENDPOINT</code> (example: <code>s3.eu-central-1.amazonaws.com</code>)</li>
-<li><code>S3_REGION</code> (example: <code>eu-central-1</code>)</li>
+<li><code>S3_ACCESS_KEY</code>（示例：<code>AKIAFIXMEFIXME</code>）</li>
+<li><code>S3_BUCKET</code>（示例：<code>my-bucket</code>）</li>
+<li><code>S3_ENDPOINT</code>（示例：<code>s3.eu-central-1.amazonaws.com</code>）</li>
+<li><code>S3_REGION</code>（示例：<code>eu-central-1</code>）</li>
 <li><code>S3_SECRET_KEY</code></li>
 </ul>
 <h2 id="S3_BUCKET"><code>S3_BUCKET</code></h2>
-<p>Default: <code>None</code></p>
-<p>Name of the bucket in S3 service for storing ping request body data.</p>
+<p>默认值：<code>None</code></p>
+<p>S3 服务中用于存储 ping 请求体数据的存储桶名称。</p>
 <h2 id="S3_ENDPOINT"><code>S3_ENDPOINT</code></h2>
-<p>Default: <code>None</code></p>
-<p>URL to the S3-compatible service.</p>
+<p>默认值：<code>None</code></p>
+<p>兼容 S3 的服务的 URL。</p>
 <h2 id="S3_REGION"><code>S3_REGION</code></h2>
-<p>Default: <code>None</code></p>
-<p>Region name of buckets in S3 service.</p>
+<p>默认值：<code>None</code></p>
+<p>S3 服务中存储桶的区域名称。</p>
 <h2 id="S3_SECRET_KEY"><code>S3_SECRET_KEY</code></h2>
-<p>Default: <code>None</code></p>
-<p>The secret key of an account in S3 service.</p>
+<p>默认值：<code>None</code></p>
+<p>S3 服务中账户的密钥。</p>
 <h2 id="S3_SECRET_KEY_FILE"><code>S3_SECRET_KEY_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#S3_SECRET_KEY">S3_SECRET_KEY</a> setting.
-If <code>S3_SECRET_KEY</code> and <code>S3_SECRET_KEY_FILE</code> are both set, <code>S3_SECRET_KEY_FILE</code> takes
-precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#S3_SECRET_KEY">S3_SECRET_KEY</a> 设置。如果同时设置了 <code>S3_SECRET_KEY</code> 和 <code>S3_SECRET_KEY_FILE</code>，则 <code>S3_SECRET_KEY_FILE</code> 优先。</p>
 <h2 id="S3_TIMEOUT"><code>S3_TIMEOUT</code></h2>
-<p>Default: <code>60</code></p>
-<p>Timeout for individual S3 operations, in seconds.</p>
+<p>默认值：<code>60</code></p>
+<p>单个 S3 操作的超时时间（秒）。</p>
 <h2 id="S3_SECURE"><code>S3_SECURE</code></h2>
-<p>Default: <code>True</code></p>
-<p>Whether to use secure (TLS) connection to S3 or not. To
-use unencrypted HTTP requests, set this value to <code>False</code>.</p>
+<p>默认值：<code>True</code></p>
+<p>是否使用安全（TLS）连接到 S3。要使用未加密的 HTTP 请求，请将此值设置为 <code>False</code>。</p>
 <h2 id="SECRET_KEY"><code>SECRET_KEY</code></h2>
-<p>Default: <code>---</code></p>
-<p>A secret key used for cryptographic signing. Should be set to a unique,
-unpredictable value.</p>
-<p>This is a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key">Django documentation</a>.</p>
+<p>默认值：<code>---</code></p>
+<p>用于加密签名的密钥。应设置为唯一且不可预测的值。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key">Django 文档</a>中了解更多。</p>
 <h2 id="SECRET_KEY_FILE"><code>SECRET_KEY_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#SECRET_KEY">SECRET_KEY</a> setting.
-If <code>SECRET_KEY</code> and <code>SECRET_KEY_FILE</code> are both set, <code>SECRET_KEY_FILE</code> takes
-precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#SECRET_KEY">SECRET_KEY</a> 设置。如果同时设置了 <code>SECRET_KEY</code> 和 <code>SECRET_KEY_FILE</code>，则 <code>SECRET_KEY_FILE</code> 优先。</p>
 <h2 id="SECURE_PROXY_SSL_HEADER"><code>SECURE_PROXY_SSL_HEADER</code></h2>
-<p>Default: <code>None</code></p>
-<p>Comma-separated HTTP header name and value that signifies a request is secure
-(made over https://). This information is important for CSRF protection.</p>
-<p>If Healthchecks is running behind a proxy, the proxy may be "swallowing" whether the original
-request uses HTTPS or not. In this case, you may see HTTP 403 errors when submitting
-forms (for example, trying to log in).</p>
-<p>If set, the value should contain the name of the header to look for and the required
-value, separated with comma. The header name must be specified in upper-case,
-with any dashes replaced with underscores, and prefixed with <code>HTTP_</code>. Example:</p>
+<p>默认值：<code>None</code></p>
+<p>以逗号分隔的 HTTP 标头名称和值，用于标识请求是安全的（通过 https:// 发出）。此信息对于 CSRF 保护很重要。</p>
+<p>如果 Healthchecks 在代理后面运行，代理可能会"吞掉"原始请求是否使用 HTTPS 的信息。在这种情况下，你可能会在提交表单时看到 HTTP 403 错误（例如，尝试登录时）。</p>
+<p>如果设置，该值应包含要查找的标头名称和所需值，以逗号分隔。标头名称必须使用大写指定，将所有短横线替换为下划线，并加上 <code>HTTP_</code> 前缀。示例：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># environment variable</span>
 <span class="na">SECURE_PROXY_SSL_HEADER</span><span class="o">=</span><span class="s">HTTP_X_FORWARDED_PROTO,https</span>
 </code></pre></div>
 
-<p>You should <em>only</em> set this environment variable if you control your proxy or have some
-other guarantee that it sets/strips this header appropriately.</p>
-<p><strong>Note on using <code>local_settings.py</code>:</strong>
-When Healthchecks reads settings from environment variables, it expects
-<code>SECURE_PROXY_SSL_HEADER</code> to contain header name and value, separated with comma.
-If you set <code>SECURE_PROXY_SSL_HEADER</code> in <code>local_settings.py</code>, it should be a tuple
-with two elements instead:</p>
+<p>你<em>仅</em>应在控制代理或有其他保证它能正确设置/剥离此标头时才设置此环境变量。</p>
+<p><strong>关于使用 <code>local_settings.py</code> 的说明：</strong>
+当 Healthchecks 从环境变量读取设置时，它期望 <code>SECURE_PROXY_SSL_HEADER</code> 包含标头名称和值，以逗号分隔。如果你在 <code>local_settings.py</code> 中设置 <code>SECURE_PROXY_SSL_HEADER</code>，它应该是一个包含两个元素的元组：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># in local_settings.py</span>
 <span class="na">SECURE_PROXY_SSL_HEADER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">(&quot;HTTP_X_FORWARDED_PROTO&quot;, &quot;https&quot;)</span>
 </code></pre></div>
 
-<p>This environment variable maps to a standard Django setting, read more in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#secure-proxy-ssl-header">Django documentation</a>.</p>
+<p>此环境变量映射到一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#secure-proxy-ssl-header">Django 文档</a>中了解更多。</p>
 <h2 id="SHELL_ENABLED"><code>SHELL_ENABLED</code></h2>
-<p>Default: <code>False</code></p>
-<p>A boolean that turns on/off the "Shell Commands" integration.</p>
-<p>The "Shell Commands" integration runs user-defined local shell commands when checks
-go up or down. This integration is disabled by default and can be enabled by setting
-the <code>SHELL_ENABLED</code> environment variable to <code>True</code>.</p>
-<p>Note: be careful when using "Shell Commands" integration, and only enable it when
-you fully trust the users of your Healthchecks instance. The commands will be executed
-by the <code>manage.py sendalerts</code> process and will run with its system permissions.</p>
+<p>默认值：<code>False</code></p>
+<p>一个布尔值，用于开启/关闭"Shell Commands"集成。</p>
+<p>"Shell Commands"集成在检查项的状态变为 up 或 down 时运行用户定义的本地 shell 命令。此集成默认禁用，可以通过将 <code>SHELL_ENABLED</code> 环境变量设置为 <code>True</code> 来启用。</p>
+<p>注意：使用"Shell Commands"集成时要小心，只有在完全信任 Healthchecks 实例的用户时才启用它。这些命令将由 <code>manage.py sendalerts</code> 进程执行，并使用其系统权限运行。</p>
 <h2 id="SIGNAL_CLI_SOCKET"><code>SIGNAL_CLI_SOCKET</code></h2>
-<p>Default: <code>None</code></p>
-<p>The path to the signal-cli UNIX socket, or the hostname:port of the signal-cli
-TCP socket.</p>
-<p>Example (UNIX socket):</p>
+<p>默认值：<code>None</code></p>
+<p>signal-cli UNIX 套接字的路径，或 signal-cli TCP 套接字的主机名:端口。</p>
+<p>示例（UNIX 套接字）：</p>
 <div class="highlight"><pre><span></span><code><span class="na">SIGNAL_CLI_SOCKET</span><span class="o">=</span><span class="s">/tmp/signal-cli.socket</span>
 </code></pre></div>
 
-<p>Example (TCP socket):</p>
+<p>示例（TCP 套接字）：</p>
 <div class="highlight"><pre><span></span><code><span class="na">SIGNAL_CLI_SOCKET</span><span class="o">=</span><span class="s">example.org:7583</span>
 </code></pre></div>
 
-<p>Healthchecks uses <a href="https://github.com/AsamK/signal-cli">signal-cli</a> to send Signal
-notifications. Healthchecks interacts with signal-cli over UNIX or TCP socket (requires
-signal-cli 0.10.0 or later).</p>
-<p>To enable the Signal integration:</p>
+<p>Healthchecks 使用 <a href="https://github.com/AsamK/signal-cli">signal-cli</a> 发送 Signal 通知。Healthchecks 通过 UNIX 或 TCP 套接字与 signal-cli 交互（需要 signal-cli 0.10.0 或更高版本）。</p>
+<p>启用 Signal 集成：</p>
 <ul>
-<li>Set up and configure signal-cli to expose JSON RPC on an UNIX or TCP socket
-  (<a href="https://github.com/AsamK/signal-cli/wiki/JSON-RPC-service">instructions</a>).
-  Example: <code>signal-cli -a +xxxxxx daemon --socket /tmp/signal-cli-socket</code></li>
-<li>Put the socket's location in the <code>SIGNAL_CLI_SOCKET</code> environment variable.</li>
+<li>设置并配置 signal-cli 以在 UNIX 或 TCP 套接字上暴露 JSON RPC（<a href="https://github.com/AsamK/signal-cli/wiki/JSON-RPC-service">说明</a>）。示例：<code>signal-cli -a +xxxxxx daemon --socket /tmp/signal-cli-socket</code></li>
+<li>将套接字的位置放入 <code>SIGNAL_CLI_SOCKET</code> 环境变量。</li>
 </ul>
 <h2 id="SITE_LOGO_URL"><code>SITE_LOGO_URL</code></h2>
-<p>Default: <code>None</code></p>
-<p>An URL pointing to the image you want to use as the site logo. If not set,
-Healthchecks will use a fallback image: <code>/static/img/logo.png</code>.</p>
-<p>You can place a custom logo in <code>/static/img/</code>, run <code>manage.py collectstatic</code>, and
-point <code>SITE_LOGO_URL</code> to it like so:</p>
+<p>默认值：<code>None</code></p>
+<p>指向要用作站点徽标的图像的 URL。如果未设置，Healthchecks 将使用备用图像：<code>/static/img/logo.png</code>。</p>
+<p>你可以将自定义徽标放在 <code>/static/img/</code> 中，运行 <code>manage.py collectstatic</code>，然后像这样指向 <code>SITE_LOGO_URL</code>：</p>
 <div class="highlight"><pre><span></span><code><span class="na">SITE_LOGO_URL</span><span class="o">=</span><span class="s">/static/img/my-custom-logo.png</span>
 </code></pre></div>
 
-<p>Or you can serve the logo from another server, and point to it using an absolute URL:</p>
+<p>或者你可以从另一台服务器提供徽标，并使用绝对 URL 指向它：</p>
 <div class="highlight"><pre><span></span><code><span class="na">SITE_LOGO_URL</span><span class="o">=</span><span class="s">https://example.org/cdn/my-custom-logo.png</span>
 </code></pre></div>
 
-<p>Either way, Healthchecks will use the provided <code>SITE_LOGO_URL</code> value as-is in HTML
-pages, and you should use an URL that <strong>the end user's browser will be able to
-access directly</strong>. The logo image can use any image format supported by browsers
-(PNG, SVG, JPG are all fine).</p>
-<p><strong>Docker note.</strong> You can build a custom Docker image with your logo "baked in". To
-do so, use a Dockerfile with the following contents, and with your logo.png placed next
-to it:</p>
+<p>无论哪种方式，Healthchecks 都会在 HTML 页面中按原样使用提供的 <code>SITE_LOGO_URL</code> 值，你应该使用<strong>最终用户的浏览器可以直接访问的</strong> URL。徽标图像可以使用浏览器支持的任何图像格式（PNG、SVG、JPG 都可以）。</p>
+<p><strong>Docker 说明。</strong> 你可以构建一个带有"内置"徽标的自定义 Docker 镜像。为此，请使用包含以下内容的 Dockerfile，并将你的 logo.png 放在其旁边：</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">healthchecks/healthchecks</span>
 <span class="k">COPY</span><span class="w"> </span>logo.png<span class="w"> </span>/opt/healthchecks/static-collected/img/
 </code></pre></div>
 
-<p>This overwrites the default placeholder logo, so, in this case, you do not need to
-specify <code>SITE_LOGO_URL</code>. Notice that the logo must be placed in <code>static-collected</code>, not
-<code>static</code>. This is because <code>manage.py collectstatic</code> has already been run in the base
-image's build time, and the web server will not recognize any new files placed in the
-<code>static</code> directory.</p>
-<p>Please do not use the Healthchecks.io logo (the one with the dark green background) on
-self-hosted instances. This logo is not part of the Healthchecks open-source project.</p>
+<p>这会覆盖默认的占位符徽标，因此在这种情况下，您无需
+指定 <code>SITE_LOGO_URL</code>。请注意，徽标必须放置在 <code>static-collected</code> 中，而不是
+<code>static</code> 中。这是因为 <code>manage.py collectstatic</code> 已在基础镜像构建时运行，
+并且 Web 服务器不会识别放置在 <code>static</code> 目录中的任何新文件。</p>
+<p>请不要在自托管实例上使用 Healthchecks.io 徽标（带有深绿色背景的那个）。
+此徽标不属于 Healthchecks 开源项目。</p>
 <h2 id="SITE_NAME"><code>SITE_NAME</code></h2>
 <p>Default: <code>Mychecks</code></p>
-<p>The display name of this Healthchecks instance. Healthchecks uses it throughout
-its web UI and documentation.</p>
+<p>此 Healthchecks 实例的显示名称。Healthchecks 在其整个 Web UI 和文档中使用它。</p>
 <h2 id="SITE_ROOT"><code>SITE_ROOT</code></h2>
-<p>Default: <code>http://localhost:8000</code></p>
-<p>The base URL of this Healthchecks instance. Healthchecks uses <code>SITE_ROOT</code> whenever
-it needs to construct absolute URLs. Healthchecks also uses <code>SITE_ROOT</code> to set
-several other settings, detailed below.</p>
-<p>If the <a href="#ALLOWED_HOSTS">ALLOWED_HOSTS</a> setting is not set, Healthchecks
-automatically populates it with the domain part of <code>SITE_ROOT</code>. Under typical scenarios
-you can use the automatically populated value and do not need to set
-<code>ALLOWED_HOSTS</code> yourself.</p>
-<p>If the SITE_ROOT contains a path (for example, <code>http://localhost:8000<b>/prefix</b></code>),
-then Healthchecks automatically sets the following additional Django settings:</p>
+<p>默认值：<code>http://localhost:8000</code></p>
+<p>此 Healthchecks 实例的基础 URL。每当 Healthchecks 需要构建绝对 URL 时，
+它都会使用 <code>SITE_ROOT</code>。Healthchecks 还使用 <code>SITE_ROOT</code> 来设置
+其他几个设置，详情如下。</p>
+<p>如果未设置 <a href="#ALLOWED_HOSTS">ALLOWED_HOSTS</a>，Healthchecks
+会自动用 <code>SITE_ROOT</code> 的域名部分填充它。在典型场景下，
+你可以使用自动填充的值，无需自行设置 <code>ALLOWED_HOSTS</code>。</p>
+<p>如果 SITE_ROOT 包含路径（例如 <code>http://localhost:8000<b>/prefix</b></code>），
+则 Healthchecks 会自动设置以下额外的 Django 设置：</p>
 <ul>
-<li><code>LOGIN_URL=<b>/prefix</b>/accounts/login/</code>. Required
-for correct redirection to a log-in page when an unauthenticated user requests a
-page that requires authentication. <code>LOGIN_URL</code> is a standard Django setting, read more
-about it in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#login-url">Django documentation</a>.</li>
-<li><code>STATIC_URL=<b>/prefix</b>/static/</code>. Required for correct
-URL generation to static files (JS, CSS, images). <code>STATIC_URL</code> is a standard Django
-setting, read more about it in
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#static-url">Django documentation</a>.</li>
+<li><code>LOGIN_URL=<b>/prefix</b>/accounts/login/</code>。当未认证用户请求需要认证的页面时，
+需要此设置以正确重定向到登录页面。<code>LOGIN_URL</code> 是一个标准的 Django 设置，在
+<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#login-url">Django 文档</a>中了解更多。</li>
+<li><code>STATIC_URL=<b>/prefix</b>/static/</code>。需要此设置以正确生成静态文件（JS、CSS、图像）的 URL。
+<code>STATIC_URL</code> 是一个标准的 Django 设置，在
+<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#static-url">Django 文档</a>中了解更多。</li>
 </ul>
-<p><strong>On using <code>local_settings.py</code>:</strong> Healthchecks only sets the above additional settings
-if you specify <code>SITE_ROOT</code> via an environment variable. If you instead specify it in
-<code>local_settings.py</code>, you will also need to set <code>ALLOWED_HOSTS</code>, <code>LOGIN_URL</code>, and
-<code>STATIC_URL</code> there.</p>
+<p><strong>关于使用 <code>local_settings.py</code>：</strong> 仅当你通过环境变量指定 <code>SITE_ROOT</code> 时，Healthchecks 才会设置上述额外设置。如果你在 <code>local_settings.py</code> 中指定它，你还需要在其中设置 <code>ALLOWED_HOSTS</code>、<code>LOGIN_URL</code> 和 <code>STATIC_URL</code>。</p>
 <h2 id="SLACK_CLIENT_ID"><code>SLACK_CLIENT_ID</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Slack Client ID, used by the Healthchecks integration for Slack.</p>
-<p>The integration can work with or without the Slack Client ID. If
-the Slack Client ID is not set, in the "Integrations - Add Slack" page,
-Healthchecks will ask the user to provide a webhook URL for posting notifications.</p>
-<p>If the Slack Client ID <em>is</em> set, Healthchecks will use the OAuth2 flow
-to get the webhook URL from Slack. The OAuth2 flow is more user-friendly.
-To set it up, go to <a href="https://api.slack.com/apps/">https://api.slack.com/apps/</a>
-and create a <em>Slack app</em>. When setting up the Slack app, make sure to:</p>
+<p>默认值：<code>None</code></p>
+<p>Slack 客户端 ID，由 Healthchecks 的 Slack 集成使用。</p>
+<p>该集成可以在设置或不设置 Slack 客户端 ID 的情况下工作。如果未设置 Slack 客户端 ID，在"集成 - 添加 Slack"页面中，Healthchecks 将要求用户提供用于发布通知的 Webhook URL。</p>
+<p>如果设置了 Slack 客户端 ID，Healthchecks 将使用 OAuth2 流程从 Slack 获取 Webhook URL。OAuth2 流程更加用户友好。要设置它，请访问 <a href="https://api.slack.com/apps/">https://api.slack.com/apps/</a> 并创建一个 <em>Slack 应用</em>。在设置 Slack 应用时，请确保：</p>
 <ul>
-<li>Add the <a href="https://api.slack.com/scopes/incoming-webhook">incoming-webhook</a>
-  scope to the Bot Token Scopes.</li>
-<li>Add a <em>Redirect URL</em> in the format <code>SITE_ROOT/integrations/add_slack_btn/</code>.
-  For example, if your <code>SITE_ROOT</code> is <code>https://my-hc.example.org</code> then the
-  Redirect URL would be <code>https://my-hc.example.org/integrations/add_slack_btn/</code>.</li>
+<li>将 <a href="https://api.slack.com/scopes/incoming-webhook">incoming-webhook</a> 范围添加到 Bot Token Scopes。</li>
+<li>添加格式为 <code>SITE_ROOT/integrations/add_slack_btn/</code> 的_重定向 URL_。例如，如果你的 <code>SITE_ROOT</code> 是 <code>https://my-hc.example.org</code>，则重定向 URL 为 <code>https://my-hc.example.org/integrations/add_slack_btn/</code>。</li>
 </ul>
 <h2 id="SLACK_CLIENT_SECRET"><code>SLACK_CLIENT_SECRET</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Slack Client Secret. Required if <code>SLACK_CLIENT_ID</code> is set.
-Look it up at <a href="https://api.slack.com/apps/">https://api.slack.com/apps/</a>.</p>
+<p>默认值：<code>None</code></p>
+<p>Slack 客户端密钥。如果设置了 <code>SLACK_CLIENT_ID</code>，则此为必需。在 <a href="https://api.slack.com/apps/">https://api.slack.com/apps/</a> 查找。</p>
 <h2 id="SLACK_CLIENT_SECRET_FILE"><code>SLACK_CLIENT_SECRET_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#SLACK_CLIENT_SECRET">SLACK_CLIENT_SECRET</a>
-setting. If <code>SLACK_CLIENT_SECRET</code> and <code>SLACK_CLIENT_SECRET_FILE</code> are both set,
-<code>SLACK_CLIENT_SECRET_FILE</code> takes precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#SLACK_CLIENT_SECRET">SLACK_CLIENT_SECRET</a> 设置。如果同时设置了 <code>SLACK_CLIENT_SECRET</code> 和 <code>SLACK_CLIENT_SECRET_FILE</code>，则 <code>SLACK_CLIENT_SECRET_FILE</code> 优先。</p>
 <h2 id="SLACK_ENABLED"><code>SLACK_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Healthchecks integration for Slack. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Healthchecks 的 Slack 集成。默认启用。</p>
 <h2 id="SPIKE_ENABLED"><code>SPIKE_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Spike.sh integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Spike.sh 集成。默认启用。</p>
 <h2 id="TELEGRAM_BOT_NAME"><code>TELEGRAM_BOT_NAME</code></h2>
-<p>Default: <code>ExampleBot</code></p>
-<p>The <a href="https://telegram.org/">Telegram</a> bot name, required by the Telegram integration.</p>
-<p>To set up the Telegram integration:</p>
+<p>默认值：<code>ExampleBot</code></p>
+<p><a href="https://telegram.org/">Telegram</a> 机器人名称，Telegram 集成所需。</p>
+<p>设置 Telegram 集成：</p>
 <ul>
-<li>Create a Telegram bot by talking to the
-<a href="https://core.telegram.org/bots#6-botfather">BotFather</a>. Set the bot's name,
-description, user picture, and add a "/start" command.</li>
-<li>After creating the bot you will have the bot's name and token. Put them
-in <code>TELEGRAM_BOT_NAME</code> and <code>TELEGRAM_TOKEN</code> environment variables.</li>
-<li>Run the <code>settelegramwebhook</code> management command. This command tells Telegram
-where to forward channel messages by invoking Telegram's
-<a href="https://core.telegram.org/bots/api#setwebhook">setWebhook</a> API call:</li>
+<li>通过与 <a href="https://core.telegram.org/bots#6-botfather">BotFather</a> 对话创建 Telegram 机器人。设置机器人名称、描述、用户头像，并添加 "/start" 命令。</li>
+<li>创建机器人后，你将获得机器人的名称和令牌。将它们放入 <code>TELEGRAM_BOT_NAME</code> 和 <code>TELEGRAM_TOKEN</code> 环境变量。</li>
+<li>运行 <code>settelegramwebhook</code> 管理命令。此命令通过调用 Telegram 的 <a href="https://core.telegram.org/bots/api#setwebhook">setWebhook</a> API 告诉 Telegram 将频道消息转发到何处：</li>
 </ul>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>./manage.py<span class="w"> </span>settelegramwebhook
 Done,<span class="w"> </span>Telegram<span class="err">&#39;</span>s<span class="w"> </span>webhook<span class="w"> </span><span class="nb">set</span><span class="w"> </span>to:<span class="w"> </span>https://my-monitoring-project.com/integrations/telegram/bot/
 </code></pre></div>
 
-<p>For this to work, your <code>SITE_ROOT</code> must be publicly accessible and use the "https://"
-scheme.</p>
+<p>为此，你的 <code>SITE_ROOT</code> 必须可公开访问并使用 "https://" 协议。</p>
 <h2 id="TELEGRAM_TOKEN"><code>TELEGRAM_TOKEN</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Telegram bot user's authentication token, required by the Telegram integration.</p>
+<p>默认值：<code>None</code></p>
+<p>Telegram 机器人用户的身份验证令牌，Telegram 集成所需。</p>
 <h2 id="TELEGRAM_TOKEN_FILE"><code>TELEGRAM_TOKEN_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#TELEGRAM_TOKEN">TELEGRAM_TOKEN</a> setting.
-If <code>TELEGRAM_TOKEN</code> and <code>TELEGRAM_TOKEN_FILE</code> are both set, <code>TELEGRAM_TOKEN_FILE</code> takes
-precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#TELEGRAM_TOKEN">TELEGRAM_TOKEN</a> 设置。如果同时设置了 <code>TELEGRAM_TOKEN</code> 和 <code>TELEGRAM_TOKEN_FILE</code>，则 <code>TELEGRAM_TOKEN_FILE</code> 优先。</p>
 <h2 id="TRELLO_APP_KEY"><code>TRELLO_APP_KEY</code></h2>
-<p>Default: <code>None</code></p>
-<p>The <a href="https://trello.com/">Trello</a> app key, required by the Trello integration.</p>
-<p>To set up the Trello integration, get a developer API key from
-<a href="https://trello.com/app-key">https://trello.com/app-key</a> and put it in the
-<code>TRELLO_APP_KEY</code> environment variable.</p>
+<p>默认值：<code>None</code></p>
+<p><a href="https://trello.com/">Trello</a> 应用密钥，Trello 集成所需。</p>
+<p>要设置 Trello 集成，请从 <a href="https://trello.com/app-key">https://trello.com/app-key</a> 获取开发者 API 密钥，并将其放入 <code>TRELLO_APP_KEY</code> 环境变量。</p>
 <h2 id="TRELLO_APP_KEY_FILE"><code>TRELLO_APP_KEY_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#TRELLO_APP_KEY">TRELLO_APP_KEY</a> setting.
-If <code>TRELLO_APP_KEY</code> and <code>TRELLO_APP_KEY_FILE</code> are both set, <code>TRELLO_APP_KEY_FILE</code> takes
-precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#TRELLO_APP_KEY">TRELLO_APP_KEY</a> 设置。如果同时设置了 <code>TRELLO_APP_KEY</code> 和 <code>TRELLO_APP_KEY_FILE</code>，则 <code>TRELLO_APP_KEY_FILE</code> 优先。</p>
 <h2 id="TWILIO_ACCOUNT"><code>TWILIO_ACCOUNT</code></h2>
-<p>Default: <code>None</code></p>
-<p>Twilio Account SID, required by the SMS, Call, and WhatsApp integrations.</p>
+<p>默认值：<code>None</code></p>
+<p>Twilio 账户 SID，SMS、电话和 WhatsApp 集成所需。</p>
 <h2 id="TWILIO_AUTH"><code>TWILIO_AUTH</code></h2>
-<p>Default: <code>None</code></p>
-<p>Twilio Auth token, required by the SMS, Call, and WhatsApp integrations.</p>
+<p>默认值：<code>None</code></p>
+<p>Twilio 身份验证令牌，SMS、电话和 WhatsApp 集成所需。</p>
 <h2 id="TWILIO_AUTH_FILE"><code>TWILIO_AUTH_FILE</code></h2>
-<p>Default: <code>None</code></p>
-<p>If set, must contain a filesystem path pointing to a readable file. Healthchecks will
-read the contents of the file into the <a href="#TWILIO_AUTH">TWILIO_AUTH</a> setting.
-If <code>TWILIO_AUTH</code> and <code>TWILIO_AUTH_FILE</code> are both set, <code>TWILIO_AUTH_FILE</code> takes
-precedence.</p>
+<p>默认值：<code>None</code></p>
+<p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#TWILIO_AUTH">TWILIO_AUTH</a> 设置。如果同时设置了 <code>TWILIO_AUTH</code> 和 <code>TWILIO_AUTH_FILE</code>，则 <code>TWILIO_AUTH_FILE</code> 优先。</p>
 <h2 id="TWILIO_FROM"><code>TWILIO_FROM</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Twilio phone number to use as the sender for SMS and WhatsApp notifications,
-and as the caller for Call integrations.</p>
-<p>Example:</p>
+<p>默认值：<code>None</code></p>
+<p>用作 SMS 和 WhatsApp 通知发送方以及电话集成的呼叫方的 Twilio 电话号码。</p>
+<p>示例：</p>
 <div class="highlight"><pre><span></span><code><span class="na">TWILIO_FROM</span><span class="o">=</span><span class="s">+15017122661</span>
 </code></pre></div>
 
 <h2 id="TWILIO_MESSAGING_SERVICE_SID"><code>TWILIO_MESSAGING_SERVICE_SID</code></h2>
-<p>Default: <code>None</code></p>
-<p>The Twilio Messaging Service SID for sending SMS and WhatsApp notifications.</p>
-<p><code>TWILIO_MESSAGING_SERVICE_SID</code> is <strong>required</strong> for sending WhatsApp notifications.</p>
-<p><code>TWILIO_MESSAGING_SERVICE_SID</code> is <strong>optional</strong> for sending SMS notifications. If specified,
-Healthchecks will pass it in the "MessagingServiceSid" field to Twilio API. This will
-result in Twilio using a Messaging Service instead of a plain sender number to deliver
-the SMS messages. If not specified, Healthchecks will fall back to using
-the "From" field with the value configured in <a href="#TWILIO_FROM">TWILIO_FROM</a>.</p>
-<p>Example:</p>
+<p>默认值：<code>None</code></p>
+<p>用于发送 SMS 和 WhatsApp 通知的 Twilio Messaging Service SID。</p>
+<p>发送 WhatsApp 通知<strong>需要</strong> <code>TWILIO_MESSAGING_SERVICE_SID</code>。</p>
+<p>发送 SMS 通知时 <code>TWILIO_MESSAGING_SERVICE_SID</code> 是<strong>可选</strong>的。如果指定，Healthchecks 会将其作为"MessagingServiceSid"字段传递给 Twilio API。这将导致 Twilio 使用 Messaging Service 而不是普通发送方号码来投递 SMS 消息。如果未指定，Healthchecks 将回退到使用 <a href="#TWILIO_FROM">TWILIO_FROM</a> 中配置的"From"字段。</p>
+<p>示例：</p>
 <div class="highlight"><pre><span></span><code><span class="na">TWILIO_MESSAGING_SERVICE_SID</span><span class="o">=</span><span class="s">MGe56e622d540e6badc52ae0ac4af028c6</span>
 </code></pre></div>
 
 <h2 id="TWILIO_USE_WHATSAPP"><code>TWILIO_USE_WHATSAPP</code></h2>
-<p>Default: <code>False</code></p>
-<p>A boolean that turns on/off the WhatsApp integration. For the WhatsApp integration
-to work, you will also need to specify:</p>
+<p>默认值：<code>False</code></p>
+<p>一个布尔值，用于开启/关闭 WhatsApp 集成。要使 WhatsApp 集成正常工作，你还需要指定：</p>
 <ul>
 <li><a href="#TWILIO_ACCOUNT">TWILIO_ACCOUNT</a></li>
 <li><a href="#TWILIO_AUTH">TWILIO_AUTH</a></li>
 <li><a href="#TWILIO_FROM">TWILIO_FROM</a></li>
 <li><a href="#TWILIO_MESSAGING_SERVICE_SID">TWILIO_MESSAGING_SERVICE_SID</a></li>
 <li><a href="#WHATSAPP_DOWN_CONTENT_SID">WHATSAPP_DOWN_CONTENT_SID</a></li>
-<li><a href="#WHATSAPP_UP_CONTENT_SID">WHATSAPP_UP_CONTENT_SID</a>.</li>
+<li><a href="#WHATSAPP_UP_CONTENT_SID">WHATSAPP_UP_CONTENT_SID</a>。</li>
 </ul>
 <h2 id="USE_PAYMENTS"><code>USE_PAYMENTS</code></h2>
-<p>Default: <code>False</code></p>
-<p>A boolean that turns on/off billing features.</p>
+<p>默认值：<code>False</code></p>
+<p>一个布尔值，用于开启/关闭计费功能。</p>
 <h2 id="VICTOROPS_ENABLED"><code>VICTOROPS_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Splunk On-Call (VictorOps) integration.
-Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Splunk On-Call (VictorOps) 集成。默认启用。</p>
 <h2 id="WEBHOOKS_ENABLED"><code>WEBHOOKS_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Webhooks integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Webhooks 集成。默认启用。</p>
 <h2 id="WHATSAPP_DOWN_CONTENT_SID"><code>WHATSAPP_DOWN_CONTENT_SID</code></h2>
-<p>Default: <code>None</code></p>
-<p>Identifier of the Twilio content template to use for WhatsApp "down" notifications.
-Required by the WhatsApp integration.</p>
-<p>Meta requires WhatsApp message templates to be pre-registered and approved.
-Create a content template in your Twilio account with the following contents:</p>
+<p>默认值：<code>None</code></p>
+<p>用于 WhatsApp "down"通知的 Twilio 内容模板标识符。WhatsApp 集成所需。</p>
+<p>Meta 要求 WhatsApp 消息模板需要预先注册和批准。在你的 Twilio 账户中创建具有以下内容的内容模板：</p>
 <div class="highlight"><pre><span></span><code><span class="x">The check “</span><span class="cp">{{</span><span class="m">1</span><span class="cp">}}</span><span class="x">” is DOWN.</span>
 </code></pre></div>
 
-<p>You can tweak the message contents as needed, but make sure it has a single placeholder
-similar to the above example.</p>
+<p>你可以根据需要调整消息内容，但请确保它有一个类似于上述示例的单个占位符。</p>
 <h2 id="WHATSAPP_UP_CONTENT_SID"><code>WHATSAPP_UP_CONTENT_SID</code></h2>
-<p>Default: <code>None</code></p>
-<p>Identifier of the Twilio content template to use for WhatsApp "up" notifications.
-Required by the WhatsApp integration.</p>
-<p>Meta requires WhatsApp message templates to be pre-registered and approved.
-Create a content template in your Twilio account with the following contents:</p>
+<p>默认值：<code>None</code></p>
+<p>用于 WhatsApp "up"通知的 Twilio 内容模板标识符。WhatsApp 集成所需。</p>
+<p>Meta 要求 WhatsApp 消息模板需要预先注册和批准。在你的 Twilio 账户中创建具有以下内容的内容模板：</p>
 <div class="highlight"><pre><span></span><code><span class="x">The check “</span><span class="cp">{{</span><span class="m">1</span><span class="cp">}}</span><span class="x">” is now UP.</span>
 </code></pre></div>
 
-<p>You can tweak the message contents as needed, but make sure it has a single placeholder
-similar to the above example.</p>
+<p>你可以根据需要调整消息内容，但请确保它有一个类似于上述示例的单个占位符。</p>
 <h2 id="ZULIP_ENABLED"><code>ZULIP_ENABLED</code></h2>
-<p>Default: <code>True</code></p>
-<p>A boolean that turns on/off the Zulip integration. Enabled by default.</p>
+<p>默认值：<code>True</code></p>
+<p>一个布尔值，用于开启/关闭 Zulip 集成。默认启用。</p>

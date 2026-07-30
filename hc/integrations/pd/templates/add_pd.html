@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}PagerDuty Integration for {{ site_name }}{% endblock %}
+{% block title %}PagerDuty 集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -10,46 +10,46 @@
     <h1>PagerDuty</h1>
 
     <p>
-        If your team uses <a href="https://www.pagerduty.com/">PagerDuty</a>,
-        you can set up {{ site_name }} to create a PagerDuty incident
-        when a check goes down, and resolve it when a check goes back up.
+        如果您的团队使用 <a href="https://www.pagerduty.com/">PagerDuty</a>，
+        您可以设置 {{ site_name }} 在检查项宕机时创建 PagerDuty 事件，
+        并在检查项恢复时将其解决。
     </p>
 
-    <h2>Setup Guide</h2>
+    <h2>设置指南</h2>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
             <p>
-                Log into your PagerDuty account,
-                go to <strong>Configuration &gt; Services</strong>,
-                and click on <strong>New Service</strong>.
+                登录您的 PagerDuty 帐户，
+                进入 <strong>配置 &gt; 服务</strong>，
+                点击 <strong>新建服务</strong>。
             </p>
             <p>
-                Give it a descriptive name, and
-                for Integration Type select
-                <strong>Use our API directly</strong>.
+                为其起一个描述性的名称，
+                在集成类型中选择
+                <strong>直接使用我们的 API</strong>。
             </p>
 
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_pd_s1.png' %}">
         </div>
     </div>
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            After adding the new service, take note of its
-            <strong>Integration Key</strong>, a long string
-            of letters and digits.
+            添加新服务后，记下其
+            <strong>集成密钥</strong>，一个由字母和数字组成的
+            长字符串。
 
         </div>
         <div class="col-sm-6">
             <img
                 class="ai-guide-screenshot"
-                alt="Screenshot"
+                alt="截图"
                 src="{% static 'img/setup_pd_s2.png' %}">
         </div>
     </div>
@@ -57,16 +57,16 @@
     <div class="row ai-step">
         <div class="col-sm-6">
             <span class="step-no"></span>
-            <p>Paste the Integration Key down below. Save the integration, and it's done!</p>
+            <p>将集成密钥粘贴到下方。保存集成，大功告成！</p>
         </div>
     </div>
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {{ form.value.css_classes }}">
-            <label for="api-key" class="col-sm-2 control-label">Integration Key</label>
+            <label for="api-key" class="col-sm-2 control-label">集成密钥</label>
             <div class="col-sm-4">
                 <input
                     id="api-key"
@@ -85,7 +85,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

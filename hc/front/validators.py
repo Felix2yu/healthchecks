@@ -35,7 +35,7 @@ class WebhookValidator(URLValidator):
 
 
 class CronValidator:
-    message = "Not a valid cron expression."
+    message = "不是有效的 cron 表达式。"
 
     def __call__(self, value: str) -> None:
         # Expect 5 components-
@@ -52,7 +52,7 @@ class CronValidator:
 
 
 class OnCalendarValidator:
-    message = "Not a valid OnCalendar expression."
+    message = "不是有效的 OnCalendar 表达式。"
 
     def __call__(self, value: str) -> None:
         # Expect 1 - 4 components
@@ -70,7 +70,7 @@ class OnCalendarValidator:
 
 
 class TimezoneValidator:
-    message = "Not a valid time zone."
+    message = "不是有效的时区。"
 
     def __call__(self, value: str) -> None:
         if value not in all_timezones:

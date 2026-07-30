@@ -1,25 +1,19 @@
 {% load hc_extras %}
-Hello,
+您好，
 
-The check "{{ check.name }}" in project "{{ check.project.name }}" is currently flapping.
-It has changed between the "up" and "down" states {{ num_flips }} times
-in the last 24 hours.
+项目 "{{ check.project.name }}" 中的检查项 "{{ check.name }}" 当前处于抖动状态。
+它在过去 24 小时内，在"正常"和"宕机"状态之间切换了 {{ num_flips }} 次。
 
-Common reasons for a check changing its state frequently are:
+检查项频繁变更状态的常见原因有：
 
-* The monitored system is misbehaving and changing between healthy and
-  unhealthy states frequently.
-* The check is configured incorrectly: either its schedule is wrong, or its
-  grace time is too short.
+* 被监控系统行为异常，频繁在健康与不健康状态之间切换。
+* 检查项配置不正确：调度有误，或者宽限期过短。
 
-Please look into the cause of the frequent state changes and see if
-anything needs to be fixed. If you have trouble accessing your {% site_name %}
-account, or have any questions, please reach out
-to us at {{ support_email }}.
+请排查频繁状态变更的原因，看看是否需要修复。如果您在访问 {% site_name %}
+账户时遇到问题，或有任何疑问，请通过 {{ support_email }} 联系我们。
 
-This is a mandatory message we're sending out to notify you about an
-issue with your {% site_name %} account.
+这是一条强制性消息，我们发送此消息是为了通知您 {% site_name %} 账户的问题。
 
 --
-Sincerely,
-The {% site_name %} Team
+此致，
+{% site_name %} 团队

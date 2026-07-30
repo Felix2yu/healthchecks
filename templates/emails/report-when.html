@@ -1,10 +1,10 @@
 {% load hc_extras tz %}
 {% timezone tz %}
 {% if report_period == "monthly" %}
-    In {{ boundary|date:"F" }}
+    {{ boundary|date:"F" }}月
 {% elif report_period == "weekly" %}
-    Last week ({{ boundary|date:"F j"}} to {{ boundary|add6days|date:"F j"}})
+    上周（{{ boundary|date:"n月j日"}} 至 {{ boundary|add6days|date:"n月j日"}}）
 {% elif report_period == "daily" %}
-    Yesterday ({{ boundary|date:"F j"}})
+    昨天（{{ boundary|date:"n月j日"}}）
 {% endif %}
 {% endtimezone %}

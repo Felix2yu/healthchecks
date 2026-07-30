@@ -4,12 +4,12 @@
 <td></td>
 <td></td>
 <td>
-{% if event.kind == "ign" %}<span class="label label-ign">Ignored</span>
-{% elif event.exitstatus %}<span class="label label-danger">Status {{ event.exitstatus }}</span>
-{% elif event.kind == "fail" %}<span class="label label-danger">Failure</span>
-{% elif event.kind == "start" %}<span class="label label-start">Started</span>
-{% elif event.kind == "log" %}<span class="label label-log">Log</span>
-{% else %}<span class="label label-success">OK</span>
+{% if event.kind == "ign" %}<span class="label label-ign">已忽略</span>
+{% elif event.exitstatus %}<span class="label label-danger">状态 {{ event.exitstatus }}</span>
+{% elif event.kind == "fail" %}<span class="label label-danger">失败</span>
+{% elif event.kind == "start" %}<span class="label label-start">已开始</span>
+{% elif event.kind == "log" %}<span class="label label-log">日志</span>
+{% else %}<span class="label label-success">正常</span>
 {% endif %}
 </td>
 <td>
@@ -17,7 +17,7 @@
 {% if event.rid %}<span class="label rid">{{ event.rid|first5 }}</span> {% endif %}
 {% if event.scheme == "email" %}{{ event.ua }}{% else %}
 {{ event.scheme|upper }} {{ event.method }}{% if event.remote_addr %} from {{ event.remote_addr }}{% endif %}
-<code>{% if event.body_raw_preview %}- {{ event.body_raw_preview|decode }}{% elif event.object_size %}- {{ event.object_size }} byte body{% endif %}{% if event.ua %} - {{ event.ua|truncatechars:80 }}{% endif %}</code>
+<code>{% if event.body_raw_preview %}- {{ event.body_raw_preview|decode }}{% elif event.object_size %}- {{ event.object_size }} 字节正文{% endif %}{% if event.ua %} - {{ event.ua|truncatechars:80 }}{% endif %}</code>
 {% endif %}
 </td>
 </tr>
@@ -30,7 +30,7 @@
 <tr class="flip" data-dt="{{ event.created|timestamp }}">
     <td></td><td></td><td></td>
     <td colspan="2">
-        Status: <strong>{{ event.old_status }} ➔ {{ event.new_status }}</strong>.
+        状态：<strong>{{ event.old_status }} ➔ {{ event.new_status }}</strong>。
     </td>
 </tr>
 {% endif %}

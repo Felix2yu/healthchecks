@@ -3,9 +3,9 @@
 
 {% block title %}
 {% if is_new %}
-Set Up Email Notifications - {{ site_name }}
+设置邮件通知 - {{ site_name }}
 {% else %}
-Email Settings - {{ site_name }}
+邮件设置 - {{ site_name }}
 {% endif %}
 {% endblock %}
 
@@ -14,22 +14,21 @@ Email Settings - {{ site_name }}
 <div class="row">
 <div class="col-sm-12">
     <h1>Email</h1>
-    <p>Get an email message when check goes up or down.</p>
+    <p>当检查项恢复或宕机时发送邮件。</p>
 
     {% if use_verification %}
     <p class="alert alert-info">
-        <strong>Requires confirmation.</strong>
-        After entering an email address, {{ site_name }} will send out a confirmation link.
-        Only confirmed addresses receive notifications.
+        <strong>需要确认。</strong>
+        输入邮箱地址后，{{ site_name }} 将发送确认链接。只有确认的地址才会收到通知。
     </p>
     {% endif %}
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {{ form.value.css_classes }}">
-            <label for="id_email" class="col-sm-2 control-label">Email</label>
+            <label for="id_email" class="col-sm-2 control-label">邮箱</label>
             <div class="col-sm-3">
                 <input
                     id="id_email"
@@ -49,7 +48,7 @@ Email Settings - {{ site_name }}
         </div>
 
         <div class="form-group {{ form.down.css_classes }}">
-            <label class="col-sm-2 control-label">Notify When</label>
+            <label class="col-sm-2 control-label">通知时机</label>
             <div class="col-sm-10">
                 <label class="checkbox-container">
                     <input
@@ -58,7 +57,7 @@ Email Settings - {{ site_name }}
                         value="true"
                         {% if form.down.value %} checked {% endif %}>
                     <span class="checkmark"></span>
-                    A check goes <strong>down</strong>
+                    检查项<strong>宕机</strong>时
                 </label>
                 <label class="checkbox-container">
                     <input
@@ -67,7 +66,7 @@ Email Settings - {{ site_name }}
                         value="true"
                         {% if form.up.value %} checked {% endif %}>
                     <span class="checkmark"></span>
-                    A check goes <strong>up</strong>
+                    检查项<strong>恢复</strong>时
                     {% if form.down.errors %}
                     <div class="help-block">
                         {{ form.down.errors|join:"" }}
@@ -75,8 +74,7 @@ Email Settings - {{ site_name }}
                     {% else %}
                     <br />
                     <span class="text-muted">
-                    Ticketing system integrations: untick this and avoid creating new tickets
-                    when checks come back up.
+                    工单系统集成：取消勾选可避免检查项恢复时创建新工单。
                     </span>
                     {% endif %}
                 </label>
@@ -85,7 +83,7 @@ Email Settings - {{ site_name }}
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Save Integration</button>
+                <button type="submit" class="btn btn-primary">保存集成</button>
             </div>
         </div>
     </form>

@@ -1,5 +1,5 @@
 {% load humanize %}
-{{ check.name_then_code }} is {{ status|upper }}{% if flip.reason %} ({{ flip.reason_long }}){% endif %}.
+{{ check.name_then_code }} {% if status == "down" %}已宕机{% else %}已恢复{% endif %}{% if flip.reason %}（{{ flip.reason_long }}）{% endif %}。
 {% if status == "down" and ping %}
-Last ping was {{ ping.created|naturaltime }}.
+上次 Ping 时间为 {{ ping.created|naturaltime }}。
 {% endif %}

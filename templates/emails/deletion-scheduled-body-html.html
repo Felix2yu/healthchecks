@@ -2,17 +2,16 @@
 {% load hc_extras %}
 
 {% block content %}
-Hello,<br />
+您好，<br />
 <br />
-The {% site_name %} account registered to <strong>{{ owner_email }}</strong>
-is  scheduled for deletion on <strong>{{ deletion_scheduled_date.date }}</strong>.<br />
+注册于 <strong>{{ owner_email }}</strong> 的 {% site_name %} 账户已计划于 <strong>{{ deletion_scheduled_date.date }}</strong> 删除。<br />
 <br />
-Account details:<br />
-Owner: <strong>{{ owner_email }}</strong><br />
-Number of checks in the account: <strong>{{ num_checks }}</strong><br />
+账户详情：<br />
+所有者：<strong>{{ owner_email }}</strong><br />
+账户中的检查项数量：<strong>{{ num_checks }}</strong><br />
 <br />
-To prevent deletion, please contact us at {{ support_email}} as soon as possible.<br />
+为防止删除，请尽快通过 {{ support_email}} 联系我们。<br />
 <br />
-Sincerely,<br />
-The {% site_name %} Team
+此致，<br />
+{% site_name %} 团队
 {% endblock %}

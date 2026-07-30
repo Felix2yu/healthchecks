@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load compress hc_extras static tz %}
 
-{% block title %}Account Settings - {{ site_name }}{% endblock %}
+{% block title %}账户设置 - {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
         <h1 class="settings-title">
-            Settings
+            设置
             <small>{{ request.user.email }}</small>
         </h1>
     </div>
@@ -16,12 +16,12 @@
 <div class="row">
     <div class="col-sm-3">
         <ul class="nav nav-pills nav-stacked">
-            <li><a href="{% url 'hc-profile' %}">Account</a></li>
-            <li class="active"><a href="{% url 'hc-appearance' %}">Appearance</a></li>
+            <li><a href="{% url 'hc-profile' %}">账户</a></li>
+            <li class="active"><a href="{% url 'hc-appearance' %}">外观</a></li>
             {% if show_pricing %}
-            <li><a href="{% url 'hc-billing' %}">Billing</a></li>
+            <li><a href="{% url 'hc-billing' %}">账单</a></li>
             {% endif %}
-            <li><a href="{% url 'hc-notifications' %}">Email Reports</a></li>
+            <li><a href="{% url 'hc-notifications' %}">邮件报告</a></li>
         </ul>
     </div>
 
@@ -30,14 +30,14 @@
             <div class="panel-body settings-block">
                 <form method="post">
                     {% csrf_token %}
-                    <h2>Theme</h2>
+                    <h2>主题</h2>
 
                     <div class="row">
                         <div class="col-sm-4 theme">
                             <label for="theme-light">
                                 <img
                                     src="{% static 'img/theme-light.png' %}"
-                                    alt="Light theme preview">
+                                    alt="亮色主题预览">
                             </label>
 
                             <label class="radio-container">
@@ -48,14 +48,14 @@
                                     value=""
                                     {% if profile.theme != "dark" %} checked {% endif %}>
                                 <span class="radiomark"></span>
-                                Light
+                                亮色
                             </label>
                         </div>
                         <div class="col-sm-4 theme">
                             <label for="theme-dark">
                                 <img
                                     src="{% static 'img/theme-dark.png' %}"
-                                    alt="Dark theme preview">
+                                    alt="深色主题预览">
                             </label>
 
                             <label class="radio-container">
@@ -66,14 +66,14 @@
                                     value="dark"
                                     {% if profile.theme == "dark" %} checked {% endif %}>
                                 <span class="radiomark"></span>
-                                Dark
+                                深色
                             </label>
                         </div>
                         <div class="col-sm-4 theme">
                             <label for="theme-system">
                                 <img
                                     src="{% static 'img/theme-system.png' %}"
-                                    alt="System theme preview">
+                                    alt="系统主题预览">
                             </label>
 
                             <label class="radio-container">
@@ -84,7 +84,7 @@
                                     value="system"
                                     {% if profile.theme == "system" %} checked {% endif %}>
                                 <span class="radiomark"></span>
-                                System
+                                系统
                             </label>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
             </div>
             {% if status == "info" %}
             <div class="panel-footer">
-                Your settings have been updated!
+                您的设置已更新！
             </div>
             {% endif %}
         </div>

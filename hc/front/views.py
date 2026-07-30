@@ -1051,7 +1051,7 @@ def transfer(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
         check.save()
         check.assign_all_channels()
 
-        messages.success(request, "Check transferred successfully!")
+        messages.success(request, "检查项转移成功！")
         return redirect("hc-details", code)
 
     ctx = {"check": check}
@@ -1314,9 +1314,9 @@ def send_test_notification(
         error = channel.notify(dummy_flip, is_test=True)
 
     if error:
-        messages.warning(request, f"Could not send a test notification. {error}.")
+        messages.warning(request, f"无法发送测试通知。{error}。")
     else:
-        messages.success(request, "Test notification sent!")
+        messages.success(request, "测试通知已发送！")
 
     return redirect("hc-channels", channel.project.code)
 

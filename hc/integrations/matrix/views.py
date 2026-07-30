@@ -33,7 +33,7 @@ def add(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
             channel.save()
 
             channel.assign_all_checks()
-            messages.success(request, "The Matrix integration has been added!")
+            messages.success(request, "Matrix 集成已添加！")
             return redirect("hc-channels", project.code)
     else:
         form = AddMatrixForm()

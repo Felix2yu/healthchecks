@@ -2,19 +2,19 @@ import requests
 URL = "PING_URL"
 
 
-# "/start" kicks off a timer: if the job takes longer than
-# the configured grace time, the check will be marked as "down"
+# "/start" 启动一个计时器：如果任务耗时超过
+# 配置的宽限时间，检查将标记为"down"
 try:
     requests.get(URL + "/start", timeout=5)
 except requests.exceptions.RequestException:
-    # If the network request fails for any reason, we don't want
-    # it to prevent the main job from running
+    # 如果网络请求因任何原因失败，我们不希望
+    # 它阻止主要任务的运行
     pass
 
 
-# TODO: run the job here
+# TODO：在此处运行任务
 fib = lambda n: n if n < 2 else fib(n - 1) + fib(n - 2)
 print("F(42) = %d" % fib(42))
 
-# Signal success:
+# 发送成功信号：
 requests.get(URL)

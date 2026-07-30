@@ -4,26 +4,25 @@
 {% block content %}
 
 {% if summary_nchecks %}
-{{ when }}, <strong>{{ summary_nchecks }} check{{ summary_nchecks|pluralize }}</strong> had <strong>{{ summary_ntimes }} downtime event{{ summary_ntimes|pluralize }}</strong>.
+{{ when }}，<strong>{{ summary_nchecks }} 个检查项</strong>发生了 <strong>{{ summary_ntimes }} 次宕机事件</strong>。
 {% else %}
-{{ when }}, no checks had downtimes. Nice!
+{{ when }}，没有检查项发生宕机。很棒！
 {% endif %}
 
 {% include "emails/report-summary-html.html" %}
 
-Just one more thing to check:
-<strong>Do you have more cron jobs or periodic processes,
-that are not yet on this list?</strong>
-Set up monitoring for them, get notified when they don't run on time!
+还有一件事：
+<strong>您是否还有其他尚未列入此列表的 cron 作业或定期进程？</strong>
+为它们设置监控，当它们未按时运行时获得通知！
 <br /><br />
 
-Cheers,<br>
-The {% site_name %} Team
+此致，<br>
+{% site_name %} 团队
 {% endblock %}
 
 {% block unsub %}
 <br>
 <a href="{{ unsub_link }}" target="_blank" style="color: #666666; text-decoration: underline;">
-    Unsubscribe
+    取消订阅
 </a>
 {% endblock %}

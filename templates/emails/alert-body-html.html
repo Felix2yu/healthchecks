@@ -4,18 +4,18 @@
 
 <p>
     {% if flip.new_status == "down" %}
-    "{{ check.name_then_code }}" is DOWN{% if flip.reason %} ({{ flip.reason_long }}){% endif %}.
+    "{{ check.name_then_code }}" 已宕机{% if flip.reason %}（{{ flip.reason_long }}）{% endif %}。
     {% else %}
-    "{{ check.name_then_code }}" is UP.
-    {% if flip.down_duration %}The downtime lasted {{ flip.down_duration|hc_duration_for_sentence }}.{% endif%}
+    "{{ check.name_then_code }}" 已恢复。
+    {% if flip.down_duration %}宕机持续了 {{ flip.down_duration|hc_duration_for_sentence }}。{% endif%}
     {% endif %}
-    <a href="{{ check.cloaked_url }}">View on {% site_name %}&hellip;</a>
+    <a href="{{ check.cloaked_url }}">在 {% site_name %} 查看&hellip;</a>
 </p>
 
 
 {% if check.desc %}
 <p>
-    <b>Description</b><br>
+    <b>描述</b><br>
     {{ check.desc|linebreaksbr }}
 </p>
 {% endif %}
@@ -25,7 +25,7 @@
     <tr>
         {% if check.project.name %}
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Project</b><br>
+            <b>项目</b><br>
             {{ check.project.name }}
         </td>
         {{ trtr|safe }} {% cycle trtr %}
@@ -33,7 +33,7 @@
 
         {% if check.tags_list %}
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Tags</b><br>
+            <b>标签</b><br>
             {% for tag in check.tags_list %}
             <code style="background-color: #eeeeee; padding: 2px 4px; border-radius: 2px;">{{ tag }}</code>
             {% endfor %}
@@ -43,7 +43,7 @@
 
         {% if check.kind == "simple" %}
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Period</b><br>
+            <b>周期</b><br>
             {{ check.timeout|hc_duration }}
         </td>
         {{ trtr|safe }} {% cycle trtr %}
@@ -51,59 +51,59 @@
 
         {% if check.kind == "cron" or check.kind == "oncalendar" %}
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Schedule</b><br>
+            <b>调度</b><br>
             <code>{{ check.schedule }}</code>
         </td>
         {{ trtr|safe }} {% cycle trtr %}
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Time Zone</b><br>
+            <b>时区</b><br>
             {{ check.tz }}
         </td>
         {{ trtr|safe }} {% cycle trtr %}
         {% endif %}
 
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Total Pings</b><br>
+            <b>总 Ping 数</b><br>
             {% if ping %}{{ ping.n }}{% else %}0{% endif %}
-            {% if check.created %}(since {{ check.created|date:'M j, Y' }}){% endif %}
+            {% if check.created %}（自 {{ check.created|date:'Y年n月j日' }}）{% endif %}
         </td>
     </tr>
 
     {% if ping %}
     <tr>
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Last Ping</b><br>
+            <b>上次 Ping</b><br>
             {{ ping.created|naturaltime }}{% if ping.remote_addr %}, from {{ ping.remote_addr }}{% endif %}
         </td>
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Last Ping Type</b><br>
+            <b>上次 Ping 类型</b><br>
             {% if ping.kind == "ign" %}
             <span style="background-color: #eeeeee; color: #333333; padding-left: 4px; padding-right: 4px; border-radius: 2px;">
-                Ignored
+                已忽略
             </span>
             {% elif ping.exitstatus > 0 %}
             <span style="background-color: #f2dede; color: #333333; padding-left: 4px; padding-right: 4px; border-radius: 2px;">
-                Exit status {{ ping.exitstatus }}
+                退出状态 {{ ping.exitstatus }}
             </span>
             {% elif ping.exitstatus == 0 %}
             <span style="background-color: #dff0d8; color: #333333; padding-left: 4px; padding-right: 4px; border-radius: 2px;">
-                Exit status 0
+                退出状态 0
             </span>
             {% elif ping.kind == "fail" %}
             <span style="background-color: #f2dede; color: #333333; padding-left: 4px; padding-right: 4px; border-radius: 2px;">
-                Failure
+                失败
             </span>
             {% elif ping.kind == "start" %}
             <span style="background-color: #dff0d8; color: #333333; padding-left: 4px; padding-right: 4px; border-radius: 2px;">
-                Started
+                已启动
             </span>
             {% elif ping.kind == "log" %}
             <span style="background-color: #eeeeee; color: #333333; padding-left: 4px; padding-right: 4px; border-radius: 2px;">
-                Log
+                日志
             </span>
             {% else %}
             <span style="background-color: #dff0d8; color: #333333; padding-left: 4px; padding-right: 4px; border-radius: 2px;">
-                Success
+                成功
             </span>
             {% endif %}
         </td>
@@ -112,38 +112,38 @@
 
     <tr>
         <td style="padding-right: 32px; padding-bottom: 8px; vertical-align: top;">
-            <b>Status Changed to {{ flip.new_status|title }} at</b><br>
+            <b>状态已变更为 {{ flip.new_status|title }} 时间</b><br>
             {{ flip.created|date:"r" }}
         </td>
     </tr>
 </table>
 
 {% if subject %}
-<p><b>Last Ping Subject</b><br>{{ subject }}</p>
+<p><b>上次 Ping 主题</b><br>{{ subject }}</p>
 {% endif %}
 
 {% if ping and ping.has_body %}
-    <p><b>Last Ping Body</b>
+    <p><b>上次 Ping 正文</b>
     {% if body|length > 10000 and not ping_attached %}
         <br>
-        Showing the last 10000 bytes of {{ body|length}} bytes total.
-        <a href="{{ check.cloaked_url }}#ping-{{ ping.n }}">View full body</a>.
+        显示共 {{ body|length}} 字节中的最后 10000 字节。
+        <a href="{{ check.cloaked_url }}#ping-{{ ping.n }}">查看完整内容</a>.
     {% endif %}
     </p>
     {% if body is None %}
     <p>
-        The request body data is being processed and will be available for viewing shortly.
-        Please <a href="{{ check.cloaked_url }}#ping-{{ ping.n }}">view it on the website</a>.
+        请求正文数据正在处理中，稍后即可查看。
+        请在<a href="{{ check.cloaked_url }}#ping-{{ ping.n }}">网站查看</a>。
     </p>
     {% elif ping_attached %}
-    <p>See the attachment.</p>
+    <p>请查看附件。</p>
     {% else %}
     <pre style="font-family: monospace; line-height: 1em;">{{ body|slice:"-10000:"|linebreaksbr }}</pre>
     {% endif %}
 {% endif %}
 
 {% if projects %}
-<p><b>Projects Overview</b></p>
+<p><b>项目概览</b></p>
 <table>
     {% for project in projects %}
     <tr>
@@ -153,9 +153,9 @@
         <td style="padding-right: 32px; padding-bottom: 4px;">
             {% with project.get_n_down as n_down %}
                 {% if n_down %}
-                <b>{{ n_down }} check{{ n_down|pluralize }} down</b>
+                <b>{{ n_down }} 个检查项宕机</b>
                 {% else %}
-                OK, all checks up
+                正常，所有检查项均正常
                 {% endif %}
             {% endwith %}
         </td>
@@ -167,9 +167,8 @@
 <br>
 <p style="color: #666666; font-size: 90%">
 &mdash;<br>
-You are receiving this email because you are subscribed to {% site_name %} monitoring
-notifications{% if check.project.name %} for project "{{ check.project.name }}"{% endif %}.<br>
-Don't want to receive these notifications?
-<a href="{{ unsub_link }}" target="_blank" style="color: #666666; text-decoration: underline;">Unsubscribe</a>.
+您收到此邮件是因为您已订阅 {% site_name %} 的监控通知{% if check.project.name %}（项目："{{ check.project.name }}"）{% endif %}。<br>
+不想收到这些通知？
+<a href="{{ unsub_link }}" target="_blank" style="color: #666666; text-decoration: underline;">取消订阅</a>。
 </p>
 {% endtimezone %}

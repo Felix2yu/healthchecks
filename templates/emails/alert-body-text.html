@@ -1,71 +1,71 @@
 {% load hc_extras humanize linemode tz %}{% linemode %}
 {% timezone tz %}
 
-{% line %}The check "{{ check.name_then_code|safe }}" has gone {{ flip.new_status }}.{% endline %}
+{% line %}检查项 "{{ check.name_then_code|safe }}" 已{{ flip.new_status }}。{% endline %}
 {% if flip.reason %}
-{% line %}Reason: {{ flip.reason_long}}.{% endline %}
+{% line %}原因：{{ flip.reason_long}}。{% endline %}
 {% endif %}
 {% if flip.new_status == "up" and flip.down_duration %}
-{% line %}The downtime lasted {{ flip.down_duration|hc_duration_for_sentence }}.{% endline %}
+{% line %}宕机持续了 {{ flip.down_duration|hc_duration_for_sentence }}。{% endline %}
 {% endif %}
 {% line %}{% endline %}
 
-{% line %}View on {% site_name %}:{% endline %}
+{% line %}在 {% site_name %} 查看：{% endline %}
 {% line %}{{ check.cloaked_url }}{% endline %}
 
 {% if check.desc %}
 {% line %}{% endline %}
-{% line %}Description:{% endline %}
-{% line %}------------{% endline %}
+{% line %}描述：{% endline %}
+{% line %}--------{% endline %}
 {% line %}{{ check.desc|safe}}{% endline %}
 {% endif %}
 
 {% line %}{% endline %}
-{% line %}Details:{% endline %}
-{% line %}--------{% endline %}
+{% line %}详情：{% endline %}
+{% line %}------{% endline %}
 
 {% if check.project.name %}
-    {% line %}Project: {{ check.project.name|safe }}{% endline %}
+    {% line %}项目：{{ check.project.name|safe }}{% endline %}
 {% endif %}
 
 {% if check.tags %}
-    {% line %}Tags: {{ check.tags|safe }}{% endline %}
+    {% line %}标签：{{ check.tags|safe }}{% endline %}
 {% endif %}
 
 {% if check.kind == "simple" %}
-    {% line %}Period: {{ check.timeout|hc_duration }}{% endline %}
+    {% line %}周期：{{ check.timeout|hc_duration }}{% endline %}
 {% endif %}
 
 {% if check.kind == "cron" or check.kind == "oncalendar" %}
-    {% line %}Schedule: {{ check.schedule }}{% endline %}
-    {% line %}Time zone: {{ check.tz }}{% endline %}
+    {% line %}调度：{{ check.schedule }}{% endline %}
+    {% line %}时区：{{ check.tz }}{% endline %}
 {% endif %}
 
-{% line %}Total pings: {% if ping %}{{ ping.n }}{% else %}0{% endif %} {% if check.created %}(since {{ check.created|date:'M j, Y' }}){% endif %}{% endline %}
+{% line %}总 Ping 数：{% if ping %}{{ ping.n }}{% else %}0{% endif %} {% if check.created %}（自 {{ check.created|date:'Y年n月j日' }}）{% endif %}{% endline %}
 
 {% if ping %}
-    {% line %}Last ping: {{ ping.created|naturaltime }}{% if ping.remote_addr %}, from {{ ping.remote_addr }}{% endif %}{% endline %}
+    {% line %}上次 Ping：{{ ping.created|naturaltime }}{% if ping.remote_addr %}，来自 {{ ping.remote_addr }}{% endif %}{% endline %}
 
-    {% line %}Last ping type: {{ ping.get_kind_display }}{% endline %}
+    {% line %}上次 Ping 类型：{{ ping.get_kind_display }}{% endline %}
     {% if subject %}
-    {% line %}Last ping subject: {{ subject }}{% endline %}
+    {% line %}上次 Ping 主题：{{ subject }}{% endline %}
     {% endif %}
 {% endif %}
 
-{% line %}Status changed to {{ flip.new_status }} at: {{ flip.created|date:"r" }}{% endline %}
+{% line %}状态已变更为 {{ flip.new_status }}，时间：{{ flip.created|date:"r" }}{% endline %}
 
 {% if ping and ping.has_body %}
     {% line %}{% endline %}
-    {% line %}Last Ping Body:{% endline %}
+    {% line %}上次 Ping 正文：{% endline %}
     {% if body|length > 10000 and not ping_attached %}
-        {% line %}Showing the last 10000 bytes of {{ body|length}} bytes total.{% endline %}
+        {% line %}显示共 {{ body|length}} 字节中的最后 10000 字节。{% endline %}
     {% endif %}
     {% line %}---------------{% endline %}
     {% if body is None %}
-        {% line %}The request body data is being processed and will be available for viewing shortly.{% endline %}
-        {% line %}Please view it on the website.{% endline %}
+        {% line %}请求正文数据正在处理中，稍后即可查看。{% endline %}
+        {% line %}请在网站查看。{% endline %}
     {% elif ping_attached %}
-        {% line %}See the attachment.{% endline %}
+        {% line %}请查看附件。{% endline %}
     {% else %}
         {% line %}{{ body|safe|slice:"-10000:"|wordwrap:80 }}{% endline %}
     {% endif %}
@@ -73,16 +73,16 @@
 
 {% if projects %}
     {% line %}{% endline %}
-    {% line %}Projects Overview:{% endline %}
-    {% line %}------------------{% endline %}
+    {% line %}项目概览：{% endline %}
+    {% line %}--------------{% endline %}
 
     {% for project in projects %}
         {% with project.get_n_down as n_down %}
             {{ project }} ({{ project.checks_url }})
             {% if n_down %}
-                {% line %}* {{ project|safe }}: {{ n_down }} check{{ n_down|pluralize }} down{% endline %}
+                {% line %}* {{ project|safe }}：{{ n_down }} 个检查项宕机{% endline %}
             {% else %}
-                {% line %}* {{ project|safe }}: OK, all checks up{% endline %}
+                {% line %}* {{ project|safe }}：正常，所有检查项均正常{% endline %}
             {% endif %}
         {% endwith %}
     {% endfor %}
@@ -90,8 +90,8 @@
 
 {% line %}{% endline %}
 {% line %}--{% endline %}
-{% line %}Unsubscribe: {{ unsub_link }}{% endline %}
-{% line %}Regards, {% site_name %}{% endline %}
+{% line %}取消订阅：{{ unsub_link }}{% endline %}
+{% line %}此致，{% site_name %}{% endline %}
 
 {% endtimezone %}
 {% endlinemode %}

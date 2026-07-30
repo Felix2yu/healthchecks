@@ -1,12 +1,11 @@
-{% load hc_extras %}Hello,
+{% load hc_extras %}您好，
 
-We could not deliver a Signal notification to {{ recipient|mask_phone }} due to
-hitting a rate-limit on the Signal network, so we are sending it via email
-instead:
+由于 Signal 网络达到速率限制，我们无法向 {{ recipient|mask_phone }} 发送 Signal 通知，
+因此改为通过电子邮件发送：
 
 ***
 {{ plaintext|safe }}
 ***
 
-Regards,
-The {% site_name %} Team
+此致，
+{% site_name %} 团队

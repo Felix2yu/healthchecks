@@ -1,35 +1,35 @@
 # PowerShell
 
- You can use [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.2)
- and Windows Task Scheduler to automate various tasks on a Windows system.
- From within a PowerShell script, it is also easy to ping SITE_NAME.
+你可以使用 [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.2)
+和 Windows 任务计划程序在 Windows 系统上自动化各种任务。
+在 PowerShell 脚本中也可以轻松地 ping SITE_NAME。
 
-Here is a simple PowerShell script that pings SITE_NAME. When scheduled to
-run with Task Scheduler, it will send regular "I'm alive" messages.
-Of course, you can extend it to do more things.
+这是一个简单的 PowerShell 脚本，用于 ping SITE_NAME。当通过
+任务计划程序调度运行时，它会定期发送"我还活着"的消息。
+当然，你可以扩展它来做更多事情。
 
 ```powershell
-# Save this in a file with a .ps1 extension, e.g. C:\Scripts\healthchecks.ps1
-# The command to run it:
+# 将其保存为 .ps1 扩展名的文件，例如 C:\Scripts\healthchecks.ps1
+# 运行它的命令：
 #     powershell.exe -ExecutionPolicy bypass -File C:\Scripts\healthchecks.ps1
 #
 Invoke-RestMethod PING_URL
 ```
 
-You can send additional diagnostic information in HTTP POST requests:
+你可以在 HTTP POST 请求中发送额外的诊断信息：
 
 ```powershell
 Invoke-RestMethod -Uri PING_URL -Method Post -Body "temperature=-7"
 ```
 
-For other parameters, you can use in the `Invoke-RestMethod` cmdlet,
-see the official [Invoke-RestMethod documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-7.2).
+关于 `Invoke-RestMethod` cmdlet 中可用的其他参数，
+请参阅官方 [Invoke-RestMethod 文档](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-7.2)。
 
-As an alternative to putting the script in a .ps1 file, you can also pass it
-to PowerShell directly, using the "-Command" argument:
+除了将脚本放在 .ps1 文件中，你也可以使用 "-Command" 参数
+直接将其传递给 PowerShell：
 
 ```bat
-# Pass the command to PowerShell directly:
+# 直接传递命令给 PowerShell：
 powershell.exe -Command "&{Invoke-RestMethod PING_URL}"
 ```
 

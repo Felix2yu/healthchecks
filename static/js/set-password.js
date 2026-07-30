@@ -13,7 +13,7 @@ $(function () {
         var score = zxcvbn(pw.value).score;
         meter.setAttribute("class", "score-" + score);
         if (pw.validity.valid && score == 0) {
-             pw.setCustomValidity("Please pick a stronger password.");
+             pw.setCustomValidity("请选择更强的密码。");
         } else {
             pw.setCustomValidity("");
         }

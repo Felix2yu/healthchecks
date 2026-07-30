@@ -17,10 +17,10 @@
     {% if is_copied %}
     <div class="col-sm-12">
         <p id="new-check-alert" class="alert alert-success">
-            <strong>Copy created!</strong>
-            This is a brand new check, with details copied over from your existing check.
-            You might now want to
-            <a data-target="edit-name" href="#">update its name and tags</a>.
+            <strong>副本已创建！</strong>
+            这是一个全新的检查项，其详情从现有检查项复制而来。
+            您现在可能需要
+            <a data-target="edit-name" href="#">更新其名称和标签</a>。
         </p>
     </div>
     {% endif %}
@@ -37,7 +37,7 @@
         <h1>
             {{ check.name_then_code }}
             {% if rw %}
-            <small><a id="edit-name" href="#">(edit&hellip;)</a></small>
+            <small><a id="edit-name" href="#">（编辑&hellip;）</a></small>
             {% endif %}
         </h1>
         {% for tag in check.tags_list %}
@@ -48,16 +48,16 @@
     <div class="col-sm-5">
         {% if rw %}
         <div class="details-block">
-            <h2>Description</h2>
+            <h2>描述</h2>
             {% if check.desc %}
             {{ check.desc|linebreaks|urlize }}
             <div class="text-right">
                 <button id="edit-desc" class="btn btn-sm btn-default">
-                    Edit Description&hellip;
+                    编辑描述&hellip;
                 </button>
             </div>
             {% else %}
-            <small><a id="edit-desc" href="#">Add description&hellip;</a></small>
+            <small><a id="edit-desc" href="#">添加描述&hellip;</a></small>
             {% endif %}
         </div>
         {% elif check.desc %}
@@ -69,7 +69,7 @@
 
         <div id="how-to-ping" class="details-block">
             <h2>
-                How To Ping
+                如何 Ping
                 {% if rw %}
                     <div class="btn-group pull-right">
                         <a href="?urls=uuid" class="btn btn-default btn-xs {% if not project.show_slugs %}active{% endif %}">uuid</a>
@@ -79,36 +79,36 @@
             </h2>
             <div>
                 <p>
-                    Keep this check up by making HTTP
+                    通过向此 URL 发送 HTTP
                     {% if check.methods == "POST" %}POST{% endif %}
-                    requests to this URL:
+                    请求来保持此检查项正常：
                 </p>
                 {% if check.url %}
                 <code class="click-to-copy">{{ check.url }}</code>
                 {% else %}
-                <code>(unavailable, set slug first)</code>
+                <code>（不可用，请先设置标识）</code>
                 {% endif %}
-                <p>Or by sending email to:</p>
+                <p>或通过发送邮件到：</p>
                 {% if check.email %}
                 <code class="click-to-copy">{{ check.email }}</code>
                 {% else %}
-                <code>(unavailable, set slug first)</code>
+                <code>（不可用，请先设置标识）</code>
                 {% endif %}
 
                 {% if rw and project.show_slugs and not project.ping_key %}
                 <p class="alert alert-info">
-                    The ping key is currently not set. Go to
-                    <a href="{% url 'hc-project-settings' project.code %}">project settings</a>
-                    to generate it.
+                    Ping 密钥尚未设置。前往
+                    <a href="{% url 'hc-project-settings' project.code %}">项目设置</a>
+                    生成它。
                 </p>
                 {% endif %}
 
-                <p>You can also explicitly
+                <p>您还可以显式
                     <a href="{% url 'hc-serve-doc' 'signaling_failures' %}">
-                        signal a failure</a>
-                    and
+                        标记失败</a>
+                    和
                     <a href="{% url 'hc-serve-doc' 'measuring_script_run_time' %}">
-                        measure job execution time</a>.
+                        测量任务执行时间</a>。
                 </p>
             </div>
             <div class="text-right">
@@ -116,19 +116,19 @@
                 <button
                     data-toggle="modal"
                     data-target="#filtering-rules-modal"
-                    class="btn btn-sm btn-default">Filtering Rules&hellip;</button>
+                    class="btn btn-sm btn-default">过滤规则&hellip;</button>
                 {% endif %}
                 {% if check.url %}
                 <button
                     data-toggle="modal"
                     data-target="#show-usage-modal"
-                    class="btn btn-sm btn-default">Usage Examples</button>
+                    class="btn btn-sm btn-default">使用示例</button>
                 {% endif %}
             </div>
         </div>
 
         <div class="details-block">
-            <h2>Current Status</h2>
+            <h2>当前状态</h2>
             <div id="current-status-indicator">
                 <span id="current-status-icon" class="status ic-{{ check.get_status }}"></span>
                 <div id="current-status-spinner" class="spinner {% if check.last_start %}started{% endif %}"></div>
@@ -145,7 +145,7 @@
                         id="pause-btn"
                         type="submit"
                         {% if check.status == "paused" %}disabled{% endif %}
-                        class="btn btn-sm btn-default" value="Pause" />
+                        class="btn btn-sm btn-default" value="暂停" />
                 </form>
                 {% endif %}
 
@@ -155,37 +155,37 @@
                     <button
                         data-toggle="modal"
                         data-target="#no-ping-key-modal"
-                        class="btn btn-sm btn-default">Ping Now!</button>
+                        class="btn btn-sm btn-default">立即 Ping！</button>
                     {% endif %}
                 {% else %}
                 <button
                     id="ping-now"
                     data-url="{{ check.url }}"
-                    class="btn btn-sm btn-default">Ping Now!</button>
+                    class="btn btn-sm btn-default">立即 Ping！</button>
                 {% endif %}
                 {% endif %}
             </div>
         </div>
 
         <div class="details-block">
-            <h2>Schedule</h2>
+            <h2>计划</h2>
             <table id="details-schedule">
                 <tr>
                     {% if check.kind == "simple" %}
-                    <th>Period</th>
+                    <th>周期</th>
                     <td>
                         <span class="value">{{ check.timeout|hc_duration }}</span>
                         <div class="subtitle">
-                            (The expected time between pings)
+                            （预期的两次 Ping 间隔时间）
                         </div>
                     </td>
                     {% elif check.kind == "cron" %}
-                    <th>Cron Expression</th>
+                    <th>Cron 表达式</th>
                     <td>
                         <span class="value">{{ check.schedule }}</span>
                     </td>
                     {% elif check.kind == "oncalendar" %}
-                    <th>OnCalendar Expr.</th>
+                    <th>OnCalendar 表达式</th>
                     <td>
                         <span class="value">{{ check.schedule|linebreaksbr }}</span>
                     </td>
@@ -193,18 +193,18 @@
                 </tr>
                 {% if check.kind == "cron" or check.kind == "oncalendar" %}
                 <tr>
-                    <th>Time Zone</th>
+                    <th>时区</th>
                     <td>
                         <span class="value">{{ check.tz }}</span>
                     </td>
                 </tr>
                 {% endif %}
                 <tr>
-                    <th>Grace Time</th>
+                    <th>宽限期</th>
                     <td>
                         <span class="value">{{ check.grace|hc_duration }}</span>
                         <div class="subtitle">
-                            (When a check is late, how long to wait to send an alert)
+                            （当检查项延迟时，等待多久发送告警）
                         </div>
                     </td>
                 </tr>
@@ -221,20 +221,20 @@
                     data-grace="{{ check.grace.total_seconds|floatformat:'0' }}"
                     data-schedule="{{ check.schedule }}"
                     data-tz="{{ check.tz }}">
-                    Change Schedule&hellip;</button>
+                    更改计划&hellip;</button>
             </div>
             {% endif %}
         </div>
 
         <div class="details-block">
             {% if group_channels %}
-            <h2>Notification Groups</h2>
+            <h2>通知分组</h2>
             <table class="details-integrations table {% if rw %}rw{% endif %}">
                 {% for channel in group_channels %}
                     <tr data-url="{% url 'hc-switch-channel' check.code channel.code %}" {% if channel in enabled_channels %}class="on"{% endif %}>
                         <th>
                             <span class="label">
-                                {% if channel in enabled_channels %}ON{% else %}OFF{% endif %}
+                                {% if channel in enabled_channels %}开启{% else %}关闭{% endif %}
                             </span>
                         </th>
                         <td>
@@ -245,7 +245,7 @@
                 {% endfor %}
             </table>
             {% endif %}
-            <h2>Notification Methods</h2>
+            <h2>通知方式</h2>
             {% if channels %}
             <table class="details-integrations table {% if rw %}rw{% endif %}">
             {% for channel in channels %}
@@ -263,26 +263,26 @@
             </table>
             {% else %}
             <div class="alert no-channels">
-                No notification methods set up yet.
+                尚未设置任何通知方式。
                 <br />
-                Set up your preferred methods of notification in the
-                <a href="{% url 'hc-channels' project.code %}">Integrations</a>
-                page.
+                在
+                <a href="{% url 'hc-channels' project.code %}">集成</a>
+                页面设置您偏好的通知方式。
             </div>
             {% endif %}
         </div>
 
         {% if rw %}
         <div class="details-block">
-            <h2>Danger Zone</h2>
-            <p>Copy, transfer, or permanently remove this check.</p>
+            <h2>危险区域</h2>
+            <p>复制、转移或永久移除此检查项。</p>
 
             <div class="text-right">
                 {% if project.num_checks_available > 0 %}
                 <button
                     data-toggle="modal"
                     data-target="#copy-modal"
-                    class="btn btn-sm btn-default">Create a Copy&hellip;</button>
+                    class="btn btn-sm btn-default">创建副本&hellip;</button>
                 {% endif %}
                 <button
                     id="transfer-btn"
@@ -290,17 +290,17 @@
                     data-target="#transfer-modal"
                     data-url="{% url 'hc-transfer' check.code %}"
                     class="btn btn-sm btn-default">
-                    Transfer<span class="hidden-sm hidden-xs"> to Another Project</span>&hellip;
+                    转移<span class="hidden-sm hidden-xs">到其他项目</span>&hellip;
                 </button>
                 &nbsp;
                 <button
                     data-toggle="modal"
                     data-target="#clear-events-modal"
-                    class="btn btn-sm btn-remove">Clear Events</button>
+                    class="btn btn-sm btn-remove">清除事件</button>
                 <button
                     data-toggle="modal"
                     data-target="#remove-check-modal"
-                    class="btn btn-sm btn-remove">Remove</button>
+                    class="btn btn-sm btn-remove">移除</button>
             </div>
         </div>
         {% endif %}
@@ -308,8 +308,8 @@
 
     <div id="events" class="col-sm-7" data-status-url="{% url 'hc-status-single' check.code %}">
         <h2>
-            Events
-            <small class="hidden-xs">Click on individual items for details</small>
+            事件
+            <small class="hidden-xs">点击单个项目查看详情</small>
             <div id="tz-switcher" class="btn-group pull-right" data-toggle="buttons">
                 {% for tz in tz_switches %}
                 <label class="btn btn-default btn-xs {% if forloop.last %}active{% endif %}" data-tz="{{ tz }}">
@@ -327,9 +327,9 @@
 <div id="ping-details-modal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id="ping-details-body">Loading</div>
+            <div id="ping-details-body">加载中</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Got It!</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">知道了！</button>
             </div>
         </div>
     </div>
@@ -356,17 +356,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4>Ping Key Required</h4>
+                <h4>需要 Ping 密钥</h4>
             </div>
             <div class="modal-body">
-                <p>This project does not yet have a ping key.<br />
-                   To ping this check, please generate the
-                   ping key first.
+                <p>此项目尚未设置 Ping 密钥。<br />
+                   要 Ping 此检查项，请先生成 Ping 密钥。
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a href="{% url 'hc-project-settings' project.code %}" class="btn btn-primary">Open Project Settings</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <a href="{% url 'hc-project-settings' project.code %}" class="btn btn-primary">打开项目设置</a>
             </div>
         </div>
     </div>

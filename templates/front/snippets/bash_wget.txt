@@ -1,2 +1,2 @@
-# using wget (10 second timeout, retry up to 5 times):
+# 使用 wget（10 秒超时，最多重试 5 次）：
 wget PING_URL -T 10 -t 5 -O /dev/null

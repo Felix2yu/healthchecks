@@ -8,12 +8,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Add Check</h4>
+                    <h4>添加检查项</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="add-check-name" class="col-sm-3 control-label">
-                            Name
+                            名称
                         </label>
                         <div class="col-sm-9">
                             <input
@@ -23,14 +23,14 @@
                                 maxlength="100"
                                 class="form-control" />
                             <span class="help-block">
-                                Give this check a human-friendly name.
+                                为此检查项设置一个易识别的名称。
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="add-check-slug" class="col-sm-3 control-label">
-                            Slug
+                            标识
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group">
@@ -45,7 +45,7 @@
                                 <span class="input-group-btn">
                                     <button
                                         class="btn btn-default use-suggested-slug"
-                                        type="button">Use Suggested</button>
+                                        type="button">使用建议值</button>
                                 </span>
                             </div>
                             <span class="help-block slug-help-block"></span>
@@ -54,7 +54,7 @@
 
                     <div class="form-group">
                         <label for="add-check-tags" class="col-sm-3 control-label">
-                            Tags
+                            标签
                         </label>
                         <div class="col-sm-9">
                             <input
@@ -63,20 +63,20 @@
                                 type="text"
                                 maxlength="500" />
                             <span class="help-block">
-                                Separate multiple tags with spaces.
+                                多个标签之间用空格分隔。
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
-                            Schedule
+                            计划
                         </label>
                         <div id="add-check-kind" class="col-sm-9">
                             <label class="radio-container">
                                 <input type="radio" name="kind" value="simple" checked>
                                 <span class="radiomark"></span>
-                                Simple
+                                简单
                             </label>
                             <label class="radio-container">
                                 <input type="radio" name="kind" value="cron">
@@ -93,7 +93,7 @@
 
                     <div class="form-group create-simple-extra">
                         <label for="add-check-period" class="col-sm-3 control-label">
-                            Period
+                            周期
                         </label>
                         <div class="col-sm-9">
                             <input
@@ -103,19 +103,19 @@
                                 class="form-control period-input"
                                 value="1" />
                             <select id="add-check-period-unit" class="form-control period-input">
-                                <option value="60">minutes</option>
-                                <option value="3600">hours</option>
-                                <option value="86400" selected>days</option>
+                                <option value="60">分钟</option>
+                                <option value="3600">小时</option>
+                                <option value="86400" selected>天</option>
                             </select>
                             <span class="help-block">
-                                The expected time between pings.
+                                预期的两次 Ping 间隔时间。
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group create-cron-extra">
                         <label for="add-check-schedule" class="col-sm-3 control-label">
-                            Cron Expression
+                            Cron 表达式
                         </label>
                         <div class="col-sm-9">
                             <input
@@ -133,7 +133,7 @@
 
                     <div class="form-group create-oncalendar-extra">
                         <label for="add-check-schedule-oncalendar" class="col-sm-3 control-label">
-                            OnCalendar Expression(s)
+                            OnCalendar 表达式
                         </label>
                         <div class="col-sm-9">
                             <textarea
@@ -147,7 +147,7 @@
 
                     <div class="form-group create-cron-extra create-oncalendar-extra">
                         <label for="add-check-tz" class="col-sm-3 control-label">
-                            Time Zone
+                            时区
                         </label>
                         <div class="col-sm-9">
                             <select id="add-check-tz" name="tz" class="form-control"></select>
@@ -156,7 +156,7 @@
 
                     <div class="form-group">
                         <label for="add-check-grace" class="col-sm-3 control-label">
-                            Grace Time
+                            宽限期
                         </label>
                         <div class="col-sm-9">
                             <input
@@ -166,20 +166,20 @@
                                 class="form-control grace-input"
                                 value="1" />
                             <select id="add-check-grace-unit" class="form-control grace-input">
-                                <option value="60">minutes</option>
-                                <option value="3600" selected>hours</option>
-                                <option value="86400">days</option>
+                                <option value="60">分钟</option>
+                                <option value="3600" selected>小时</option>
+                                <option value="86400">天</option>
                             </select>
                             <span class="help-block">
-                                When a check is late, or has received a "start" signal, how long to wait to send an alert.
+                                当检查项延迟或收到"开始"信号时，等待多久发送告警。
                             </span>
                         </div>
                     </div>
                 </div> <!-- modal-body -->
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="add-check-submit" type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id="add-check-submit" type="submit" class="btn btn-primary">保存</button>
                 </div>
             </div>
         </form>

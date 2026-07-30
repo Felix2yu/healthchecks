@@ -2,26 +2,26 @@
 {% load hc_extras %}
 
 {% block content %}
-Hello,<br />
+您好，<br />
 
 <br />
 
-We send a confirmation code before performing sensitive actions on {% site_name%}.<br />
-Your confirmation code is:<br />
+在 {% site_name%} 上执行敏感操作前，我们需要发送确认码。<br />
+您的确认码为：<br />
 <br />
 <div style="font-family: monospace; font-weight: bold; font-size: 24px">
     {{ sudo_code }}
 </div>
 <br />
 
-Note: this code is only valid for 15 minutes.<br />
+注意：此确认码有效期为 15 分钟。<br />
 
 <br />
 {% endblock %}
 
 {% block content_more %}
-All the Best,<br>
-The {% site_name %} Team
+此致，<br>
+{% site_name %} 团队
 <br /><br />
 
 {% endblock %}

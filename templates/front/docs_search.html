@@ -1,5 +1,5 @@
 <ul class="docs-nav">
-    <li class="nav-header">Search Results</li>
+    <li class="nav-header">搜索结果</li>
     {% if results %}
         {% for slug, title, snippet in results %}
         <li>
@@ -9,6 +9,6 @@
         {% endfor %}
         </ul>
     {% else %}
-        <li>Your search query matched no results.</li>
+        <li>您的搜索查询没有匹配到结果。</li>
     {% endif %}
 </ul>

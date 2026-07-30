@@ -1,42 +1,42 @@
 {% load humanize hc_extras %}
 {% if status == "down" %}
-    🔴 The check <a href="{{ check.cloaked_url }}">{{ check.name_then_code }}</a> is <b>DOWN</b>{% if flip.reason %} ({{ flip.reason_long }}){% endif %}.
+    🔴 检查项 <a href="{{ check.cloaked_url }}">{{ check.name_then_code }}</a> <b>已宕机</b>{% if flip.reason %}（{{ flip.reason_long }}）{% endif %}。
 {% else %}
-    🟢 The check <a href="{{ check.cloaked_url }}">{{ check.name_then_code }}</a> is <b>UP</b>.
+    🟢 检查项 <a href="{{ check.cloaked_url }}">{{ check.name_then_code }}</a> <b>已恢复</b>。
     {% if flip.new_status == "up" and flip.down_duration %}
-    <br>The downtime lasted {{ flip.down_duration|hc_duration_for_sentence }}.
+    <br>宕机持续了 {{ flip.down_duration|hc_duration_for_sentence }}。
     {% endif %}
 {% endif %}
 <br>
 
 <br>
 {% if check.project.name %}
-<b>Project:</b> {{ check.project.name }}<br>
+<b>项目：</b> {{ check.project.name }}<br>
 {% endif %}
 
 {% if check.tags_list %}
-<b>Tags:</b> {% for tag in check.tags_list%}<code>{{ tag }}</code> {% endfor %}<br>
+<b>标签：</b> {% for tag in check.tags_list%}<code>{{ tag }}</code> {% endfor %}<br>
 {% endif %}
 
 {% if check.kind == "simple" %}
-<b>Period:</b> {{ check.timeout|hc_duration }}<br>
+<b>周期：</b> {{ check.timeout|hc_duration }}<br>
 {% endif %}
 
 {% if check.kind == "cron" or check.kind == "oncalendar" %}
-<b>Schedule:</b> <code>{{ check.schedule }}</code><br>
-<b>Time Zone:</b> {{ check.tz }}<br>
+<b>计划：</b> <code>{{ check.schedule }}</code><br>
+<b>时区：</b> {{ check.tz }}<br>
 {% endif %}
 
-<b>Total Pings:</b> {% if ping %}{{ ping.n }}{% else %}0{% endif %}<br>
+<b>总 Ping 数：</b> {% if ping %}{{ ping.n }}{% else %}0{% endif %}<br>
 
 {% if ping is None %}
-<b>Last Ping:</b> Never<br>
+<b>上次 Ping：</b> 从未<br>
 {% else %}
-<b>Last Ping:</b> {{ ping.get_kind_display }}, {{ ping.created|naturaltime }}<br>
+<b>上次 Ping：</b> {{ ping.get_kind_display }}，{{ ping.created|naturaltime }}<br>
 {% endif %}
 
 {% if body %}
-<b>Last Ping Body:</b><br>
+<b>上次 Ping 内容：</b><br>
 <pre>{{ body }}</pre>
 {% endif %}
 
@@ -44,16 +44,16 @@
     <br>
     {% if down_checks %}
         {% if down_checks|length > 10 %}
-            {{ down_checks|length }} other checks are {% if status == "down" %}also{% else %}still{% endif %} down.<br>
+            其他 {{ down_checks|length }} 个检查项{% if status == "down" %}也{% else %}仍然{% endif %}宕机。<br>
         {% else %}
-            The following checks are {% if status == "down" %}also{% else %}still{% endif %} down:<br>
+            以下检查项{% if status == "down" %}也{% else %}仍然{% endif %}宕机：<br>
             <ul>
             {% for c in down_checks %}
-                <li><a href="{{ c.cloaked_url }}">{{ c.name_then_code }}</a> (last ping: {{ c.last_ping|naturaltime|default:"never" }})</li>
+                <li><a href="{{ c.cloaked_url }}">{{ c.name_then_code }}</a>（上次 Ping：{{ c.last_ping|naturaltime|default:"从未" }}）</li>
             {% endfor %}
             </ul>
         {% endif %}
     {% else %}
-        All the other checks are up.<br>
+        所有其他检查项均已恢复。<br>
     {% endif %}
 {% endif %}

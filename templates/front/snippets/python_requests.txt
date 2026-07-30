@@ -1,8 +1,8 @@
-# Using the requests library:
+# 使用 requests 库：
 import requests
 
 try:
     requests.get("PING_URL", timeout=10)
 except requests.RequestException as e:
-    # Log ping failure here...
+    # 在此记录 ping 失败日志...
     print("Ping failed: %s" % e)

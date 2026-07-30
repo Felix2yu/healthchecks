@@ -1,6 +1,6 @@
 # Ruby
 
-Below is an example of making an HTTP request to SITE_NAME from Ruby.
+以下是从 Ruby 向 SITE_NAME 发起 HTTP 请求的示例。
 
 ```ruby
 require 'net/http'

@@ -1,13 +1,13 @@
-{% load hc_extras %}Hello,
+{% load hc_extras %}您好，
 
-We could not deliver a phone call notification to {{ recipient|mask_phone }} because {% site_name %} account {{ owner_email }} has reached its monthly phone call limit of {{ limit }} calls per month. The limit resets at the start of each month.
+我们无法向 {{ recipient|mask_phone }} 发送电话通知，因为 {% site_name %} 账户 {{ owner_email }} 已达到每月电话呼叫上限 {{ limit }} 次/月。该上限将在每月初重置。
 
-Here is the voice message we tried to deliver:
+以下是我们尝试发送的语音消息：
 
 ***
 {{ message|safe }}
 ***
 
 --
-Regards,
-The {% site_name %} Team
+此致，
+{% site_name %} 团队

@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}Integrations - {{ site_name }}{% endblock %}
+{% block title %}集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -19,10 +19,10 @@
     <table class="table channels-table {% if rw %}rw{% endif %}">
         <tr>
             <th></th>
-            <th class="th-name">Name, Details</th>
-            <th class="th-checks">Assigned Checks</th>
-            <th>Status</th>
-            <th>Last Notification</th>
+            <th class="th-name">名称、详情</th>
+            <th class="th-checks">已分配的检查项</th>
+            <th>状态</th>
+            <th>上次通知</th>
             <th></th>
         </tr>
         {% for ch in channels %}
@@ -35,7 +35,7 @@
                     {% if ch.name %}
                     {{ ch.name }}
                     {% else %}
-                    <div class="unnamed">unnamed</div>
+                    <div class="unnamed">未命名</div>
                     {% endif %}
                     <div class="channel-details-mini">
                     {% include "front/channel_description.html" with ch=ch %}
@@ -46,42 +46,42 @@
                 <div class="edit-checks"
                      data-url="{% url 'hc-channel-checks' ch.code %}"
                      data-toggle="tooltip"
-                     title="Click to change assigned checks">
+                     title="点击更改分配的检查项">
                      {{ ch.n_checks }} of {{ num_checks }}
                 </div>
             </td>
             <td>
                 {% if ch.disabled %}
-                    <span class="label label-danger">Disabled</span>
+                    <span class="label label-danger">已禁用</span>
                 {% elif ch.kind == "email" and not ch.email_verified %}
-                    <span class="label label-default">Unconfirmed</span>
+                    <span class="label label-default">未确认</span>
                 {% else %}
-                    Ready to deliver
+                    可正常发送
                 {% endif %}
             </td>
             <td>
                 {% if ch.last_notify %}
                     {% if ch.last_error %}
                     <span class="text-danger" data-toggle="tooltip" title="{{ ch.last_error }}">
-                        <strong>Failed</strong>, {{ ch.last_notify|naturaltime }}
+                        <strong>失败</strong>，{{ ch.last_notify|naturaltime }}
                     </span>
                     {% else %}
-                    Delivered, {{ ch.last_notify|naturaltime }}
+                    已送达，{{ ch.last_notify|naturaltime }}
                     {% endif %}
                 {% else %}
-                Never
+                从未
                 {% endif %}
                 {% if ch.kind == "sms" or ch.kind == "whatsapp" %}
-                    <p>Used {{ profile.sms_sent_this_month }} of {{ profile.sms_limit }} sends this month.</p>
+                    <p>本月已使用 {{ profile.sms_sent_this_month }} / {{ profile.sms_limit }} 条短信。</p>
                 {% endif %}
                 {% if ch.kind == "call" %}
-                    <p>Used {{ profile.calls_sent_this_month }} of {{ profile.call_limit }} phone calls this month.</p>
+                    <p>本月已使用 {{ profile.calls_sent_this_month }} / {{ profile.call_limit }} 次电话呼叫。</p>
                 {% endif %}
             </td>
             <td class="actions">
                 {% if ch.is_editable and rw %}
                 <a class="btn btn-sm btn-default" href="{% url 'hc-edit-channel' ch.code %}">
-                    {% if ch.kind == "email" and ch.disabled %}Fix&hellip;{% else %}Edit{% endif %}
+                    {% if ch.kind == "email" and ch.disabled %}修复&hellip;{% else %}编辑{% endif %}
                 </a>
                 {% endif %}
                 <form action="{% url 'hc-channel-test' ch.code %}" method="post">
@@ -89,9 +89,9 @@
                     <button
                         class="btn btn-sm btn-default"
                         data-toggle="tooltip"
-                        title="Send a test notification using this integration"
+                        title="使用此集成发送测试通知"
                         type="submit">
-                        Test!
+                        测试！
                     </button>
                 </form>
                 {% if rw %}
@@ -109,27 +109,25 @@
     </table>
     {% else %}
         <div class="alert alert-danger">
-            <p> The project "{{ project }}" does not have any integrations
-                set up yet.
+            <p> 项目 "{{ project }}" 尚未设置任何集成。
             </p>
-            <p>With no configured integrations, {{ site_name }}
-                <strong>will not send any notifications</strong>
-                when checks change state.
+            <p>没有配置集成，{{ site_name }}
+                在检查项状态变化时<strong>不会发送任何通知</strong>。
             </p>
         </div>
     {% endif %}
 
 
     {% if rw %}
-    <h1 class="ai-title">Add More</h1>
+    <h1 class="ai-title">添加更多</h1>
     <ul class="add-integration">
         <li>
             <img src="{% static 'img/email.png' %}"
                 class="icon" alt="Email icon" />
 
             <h2>Email</h2>
-            <p>Get an email message when a check goes up or down.</p>
-            <a href="{% url 'hc-add-email' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>当检查项状态变化时接收邮件通知。</p>
+            <a href="{% url 'hc-add-email' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
 
         {% if enable_webhooks %}
@@ -138,8 +136,8 @@
                 class="icon" alt="Webhook icon" />
 
             <h2>Webhook</h2>
-            <p>Receive an HTTP callback when a check goes down.</p>
-            <a href="{% url 'hc-add-webhook' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>当检查项异常时接收 HTTP 回调。</p>
+            <a href="{% url 'hc-add-webhook' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -149,8 +147,8 @@
                  class="icon" alt="Apprise icon" />
 
             <h2>Apprise</h2>
-            <p>Receive instant push notifications using Apprise; see <a href="https://github.com/caronc/apprise#popular-notification-services" >all of the supported services here</a>.</p>
-            <a href="{% url 'hc-add-apprise' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>使用 Apprise 接收即时推送通知；查看<a href="https://github.com/caronc/apprise#popular-notification-services" >所有支持的服务</a>。</p>
+            <a href="{% url 'hc-add-apprise' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -160,8 +158,8 @@
                  class="icon" alt="Discord icon" />
 
             <h2>Discord</h2>
-            <p>Cross-platform voice and text chat app designed for gamers.</p>
-            <a href="{% url 'hc-add-discord' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>面向游戏玩家的跨平台语音和文字聊天应用。</p>
+            <a href="{% url 'hc-add-discord' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -169,30 +167,30 @@
         <li>
             <img src="{% static 'img/github.png' %}" class="icon kind-github" alt="GitHub icon" />
             <h2>GitHub Issues</h2>
-            <p> Create a GitHub issue when a check goes down.</p>
-            <a href="{% url 'hc-add-github' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p> 当检查项异常时创建 GitHub Issue。</p>
+            <a href="{% url 'hc-add-github' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
         <li>
             <img src="{% static 'img/googlechat.png' %}" class="icon" alt="Google Chat icon" />
             <h2>Google Chat</h2>
-            <p>Google's communication tool for teams, successor of Hangouts.</p>
-            <a href="{% url 'hc-add-googlechat' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>Google 的团队通讯工具，Hangouts 的继任者。</p>
+            <a href="{% url 'hc-add-googlechat' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
 
         <li>
             <img src="{% static 'img/gotify.png' %}" class="icon" alt="Gotify icon" />
             <h2>Gotify</h2>
-            <p> Self-hosted push notification service.</p>
-            <a href="{% url 'hc-add-gotify' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p> 自托管的推送通知服务。</p>
+            <a href="{% url 'hc-add-gotify' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
 
         <li>
             <img src="{% static 'img/group.png' %}" class="icon" alt="Group icon" />
-            <h2>Group</h2>
-            <p> Deliver to multiple integrations at once.</p>
-            <a href="{% url 'hc-add-group' project.code %}" class="btn btn-primary">Add Integration</a>
+            <h2>分组</h2>
+            <p> 同时发送到多个集成。</p>
+            <a href="{% url 'hc-add-group' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
 
         {% if enable_matrix %}
@@ -201,8 +199,8 @@
                  class="icon kind-matrix" alt="Matrix icon" />
 
             <h2>Matrix</h2>
-            <p>Post notifications to a Matrix room.</p>
-            <a href="{% url 'hc-add-matrix' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>向 Matrix 房间发送通知。</p>
+            <a href="{% url 'hc-add-matrix' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -212,8 +210,8 @@
                 class="icon kind-mattermost" alt="Mattermost icon" />
 
             <h2>Mattermost</h2>
-            <p>High Trust Messaging for the Enterprise.</p>
-            <a href="{% url 'hc-add-mattermost' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>企业级高信任度消息传递平台。</p>
+            <a href="{% url 'hc-add-mattermost' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -223,8 +221,8 @@
                 class="icon" alt="Microsoft Teams" />
 
             <h2>Microsoft Teams</h2>
-            <p>Chat and collaboration platform for Microsoft Office 365 customers.</p>
-            <a href="{% url 'hc-add-msteams' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>面向 Microsoft Office 365 用户的聊天和协作平台。</p>
+            <a href="{% url 'hc-add-msteams' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -233,8 +231,8 @@
                 class="icon kind-ntfy" alt="ntfy" />
 
             <h2>ntfy</h2>
-            <p>Send push notifications to your phone or desktop via PUT/POST.</p>
-            <a href="{% url 'hc-add-ntfy' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>通过 PUT/POST 向您的手机或桌面发送推送通知。</p>
+            <a href="{% url 'hc-add-ntfy' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
 
         {% if enable_opsgenie %}
@@ -243,8 +241,8 @@
                 class="icon" alt="Opsgenie icon" />
 
             <h2>Opsgenie</h2>
-            <p> Alerting &amp; Incident Management Solution for Dev &amp; Ops.</p>
-            <a href="{% url 'hc-add-opsgenie' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p> 面向开发与运维的告警与事件管理解决方案。</p>
+            <a href="{% url 'hc-add-opsgenie' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -254,8 +252,8 @@
                 class="icon" alt="PagerDuty icon" />
 
             <h2>PagerDuty</h2>
-            <p>On-call scheduling, alerting, and incident tracking.</p>
-            <a href="{% url 'hc-add-pd' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>值班排班、告警和事件跟踪。</p>
+            <a href="{% url 'hc-add-pd' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -265,8 +263,8 @@
                 class="icon" alt="PagerTree icon" />
 
             <h2>PagerTree</h2>
-            <p>DevOps Incident Management - On-Call Schedules, Alerts, &amp; Notifications.</p>
-            <a href="{% url 'hc-add-pagertree' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>DevOps 事件管理 - 值班排班、告警与通知。</p>
+            <a href="{% url 'hc-add-pagertree' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -275,9 +273,9 @@
             <img src="{% static 'img/call.png' %}"
                 class="icon" alt="Phone icon" />
 
-            <h2>Phone Call</h2>
-            <p>Get a phone call when a check goes down.</p>
-            <a href="{% url 'hc-add-call' project.code %}" class="btn btn-primary">Add Integration</a>
+            <h2>电话呼叫</h2>
+            <p>当检查项异常时接听电话通知。</p>
+            <a href="{% url 'hc-add-call' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -287,8 +285,8 @@
                 class="icon" alt="Prometheus icon" />
 
             <h2>Prometheus</h2>
-            <p>Export check and tag status values to Prometheus.</p>
-            <a href="{% url 'hc-add-prometheus' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>将检查项和标签状态值导出到 Prometheus。</p>
+            <a href="{% url 'hc-add-prometheus' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -298,8 +296,8 @@
                  class="icon" alt="Pushbullet icon" />
 
             <h2>Pushbullet</h2>
-            <p>Pushbullet connects your devices, making them feel like one.</p>
-            <a href="{% url 'hc-add-pushbullet' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>Pushbullet 连接您的设备，让它们融为一体。</p>
+            <a href="{% url 'hc-add-pushbullet' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -309,8 +307,8 @@
                  class="icon" alt="Pushover icon" />
 
             <h2>Pushover</h2>
-            <p>Receive instant push notifications on your phone or tablet.</p>
-            <a href="{% url 'hc-add-pushover' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>在手机或平板上接收即时推送通知。</p>
+            <a href="{% url 'hc-add-pushover' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -320,8 +318,8 @@
                 class="icon" alt="Rocket.Chat icon" />
 
             <h2>Rocket.Chat</h2>
-            <p>Open-source communications platform for organizations with high data protection standards.</p>
-            <a href="{% url 'hc-add-rocketchat' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>面向高数据保护标准组织的开源通讯平台。</p>
+            <a href="{% url 'hc-add-rocketchat' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -330,9 +328,9 @@
             <img src="{% static 'img/shell.png' %}"
                 class="icon" alt="Shell icon" />
 
-            <h2>Shell Command</h2>
-            <p>Execute a local shell command when a check goes up or down.</p>
-            <a href="{% url 'hc-add-shell' project.code %}" class="btn btn-primary">Add Integration</a>
+            <h2>Shell 命令</h2>
+            <p>当检查项状态变化时执行本地 shell 命令。</p>
+            <a href="{% url 'hc-add-shell' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -342,8 +340,8 @@
                 class="icon" alt="Signal icon" />
 
             <h2>Signal</h2>
-            <p>Get a Signal message when a check goes up or down.</p>
-            <a href="{% url 'hc-add-signal' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>当检查项状态变化时接收 Signal 消息。</p>
+            <a href="{% url 'hc-add-signal' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -353,11 +351,11 @@
                 class="icon" alt="Slack icon" />
 
             <h2>Slack</h2>
-            <p>A messaging app for teams.</p>
+            <p>面向团队的消息应用。</p>
             {% if enable_slack_btn %}
-            <a href="{% url 'hc-add-slack-btn' project.code %}" class="btn btn-primary">Add Integration</a>
+            <a href="{% url 'hc-add-slack-btn' project.code %}" class="btn btn-primary">添加集成</a>
             {% else %}
-            <a href="{% url 'hc-add-slack' project.code %}" class="btn btn-primary">Add Integration</a>
+            <a href="{% url 'hc-add-slack' project.code %}" class="btn btn-primary">添加集成</a>
             {% endif %}
         </li>
         {% endif %}
@@ -368,8 +366,8 @@
                 class="icon" alt="SMS icon" />
 
             <h2>SMS</h2>
-            <p>Get a text message to your phone when a check goes down.</p>
-            <a href="{% url 'hc-add-sms' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>当检查项异常时发送短信到您的手机。</p>
+            <a href="{% url 'hc-add-sms' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -378,9 +376,9 @@
             <img src="{% static 'img/spike.png' %}" class="icon" alt="Spike.sh icon" />
 
             <h2>Spike.sh</h2>
-            <p>Incident management with unlimited alerts and on-call schedules.</p>
+            <p>包含无限告警和值班排班的事件管理。</p>
 
-                <a href="{% url 'hc-add-spike' project.code %}" class="btn btn-primary">Add Integration</a>
+                <a href="{% url 'hc-add-spike' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -390,8 +388,8 @@
                  class="icon" alt="Telegram icon" />
 
             <h2>Telegram</h2>
-            <p>A messaging app with a focus on speed and security.</p>
-            <a href="{% url 'hc-add-telegram' %}" class="btn btn-primary">Add Integration</a>
+            <p>注重速度和安全的消息应用。</p>
+            <a href="{% url 'hc-add-telegram' %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -401,8 +399,8 @@
                  class="icon" alt="Trello icon" />
 
             <h2>Trello</h2>
-            <p>Create a Trello card when a check goes down.</p>
-            <a href="{% url 'hc-add-trello' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>当检查项异常时创建 Trello 卡片。</p>
+            <a href="{% url 'hc-add-trello' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -412,8 +410,8 @@
                 class="icon" alt="Splunk On-Call icon" />
 
             <h2>Splunk On-Call (VictorOps)</h2>
-            <p>On-call scheduling, alerting, and incident tracking.</p>
-            <a href="{% url 'hc-add-victorops' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>值班排班、告警和事件跟踪。</p>
+            <a href="{% url 'hc-add-victorops' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -423,8 +421,8 @@
                 class="icon" alt="WhatsApp icon" />
 
             <h2>WhatsApp</h2>
-            <p>Get a WhatsApp message when a check goes up or down.</p>
-            <a href="{% url 'hc-add-whatsapp' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>当检查项状态变化时接收 WhatsApp 消息。</p>
+            <a href="{% url 'hc-add-whatsapp' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
@@ -434,17 +432,17 @@
                 class="icon" alt="Zulip icon" />
 
             <h2>Zulip</h2>
-            <p>Open-source group chat.</p>
-            <a href="{% url 'hc-add-zulip' project.code %}" class="btn btn-primary">Add Integration</a>
+            <p>开源群组聊天。</p>
+            <a href="{% url 'hc-add-zulip' project.code %}" class="btn btn-primary">添加集成</a>
         </li>
         {% endif %}
 
         <li class="link-to-github">
             <img src="{% static 'img/missing.png' %}"
-                 class="icon" alt="Suggest New Integration" />
+                 class="icon" alt="建议新集成" />
             <p>
-                Your favorite service or notification method not listed? <br />
-                Please <a href="https://github.com/healthchecks/healthchecks/issues">file an issue on GitHub</a>!
+                您喜欢的服务或通知方式不在列表中？<br />
+                请在 <a href="https://github.com/healthchecks/healthchecks/issues">GitHub 上提交 Issue</a>！
             </p>
         </li>
 
@@ -468,23 +466,22 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4>
-                        Remove this
+                        移除
                         <span class="remove-channel-kind">---</span>
-                        Integration?
+                        集成？
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <p>You are about to remove this
+                    <p>您即将移除
                         <span class="remove-channel-kind">---</span>
-                    integration.
+                    集成。
                     </p>
-                    <p>Once it's gone it's gone. But, if you change your
-                    mind later, you can create a similar channel again.
-                    Do you want to continue?</p>
+                    <p>一旦删除无法撤销。但如果您改变主意，以后可以重新创建类似的通道。
+                    是否继续？</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Remove</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-danger">移除</button>
                 </div>
             </div>
         </form>
@@ -503,12 +500,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>Integration Details</h4>
+                    <h4>集成详情</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">
-                            Name
+                            名称
                         </label>
                         <div class="col-sm-10">
                             <input
@@ -520,8 +517,7 @@
                                 class="input-name form-control" />
 
                             <span class="help-block">
-                                Give this integration a human-friendly name,
-                                so you can easily recognize it later.
+                                为此集成设置一个易识别的名称，方便以后识别。
                             </span>
                         </div>
                     </div>
@@ -529,15 +525,15 @@
                     {% if ch.kind == "webhook" %}
                     {% with ch.down_webhook_spec as spec %}
                         {% if spec.url %}
-                            <p><strong>Execute on "down" events:</strong></p>
+                            <p><strong>在"异常"事件时执行：</strong></p>
                             <pre>{{ spec.method }} {{ spec.url }}</pre>
                             {% if spec.body %}
-                                <p>Request Body</p>
+                                <p>请求正文</p>
                                 <pre>{{ spec.body }}</pre>
                             {% endif %}
 
                             {% if spec.headers %}
-                                <p>Request Headers</p>
+                                <p>请求头部</p>
                                 <pre>{{ spec.headers|format_headers }}</pre>
                             {% endif %}
                         {% endif %}
@@ -545,15 +541,15 @@
 
                         {% with ch.up_webhook_spec as spec %}
                         {% if spec.url %}
-                            <p><strong>Execute on "up" events:</strong></p>
+                            <p><strong>在"恢复"事件时执行：</strong></p>
                             <pre>{{ spec.method }} {{ spec.url }}</pre>
                             {% if spec.body %}
-                                <p>Request Body</p>
+                                <p>请求正文</p>
                                 <pre>{{ spec.body }}</pre>
                             {% endif %}
 
                             {% if spec.headers %}
-                                <p>Request Headers</p>
+                                <p>请求头部</p>
                                 <pre>{{ spec.headers|format_headers }}</pre>
                             {% endif %}
                         {% endif %}
@@ -563,22 +559,22 @@
 
                     {% if ch.kind == "shell" %}
                         {% if ch.shell.cmd_down %}
-                            <p><strong>Execute on "down" events:</strong></p>
+                            <p><strong>在"异常"事件时执行：</strong></p>
                             <pre>{{ ch.shell.cmd_down }}</pre>
                         {% endif %}
 
                         {% if ch.shell.cmd_up %}
-                            <p><strong>Execute on "up" events:</strong></p>
+                            <p><strong>在"恢复"事件时执行：</strong></p>
                             <pre>{{ ch.shell.cmd_up }}</pre>
                         {% endif %}
                     {% endif %}
                 </div>
                 <div class="modal-footer">
                     {% if ch.kind == "webhook" %}
-                    <a class="btn btn-default pull-left" href="{% url 'hc-edit-channel' ch.code %}">Edit Webhook Parameters&hellip;</a>
+                    <a class="btn btn-default pull-left" href="{% url 'hc-edit-channel' ch.code %}">编辑 Webhook 参数&hellip;</a>
                     {% endif %}
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </div>
         </form>

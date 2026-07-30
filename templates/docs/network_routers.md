@@ -1,63 +1,61 @@
-# Network Routers
+# 网络路由器
 
-Certain network router operating systems can be configured to send regular HTTP(S)
-requests to SITE_NAME directly from the router. This is a handy way to monitor them: when
-the router loses its WAN connection, it will not be able to ping SITE_NAME, and SITE_NAME
-will notify you about the outage.
+某些网络路由器操作系统可以配置为直接从路由器向 SITE_NAME 发送定期 HTTP(S)
+请求。这是监控它们的便捷方式：当
+路由器失去 WAN 连接时，它将无法 ping SITE_NAME，SITE_NAME
+会通知你中断情况。
 
 ## DD-WRT
 
-[DD-WRT](https://dd-wrt.com/) is a Linux-based firmware for routers that runs on wide
-variety of router models. DD-WRT ships with a cron daemon and wget utility. You can
-enable the cron daemon and edit crontab in DD-WRT control panel,
-**Administration › Management › Cron**.
+[DD-WRT](https://dd-wrt.com/) 是一种基于 Linux 的路由器固件，可运行在多种
+路由器型号上。DD-WRT 自带 cron 守护进程和 wget 工具。你可以
+在 DD-WRT 控制面板中启用 cron 守护进程并编辑 crontab，
+路径为 **Administration › Management › Cron**。
 
-The crontab syntax on DD-WRT is:
+DD-WRT 上的 crontab 语法为：
 
-    [cron expression] [username] [command]
+    [cron 表达式] [用户名] [命令]
 
-Example for sending a ping every minute:
+每分钟发送 ping 的示例：
 
     * * * * * root wget PING_URL
 
-Screenshot:
+截图：
 
-![DD-WRT control panel](IMG_URL/ddwrt.png)
+![DD-WRT 控制面板](IMG_URL/ddwrt.png)
 
 ## MikroTik RouterOS
 
-[MikroTik RouterOS](https://mikrotik.com/software) is a router operating system used
-primarily on MikroTik network hardware. Among its many features is scripting support
-and a scheduler.
+[MikroTik RouterOS](https://mikrotik.com/software) 是一种路由器操作系统，主要用于
+MikroTik 网络硬件。其众多功能包括脚本支持
+和调度器。
 
-First, create a script in WebFig, **System › Scripts › Add New**. Use the following
-parameters:
+首先，在 WebFig 中创建脚本，路径为 **System › Scripts › Add New**。使用以下
+参数：
 
-* Name: `ping` (example, you can use a different name)
+* Name: `ping`（示例，你可以使用其他名称）
 * Policy: `read`, `test`
 * Source: `/tool fetch url="PING_URL" output=none`
 
-![DD-WRT control panel](IMG_URL/routeros1.png)
+![DD-WRT 控制面板](IMG_URL/routeros1.png)
 
-Then, create a schedule in WebFig, **System › Scheduler › Add New**. Use parameters:
+然后，在 WebFig 中创建调度，路径为 **System › Scheduler › Add New**。使用参数：
 
-* Interval: `00:01:00` (one minute)
+* Interval: `00:01:00`（一分钟）
 * Policy: `read`, `test`
-* On Event: `ping` (the name of the script from the previous step)
+* On Event: `ping`（上一步中脚本的名称）
 
-![DD-WRT control panel](IMG_URL/routeros2.png)
+![DD-WRT 控制面板](IMG_URL/routeros2.png)
 
-Notes:
+注意：
 
-* The `output=none` parameter tells the system to discard response body. Without
-  this parameter, the system will save response body to a file, which will additionally
-  require the `write` policy.
-* The "tool fetch" utility supports HTTPS URLs but does not verify TLS certificates
-  by default. You can add `check-certificate=yes` parameter to require a valid TLS
-  certificate. Note that RouterOS ships with no root CA certificates, so you will
-  also need to load these.
-* [Here's the full list of options](https://wiki.mikrotik.com/wiki/Manual:Tools/Fetch)
-  supported by "tool fetch".
+* `output=none` 参数告诉系统丢弃响应体。如果没有
+  此参数，系统会将响应体保存到文件，这还额外需要 `write` 策略。
+* "tool fetch" 工具支持 HTTPS URL，但默认情况下不验证 TLS 证书。
+  你可以添加 `check-certificate=yes` 参数以要求有效 TLS
+  证书。请注意，RouterOS 不附带根 CA 证书，因此你还需要
+  加载这些证书。
+* [这里是 "tool fetch" 支持的完整选项列表](https://wiki.mikrotik.com/wiki/Manual:Tools/Fetch)。
 
 
 

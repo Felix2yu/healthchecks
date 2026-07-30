@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}ntfy Integration for {{ site_name }}{% endblock %}
+{% block title %}ntfy 集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -10,18 +10,18 @@
         <h1>ntfy</h1>
         <div class="jumbotron">
             <p>
-            <a href="https://ntfy.sh/">ntfy</a> is is a simple HTTP-based pub-sub
-            notification service. If you use or plan on using ntfy,
-            you can can integrate it with your {{ site_name }} account in few simple steps.
+            <a href="https://ntfy.sh/">ntfy</a> 是一个基于 HTTP 的简单发布/订阅
+            通知服务。如果您正在使用或计划使用 ntfy，
+            只需几个简单步骤即可将其集成到您的 {{ site_name }} 帐户中。
             </p>
         </div>
 
-        <h2>Integration Settings</h2>
+        <h2>集成设置</h2>
 
         <form method="post" class="form-horizontal">
             {% csrf_token %}
             <div class="form-group {{ form.topic.css_classes }}">
-                <label for="topic" class="col-sm-3 control-label">Topic</label>
+                <label for="topic" class="col-sm-3 control-label">主题</label>
                 <div class="col-sm-6">
                     <input
                         id="topic"
@@ -38,7 +38,7 @@
             </div>
 
             <div class="form-group {{ form.url.css_classes }}">
-                <label for="url" class="col-sm-3 control-label">Server URL</label>
+                <label for="url" class="col-sm-3 control-label">服务器链接</label>
                 <div class="col-sm-6">
                     <input
                         id="url"
@@ -52,13 +52,13 @@
                     {% if form.url.errors %}
                     <div class="help-block">{{ form.url.errors|join:"" }}</div>
                     {% else %}
-                    <div class="help-block">ntfy server's root URL, <em>without</em> the topic name.</div>
+                    <div class="help-block">ntfy 服务器的根链接，<em>不包含</em>主题名称。</div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="form-group {{ form.token.css_classes }}">
-                <label for="token" class="col-sm-3 control-label">Access Token</label>
+                <label for="token" class="col-sm-3 control-label">访问令牌</label>
                 <div class="col-sm-6">
                     <input
                         id="token"
@@ -70,24 +70,24 @@
                     {% if form.token.errors %}
                     <div class="help-block">{{ form.url.errors|join:"" }}</div>
                     {% else %}
-                    <div class="help-block">If publishing to the topic requires an access token, specify it here.</div>
+                    <div class="help-block">如果发布到该主题需要访问令牌，请在此处指定。</div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">Priority for "down" events</label>
+                <label class="col-sm-3 control-label">宕机事件优先级</label>
                 <div class="col-sm-8">{{ form.priority }}</div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">Priority for "up" events</label>
+                <label class="col-sm-3 control-label">恢复事件优先级</label>
                 <div class="col-sm-8">{{ form.priority_up }}</div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">
-                    <button type="submit" class="btn btn-primary">Save Integration</button>
+                    <button type="submit" class="btn btn-primary">保存集成</button>
                 </div>
             </div>
         </form>

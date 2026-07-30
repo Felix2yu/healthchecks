@@ -142,19 +142,19 @@ class Spec(BaseModel):
 
 
 CUSTOM_ERRORS = {
-    "too_long": "%s is too long",
-    "string_too_long": "%s is too long",
-    "string_type": "%s is not a string",
-    "string_pattern_mismatch": "%s does not match pattern",
-    "less_than_equal": "%s is too large",
-    "greater_than_equal": "%s is too small",
-    "int_type": "%s is not a number",
-    "bool_type": "%s is not a boolean",
-    "literal_error": "%s has unexpected value",
-    "list_type": "%s is not an array",
-    "cron_syntax": "%s is not a valid cron or OnCalendar expression",
-    "tz_syntax": "%s is not a valid timezone",
-    "time_delta_type": "%s is not a number",
+    "too_long": "%s 过长",
+    "string_too_long": "%s 过长",
+    "string_type": "%s 不是字符串",
+    "string_pattern_mismatch": "%s 不匹配格式",
+    "less_than_equal": "%s 过大",
+    "greater_than_equal": "%s 过小",
+    "int_type": "%s 不是数字",
+    "bool_type": "%s 不是布尔值",
+    "literal_error": "%s 包含意外的值",
+    "list_type": "%s 不是数组",
+    "cron_syntax": "%s 不是有效的 cron 或 OnCalendar 表达式",
+    "tz_syntax": "%s 不是有效的时区",
+    "time_delta_type": "%s 不是数字",
 }
 
 
@@ -165,7 +165,7 @@ def format_first_error(exc: ValidationError) -> str:
         subject = f"an item in '{subject}'"
 
     tmpl = CUSTOM_ERRORS[first_error["type"]]
-    return "json validation error: " + tmpl % subject
+    return "JSON 验证错误：" + tmpl % subject
 
 
 def valid_ip(ip: str) -> bool:
@@ -189,10 +189,10 @@ def ping(
         try:
             check = Check.objects.get(code=code)
         except Check.DoesNotExist:
-            return HttpResponseNotFound("not found")
+            return HttpResponseNotFound("未找到")
 
     if exitstatus is not None and exitstatus > 255:
-        return HttpResponseBadRequest("invalid url format")
+        return HttpResponseBadRequest("无效的链接格式")
 
     headers = request.META
     remote_addr = headers.get("HTTP_X_FORWARDED_FOR", headers["REMOTE_ADDR"])
@@ -232,7 +232,7 @@ def ping(
     rid, rid_str = None, request.GET.get("rid")
     if rid_str is not None:
         if not is_valid_uuid_string(rid_str):
-            return HttpResponseBadRequest("invalid uuid format")
+            return HttpResponseBadRequest("无效的 UUID 格式")
         rid = UUID(rid_str)
 
     check.ping(remote_addr, scheme, method, ua, body, action, rid, exitstatus)
@@ -253,32 +253,32 @@ def ping_by_slug(
     exitstatus: int | None = None,
 ) -> HttpResponse:
     if slug != slug.lower():
-        return HttpResponseBadRequest("invalid url format")
+        return HttpResponseBadRequest("无效的链接格式")
 
     created = False
     try:
         check = Check.objects.get(slug=slug, project__ping_key=ping_key)
     except Check.DoesNotExist:
         if request.GET.get("create") != "1":
-            return HttpResponseNotFound("not found")
+            return HttpResponseNotFound("未找到")
 
         try:
             project = Project.objects.get(ping_key=ping_key)
         except Project.DoesNotExist:
-            return HttpResponseNotFound("not found")
+            return HttpResponseNotFound("未找到")
 
         profile = project.owner_profile
         # When using auto-provisioning, users are allowed to temporarily
         # exceed their check limit up to 2 times.
         if profile.num_checks_used() >= profile.check_limit * 2:
-            return HttpResponseNotFound("not found")
+            return HttpResponseNotFound("未找到")
 
         check = Check(project=project, name=slug, slug=slug)
         check.save()
         check.assign_all_channels()
         created = True
     except Check.MultipleObjectsReturned:
-        return HttpResponse("ambiguous slug", status=409)
+        return HttpResponse("标识存在歧义", status=409)
 
     response = ping(request, check.code, check, action, exitstatus)
     if response.status_code == 200 and created:
@@ -581,7 +581,7 @@ def resume(request: ApiRequest, code: UUID) -> HttpResponse:
         return HttpResponseForbidden()
 
     if check.status != "paused":
-        return HttpResponse("check is not paused", status=409)
+        return HttpResponse("检查项未暂停", status=409)
 
     check.create_flip("new", mark_as_processed=True)
 
@@ -838,11 +838,11 @@ def notification_status(request: HttpRequest, code: UUID) -> HttpResponse:
     # Handle "MessageStatus" key from Twilio
     if request.POST.get("MessageStatus") in ("failed", "undelivered"):
         status = request.POST["MessageStatus"]
-        error = f"Delivery failed (status={status})."
+        error = f"投递失败（状态={status}）。"
 
     # Handle "CallStatus" key from Twilio
     if request.POST.get("CallStatus") == "failed":
-        error = "Delivery failed (status=failed)."
+        error = "投递失败（状态=失败）。"
 
     if error:
         notification.error = error
@@ -892,7 +892,7 @@ def bounces(request: HttpRequest) -> HttpResponse:
     except BadSignature:
         # If the signature is invalid or expired return HTTP 200 so the other party
         # doesn't retry over and over again-
-        return HttpResponse("OK (bad signature)")
+        return HttpResponse("OK（无效签名）")
 
     status, diagnostic = "", ""
     for part in msg.walk():
@@ -911,7 +911,7 @@ def bounces(request: HttpRequest) -> HttpResponse:
         transient = True
 
     if not permanent and not transient:
-        return HttpResponse("OK (ignored)")
+        return HttpResponse("OK（已忽略）")
 
     if unsigned.startswith("n."):
         notification_code = unsigned[2:]
@@ -919,12 +919,12 @@ def bounces(request: HttpRequest) -> HttpResponse:
             cutoff = now() - td(hours=48)
             n = Notification.objects.get(code=notification_code, created__gt=cutoff)
         except Notification.DoesNotExist:
-            return HttpResponse("OK (notification not found)")
+            return HttpResponse("OK（通知未找到）")
 
         if diagnostic:
-            error = f"Delivery failed ({diagnostic})"[:200]
+            error = f"投递失败（{diagnostic}）"[:200]
         else:
-            error = f"Delivery failed (SMTP status code: {status})"[:200]
+            error = f"投递失败（SMTP 状态码：{status}）"[:200]
 
         n.error = error
         n.save(update_fields=["error"])
@@ -941,7 +941,7 @@ def bounces(request: HttpRequest) -> HttpResponse:
         try:
             profile = Profile.objects.get(user__username=username)
         except Profile.DoesNotExist:
-            return HttpResponse("OK (user not found)")
+            return HttpResponse("OK（用户未找到）")
 
         profile.reports = "off"
         profile.next_report_date = None

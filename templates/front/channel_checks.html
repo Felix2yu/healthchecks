@@ -6,7 +6,7 @@
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4>Assign Checks to Integration <small>(<span id="num-assigned">{{ assigned|length }}</span> of {{ checks|length }})</small></h4>
+    <h4>分配检查项到集成 <small>(<span id="num-assigned">{{ assigned|length }}</span> / {{ checks|length }})</small></h4>
 </div>
 
 <input type="hidden" name="channel" value="{{ channel.code }}" />
@@ -21,7 +21,7 @@
             {% if check.name %}
                 {{ check.name }}
             {% else %}
-                <span class="unnamed">unnamed</span>
+                <span class="unnamed">未命名</span>
             {% endif %}
         </td>
         <td>
@@ -37,31 +37,30 @@
         id="select-all"
         type="button"
         {% if assigned|length == checks|length%}disabled{% endif%}
-        class="btn btn-default btn-sm pull-left">Select All</button>
+        class="btn btn-default btn-sm pull-left">全选</button>
     <button
         id="unselect-all"
         {% if assigned|length == 0 %}disabled{% endif %}
         type="button"
-        class="btn btn-default btn-sm pull-left">Unselect All</button>
+        class="btn btn-default btn-sm pull-left">取消全选</button>
 
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+    <button type="submit" class="btn btn-primary">保存更改</button>
 </div>
 </form>
 {% else %}
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4>Assign Checks to Integration</h4>
+    <h4>分配检查项到集成</h4>
 </div>
 <div class="modal-body">
     <p>
-        This dialog would normally show a list of checks in the project, and let
-        you assign checks to this integration. But there are currently no checks
-        in <strong>{{ channel.project }}</strong>. Please check back
-        after adding a check!
+        此对话框通常显示项目中的检查项列表，让您将检查项分配到此集成。
+        但目前 <strong>{{ channel.project }}</strong> 中没有检查项。
+        请添加检查项后再来！
     </p>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Got It</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">知道了</button>
 </div>
 {% endif %}

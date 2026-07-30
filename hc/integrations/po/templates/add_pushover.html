@@ -1,7 +1,7 @@
 {% extends "base_project.html" %}
 {% load compress humanize static hc_extras %}
 
-{% block title %}Pushover Integration for {{ site_name }}{% endblock %}
+{% block title %}Pushover 集成 - {{ site_name }}{% endblock %}
 
 
 {% block content %}
@@ -10,64 +10,63 @@
     <h1>Pushover</h1>
     <div class="jumbotron">
         <p>
-            <a href="https://www.pushover.net/">Pushover</a> delivers
-            real-time notifications on your Android, iPhone, iPad, Desktop,
-            Android Wear and Apple Watch. You can set up {{ site_name }} to
-            receive Pushover notifications in a few simple steps.
+            <a href="https://www.pushover.net/">Pushover</a> 可在您的 Android、iPhone、iPad、桌面电脑、
+            Android Wear 和 Apple Watch 上发送实时通知。您可以设置 {{ site_name }}
+            在几个简单步骤内接收 Pushover 通知。
         </p>
     </div>
 
-    <h2>Integration Settings</h2>
+    <h2>集成设置</h2>
 
     <form id="add-pushover" method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group">
-            <label class="col-sm-3 control-label">Priority for "down" events</label>
+            <label class="col-sm-3 control-label">宕机事件优先级</label>
             <div class="col-sm-8">
                 <select name="po_priority" class="form-control">
                     <option value="-3">
-                        Disabled: Does not notify about Down events.
+                        禁用：不通知宕机事件。
                     </option>
                     <option value="-2">
-                        Lowest Priority: Generates no notification on your device.
+                        最低优先级：设备上不生成通知。
                     </option>
                     <option value="-1">
-                        Low Priority: Sends a quiet notification.
+                        低优先级：发送静默通知。
                     </option>
                     <option value="0" selected="selected">
-                        Normal Priority:
+                        普通优先级：
                     </option>
                     <option value="1">
-                        High Priority: Bypasses user's quiet hours.
+                        高优先级：绕过用户的免打扰时段。
                     </option>
                     <option value="2">
-                        Emergency Priority: Repeated every {{po_retry_delay|hc_duration }} for at most {{ po_expiration|hc_duration }} until you acknowledge them.
+                        紧急优先级：每 {{po_retry_delay|hc_duration }} 重复一次，最多持续 {{ po_expiration|hc_duration }}，直到您确认。
                     </option>
                 </select>
            </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Priority for "up" events</label>
+            <label class="col-sm-3 control-label">恢复事件优先级</label>
             <div class="col-sm-8">
                 <select name="po_priority_up" class="form-control">
                     <option value="-3">
-                        Disabled: Does not notify about Up events.
+                        禁用：不通知恢复事件。
                     </option>
                     <option value="-2">
-                        Lowest priority: Generates no notification on your device.
+                        最低优先级：设备上不生成通知。
                     </option>
                     <option value="-1">
-                        Low priority: Sends a quiet notification.
+                        低优先级：发送静默通知。
                     </option>
                     <option value="0" selected="selected">
-                        Normal priority:
+                        普通优先级：
                     </option>
                     <option value="1">
-                        High priority: Bypasses user's quiet hours.
+                        高优先级：绕过用户的免打扰时段。
                     </option>
                     <option value="2">
-                        Emergency priority: Repeated every {{po_retry_delay|hc_duration }} for at most {{ po_expiration|hc_duration }} until you acknowledge them.
+                        紧急优先级：每 {{po_retry_delay|hc_duration }} 重复一次，最多持续 {{ po_expiration|hc_duration }}，直到您确认。
                     </option>
                 </select>
            </div>
@@ -77,7 +76,7 @@
             <div class="col-sm-offset-3 col-sm-8">
                 <button type="submit" class="btn btn-default">
                     <img class="ai-icon" src="{% static 'img/po.png' %}" alt="Pushover" />
-                    Subscribe with Pushover
+                    通过 Pushover 订阅
                 </button>
             </div>
         </div>
