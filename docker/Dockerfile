@@ -36,17 +36,18 @@ RUN --mount=type=bind,target=/wheels,source=/wheels,from=builder \
     pip install --no-cache /wheels/*
 
 COPY --from=builder /opt/healthchecks/ /opt/healthchecks/
-COPY docker/fetchstatus.py /opt/healthchecks/
+COPY docker/fetchstatus.py docker/entrypoint.sh /opt/healthchecks/
 
 RUN \
     rm -f /opt/healthchecks/hc/local_settings.py && \
     DEBUG=False SECRET_KEY=build-key ./manage.py collectstatic --noinput && \
-    DEBUG=False SECRET_KEY=build-key ./manage.py compress
+    DEBUG=False SECRET_KEY=build-key ./manage.py compress && \
+    chmod +x /opt/healthchecks/entrypoint.sh
 
-RUN mkdir /data && chown hc /data
-
-USER hc
+RUN mkdir /data && chown hc /data && \
+    mkdir /config && chown hc /config
 
 ENV USE_GZIP_MIDDLEWARE=True
 HEALTHCHECK --start-period=20s --start-interval=5s --interval=60s --retries=1 CMD ./fetchstatus.py
+ENTRYPOINT ["/opt/healthchecks/entrypoint.sh"]
 CMD [ "uwsgi", "/opt/healthchecks/docker/uwsgi.ini"]
