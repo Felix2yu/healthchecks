@@ -69,7 +69,7 @@ class AddTelegramTestCase(BaseTestCase):
     def test_it_handles_bad_signature(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url + "?bad-signature")
-        self.assertContains(r, "Incorrect Link")
+        self.assertContains(r, "链接无效")
 
         self.assertFalse(Channel.objects.exists())
 

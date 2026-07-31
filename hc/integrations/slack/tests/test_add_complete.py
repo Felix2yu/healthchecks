@@ -31,7 +31,7 @@ class AddSlackCompleteTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Success, integration added!")
+        self.assertContains(r, "集成添加成功！")
 
         ch = Channel.objects.get()
         self.assertEqual(ch.name, "bar")
@@ -70,7 +70,7 @@ class AddSlackCompleteTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Received an unexpected response from Slack")
+        self.assertContains(r, "收到来自 Slack 的意外响应。集成未添加。")
 
     @patch("hc.integrations.slack.views.logger")
     @patch("hc.integrations.slack.views.curl.post", autospec=True)
@@ -91,7 +91,7 @@ class AddSlackCompleteTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Received an unexpected response from Slack")
+        self.assertContains(r, "收到来自 Slack 的意外响应。集成未添加。")
         self.assertTrue(logger.warning.called)
 
     @override_settings(SLACK_CLIENT_ID=None)

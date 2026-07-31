@@ -49,7 +49,7 @@ class LoginTestCase(BaseTestCase):
 
         # And email should have been sent
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, f"Log in to {settings.SITE_NAME}")
+        self.assertEqual(mail.outbox[0].subject, f"登录 {settings.SITE_NAME}")
         self.assertEmailContainsHtml("http://testserver/static/img/logo.png")
         self.assertEmailContains("http://testserver/docs/")
 
@@ -97,7 +97,7 @@ class LoginTestCase(BaseTestCase):
         form = {"identity": "alice@example.org"}
 
         r = self.client.post("/accounts/login/", form)
-        self.assertContains(r, "Too many attempts")
+        self.assertContains(r, "尝试次数过多，请稍后再试。")
 
         # No email should have been sent
         self.assertEqual(len(mail.outbox), 0)
@@ -110,7 +110,7 @@ class LoginTestCase(BaseTestCase):
         form = {"identity": "alice@example.org"}
 
         r = self.client.post("/accounts/login/", form)
-        self.assertContains(r, "Too many attempts")
+        self.assertContains(r, "尝试次数过多，请稍后再试。")
 
         # No email should have been sent
         self.assertEqual(len(mail.outbox), 0)
@@ -123,7 +123,7 @@ class LoginTestCase(BaseTestCase):
         form = {"identity": "alice@example.org"}
         xff = "127.0.0.2:1234,127.0.0.3"
         r = self.client.post("/accounts/login/", form, HTTP_X_FORWARDED_FOR=xff)
-        self.assertContains(r, "Too many attempts")
+        self.assertContains(r, "尝试次数过多，请稍后再试。")
 
         # No email should have been sent
         self.assertEqual(len(mail.outbox), 0)
@@ -158,7 +158,7 @@ class LoginTestCase(BaseTestCase):
         form = {"action": "login", "email": "alice@example.org", "password": "password"}
 
         r = self.client.post("/accounts/login/", form)
-        self.assertContains(r, "Too many attempts")
+        self.assertContains(r, "尝试次数过多，请稍后再试。")
 
     def test_it_handles_password_login_with_redirect(self) -> None:
         check = Check.objects.create(project=self.project)
@@ -188,12 +188,12 @@ class LoginTestCase(BaseTestCase):
         }
 
         r = self.client.post("/accounts/login/", form)
-        self.assertContains(r, "Incorrect email or password")
+        self.assertContains(r, "邮箱或密码不正确。")
 
     @override_settings(REGISTRATION_OPEN=False)
     def test_it_obeys_registration_open(self) -> None:
         r = self.client.get("/accounts/login/")
-        self.assertNotContains(r, "Create Your Account")
+        self.assertNotContains(r, "创建您的账户")
 
     def test_it_redirects_to_webauthn_form(self) -> None:
         Credential.objects.create(user=self.alice, name="Alices Key")

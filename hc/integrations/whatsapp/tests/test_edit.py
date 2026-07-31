@@ -32,8 +32,8 @@ class EditWhatsAppTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "WhatsApp Settings")
-        self.assertContains(r, "Get a WhatsApp message")
+        self.assertContains(r, "WhatsApp 设置")
+        self.assertContains(r, "接收 WhatsApp 消息")
         self.assertContains(r, "+12345678")
 
     def test_it_updates_channel(self) -> None:

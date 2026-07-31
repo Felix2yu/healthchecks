@@ -33,7 +33,7 @@ class EditWebhookTestCase(BaseTestCase):
     def test_it_shows_form(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Webhook Settings")
+        self.assertContains(r, "Webhook 设置")
 
         self.assertContains(r, "Call example.org")
 

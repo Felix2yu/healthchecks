@@ -49,7 +49,7 @@ class ChangeEmailVerifyTestCase(BaseTestCase):
 
     def test_it_handles_get(self) -> None:
         r = self.client.get(self._url())
-        self.assertContains(r, "You are about to log into")
+        self.assertContains(r, "您即将登录")
 
         # Alice's email should have *not* been changed yet
         self.alice.refresh_from_db()
@@ -62,11 +62,11 @@ class ChangeEmailVerifyTestCase(BaseTestCase):
 
     def test_it_handles_expired_link(self) -> None:
         r = self.client.post(self._url(expired=True))
-        self.assertContains(r, "The link you just used is incorrect.")
+        self.assertContains(r, "您使用的链接无效。")
 
     def test_it_handles_bad_payload(self) -> None:
         r = self.client.post("/accounts/change_email/bad-payload/")
-        self.assertContains(r, "The link you just used is incorrect.")
+        self.assertContains(r, "您使用的链接无效。")
 
     def test_it_handles_unavailable_email(self) -> None:
         # Make the target address unavailable
@@ -74,7 +74,7 @@ class ChangeEmailVerifyTestCase(BaseTestCase):
 
         r = self.client.post(self._url(), follow=True)
         self.assertRedirects(r, "/accounts/login/")
-        self.assertContains(r, "incorrect or expired")
+        self.assertContains(r, "不正确或已过期")
 
         # Alice's email should have *not* been updated
         self.alice.refresh_from_db()

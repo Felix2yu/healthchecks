@@ -25,8 +25,8 @@ class EditSignalTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Signal Settings")
-        self.assertContains(r, "Get a Signal message")
+        self.assertContains(r, "Signal 设置")
+        self.assertContains(r, "接收 Signal 消息")
         self.assertContains(r, "+12345678")
 
     def test_it_updates_channel(self) -> None:

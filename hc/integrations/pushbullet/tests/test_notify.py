@@ -49,7 +49,7 @@ class NotifyPushbulletTestCase(BaseTestCase):
         self.assertEqual(kwargs["headers"]["Access-Token"], "fake-token")
         payload = kwargs["json"]
         self.assertEqual(payload["type"], "note")
-        self.assertIn("""The check "Foo" is DOWN""", payload["body"])
+        self.assertIn("""检查项 "Foo" 已宕机""", payload["body"])
         self.assertIn("grace time passed", payload["body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -75,7 +75,7 @@ class NotifyPushbulletTestCase(BaseTestCase):
 
         _, kwargs = mock_post.call_args
         payload = kwargs["json"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["body"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_up(self, mock_post: Mock) -> None:
@@ -88,7 +88,7 @@ class NotifyPushbulletTestCase(BaseTestCase):
 
         _, kwargs = mock_post.call_args
         self.assertEqual(kwargs["json"]["type"], "note")
-        self.assertEqual(kwargs["json"]["body"], 'The check "Foo" is UP.')
+        self.assertEqual(kwargs["json"]["body"], '检查项 "Foo" 已恢复。')
         self.assertEqual(kwargs["headers"]["Access-Token"], "fake-token")
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -101,6 +101,6 @@ class NotifyPushbulletTestCase(BaseTestCase):
 
         _, kwargs = mock_post.call_args
         self.assertIn(
-            'The check "Foo & Bar" is DOWN ',
+            '检查项 "Foo & Bar" 已宕机',
             kwargs["json"]["body"],
         )

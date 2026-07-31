@@ -162,7 +162,7 @@ class CurlTestCase(SimpleTestCase):
             request("get", "http://example.org")
         self.assertEqual(
             cm.exception.message,
-            "Connections to private IP addresses are not allowed",
+            "不允许连接到私有 IP 地址",
         )
 
     @override_settings(INTEGRATIONS_ALLOW_PRIVATE_IPS=True)

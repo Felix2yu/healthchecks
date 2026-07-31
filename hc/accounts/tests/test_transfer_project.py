@@ -23,7 +23,7 @@ class TransferProjectTestCase(BaseTestCase):
 
         form = {"transfer_project": "1", "email": "bob@example.org"}
         r = self.client.post(self.url, form)
-        self.assertContains(r, "Transfer initiated!")
+        self.assertContains(r, "转移已发起！")
 
         self.bobs_membership.refresh_from_db()
         self.assertIsNotNone(self.bobs_membership.transfer_request_date)
@@ -54,7 +54,7 @@ class TransferProjectTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {"cancel_transfer": "1"})
-        self.assertContains(r, "Transfer cancelled!")
+        self.assertContains(r, "转移已取消！")
 
         self.bobs_membership.refresh_from_db()
         self.assertIsNone(self.bobs_membership.transfer_request_date)
@@ -76,8 +76,8 @@ class TransferProjectTestCase(BaseTestCase):
 
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "would like to transfer")
-        self.assertNotContains(r, "upgrade your account first")
+        self.assertContains(r, "所有权转移给您")
+        self.assertNotContains(r, "先升级您的账户")
 
     def test_it_shows_transfer_request_with_limit_notice(self) -> None:
         self.bobs_membership.transfer_request_date = now()
@@ -88,7 +88,7 @@ class TransferProjectTestCase(BaseTestCase):
 
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "upgrade your account first")
+        self.assertContains(r, "先升级您的账户")
 
     def test_accept_works(self) -> None:
         self.bobs_membership.transfer_request_date = now()
@@ -96,7 +96,7 @@ class TransferProjectTestCase(BaseTestCase):
 
         self.client.login(username="bob@example.org", password="password")
         r = self.client.post(self.url, {"accept_transfer": "1"})
-        self.assertContains(r, "You are now the owner of this project!")
+        self.assertContains(r, "您现在是此项目的拥有者！")
 
         self.project.refresh_from_db()
         # Bob should now be the owner

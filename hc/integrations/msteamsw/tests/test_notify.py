@@ -64,8 +64,8 @@ class NotifyMsTeamsTestCase(BaseTestCase):
         heading = card["body"][0]
         self.assertEqual(
             heading["text"],
-            "🔴 “Foo” is DOWN (success signal did not"
-            " arrive on time, grace time passed).",
+            "🔴 “Foo” 已宕机（success signal did not arrive"
+            " on time, grace time passed）。",
         )
 
         facts = self.facts(payload)
@@ -85,7 +85,7 @@ class NotifyMsTeamsTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         text = payload["attachments"][0]["content"]["body"][0]["text"]
-        self.assertEqual(text, "🔴 “Foo” is DOWN (received a failure signal).")
+        self.assertEqual(text, "🔴 “Foo” 已宕机（received a failure signal）。")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_escapes_special_characters(self, mock_post: Mock) -> None:
@@ -98,7 +98,7 @@ class NotifyMsTeamsTestCase(BaseTestCase):
         card = payload["attachments"][0]["content"]
         self.assertEqual(card["fallbackText"], "“_underscores_ &amp; more” is DOWN.")
         heading = card["body"][0]
-        self.assertIn("🔴 “_underscores_ &amp; more” is DOWN", heading["text"])
+        self.assertIn("🔴 “_underscores_ &amp; more” 已宕机", heading["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_cron_schedule_and_tz(self, mock_post: Mock) -> None:

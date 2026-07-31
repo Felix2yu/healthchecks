@@ -27,9 +27,9 @@ class EditEmailTestCase(BaseTestCase):
     def test_it_shows_form(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Get an email message when check goes up or down.")
+        self.assertContains(r, "发送邮件")
         self.assertContains(r, "alerts@example.org")
-        self.assertContains(r, "Email Settings")
+        self.assertContains(r, "邮件设置")
 
     def test_it_saves_changes(self) -> None:
         form = {"value": "new@example.org", "down": "true", "up": "false"}
@@ -45,7 +45,7 @@ class EditEmailTestCase(BaseTestCase):
 
         # It should send a verification link
         email = mail.outbox[0]
-        self.assertTrue(email.subject.startswith("Verify email address on"))
+        self.assertTrue(email.subject.startswith("验证"))
         self.assertEqual(email.to[0], "new@example.org")
 
         # Make sure it does not call assign_all_checks
@@ -123,7 +123,7 @@ class EditEmailTestCase(BaseTestCase):
 
         # It should send a verification link
         email = mail.outbox[0]
-        self.assertTrue(email.subject.startswith("Verify email address on"))
+        self.assertTrue(email.subject.startswith("验证"))
 
     def test_it_requires_rw_access(self) -> None:
         self.bobs_membership.role = "r"

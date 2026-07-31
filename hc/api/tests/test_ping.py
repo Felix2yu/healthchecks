@@ -90,7 +90,7 @@ class PingTestCase(BaseTestCase):
     def test_it_handles_missing_check(self) -> None:
         r = self.client.get("/ping/07c2f548-9850-4b27-af5d-6c9dc157ec02/")
         self.assertEqual(r.status_code, 404)
-        self.assertEqual(r.text, "not found")
+        self.assertEqual(r.text, "未找到")
 
     def test_it_handles_120_char_ua(self) -> None:
         ua = (

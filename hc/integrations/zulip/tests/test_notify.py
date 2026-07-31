@@ -61,8 +61,8 @@ class NotifyZulipTestCase(BaseTestCase):
         self.assertEqual(url, "https://example.org/api/v1/messages")
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertEqual(payload["topic"], "Foobar is DOWN")
-        self.assertIn("is **DOWN**", payload["content"])
+        self.assertEqual(payload["topic"], "Foobar DOWN")
+        self.assertIn("**DOWN**", payload["content"])
         self.assertIn("grace time passed", payload["content"])
 
         # payload should not contain check's code
@@ -92,7 +92,7 @@ class NotifyZulipTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["content"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["content"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_uses_custom_topic(self, mock_post: Mock) -> None:
@@ -162,7 +162,7 @@ class NotifyZulipTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertEqual(payload["topic"], "Foo & Bar is DOWN")
+        self.assertEqual(payload["topic"], "Foo & Bar DOWN")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_no_last_ping(self, mock_post: Mock) -> None:

@@ -95,7 +95,7 @@ class CreateCheckTestCase(BaseTestCase):
             "subject_fail",
             "unique",
         ]:
-            self.post({field: None}, expect_fragment=f"{field} is not a")
+            self.post({field: None}, expect_fragment=f"JSON 验证错误：{field}")
 
     def test_it_handles_options(self) -> None:
         r = self.client.options(self.URL)
@@ -178,7 +178,7 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertFalse(Check.objects.exists())
 
     def test_it_rejects_non_string_channels_key(self) -> None:
-        self.post({"channels": 123}, expect_fragment="channels is not a string")
+        self.post({"channels": 123}, expect_fragment="channels 不是字符串")
 
     def test_it_supports_unique_name(self) -> None:
         check = Check.objects.create(project=self.project, name="Foo")
@@ -278,30 +278,30 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(r.status_code, 401)
 
     def test_it_rejects_small_timeout(self) -> None:
-        self.post({"timeout": 0}, expect_fragment="timeout is too small")
+        self.post({"timeout": 0}, expect_fragment="timeout 过小")
 
     def test_it_rejects_large_timeout(self) -> None:
-        self.post({"timeout": 31536001}, expect_fragment="timeout is too large")
+        self.post({"timeout": 31536001}, expect_fragment="timeout 过大")
 
     def test_it_rejects_non_number_timeout(self) -> None:
-        self.post({"timeout": "oops"}, expect_fragment="timeout is not a number")
+        self.post({"timeout": "oops"}, expect_fragment="timeout 不是数字")
 
     def test_it_rejects_non_string_name(self) -> None:
-        self.post({"name": False}, expect_fragment="name is not a string")
+        self.post({"name": False}, expect_fragment="name 不是字符串")
 
     def test_it_rejects_long_name(self) -> None:
-        self.post({"name": "01234567890" * 20}, expect_fragment="name is too long")
+        self.post({"name": "01234567890" * 20}, expect_fragment="name 过长")
 
     def test_unique_accepts_only_specific_values(self) -> None:
         self.post(
             {"name": "Foo", "unique": ["status"]},
-            expect_fragment="an item in 'unique' has unexpected value",
+            expect_fragment="an item in 'unique' 包含意外的值",
         )
 
     def test_it_rejects_bad_unique_values(self) -> None:
         self.post(
             {"name": "Foo", "unique": "not a list"},
-            expect_fragment="not an array",
+            expect_fragment="unique 不是数组",
         )
 
     def test_it_supports_cron_syntax(self) -> None:
@@ -319,7 +319,7 @@ class CreateCheckTestCase(BaseTestCase):
         for expr in ["bad-expression", "* * * * * *"]:
             r = self.post(
                 {"schedule": expr, "tz": "Europe/Riga", "grace": 60},
-                expect_fragment="schedule is not a valid cron or OnCalendar expression",
+                expect_fragment="schedule 不是有效的 cron 或 OnCalendar 表达式",
             )
             self.assertEqual(r.status_code, 400)
 
@@ -327,14 +327,14 @@ class CreateCheckTestCase(BaseTestCase):
         s = "1," * 100 + "1 * * * *"
         r = self.post(
             {"schedule": s, "tz": "Europe/Riga", "grace": 60},
-            expect_fragment="schedule is too long",
+            expect_fragment="schedule 过长",
         )
         self.assertEqual(r.status_code, 400)
 
     def test_it_validates_timezone(self) -> None:
         r = self.post(
             {"schedule": "* * * * *", "tz": "not-a-timezone", "grace": 60},
-            expect_fragment="tz is not a valid timezone",
+            expect_fragment="tz 不是有效的时区",
         )
         self.assertEqual(r.status_code, 400)
 
@@ -364,7 +364,7 @@ class CreateCheckTestCase(BaseTestCase):
     def test_it_validates_oncalendar_expression(self) -> None:
         r = self.post(
             {"schedule": "12:34\nsurprise", "tz": "Europe/Riga", "grace": 60},
-            expect_fragment="schedule is not a valid cron or OnCalendar expression",
+            expect_fragment="schedule 不是有效的 cron 或 OnCalendar 表达式",
         )
         self.assertEqual(r.status_code, 400)
 
@@ -399,13 +399,13 @@ class CreateCheckTestCase(BaseTestCase):
     def test_it_rejects_non_boolean_manual_resume(self) -> None:
         r = self.post(
             {"manual_resume": "surprise"},
-            expect_fragment="manual_resume is not a boolean",
+            expect_fragment="manual_resume 不是布尔值",
         )
         self.assertEqual(r.status_code, 400)
 
     def test_it_rejects_non_boolean_filter_flags(self) -> None:
         for s in ("filter_subject", "filter_body"):
-            self.post({s: "surprise"}, expect_fragment=f"{s} is not a boolean")
+            self.post({s: "surprise"}, expect_fragment=f"{s} 不是布尔值")
 
     def test_it_sets_methods(self) -> None:
         r = self.post({"methods": "POST"})
@@ -416,12 +416,12 @@ class CreateCheckTestCase(BaseTestCase):
 
     def test_it_rejects_bad_methods_value(self) -> None:
         self.post(
-            {"methods": "bad-value"}, expect_fragment="methods has unexpected value"
+            {"methods": "bad-value"}, expect_fragment="methods 包含意外的值"
         )
 
     def test_it_rejects_long_filtering_keywords(self) -> None:
         for s in ("subject", "subject_fail", "start_kw", "success_kw", "failure_kw"):
-            self.post({s: "A" * 201}, expect_fragment=f"{s} is too long")
+            self.post({s: "A" * 201}, expect_fragment=f"{s} 过长")
 
     def test_it_sets_success_kw(self) -> None:
         r = self.post({"subject": "SUCCESS,COMPLETE"})
@@ -438,10 +438,10 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(check.failure_kw, "FAILED,FAILURE")
 
     def test_it_rejects_non_string_subject(self) -> None:
-        self.post({"subject": False}, expect_fragment="subject is not a string")
+        self.post({"subject": False}, expect_fragment="subject 不是字符串")
 
     def test_it_rejects_non_string_subject_fail(self) -> None:
-        msg = "subject_fail is not a string"
+        msg = "subject_fail 不是字符串"
         self.post({"subject_fail": False}, expect_fragment=msg)
 
     def test_v2_reports_started_separately(self) -> None:
@@ -475,10 +475,10 @@ class CreateCheckTestCase(BaseTestCase):
             r = self.post({"name": "Foo", "slug": slug}, v=3)
             self.assertEqual(r.status_code, 400)
             self.assertEqual(
-                r.json()["error"], "json validation error: slug does not match pattern"
+                r.json()["error"], "JSON 验证错误：slug 不匹配格式"
             )
 
     def test_it_rejects_long_slug(self) -> None:
         self.post(
-            {"name": "Foo", "slug": "a" * 101}, v=3, expect_fragment="slug is too long"
+            {"name": "Foo", "slug": "a" * 101}, v=3, expect_fragment="slug 过长"
         )

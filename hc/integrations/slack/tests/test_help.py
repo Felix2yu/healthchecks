@@ -9,7 +9,7 @@ from hc.test import BaseTestCase
 class AddSlackHelpTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         r = self.client.get("/integrations/add_slack/")
-        self.assertContains(r, "Setup Guide", status_code=200)
+        self.assertContains(r, "设置指南", status_code=200)
 
     @override_settings(SLACK_CLIENT_ID=None)
     def test_it_requires_client_id(self) -> None:

@@ -13,7 +13,7 @@ class AddNtfyTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "simple HTTP-based pub-sub")
+        self.assertContains(r, "基于 HTTP 的简单发布/订阅")
 
     def test_it_creates_channel(self) -> None:
         form = {

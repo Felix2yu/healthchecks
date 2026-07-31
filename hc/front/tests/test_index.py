@@ -16,7 +16,7 @@ class IndexTestCase(BaseTestCase):
         r = self.client.get("/")
 
         self.assertContains(r, "Alices Project")
-        self.assertContains(r, "3 checks")
+        self.assertContains(r, "3 个检查项")
         self.assertContains(r, "status ic-up")
         self.assertContains(r, "favicon.svg")
 

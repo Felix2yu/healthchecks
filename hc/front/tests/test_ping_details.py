@@ -86,7 +86,7 @@ class PingDetailsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
 
-        self.assertContains(r, "5 min 0 sec", status_code=200)
+        self.assertContains(r, "5 分钟 0 秒", status_code=200)
 
     def test_it_requires_logged_in_user(self) -> None:
         Ping.objects.create(owner=self.check, n=1)
@@ -152,21 +152,21 @@ class PingDetailsTestCase(BaseTestCase):
     def test_it_handles_missing_ping(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(f"/checks/{self.check.code}/pings/123/")
-        self.assertContains(r, "No additional information is", status_code=200)
+        self.assertContains(r, "此事件没有其他可用信息", status_code=200)
 
     def test_it_shows_nonzero_exitstatus(self) -> None:
         Ping.objects.create(owner=self.check, n=1, kind="fail", exitstatus=42)
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "(failure, exit status 42)", status_code=200)
+        self.assertContains(r, "（失败，退出状态 42）", status_code=200)
 
     def test_it_shows_zero_exitstatus(self) -> None:
         Ping.objects.create(owner=self.check, n=1, exitstatus=0)
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "(exit status 0)", status_code=200)
+        self.assertContains(r, "（退出状态 0）", status_code=200)
 
     def test_it_decodes_plaintext_email_body(self) -> None:
         Ping.objects.create(
@@ -276,7 +276,7 @@ class PingDetailsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "please check back later", status_code=200)
+        self.assertContains(r, "请稍后再查看", status_code=200)
 
     @override_settings(S3_BUCKET="test-bucket")
     @patch("hc.api.models.get_object")
@@ -286,7 +286,7 @@ class PingDetailsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "please check back later", status_code=200)
+        self.assertContains(r, "请稍后再查看", status_code=200)
 
     @override_settings(S3_BUCKET=None)
     def test_it_handles_missing_s3_credentials(self) -> None:
@@ -294,14 +294,14 @@ class PingDetailsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "please check back later", status_code=200)
+        self.assertContains(r, "请稍后再查看", status_code=200)
 
     def test_it_shows_ignored_nonzero_exitstatus(self) -> None:
         Ping.objects.create(owner=self.check, n=1, kind="ign", exitstatus=42)
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(f"/checks/{self.check.code}/pings/1/")
-        self.assertContains(r, "(ignored)", status_code=200)
+        self.assertContains(r, "（已忽略）", status_code=200)
 
     @override_settings(S3_BUCKET="test-bucket")
     def test_it_handles_s3_outage(self) -> None:
@@ -310,4 +310,4 @@ class PingDetailsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         with patch("hc.api.models.get_object", Mock(side_effect=GetObjectError)):
             r = self.client.get(self.url)
-        self.assertContains(r, "please check back later", status_code=200)
+        self.assertContains(r, "请稍后再查看", status_code=200)

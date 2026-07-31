@@ -15,7 +15,7 @@ class AddPushbulletTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
         self.assertContains(r, "www.pushbullet.com/authorize", status_code=200)
-        self.assertContains(r, "Connect Pushbullet")
+        self.assertContains(r, "连接 Pushbullet")
 
         # There should now be a key in session
         self.assertTrue("add_pushbullet" in self.client.session)

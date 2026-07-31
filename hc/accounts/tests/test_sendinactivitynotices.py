@@ -45,7 +45,7 @@ class SendInactivityNoticesTestCase(BaseTestCase):
         self.assertTrue(self.profile.deletion_notice_date)
 
         email = mail.outbox[0]
-        self.assertEqual(email.subject, "Inactive Account Notification")
+        self.assertEqual(email.subject, "非活动账户通知")
 
     def test_it_checks_last_login(self) -> None:
         # alice has logged in recently:

@@ -19,14 +19,14 @@ class SudoModeTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get(self.url)
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
         # A code should have been sent
         self.assertEqual(len(mail.outbox), 1)
 
         email = mail.outbox[0]
         self.assertEqual(email.to[0], "alice@example.org")
-        self.assertIn("Confirmation code", email.subject)
+        self.assertIn("确认码", email.subject)
 
     def test_it_accepts_code(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -49,7 +49,7 @@ class SudoModeTestCase(BaseTestCase):
         session.save()
 
         r = self.client.post(self.url, {"sudo_code": "000000"})
-        self.assertContains(r, "Not a valid code.")
+        self.assertContains(r, "验证码无效")
 
         # sudo mode should *not* be active
         self.assertNotIn("sudo", self.client.session)
@@ -62,7 +62,7 @@ class SudoModeTestCase(BaseTestCase):
         session.save()
 
         r = self.client.get(self.url)
-        self.assertContains(r, "Please pick a password")
+        self.assertContains(r, "请为您的 Mychecks 账户选择一个密码。")
 
     def test_it_uses_rate_limiting(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -72,4 +72,4 @@ class SudoModeTestCase(BaseTestCase):
         obj.save()
 
         r = self.client.get(self.url)
-        self.assertContains(r, "Too Many Requests")
+        self.assertContains(r, "请求过多")

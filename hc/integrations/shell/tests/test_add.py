@@ -21,7 +21,7 @@ class AddShellTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Executes a local shell command")
+        self.assertContains(r, "本地 Shell 命令")
 
     def test_it_adds_two_commands_and_redirects(self) -> None:
         form = {"cmd_down": "logger down", "cmd_up": "logger up"}

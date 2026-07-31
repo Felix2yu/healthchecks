@@ -71,8 +71,8 @@ class NotifyEmailTestCase(BaseTestCase):
         self.assertTrue(email.extra_headers["Message-ID"].endswith("@example.org>"))
 
         # Message
-        self.assertEmailContainsText("""The check "Daily Backup" has gone down.""")
-        self.assertEmailContainsHtml(""""Daily Backup" is DOWN""")
+        self.assertEmailContainsText("""检查项 "Daily Backup" 已down。""")
+        self.assertEmailContainsHtml(""""Daily Backup" 已宕机""")
         self.assertEmailContains("grace time passed")
 
         # Description
@@ -88,10 +88,11 @@ class NotifyEmailTestCase(BaseTestCase):
         self.assertEmailContainsHtml("bar</code>")
 
         # Period
-        self.assertEmailContains("1 day")
+        self.assertEmailContains("1 天")
 
         # Source IP
-        self.assertEmailContains("from 1.2.3.4")
+        self.assertEmailContainsText("来自 1.2.3.4")
+        self.assertEmailContainsHtml("from 1.2.3.4")
 
         # Total pings
         self.assertEmailContains("112233")
@@ -118,7 +119,7 @@ class NotifyEmailTestCase(BaseTestCase):
         up_flip.new_status = "up"
         self.channel.notify(up_flip)
 
-        self.assertEmailContains("The downtime lasted 1 hour, 30 minutes.")
+        self.assertEmailContains("宕机持续了 1 小时, 30 分钟。")
 
     @time_machine.travel(EPOCH + td(hours=1))
     def test_it_uses_users_preferred_timezone(self) -> None:
@@ -185,7 +186,7 @@ class NotifyEmailTestCase(BaseTestCase):
         self.ping.save()
 
         self.channel.notify(self.flip)
-        self.assertEmailContainsHtml("The request body data is being processed")
+        self.assertEmailContainsHtml("请求正文数据正在处理中，稍后即可查看。")
 
     def test_it_shows_cron_schedule(self) -> None:
         self.check.kind = "cron"
@@ -217,7 +218,7 @@ class NotifyEmailTestCase(BaseTestCase):
 
         self.channel.notify(self.flip)
 
-        self.assertEmailContains("Showing the last 10000 bytes of 10022 bytes total.")
+        self.assertEmailContains("显示共 10022 字节中的最后 10000 字节。")
         self.assertEmailNotContains("the start gets cut off")
 
     def test_it_handles_missing_ping_object(self) -> None:
@@ -242,8 +243,8 @@ class NotifyEmailTestCase(BaseTestCase):
 
         self.channel.notify(self.flip)
 
-        self.assertEmailContainsText("Last ping")
-        self.assertEmailContainsHtml("Last Ping")
+        self.assertEmailContainsText("上次 Ping")
+        self.assertEmailContainsHtml("上次 Ping")
 
     def test_it_handles_missing_profile(self) -> None:
         self.channel.value = "alice+notifications@example.org"
@@ -312,7 +313,7 @@ class NotifyEmailTestCase(BaseTestCase):
         with patch("hc.api.transports.time.sleep"):
             self.channel.notify(self.flip)
 
-        self.assertEmailContains("The request body data is being processed")
+        self.assertEmailContains("请求正文数据正在处理中")
 
     def test_it_shows_ignored_nonzero_exitstatus(self) -> None:
         self.ping.kind = "ign"
@@ -321,7 +322,8 @@ class NotifyEmailTestCase(BaseTestCase):
 
         self.channel.notify(self.flip)
 
-        self.assertEmailContains("Ignored")
+        self.assertEmailContainsText("Ignored")
+        self.assertEmailContainsHtml("已忽略")
 
     def test_it_handles_last_ping_log(self) -> None:
         self.ping.kind = "log"
@@ -329,7 +331,8 @@ class NotifyEmailTestCase(BaseTestCase):
 
         self.channel.notify(self.flip)
 
-        self.assertEmailContains("Log")
+        self.assertEmailContainsText("Log")
+        self.assertEmailContainsHtml("日志")
 
     def test_it_handles_last_ping_exitstatus(self) -> None:
         self.ping.kind = "fail"
@@ -338,7 +341,8 @@ class NotifyEmailTestCase(BaseTestCase):
 
         self.channel.notify(self.flip)
 
-        self.assertEmailContains("Exit status 123")
+        self.assertEmailContainsText("Exit status 123")
+        self.assertEmailContainsHtml("退出状态 123")
 
     @override_settings(EMAIL_MAIL_FROM_TMPL="%s@bounces.example.org")
     def test_it_sets_custom_mail_from(self) -> None:
@@ -365,10 +369,10 @@ tempor incididunt ut labore et dolore magna aliqua.
 
         self.channel.notify(self.flip)
 
-        self.assertEmailContainsText("Last ping subject: Foo bar baz")
-        self.assertEmailContainsHtml("<b>Last Ping Subject</b><br>Foo bar baz")
+        self.assertEmailContainsText("上次 Ping 主题：Foo bar baz")
+        self.assertEmailContainsHtml("<b>上次 Ping 主题</b><br>Foo bar baz")
 
-        self.assertEmailContains("See the attachment")
+        self.assertEmailContains("请查看附件。")
         self.assertEmailNotContains("Lorem ipsum")
 
         message = mail.outbox[0]
@@ -404,8 +408,8 @@ Hello 123
 
         self.channel.notify(self.flip)
 
-        self.assertEmailContainsText("Last ping subject: Outer subject")
-        self.assertEmailContains("See the attachment")
+        self.assertEmailContainsText("上次 Ping 主题：Outer subject")
+        self.assertEmailContains("请查看附件。")
 
         message = mail.outbox[0]
         attachment = message.attachments[0]

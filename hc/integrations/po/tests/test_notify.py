@@ -55,7 +55,7 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.assertEqual(url, API + "/messages.json")
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertEqual(payload["title"], "🔴 Foo is DOWN")
+        self.assertEqual(payload["title"], "🔴 Foo 已宕机")
         self.assertEqual(payload["url"], self.check.cloaked_url())
         self.assertIn("112233", payload["message"])
         self.assertIn("10 minutes ago", payload["message"])
@@ -63,7 +63,7 @@ class NotifyPushoverTestCase(BaseTestCase):
 
         # Only one check in the project, so there should be no note about
         # other checks:
-        self.assertNotIn("All the other checks are up.", payload["message"])
+        self.assertNotIn("所有其他检查项均已恢复。", payload["message"])
         self.assertEqual(payload["tags"], self.check.unique_key)
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -75,7 +75,7 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("Reason: received a failure signal", payload["message"])
+        self.assertIn("原因：received a failure signal", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_reports_down_duration(self, mock_post: Mock) -> None:
@@ -91,7 +91,7 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["message"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_cron_schedule(self, mock_post: Mock) -> None:
@@ -104,8 +104,8 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("<b>Schedule:</b> <code>* * * * *</code>", payload["message"])
-        self.assertIn("<b>Time Zone:</b> Europe/Riga", payload["message"])
+        self.assertIn("<b>计划：</b> <code>* * * * *</code>", payload["message"])
+        self.assertIn("<b>时区：</b> Europe/Riga", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_oncalendar_schedule(self, mock_post: Mock) -> None:
@@ -119,8 +119,8 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("<b>Schedule:</b> <code>Mon 2-29</code>", payload["message"])
-        self.assertIn("<b>Time Zone:</b> Europe/Riga", payload["message"])
+        self.assertIn("<b>计划：</b> <code>Mon 2-29</code>", payload["message"])
+        self.assertIn("<b>时区：</b> Europe/Riga", payload["message"])
 
     @override_settings(PUSHOVER_API_TOKEN=None)
     def test_it_requires_pushover_api_token(self) -> None:
@@ -138,7 +138,7 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.assertEqual(Notification.objects.count(), 1)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertEqual(payload["title"], "🟢 Foo is UP")
+        self.assertEqual(payload["title"], "🟢 Foo 已恢复")
         self.assertEqual(payload["priority"], 2)
         self.assertIn("retry", payload)
         self.assertIn("expire", payload)
@@ -173,7 +173,7 @@ class NotifyPushoverTestCase(BaseTestCase):
 
         up_call = mock_post.call_args_list[1]
         payload = up_call.kwargs["data"]
-        self.assertEqual(payload["title"], "🟢 Foo is UP")
+        self.assertEqual(payload["title"], "🟢 Foo 已恢复")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_all_other_checks_up_note(self, mock_post: Mock) -> None:
@@ -189,7 +189,7 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("All the other checks are up.", payload["message"])
+        self.assertIn("所有其他检查项均已恢复。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_lists_other_down_checks(self, mock_post: Mock) -> None:
@@ -205,7 +205,7 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("The following checks are also down", payload["message"])
+        self.assertIn("以下检查项也宕机", payload["message"])
         self.assertIn("Foobar", payload["message"])
         self.assertIn("(last ping: an hour ago)", payload["message"])
 
@@ -237,7 +237,7 @@ class NotifyPushoverTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["data"]
         self.assertNotIn("Foobar", payload["message"])
-        self.assertIn("11 other checks are also down.", payload["message"])
+        self.assertIn("其他 11 个检查项也宕机。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_does_not_escape_title(self, mock_post: Mock) -> None:
@@ -249,7 +249,7 @@ class NotifyPushoverTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertEqual(payload["title"], "🔴 Foo & Bar is DOWN")
+        self.assertEqual(payload["title"], "🔴 Foo & Bar 已宕机")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_disabled_priority(self, mock_post: Mock) -> None:

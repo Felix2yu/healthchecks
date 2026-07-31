@@ -105,7 +105,7 @@ class PingBySlugTestCase(BaseTestCase):
 
     def test_it_rejects_uppercase_slug(self) -> None:
         r = self.client.get(self.url + "FOO")
-        self.assertEqual(r.content, b"invalid url format")
+        self.assertEqual(r.content, b"\xe6\x97\xa0\xe6\x95\x88\xe7\x9a\x84\xe9\x93\xbe\xe6\x8e\xa5\xe6\xa0\xbc\xe5\xbc\x8f")
         self.assertEqual(r.status_code, 400)
 
     def test_auto_provisioning_limits_check_count(self) -> None:

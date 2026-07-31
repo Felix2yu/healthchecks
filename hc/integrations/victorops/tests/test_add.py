@@ -14,7 +14,7 @@ class AddVictorOpsTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "incident management platform")
+        self.assertContains(r, "事件管理平台")
 
     def test_it_works(self) -> None:
         form = {"value": "http://example.org"}

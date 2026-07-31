@@ -17,7 +17,7 @@ class SignupTestCase(TestCase):
         form = {"identity": "alice@example.org", "tz": "Europe/Riga"}
 
         r = self.client.post("/accounts/signup/", form)
-        self.assertContains(r, "check your email")
+        self.assertContains(r, "请检查您的邮箱！")
 
         self.assertEqual(r.cookies["auto-login"].value, "1")
         self.assertEqual(r.cookies["auto-login"]["samesite"], "Lax")
@@ -36,7 +36,7 @@ class SignupTestCase(TestCase):
 
         # And email sent
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, f"Log in to {settings.SITE_NAME}")
+        self.assertEqual(mail.outbox[0].subject, f"登录 {settings.SITE_NAME}")
 
         # A project should have been created
         project = Project.objects.get()
@@ -102,7 +102,7 @@ class SignupTestCase(TestCase):
         form = {"identity": "alice@example.org", "tz": ""}
         r = self.client.post("/accounts/signup/", form)
         # It should send the same response and cookies as in normal signup
-        self.assertContains(r, "check your email")
+        self.assertContains(r, "请检查您的邮箱！")
         self.assertEqual(r.cookies["auto-login"].value, "1")
 
         # There should still be a single user
@@ -110,7 +110,7 @@ class SignupTestCase(TestCase):
 
         # It should send a normal sign-in email
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, f"Log in to {settings.SITE_NAME}")
+        self.assertEqual(mail.outbox[0].subject, f"登录 {settings.SITE_NAME}")
 
     def test_it_checks_syntax(self) -> None:
         form = {"identity": "alice at example org", "tz": ""}
@@ -121,7 +121,7 @@ class SignupTestCase(TestCase):
         aaa = "a" * 300
         form = {"identity": f"alice+{aaa}@example.org", "tz": ""}
         r = self.client.post("/accounts/signup/", form)
-        self.assertContains(r, "Address is too long.")
+        self.assertContains(r, "地址过长。")
 
         self.assertFalse(User.objects.exists())
 
@@ -130,7 +130,7 @@ class SignupTestCase(TestCase):
         form = {"identity": "alice@example.org", "tz": "Foo/Bar"}
 
         r = self.client.post("/accounts/signup/", form)
-        self.assertContains(r, "check your email")
+        self.assertContains(r, "请检查您的邮箱！")
 
         profile = Profile.objects.get()
         self.assertEqual(profile.tz, "UTC")
@@ -142,7 +142,7 @@ class SignupTestCase(TestCase):
 
         form = {"identity": "alice@example.org", "tz": ""}
         r = self.client.post("/accounts/signup/", form)
-        self.assertContains(r, "please try later")
+        self.assertContains(r, "尝试次数过多，请稍后再试。")
 
     @override_settings(SECRET_KEY="test-secret")
     def test_it_rate_limits_email_address(self) -> None:
@@ -153,7 +153,7 @@ class SignupTestCase(TestCase):
 
         form = {"identity": "alice@example.org", "tz": ""}
         r = self.client.post("/accounts/signup/", form)
-        self.assertContains(r, "please try later")
+        self.assertContains(r, "尝试次数过多，请稍后再试。")
 
     def test_rate_limiter_uses_x_forwarded_for(self) -> None:
         obj = TokenBucket(value="auth-ip-127.0.0.2")
@@ -163,4 +163,4 @@ class SignupTestCase(TestCase):
         form = {"identity": "alice@example.org", "tz": ""}
         xff = "127.0.0.2:1234,127.0.0.3"
         r = self.client.post("/accounts/signup/", form, HTTP_X_FORWARDED_FOR=xff)
-        self.assertContains(r, "please try later")
+        self.assertContains(r, "尝试次数过多，请稍后再试。")

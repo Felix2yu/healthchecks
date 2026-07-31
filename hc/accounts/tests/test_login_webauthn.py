@@ -24,8 +24,8 @@ class LoginWebAuthnTestCase(BaseTestCase):
 
     def test_it_shows_form(self) -> None:
         r = self.client.get(self.url)
-        self.assertContains(r, "Waiting for security key")
-        self.assertNotContains(r, "Use authenticator app")
+        self.assertContains(r, "等待安全密钥")
+        self.assertNotContains(r, "使用身份验证器应用")
 
         # It should put a "state" key in the session:
         self.assertIn("state", self.client.session)
@@ -35,7 +35,7 @@ class LoginWebAuthnTestCase(BaseTestCase):
         self.profile.save()
 
         r = self.client.get(self.url)
-        self.assertContains(r, "Use authenticator app")
+        self.assertContains(r, "使用身份验证器应用")
 
     def test_it_preserves_next_parameter_in_totp_url(self) -> None:
         self.profile.totp = "0" * 32

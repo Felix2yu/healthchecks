@@ -18,4 +18,4 @@ class AddPushoverHelpTestCase(BaseTestCase):
 
     def test_instructions_work_without_login(self) -> None:
         r = self.client.get(self.url)
-        self.assertContains(r, "Setup Guide")
+        self.assertContains(r, "设置指南")

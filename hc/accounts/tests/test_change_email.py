@@ -13,15 +13,15 @@ class ChangeEmailTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get("/accounts/change_email/")
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
     def test_it_shows_form(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         self.set_sudo_flag()
 
         r = self.client.get("/accounts/change_email/")
-        self.assertContains(r, "Change Account's Email Address")
-        self.assertNotContains(r, "Two-factor authentication is active")
+        self.assertContains(r, "修改账户邮箱地址")
+        self.assertNotContains(r, "双重身份验证已启用。")
 
     def test_it_shows_2fa_warning_if_webauthn_is_active(self) -> None:
         Credential.objects.create(user=self.alice, name="Alices Key")
@@ -30,7 +30,7 @@ class ChangeEmailTestCase(BaseTestCase):
         self.set_sudo_flag()
 
         r = self.client.get("/accounts/change_email/")
-        self.assertContains(r, "Two-factor authentication is active")
+        self.assertContains(r, "双重身份验证已启用。")
 
     def test_it_shows_2fa_warning_if_totp_is_active(self) -> None:
         self.profile.totp = "0" * 32
@@ -40,7 +40,7 @@ class ChangeEmailTestCase(BaseTestCase):
         self.set_sudo_flag()
 
         r = self.client.get("/accounts/change_email/")
-        self.assertContains(r, "Two-factor authentication is active")
+        self.assertContains(r, "双重身份验证已启用。")
 
     @override_settings(SITE_ROOT="http://testserver", SESSION_COOKIE_SECURE=False)
     def test_it_sends_link(self) -> None:
@@ -50,7 +50,7 @@ class ChangeEmailTestCase(BaseTestCase):
         payload = {"email": "alice2@example.org"}
         r = self.client.post("/accounts/change_email/", payload, follow=True)
         self.assertRedirects(r, "/accounts/change_email/")
-        self.assertContains(r, "One Last Step")
+        self.assertContains(r, "最后一步…")
 
         self.assertEqual(self.client.cookies["auto-login"].value, "1")
         self.assertEqual(self.client.cookies["auto-login"]["samesite"], "Lax")
@@ -64,7 +64,7 @@ class ChangeEmailTestCase(BaseTestCase):
 
         # And email should have been sent
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, f"Log in to {settings.SITE_NAME}")
+        self.assertEqual(mail.outbox[0].subject, f"登录 {settings.SITE_NAME}")
         self.assertEmailContains("http://testserver/accounts/change_email/")
 
     @override_settings(SESSION_COOKIE_SECURE=True)
@@ -82,7 +82,7 @@ class ChangeEmailTestCase(BaseTestCase):
 
         payload = {"email": "bob@example.org"}
         r = self.client.post("/accounts/change_email/", payload)
-        self.assertContains(r, "bob@example.org is already registered")
+        self.assertContains(r, "bob@example.org 已被注册")
 
         self.alice.refresh_from_db()
         self.assertEqual(self.alice.email, "alice@example.org")

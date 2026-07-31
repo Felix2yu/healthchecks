@@ -111,7 +111,7 @@ class NotifyMattermostTestCase(BaseTestCase):
 
         attachment = mock_post.call_args.kwargs["json"]["attachments"][0]
         fields = {f["title"]: f["value"] for f in attachment["fields"]}
-        self.assertIn("[truncated]", fields["Last Ping Body"])
+        self.assertIn("[已截断]", fields["Last Ping Body"])
 
     @override_settings(SITE_ROOT="http://testserver")
     @patch("hc.api.transports.curl.request", autospec=True)

@@ -100,7 +100,7 @@ class NotifySlackTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         attachment = payload["attachments"][0]
-        self.assertEqual(attachment["text"], "The downtime lasted 1 hour, 30 minutes.")
+        self.assertEqual(attachment["text"], "The downtime lasted 1 小时, 30 分钟.")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_slack_with_complex_value(self, mock_post: Mock) -> None:
@@ -323,7 +323,7 @@ class NotifySlackTestCase(BaseTestCase):
 
         attachment = mock_post.call_args.kwargs["json"]["attachments"][0]
         fields = {f["title"]: f["value"] for f in attachment["fields"]}
-        self.assertIn("[truncated]", fields["Last Ping Body"])
+        self.assertIn("[已截断]", fields["Last Ping Body"])
 
     @override_settings(SITE_ROOT="http://testserver")
     @patch("hc.api.transports.curl.request", autospec=True)

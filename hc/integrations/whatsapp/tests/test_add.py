@@ -23,8 +23,8 @@ class AddWhatsAppTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Add WhatsApp Integration")
-        self.assertContains(r, "Get a WhatsApp message")
+        self.assertContains(r, "添加 WhatsApp 集成")
+        self.assertContains(r, "接收 WhatsApp 消息")
 
     @override_settings(USE_PAYMENTS=True)
     def test_it_warns_about_limits(self) -> None:
@@ -33,7 +33,7 @@ class AddWhatsAppTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "upgrade to a")
+        self.assertContains(r, "需要付费套餐。")
 
     def test_it_creates_channel(self) -> None:
         form = {
@@ -87,4 +87,4 @@ class AddWhatsAppTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, form)
-        self.assertContains(r, "Please select at least one.")
+        self.assertContains(r, "请至少选择一项。")

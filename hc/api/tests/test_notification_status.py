@@ -28,10 +28,10 @@ class NotificationStatusTestCase(BaseTestCase):
         self.assertEqual(r.status_code, 200)
 
         self.n.refresh_from_db()
-        self.assertEqual(self.n.error, "Delivery failed (status=failed).")
+        self.assertEqual(self.n.error, "投递失败（状态=failed）。")
 
         self.channel.refresh_from_db()
-        self.assertEqual(self.channel.last_error, "Delivery failed (status=failed).")
+        self.assertEqual(self.channel.last_error, "投递失败（状态=failed）。")
         self.assertTrue(self.channel.email_verified)
 
     def test_it_handles_twilio_undelivered_status(self) -> None:
@@ -39,10 +39,10 @@ class NotificationStatusTestCase(BaseTestCase):
         self.assertEqual(r.status_code, 200)
 
         self.n.refresh_from_db()
-        self.assertEqual(self.n.error, "Delivery failed (status=undelivered).")
+        self.assertEqual(self.n.error, "投递失败（状态=undelivered）。")
 
         self.channel.refresh_from_db()
-        self.assertIn("status=undelivered", self.channel.last_error)
+        self.assertIn("状态=undelivered", self.channel.last_error)
 
     def test_it_handles_twilio_delivered_status(self) -> None:
         r = self.csrf_client.post(self.url, {"MessageStatus": "delivered"})
@@ -102,8 +102,8 @@ class NotificationStatusTestCase(BaseTestCase):
         self.assertEqual(r.status_code, 200)
 
         self.n.refresh_from_db()
-        self.assertEqual(self.n.error, "Delivery failed (status=failed).")
+        self.assertEqual(self.n.error, "投递失败（状态=失败）。")
 
         self.channel.refresh_from_db()
-        self.assertEqual(self.channel.last_error, "Delivery failed (status=failed).")
+        self.assertEqual(self.channel.last_error, "投递失败（状态=失败）。")
         self.assertTrue(self.channel.email_verified)

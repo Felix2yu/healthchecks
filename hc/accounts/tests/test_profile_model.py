@@ -15,29 +15,29 @@ from hc.test import BaseTestCase
 CURRENT_TIME = datetime(2020, 1, 13, 2, tzinfo=timezone.utc)
 
 EMPTY_TABLE = """
-+--------+------+-----------+-----------+
-| Status | Name | Nov. 2019 | Dec. 2019 |
-+========+======+===========+===========+
-| new    | Foo  |           |           |
-+--------+------+-----------+-----------+
++-----+-----+-----------+-----------+
+| 状态  | 名称  | Nov. 2019 | Dec. 2019 |
++=====+=====+===========+===========+
+| new | Foo |           |           |
++-----+-----+-----------+-----------+
 """.strip()
 
-NAG_TEXT = """Hello,
+NAG_TEXT = """您好，
 
-This is a hourly reminder sent by Mychecks.
-One check is currently DOWN:
+这是由 Mychecks 发送的每小时 提醒。
+当前有 1 个检查项宕机：
 
 
-Project "Alices Project"
-+--------+------+--------------------+
-| Status | Name | Last Ping          |
-+========+======+====================+
-| DOWN   | Foo  | 1 week, 5 days ago |
-+--------+------+--------------------+
+项目 "Alices Project"
++------+-----+--------------------+
+| 状态   | 名称  | 上次 Ping            |
++======+=====+====================+
+| DOWN | Foo | 1 week, 5 days ago |
++------+-----+--------------------+
 
 
 --
-Cheers,
+此致，
 Mychecks
 """
 
@@ -71,13 +71,13 @@ class ProfileModelTestCase(BaseTestCase):
         self.assertIn("List-Unsubscribe-Post", message.extra_headers)
         self.assertNotIn("X-Bounce-ID", message.extra_headers)
 
-        self.assertEqual(message.subject, "Monthly Report")
+        self.assertEqual(message.subject, "Monthly 报告")
 
         # The summary line
         self.assertEmailContainsHtml(
-            "In December, <strong>1 check</strong> had <strong>1 downtime event</strong>."
+            "December月，<strong>1 个检查项</strong>发生了 <strong>1 次宕机事件</strong>。"
         )
-        self.assertEmailContainsText("In December, 1 check had 1 downtime event.")
+        self.assertEmailContainsText("December月，1 个检查项发生了 1 次宕机事件。")
 
         # Note, assertEmailContains tests if the fragment appears in
         # *both* text and HTML versions.
@@ -89,11 +89,11 @@ class ProfileModelTestCase(BaseTestCase):
 
         # There were no downtimes in November 2019:
         self.assertEmailContainsHtml("Nov. 2019")
-        self.assertEmailContains("All good!")
+        self.assertEmailContains("一切正常！")
 
         # There was one hour downtime in December 2019 (the last hour before midnight)
         self.assertEmailContainsHtml("Dec. 2019")
-        self.assertEmailContains("1 h 0 min total")
+        self.assertEmailContains("共计 1 小时 0 分钟")
 
         # Check UUIDs should not appear anywhere in the email
         self.assertEmailNotContains(str(self.check.code))
@@ -104,7 +104,7 @@ class ProfileModelTestCase(BaseTestCase):
         self.flip.delete()
 
         self.profile.send_report()
-        self.assertEmailContains("In December, no checks had downtimes. Nice!")
+        self.assertEmailContains("December月，没有检查项发生宕机。很棒！")
 
     def test_send_report_sends_weekly_report(self) -> None:
         self.profile.reports = "weekly"
@@ -114,14 +114,14 @@ class ProfileModelTestCase(BaseTestCase):
 
         # The summary line
         self.assertEmailContainsHtml(
-            "Last week (January 6 to January 12), <strong>1 check</strong> had <strong>1 downtime event</strong>."
+            "上周（1月6日 至 1月12日），<strong>1 个检查项</strong>发生了 <strong>1 次宕机事件</strong>。"
         )
         self.assertEmailContainsText(
-            "Last week (January 6 to January 12), 1 check had 1 downtime event."
+            "上周（1月6日 至 1月12日），1 个检查项发生了 1 次宕机事件。"
         )
 
         email = mail.outbox[0]
-        self.assertEqual(email.subject, "Weekly Report")
+        self.assertEqual(email.subject, "Weekly 报告")
         self.assertEmailContains("Dec 30 - Jan 5")
         self.assertEmailContains("Jan 6 - Jan 12")
 
@@ -133,14 +133,14 @@ class ProfileModelTestCase(BaseTestCase):
 
         # The summary line
         self.assertEmailContainsHtml(
-            "Yesterday (January 12), <strong>1 check</strong> had <strong>1 downtime event</strong>."
+            "昨天（1月12日），<strong>1 个检查项</strong>发生了 <strong>1 次宕机事件</strong>。"
         )
         self.assertEmailContainsText(
-            "Yesterday (January 12), 1 check had 1 downtime event."
+            "昨天（1月12日），1 个检查项发生了 1 次宕机事件。"
         )
 
         email = mail.outbox[0]
-        self.assertEqual(email.subject, "Daily Report")
+        self.assertEqual(email.subject, "Daily 报告")
         self.assertEmailContains("January 11")
         self.assertEmailContains("January 12")
 
@@ -166,9 +166,9 @@ class ProfileModelTestCase(BaseTestCase):
         self.profile.send_report()
 
         # The check did not exist in November-December 2019, so the email should not
-        # contain strings "All good!" or "total"
-        self.assertEmailNotContains("All good!")
-        self.assertEmailNotContains("total")
+        # contain strings "一切正常！" or "共计"
+        self.assertEmailNotContains("一切正常！")
+        self.assertEmailNotContains("共计")
 
         # Make sure the text version contains empty cells for months with no data
         self.assertEmailContainsText(EMPTY_TABLE)
@@ -201,7 +201,7 @@ class ProfileModelTestCase(BaseTestCase):
         self.assertEmailNotContains("Jan 6 - Jan 12")
 
         # Let's also verify the summary line
-        self.assertEmailContains("Last week (December 30 to January 5)")
+        self.assertEmailContains("上周（12月30日 至 1月5日）")
 
     def test_send_report_handles_negative_utc_offset(self) -> None:
         self.profile.reports = "weekly"
@@ -217,7 +217,7 @@ class ProfileModelTestCase(BaseTestCase):
         self.assertEmailContains("Jan 6 - Jan 12")
 
         # Let's also verify the summary line
-        self.assertEmailContains("Last week (January 6 to January 12)")
+        self.assertEmailContains("上周（1月6日 至 1月12日）")
 
     def test_send_report_noops_if_no_pings(self) -> None:
         self.check.delete()
@@ -247,7 +247,7 @@ class ProfileModelTestCase(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
         message = mail.outbox[0]
 
-        self.assertEqual(message.subject, "Reminder: 1 check still down")
+        self.assertEqual(message.subject, "提醒：1 个检查项仍宕机")
         self.assertEqual(message.body, NAG_TEXT)
         self.assertEmailContains("Foo")
 

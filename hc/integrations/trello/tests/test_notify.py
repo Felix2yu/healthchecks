@@ -56,9 +56,9 @@ class NotifyTrelloTestCase(BaseTestCase):
 
         params = mock_post.call_args.kwargs["params"]
         self.assertEqual(params["idList"], "fake-list-id")
-        self.assertEqual(params["name"], "Down: Foo")
-        self.assertIn("Full Details", params["desc"])
-        self.assertIn("**Last Ping:** 10 minutes ago", params["desc"])
+        self.assertEqual(params["name"], "宕机：Foo")
+        self.assertIn("查看详情", params["desc"])
+        self.assertIn("**上次 Ping：** 10 minutes ago", params["desc"])
         self.assertEqual(params["key"], "fake-trello-app-key")
         self.assertEqual(params["token"], "fake-token")
 
@@ -79,8 +79,8 @@ class NotifyTrelloTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         params = mock_post.call_args.kwargs["params"]
-        self.assertIn("**Schedule:** `* * * * *`", params["desc"])
-        self.assertIn("**Time Zone:** Europe/Riga", params["desc"])
+        self.assertIn("**计划：** `* * * * *`", params["desc"])
+        self.assertIn("**时区：** Europe/Riga", params["desc"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_oncalendar_schedule(self, mock_post: Mock) -> None:
@@ -93,8 +93,8 @@ class NotifyTrelloTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         params = mock_post.call_args.kwargs["params"]
-        self.assertIn("**Schedule:** `Mon 2-29`", params["desc"])
-        self.assertIn("**Time Zone:** Europe/Riga", params["desc"])
+        self.assertIn("**计划：** `Mon 2-29`", params["desc"])
+        self.assertIn("**时区：** Europe/Riga", params["desc"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_does_not_escape_name(self, mock_post: Mock) -> None:
@@ -106,7 +106,7 @@ class NotifyTrelloTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         params = mock_post.call_args.kwargs["params"]
-        self.assertEqual(params["name"], "Down: Foo & Bar")
+        self.assertEqual(params["name"], "宕机：Foo & Bar")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_no_last_ping(self, mock_post: Mock) -> None:
@@ -116,4 +116,4 @@ class NotifyTrelloTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         params = mock_post.call_args.kwargs["params"]
-        self.assertIn("**Last Ping:** never", params["desc"])
+        self.assertIn("**上次 Ping：** 从未", params["desc"])

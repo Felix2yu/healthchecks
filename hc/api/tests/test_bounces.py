@@ -78,12 +78,12 @@ To: foo@example.com
         self.assertEqual(r.status_code, 200)
 
         self.n.refresh_from_db()
-        self.assertEqual(self.n.error, "Delivery failed (SMTP status code: 5.0.0)")
+        self.assertEqual(self.n.error, "投递失败（SMTP 状态码：5.0.0）")
         self.assertEqual(r.text, "OK")
 
         self.channel.refresh_from_db()
         self.assertEqual(
-            self.channel.last_error, "Delivery failed (SMTP status code: 5.0.0)"
+            self.channel.last_error, "投递失败（SMTP 状态码：5.0.0）"
         )
         self.assertTrue(self.channel.disabled)
 
@@ -93,11 +93,11 @@ To: foo@example.com
         self.assertEqual(r.text, "OK")
 
         self.n.refresh_from_db()
-        self.assertEqual(self.n.error, "Delivery failed (SMTP status code: 4.0.0)")
+        self.assertEqual(self.n.error, "投递失败（SMTP 状态码：4.0.0）")
 
         self.channel.refresh_from_db()
         self.assertEqual(
-            self.channel.last_error, "Delivery failed (SMTP status code: 4.0.0)"
+            self.channel.last_error, "投递失败（SMTP 状态码：4.0.0）"
         )
         self.assertFalse(self.channel.disabled)
 
@@ -106,7 +106,7 @@ To: foo@example.com
 
         self.channel.refresh_from_db()
         self.assertEqual(
-            self.channel.last_error, "Delivery failed (SMTP status code: 5.4.4)"
+            self.channel.last_error, "投递失败（SMTP 状态码：5.4.4）"
         )
         # 5.4.4 ("Unable to route") can be caused by DNS problems on our
         # side and so should not be treated as permanent:
@@ -115,7 +115,7 @@ To: foo@example.com
     def test_it_handles_notification_non_bounce(self) -> None:
         r = self.post(status="2.0.0")
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.text, "OK (ignored)")
+        self.assertEqual(r.text, "OK（已忽略）")
 
     def test_it_handles_bad_signature(self) -> None:
         with override_settings(SECRET_KEY="wrong-signing-key"):
@@ -123,7 +123,7 @@ To: foo@example.com
 
         r = self.post(to_local=to_local)
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.text, "OK (bad signature)")
+        self.assertEqual(r.text, "OK（无效签名）")
 
     def test_it_handles_expired_signature(self) -> None:
         with patch("hc.lib.signing.time") as mock_time:
@@ -132,14 +132,14 @@ To: foo@example.com
 
         r = self.post(to_local=to_local)
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.text, "OK (bad signature)")
+        self.assertEqual(r.text, "OK（无效签名）")
 
     def test_it_checks_notification_age(self) -> None:
         self.n.created = now() - td(hours=49)
         self.n.save()
         r = self.post()
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.text, "OK (notification not found)")
+        self.assertEqual(r.text, "OK（通知未找到）")
 
     def test_it_handles_permanent_report_bounce(self) -> None:
         to_local = sign_bounce_id("r.alice")
@@ -164,7 +164,7 @@ To: foo@example.com
         to_local = sign_bounce_id("r.doesnotexist")
         r = self.post(to_local=to_local)
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.text, "OK (user not found)")
+        self.assertEqual(r.text, "OK（用户未找到）")
 
     def test_it_logs_diagnostic_code(self) -> None:
         diagnostic_code = (
@@ -175,7 +175,7 @@ To: foo@example.com
         self.assertEqual(r.status_code, 200)
 
         expected = (
-            "Delivery failed (451 4.0.0 No usable MXs, last err: try again later)"
+            "投递失败（451 4.0.0 No usable MXs, last err: try again later）"
         )
 
         self.n.refresh_from_db()

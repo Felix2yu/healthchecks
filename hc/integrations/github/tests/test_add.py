@@ -14,7 +14,7 @@ class AddGitHubTestCase(BaseTestCase):
     def test_prompt_works(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "create an issue", status_code=200)
+        self.assertContains(r, "创建问题", status_code=200)
         self.assertContains(r, "github.com/login/oauth/authorize")
 
         self.assertTrue("add_github_state" in self.client.session)

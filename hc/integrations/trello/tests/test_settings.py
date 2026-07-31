@@ -20,7 +20,7 @@ class AddTrelloTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url)
-        self.assertContains(r, "Please select the Trello list")
+        self.assertContains(r, "请选择要发布通知到的 Trello 列表")
         self.assertContains(r, "Alerts")
 
     @override_settings(TRELLO_APP_KEY=None)
@@ -35,8 +35,8 @@ class AddTrelloTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url)
-        self.assertNotContains(r, "Please select the Trello list")
-        self.assertContains(r, "Could not find any boards with lists")
+        self.assertNotContains(r, "请选择要发布通知到的 Trello 列表")
+        self.assertContains(r, "在你的 Trello 账户中未找到任何包含列表的看板")
 
     @patch("hc.integrations.trello.views.curl.get", autospec=True)
     def test_it_handles_unexpected_response_from_trello(self, mock_get: Mock) -> None:
@@ -47,5 +47,5 @@ class AddTrelloTestCase(BaseTestCase):
 
             with patch("hc.integrations.trello.views.logger") as logger:
                 r = self.client.post(self.url)
-                self.assertContains(r, "Received an unexpected response from Trello")
+                self.assertContains(r, "收到来自 Trello 的意外响应")
                 self.assertTrue(logger.warning.called)

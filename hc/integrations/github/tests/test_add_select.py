@@ -33,7 +33,7 @@ class AddGitHubSelectTestCase(BaseTestCase):
         get_repos_args, _ = client.get_repos.call_args
         self.assertEqual(get_repos_args[0], "test-token")
 
-        self.assertContains(r, "Save Integration", status_code=200)
+        self.assertContains(r, "保存集成", status_code=200)
         self.assertContains(r, "alice/foo")
         self.assertContains(r, f"/projects/{self.project.code}/add_github/save/")
         self.assertContains(r, "http://example.org/installations/new")
@@ -129,7 +129,7 @@ class AddGitHubSelectTestCase(BaseTestCase):
         self.assertRedirects(r, self.channels_url)
 
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "GitHub setup was cancelled.")
+        self.assertContains(r, "GitHub 设置已取消。")
 
     def test_it_handles_missing_code(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -157,7 +157,7 @@ class AddGitHubSelectTestCase(BaseTestCase):
         r = self.client.get(self.url + "?state=test-state&code=test-code", follow=True)
 
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "GitHub setup failed, GitHub access was revoked.")
+        self.assertContains(r, "GitHub 设置失败，GitHub 访问已被撤销。")
 
         # It should clean up session
         session = self.client.session

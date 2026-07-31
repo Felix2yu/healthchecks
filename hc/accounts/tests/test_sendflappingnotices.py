@@ -29,7 +29,7 @@ class SendFlappingNoticesTestCase(BaseTestCase):
 
         tos = set()
         for email in mail.outbox:
-            self.assertEqual(email.subject, """The Check "Foo" Is Flapping""")
+            self.assertEqual(email.subject, """检查项 "Foo" 处于抖动状态""")
             tos.update(email.to)
 
         self.assertIn("alice@example.org", tos)

@@ -18,7 +18,7 @@ class RemoveCredentialTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get(self.url)
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
     @override_settings(RP_ID=None)
     def test_it_requires_rp_id(self) -> None:
@@ -33,9 +33,9 @@ class RemoveCredentialTestCase(BaseTestCase):
         self.set_sudo_flag()
 
         r = self.client.get(self.url)
-        self.assertContains(r, "Remove Security Key")
+        self.assertContains(r, "移除安全密钥")
         self.assertContains(r, "Alices Key")
-        self.assertContains(r, "two-factor authentication will no longer be active")
+        self.assertContains(r, "双重身份验证将不再生效")
 
     def test_it_skips_warning_when_other_2fa_methods_exist(self) -> None:
         self.profile.totp = "0" * 32
@@ -45,7 +45,7 @@ class RemoveCredentialTestCase(BaseTestCase):
         self.set_sudo_flag()
 
         r = self.client.get(self.url)
-        self.assertNotContains(r, "two-factor authentication will no longer be active")
+        self.assertNotContains(r, "双重身份验证将不再生效")
 
     def test_it_removes_credential(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -53,7 +53,7 @@ class RemoveCredentialTestCase(BaseTestCase):
 
         r = self.client.post(self.url, {"remove_credential": ""}, follow=True)
         self.assertRedirects(r, "/accounts/profile/")
-        self.assertContains(r, "Removed security key <strong>Alices Key</strong>")
+        self.assertContains(r, "已移除安全密钥 <strong>Alices Key</strong>")
 
         self.assertFalse(self.alice.credentials.exists())
 

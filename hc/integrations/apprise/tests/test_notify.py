@@ -55,10 +55,10 @@ class NotifyAppriseTestCase(BaseTestCase):
         self.assertEqual(Notification.objects.count(), 1)
 
         kwargs = apprise.return_value.notify.call_args.kwargs
-        self.assertEqual(kwargs["title"], "Foo is DOWN")
+        self.assertEqual(kwargs["title"], "Foo DOWN")
         self.assertEqual(
             kwargs["body"],
-            "Reason: success signal did not arrive on time, grace time passed.",
+            "原因：success signal did not arrive on time, grace time passed。",
         )
 
     @patch("apprise.Apprise")
@@ -76,7 +76,7 @@ class NotifyAppriseTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         body = apprise.return_value.notify.call_args.kwargs["body"]
-        self.assertEqual(body, "Reason: received a failure signal.")
+        self.assertEqual(body, "原因：received a failure signal。")
 
     @patch("apprise.Apprise")
     @override_settings(APPRISE_ENABLED=True)
@@ -90,5 +90,5 @@ class NotifyAppriseTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         kwargs = apprise.return_value.notify.call_args.kwargs
-        self.assertEqual(kwargs["title"], "Foo is UP")
-        self.assertEqual(kwargs["body"], "The downtime lasted 1 hour, 30 minutes.")
+        self.assertEqual(kwargs["title"], "Foo UP")
+        self.assertEqual(kwargs["body"], "宕机持续了 1 小时, 30 分钟。")

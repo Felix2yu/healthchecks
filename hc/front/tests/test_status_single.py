@@ -22,8 +22,8 @@ class StatusSingleTestCase(BaseTestCase):
         doc = r.json()
 
         self.assertEqual(doc["status"], "new")
-        self.assertIn("never received a ping", doc["status_text"])
-        self.assertIn("not received any pings yet", doc["events"])
+        self.assertIn("从未收到过 Ping", doc["status_text"])
+        self.assertIn("尚未收到任何 Ping", doc["events"])
 
     def test_status_text_shows_elapsed_run_time(self) -> None:
         Ping.objects.create(owner=self.check, n=1, kind="start")
@@ -37,8 +37,8 @@ class StatusSingleTestCase(BaseTestCase):
         doc = r.json()
 
         self.assertEqual(doc["status"], "new")
-        self.assertIn("This check is ready for pings.", doc["status_text"])
-        self.assertIn("Currently running, started 1 min", doc["status_text"])
+        self.assertIn("此检查项已准备好接收 Ping。", doc["status_text"])
+        self.assertIn("正在运行，1 分钟", doc["status_text"])
 
     def test_it_returns_403_for_anon_requests(self) -> None:
         r = self.client.get(self.url)
@@ -88,7 +88,7 @@ class StatusSingleTestCase(BaseTestCase):
         doc = r.json()
 
         self.assertEqual(doc["status"], "paused")
-        self.assertIn("will ignore pings until resumed", doc["status_text"])
+        self.assertIn("将忽略 Ping 直到恢复", doc["status_text"])
         self.assertIn("resume-btn", doc["status_text"])
 
     def test_resume_requires_rw_access(self) -> None:
@@ -104,7 +104,7 @@ class StatusSingleTestCase(BaseTestCase):
         doc = r.json()
 
         self.assertEqual(doc["status"], "paused")
-        self.assertIn("will ignore pings until resumed", doc["status_text"])
+        self.assertIn("将忽略 Ping 直到恢复", doc["status_text"])
         self.assertNotIn("resume-btn", doc["status_text"])
 
     def test_it_shows_ignored_nonzero_exitstatus(self) -> None:
@@ -118,7 +118,7 @@ class StatusSingleTestCase(BaseTestCase):
         r = self.client.get(self.url)
         doc = r.json()
 
-        self.assertIn("Ignored", doc["events"])
+        self.assertIn("已忽略", doc["events"])
 
     def test_it_handles_log_event(self) -> None:
         p = Ping.objects.create(owner=self.check, kind="log", n=1)

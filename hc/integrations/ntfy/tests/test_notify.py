@@ -58,19 +58,19 @@ class NotifyNtfyTestCase(BaseTestCase):
         assert Notification.objects.count() == 1
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertEqual(payload["title"], "Foo is DOWN")
+        self.assertEqual(payload["title"], "Foo 已宕机")
         self.assertIn(
-            "Reason: success signal did not arrive on time, grace time passed.",
+            "原因：success signal did not arrive on time, grace time passed。",
             payload["message"],
         )
-        self.assertIn("**Project:** Alices Project", payload["message"])
-        self.assertIn("**Tags:** foo, bar", payload["message"])
-        self.assertIn("**Period:** 1 day", payload["message"])
-        self.assertIn("**Total Pings:** 112233", payload["message"])
-        self.assertIn("**Last Ping:** Success, 10 minutes ago", payload["message"])
+        self.assertIn("**项目：** Alices Project", payload["message"])
+        self.assertIn("**标签：** foo, bar", payload["message"])
+        self.assertIn("**周期：** 1 天", payload["message"])
+        self.assertIn("**总 Ping 数：** 112233", payload["message"])
+        self.assertIn("**上次 Ping：** Success，10 minutes ago", payload["message"])
 
         self.assertEqual(payload["actions"][0]["url"], self.check.cloaked_url())
-        self.assertNotIn("All the other checks are up.", payload["message"])
+        self.assertNotIn("所有其他检查项均已恢复。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_reason_fail(self, mock_post: Mock) -> None:
@@ -80,7 +80,7 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("Reason: received a failure signal.", payload["message"])
+        self.assertIn("原因：received a failure signal。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_reports_down_duration(self, mock_post: Mock) -> None:
@@ -95,7 +95,7 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["message"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_reports_last_pings_exit_code(self, mock_post: Mock) -> None:
@@ -108,7 +108,7 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Last Ping:** Exit status 123", payload["message"])
+        self.assertIn("**上次 Ping：** Exit status 123", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_escapes_special_characters_in_message(self, mock_post: Mock) -> None:
@@ -120,7 +120,7 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Project:** Alice &amp; Bob &gt; Charlie", payload["message"])
+        self.assertIn("**项目：** Alice &amp; Bob &gt; Charlie", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_cron_schedule_and_tz(self, mock_post: Mock) -> None:
@@ -132,8 +132,8 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Schedule:** `* * * * *`", payload["message"])
-        self.assertIn("**Time Zone:** Europe/Riga", payload["message"])
+        self.assertIn("**计划：** `* * * * *`", payload["message"])
+        self.assertIn("**时区：** Europe/Riga", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_oncalendar_schedule_and_tz(self, mock_post: Mock) -> None:
@@ -146,8 +146,8 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Schedule:** `Mon 2-29`", payload["message"])
-        self.assertIn("**Time Zone:** Europe/Riga", payload["message"])
+        self.assertIn("**计划：** `Mon 2-29`", payload["message"])
+        self.assertIn("**时区：** Europe/Riga", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_all_other_checks_up_note(self, mock_post: Mock) -> None:
@@ -162,7 +162,7 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("All the other checks are up.", payload["message"])
+        self.assertIn("所有其他检查项均已恢复。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_lists_other_down_checks(self, mock_post: Mock) -> None:
@@ -177,7 +177,7 @@ class NotifyNtfyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("The following checks are also down", payload["message"])
+        self.assertIn("以下检查项也宕机", payload["message"])
         self.assertIn("Foobar", payload["message"])
         self.assertIn("(last ping: an hour ago)", payload["message"])
 
@@ -207,7 +207,7 @@ class NotifyNtfyTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         self.assertNotIn("Foobar", payload["message"])
-        self.assertIn("11 other checks are also down.", payload["message"])
+        self.assertIn("其他 11 个检查项也宕机。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_uses_access_token(self, mock_post: Mock) -> None:

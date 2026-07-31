@@ -25,8 +25,8 @@ class EditSmsTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "SMS Settings")
-        self.assertContains(r, "Get a SMS message")
+        self.assertContains(r, "短信设置")
+        self.assertContains(r, "发送短信")
         self.assertContains(r, "+12345678")
 
     def test_it_updates_channel(self) -> None:

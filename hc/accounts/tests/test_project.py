@@ -24,7 +24,7 @@ class ProjectTestCase(BaseTestCase):
     def test_it_allows_team_access(self) -> None:
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Change Project Name")
+        self.assertContains(r, "修改项目名称")
 
     def test_it_shows_plaintext_keys(self) -> None:
         self.project.api_key_readonly = "R" * 32
@@ -89,7 +89,7 @@ class ProjectTestCase(BaseTestCase):
         self.assertEqual(len(self.project.ping_key), 22)
         self.assertEqual(self.project.ping_key, self.project.ping_key.lower())
         self.assertContains(r, "key-created-modal")
-        self.assertContains(r, "click on it to reveal it")
+        self.assertContains(r, "点击它以显示明文")
 
     def test_it_requires_rw_access_to_create_key(self) -> None:
         self.bobs_membership.role = "r"
@@ -141,10 +141,10 @@ class ProjectTestCase(BaseTestCase):
 
         # And an email should have been sent
         message = mail.outbox[0]
-        subj = f"You have been invited to join Alice's Project on {settings.SITE_NAME}"
+        subj = f"您已被邀请加入 Alice's Project（{settings.SITE_NAME}）"
         self.assertEqual(message.subject, subj)
 
-        self.assertEmailContains("You will be able to manage")
+        self.assertEmailContains("您可以管理现有的监控检查项并设置新的检查项。")
 
     @override_settings(EMAIL_HOST=None)
     def test_it_skips_invite_email_if_email_host_not_set(self) -> None:
@@ -170,7 +170,7 @@ class ProjectTestCase(BaseTestCase):
 
         self.assertEqual(member.role, member.Role.READONLY)
 
-        self.assertEmailContains("You will be able to view")
+        self.assertEmailContains("您可以查看现有的监控检查项，但无法修改它们。")
 
     def test_it_adds_manager_team_member(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -191,7 +191,7 @@ class ProjectTestCase(BaseTestCase):
 
         form = {"invite_team_member": "1", "email": "bob@example.org", "role": "r"}
         r = self.client.post(self.url, form)
-        self.assertContains(r, "bob@example.org is already a member")
+        self.assertContains(r, "bob@example.org 已是团队成员")
 
         # The number of memberships should have not increased
         self.assertEqual(self.project.member_set.count(), 1)
@@ -201,7 +201,7 @@ class ProjectTestCase(BaseTestCase):
 
         form = {"invite_team_member": "1", "email": "alice@example.org", "role": "r"}
         r = self.client.post(self.url, form)
-        self.assertContains(r, "alice@example.org is already a member")
+        self.assertContains(r, "alice@example.org 已是团队成员")
 
         # The number of memberships should have not increased
         self.assertEqual(self.project.member_set.count(), 1)
@@ -231,7 +231,7 @@ class ProjectTestCase(BaseTestCase):
 
         form = {"invite_team_member": "1", "email": "frank@example.org", "role": "r"}
         r = self.client.post(self.url, form)
-        self.assertContains(r, "Too Many Requests")
+        self.assertContains(r, "请求过多")
 
         self.assertEqual(len(mail.outbox), 0)
 
@@ -347,7 +347,7 @@ class ProjectTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get(f"/projects/{p2.code}/settings/")
-        self.assertContains(r, "Add Users from Other Projects")
+        self.assertContains(r, "从其他项目添加用户")
         self.assertContains(r, "bob@example.org")
 
     def test_it_requires_rw_access_to_update_project_name(self) -> None:
@@ -368,7 +368,7 @@ class ProjectTestCase(BaseTestCase):
 
         r = self.client.get(self.url)
         self.assertNotContains(r, "#set-project-name-modal", status_code=200)
-        self.assertNotContains(r, "Show API Keys")
+        self.assertNotContains(r, "API 访问")
 
     @override_settings(PROMETHEUS_ENABLED=False)
     def test_it_hides_prometheus_link_if_prometheus_not_enabled(self) -> None:

@@ -8,14 +8,14 @@ class SetPasswordTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get("/accounts/set_password/")
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
     def test_it_shows_form(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         self.set_sudo_flag()
 
         r = self.client.get("/accounts/set_password/")
-        self.assertContains(r, "Please pick a password")
+        self.assertContains(r, "请为您的 Mychecks 账户选择一个密码。")
 
     def test_it_sets_password(self) -> None:
         self.client.login(username="alice@example.org", password="password")

@@ -12,14 +12,14 @@ class CloseAccountTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get("/accounts/close/")
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
     def test_it_shows_confirmation_form(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         self.set_sudo_flag()
 
         r = self.client.get("/accounts/close/")
-        self.assertContains(r, "Close Account?")
+        self.assertContains(r, "关闭账户？")
         self.assertContains(r, "1 project")
         self.assertContains(r, "0 checks")
 
@@ -35,7 +35,7 @@ class CloseAccountTestCase(BaseTestCase):
         payload = {"confirmation": "alice@example.org"}
         r = self.client.post("/accounts/close/", payload, follow=True)
         self.assertRedirects(r, "/accounts/login/?account-closed=1")
-        self.assertContains(r, "Account closed.")
+        self.assertContains(r, "账户已关闭。")
 
         # Alice should be gone
         alices = User.objects.filter(username="alice")
@@ -53,7 +53,7 @@ class CloseAccountTestCase(BaseTestCase):
 
         payload = {"confirmation": "incorrect"}
         r = self.client.post("/accounts/close/", payload)
-        self.assertContains(r, "Close Account?")
+        self.assertContains(r, "关闭账户？")
         self.assertContains(r, "has-error")
 
         # Alice should be still present

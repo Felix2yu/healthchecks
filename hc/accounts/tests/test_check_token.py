@@ -19,7 +19,7 @@ class CheckTokenTestCase(BaseTestCase):
 
     def test_it_shows_form(self) -> None:
         r = self.client.get(self.url)
-        self.assertContains(r, "You are about to log in")
+        self.assertContains(r, "您即将登录")
 
     def test_it_redirects(self) -> None:
         r = self.client.post(self.url)
@@ -59,7 +59,7 @@ class CheckTokenTestCase(BaseTestCase):
         url = "/accounts/check_token/alice/invalid-token/"
         r = self.client.post(url, follow=True)
         self.assertRedirects(r, "/accounts/login/")
-        self.assertContains(r, "incorrect or expired")
+        self.assertContains(r, "不正确或已过期")
 
     def test_it_handles_next_parameter(self) -> None:
         url = self.url + "?next=" + self.channels_url

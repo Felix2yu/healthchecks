@@ -24,7 +24,7 @@ class StatusTestCase(BaseTestCase):
         detail = doc["details"][0]
         self.assertEqual(detail["code"], str(self.check.code))
         self.assertEqual(detail["status"], "new")
-        self.assertIn("Never", detail["last_ping"])
+        self.assertIn("从未", detail["last_ping"])
 
     def test_it_returns_403_for_anon_requests(self) -> None:
         r = self.client.get(self.url)

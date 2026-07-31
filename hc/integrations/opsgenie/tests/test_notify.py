@@ -53,8 +53,8 @@ class NotifyOpsgenieTestCase(BaseTestCase):
         payload = mock_post.call_args.kwargs["json"]
         self.assertEqual(payload["alias"], self.check.unique_key)
         self.assertIn(
-            """The check "Foo" is DOWN (success signal did not arrive """
-            """on time, grace time passed).""",
+            """检查项 "Foo" 已宕机（success signal did not arrive """
+            """on time, grace time passed）。""",
             payload["message"],
         )
 
@@ -73,7 +73,7 @@ class NotifyOpsgenieTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         self.assertIn(
-            """The check "Foo" is DOWN (received a failure signal).""",
+            """检查项 "Foo" 已宕机（received a failure signal）。""",
             payload["message"],
         )
 
@@ -106,7 +106,7 @@ class NotifyOpsgenieTestCase(BaseTestCase):
         url = mock_post.call_args.args[1]
         self.assertIn("api.opsgenie.com", url)
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("DOWN", payload["message"])
+        self.assertIn("已宕机", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_opsgenie_up(self, mock_post: Mock) -> None:

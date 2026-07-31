@@ -80,7 +80,7 @@ class AddGitHubSaveTestCase(BaseTestCase):
         r = self.client.post(self.url, {"repo_name": "alice/bar"}, follow=True)
 
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "GitHub setup failed, GitHub access was revoked.")
+        self.assertContains(r, "GitHub 设置失败，GitHub 访问已被撤销。")
 
     def test_it_handles_no_session(self) -> None:
         session = self.client.session

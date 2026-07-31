@@ -44,15 +44,15 @@ class SendDeletionScheduledTestCase(BaseTestCase):
         self.assertEqual(counts(result), [1])
 
         email = mail.outbox[0]
-        self.assertEqual(email.subject, "Account Deletion Warning")
+        self.assertEqual(email.subject, "账户删除警告")
         self.assertEqual(email.to[0], "alice@example.org")
 
-        self.assertEmailContainsText("Owner: alice@example.org")
-        self.assertEmailContainsText("Number of checks in the account: 2")
+        self.assertEmailContainsText("所有者：alice@example.org")
+        self.assertEmailContainsText("账户中的检查项数量：2")
 
-        self.assertEmailContainsHtml("Owner: <strong>alice@example.org</strong>")
+        self.assertEmailContainsHtml("所有者：<strong>alice@example.org</strong>")
         self.assertEmailContainsHtml(
-            "Number of checks in the account: <strong>2</strong>"
+            "账户中的检查项数量：<strong>2</strong>"
         )
 
     def test_it_sends_notice_to_team_members(self) -> None:
@@ -107,7 +107,7 @@ class SendDeletionScheduledTestCase(BaseTestCase):
         cmd = Command(stdout=Mock())
         cmd.handle()
 
-        self.assertEqual(mail.outbox[0].subject, "Account Deletion Warning")
+        self.assertEqual(mail.outbox[0].subject, "账户删除警告")
         s = "DOWN | Mychecks Account Deletion"
         self.assertTrue(mail.outbox[1].subject.startswith(s))
 

@@ -15,7 +15,7 @@ class AddCallTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Get a phone call")
+        self.assertContains(r, "拨打电话")
 
     @override_settings(USE_PAYMENTS=True)
     def test_it_warns_about_limits(self) -> None:
@@ -24,7 +24,7 @@ class AddCallTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "upgrade to a")
+        self.assertContains(r, "需要付费套餐")
 
     def test_it_creates_channel(self) -> None:
         form = {"label": "My Phone", "phone": "+1234567890"}
@@ -44,7 +44,7 @@ class AddCallTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, form)
-        self.assertContains(r, "Invalid phone number format.")
+        self.assertContains(r, "无效的手机号码格式。")
 
     def test_it_trims_whitespace(self) -> None:
         form = {"phone": "   +1234567890   "}

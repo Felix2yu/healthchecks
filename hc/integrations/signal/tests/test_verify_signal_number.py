@@ -20,7 +20,7 @@ class VerifySignalNumberTestCase(BaseTestCase):
     def test_it_works(self, mock_signal: Mock) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {"recipient": "+1234567890"})
-        self.assertContains(r, "All good, the message was sent")
+        self.assertContains(r, "一切正常，消息已发送")
 
     @patch("hc.integrations.signal.views.Signal")
     def test_it_handles_rate_limit(self, mock_signal: Mock) -> None:
@@ -28,7 +28,7 @@ class VerifySignalNumberTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {"recipient": "+1234567890"})
-        self.assertContains(r, "We hit a Signal rate-limit")
+        self.assertContains(r, "遇到了 Signal 速率限制")
 
     @patch("hc.integrations.signal.views.Signal")
     def test_it_handles_recipient_not_found(self, mock_signal: Mock) -> None:
@@ -36,7 +36,7 @@ class VerifySignalNumberTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {"recipient": "+1234567890"})
-        self.assertContains(r, "Recipient not found")
+        self.assertContains(r, "未找到接收者")
 
     @patch("hc.integrations.signal.views.Signal")
     def test_it_handles_unhandled_error(self, mock_signal: Mock) -> None:
@@ -50,7 +50,7 @@ class VerifySignalNumberTestCase(BaseTestCase):
     def test_it_handles_invalid_phone_number(self, mock_signal: Mock) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {"recipient": "+123"})
-        self.assertContains(r, "Invalid phone number")
+        self.assertContains(r, "无效的手机号码")
 
     def test_it_requires_post(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -66,7 +66,7 @@ class VerifySignalNumberTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {"recipient": "+1234567890"})
-        self.assertContains(r, "Verification rate limit exceeded")
+        self.assertContains(r, "验证频率超限")
 
     @override_settings(SECRET_KEY="test-secret")
     def test_it_obeys_per_recipient_rate_limit(self) -> None:
@@ -77,4 +77,4 @@ class VerifySignalNumberTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {"recipient": "+123456789"})
-        self.assertContains(r, "Verification rate limit exceeded")
+        self.assertContains(r, "验证频率超限")

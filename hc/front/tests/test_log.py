@@ -49,7 +49,7 @@ class LogTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "1234 byte body")
+        self.assertContains(r, "1234 字节正文")
         get_object.assert_not_called()
 
     def test_it_displays_email(self) -> None:
@@ -95,7 +95,7 @@ class LogTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Ignored", status_code=200)
+        self.assertContains(r, "已忽略", status_code=200)
 
     def test_it_handles_log_event(self) -> None:
         self.ping.kind = "log"

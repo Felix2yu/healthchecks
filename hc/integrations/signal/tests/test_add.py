@@ -16,8 +16,8 @@ class AddSignalTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Add Signal Integration")
-        self.assertContains(r, "Get a Signal message")
+        self.assertContains(r, "添加 Signal 集成")
+        self.assertContains(r, "接收 Signal 消息")
 
     def test_it_creates_channel(self) -> None:
         form = {

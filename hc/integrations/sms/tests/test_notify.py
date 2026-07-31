@@ -53,7 +53,7 @@ class NotifySmsTestCase(BaseTestCase):
         self.assertEqual(payload["To"], "+1234567890")
         self.assertEqual(payload["From"], "+000")
         self.assertNotIn("\xa0", payload["Body"])
-        self.assertIn("""The check "Foo" is DOWN""", payload["Body"])
+        self.assertIn("""检查项 "Foo" 已宕机""", payload["Body"])
         self.assertIn("grace time passed", payload["Body"])
 
         n = Notification.objects.get()
@@ -92,7 +92,7 @@ class NotifySmsTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["Body"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["Body"])
 
     @override_settings(TWILIO_ACCOUNT=None)
     def test_it_requires_twilio_configuration(self) -> None:
@@ -132,14 +132,14 @@ class NotifySmsTestCase(BaseTestCase):
         email = mail.outbox[0]
         self.assertEqual(email.to[0], "alice@example.org")
         self.assertEqual(email.to[1], "bob@example.org")
-        self.assertEqual(email.subject, "Monthly SMS Limit Reached")
+        self.assertEqual(email.subject, "每月 SMS 上限已达")
 
         # Account's owner should be mentioned in the message body
         self.assertEmailContains("alice@example.org")
 
         # The alert content itself should be in the message body
-        self.assertEmailContainsText("""The check "Foo" is DOWN""")
-        self.assertEmailContainsHtml("""The check &quot;Foo&quot; is DOWN""")
+        self.assertEmailContainsText("""检查项 "Foo" 已宕机""")
+        self.assertEmailContainsHtml("""检查项 &quot;Foo&quot; 已宕机""")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_limit_notice_handles_escaping(self, mock_post: Mock) -> None:
@@ -154,8 +154,8 @@ class NotifySmsTestCase(BaseTestCase):
         self.channel.notify(self.flip)
         mock_post.assert_not_called()
 
-        self.assertEmailContainsText("""The check "Foo & Bar" is DOWN""")
-        self.assertEmailContainsHtml("The check &quot;Foo &amp; Bar&quot; is DOWN")
+        self.assertEmailContainsText("""检查项 "Foo & Bar" 已宕机""")
+        self.assertEmailContainsHtml("检查项 &quot;Foo &amp; Bar&quot; 已宕机")
 
     @override_settings(TWILIO_FROM="+000")
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -205,7 +205,7 @@ class NotifySmsTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["data"]
         assert isinstance(payload["Body"], str)
-        self.assertIn("is UP", payload["Body"])
+        self.assertIn("已恢复", payload["Body"])
 
     @override_settings(TWILIO_FROM="+000")
     @patch("hc.api.transports.logger.debug", autospec=True)

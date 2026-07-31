@@ -16,8 +16,8 @@ class AddSmsTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Add SMS Integration")
-        self.assertContains(r, "Get a SMS message")
+        self.assertContains(r, "添加短信集成")
+        self.assertContains(r, "发送短信")
 
     @override_settings(USE_PAYMENTS=True)
     def test_it_warns_about_limits(self) -> None:
@@ -26,7 +26,7 @@ class AddSmsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "upgrade to a")
+        self.assertContains(r, "需要付费套餐")
 
     def test_it_creates_channel(self) -> None:
         form = {"label": "My Phone", "phone": "+1234567890", "down": True}
@@ -51,7 +51,7 @@ class AddSmsTestCase(BaseTestCase):
             form = {"phone": v}
             self.client.login(username="alice@example.org", password="password")
             r = self.client.post(self.url, form)
-            self.assertContains(r, "Invalid phone number format.")
+            self.assertContains(r, "无效的手机号码格式。")
 
     @override_settings(TWILIO_AUTH=None)
     def test_it_requires_credentials(self) -> None:
@@ -112,4 +112,4 @@ class AddSmsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, form)
-        self.assertContains(r, "Please select at least one.")
+        self.assertContains(r, "请至少选择一项。")

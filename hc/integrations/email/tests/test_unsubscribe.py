@@ -22,12 +22,12 @@ class UnsubscribeTestCase(BaseTestCase):
 
     def test_it_serves_confirmation_form(self) -> None:
         r = self.client.get(self.url)
-        self.assertContains(r, "Please press the button below")
+        self.assertContains(r, "请点击下方按钮")
         self.assertNotContains(r, "submit()")
 
     def test_post_unsubscribes(self) -> None:
         r = self.client.post(self.url)
-        self.assertContains(r, "has been unsubscribed", status_code=200)
+        self.assertContains(r, "已取消订阅", status_code=200)
 
         self.channel.refresh_from_db()
         self.assertTrue(self.channel.disabled)
@@ -35,7 +35,7 @@ class UnsubscribeTestCase(BaseTestCase):
     def test_fresh_signature_does_not_autosubmit(self) -> None:
         r = self.client.get(self.url)
         self.assertContains(
-            r, "Please press the button below to unsubscribe", status_code=200
+            r, "请点击下方按钮取消订阅：", status_code=200
         )
         self.assertNotContains(r, "submit()", status_code=200)
 
@@ -49,7 +49,7 @@ class UnsubscribeTestCase(BaseTestCase):
 
         r = self.client.get(url)
         self.assertContains(
-            r, "Please press the button below to unsubscribe", status_code=200
+            r, "请点击下方按钮取消订阅：", status_code=200
         )
         self.assertContains(r, "submit()", status_code=200)
 
@@ -58,13 +58,13 @@ class UnsubscribeTestCase(BaseTestCase):
         url = f"/integrations/{self.channel.code}/unsub/{signed_token}/"
 
         r = self.client.get(url)
-        self.assertContains(r, "link you just used is incorrect", status_code=200)
+        self.assertContains(r, "链接无效", status_code=200)
 
     def test_it_checks_token(self) -> None:
         url = f"/integrations/{self.channel.code}/unsub/faketoken/"
 
         r = self.client.get(url)
-        self.assertContains(r, "link you just used is incorrect", status_code=200)
+        self.assertContains(r, "链接无效", status_code=200)
 
     def test_it_checks_channel_kind(self) -> None:
         self.channel.kind = "webhook"

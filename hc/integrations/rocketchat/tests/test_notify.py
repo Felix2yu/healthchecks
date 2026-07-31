@@ -50,7 +50,7 @@ class NotifyRocketChatTestCase(BaseTestCase):
 
         text = mock_post.call_args.kwargs["json"]["text"]
         self.assertIn(
-            "is DOWN (success signal did not arrive on time, grace time passed).", text
+            "已宕机（success signal did not arrive on time, grace time passed）。", text
         )
 
         attachment = mock_post.call_args.kwargs["json"]["attachments"][0]
@@ -66,7 +66,7 @@ class NotifyRocketChatTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         text = mock_post.call_args.kwargs["json"]["text"]
-        self.assertIn("is DOWN (received a failure signal).", text)
+        self.assertIn("已宕机（received a failure signal）。", text)
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_reports_down_duration(self, mock_post: Mock) -> None:
@@ -81,7 +81,7 @@ class NotifyRocketChatTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         text = mock_post.call_args.kwargs["json"]["text"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", text)
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", text)
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_does_not_escape_name(self, mock_post: Mock) -> None:
@@ -108,7 +108,7 @@ class NotifyRocketChatTestCase(BaseTestCase):
         self.channel.notify(self.flip)
         self.channel.refresh_from_db()
         self.assertFalse(self.channel.disabled)
-        self.assertEqual(self.channel.last_error, "Received status code 404")
+        self.assertEqual(self.channel.last_error, "收到状态码 404")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_cron_schedule_and_tz(self, mock_post: Mock) -> None:

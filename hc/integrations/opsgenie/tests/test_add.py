@@ -16,7 +16,7 @@ class AddOpsgenieTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "escalation policies, and incident tracking")
+        self.assertContains(r, "升级策略和事件跟踪")
 
     def test_it_works(self) -> None:
         form = {"key": "123456", "region": "us"}

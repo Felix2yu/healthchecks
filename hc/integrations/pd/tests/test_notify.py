@@ -53,7 +53,7 @@ class NotifyPdTestCase(BaseTestCase):
         payload = mock_post.call_args.kwargs["json"]
         self.assertEqual(
             payload["description"],
-            "Foo is DOWN (success signal did not arrive on time, grace time passed).",
+            "Foo 已宕机（success signal did not arrive on time, grace time passed）。",
         )
         self.assertEqual(payload["details"]["Description"], "Description goes here")
         self.assertEqual(payload["event_type"], "trigger")
@@ -72,7 +72,7 @@ class NotifyPdTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         self.assertEqual(
-            payload["description"], "Foo is DOWN (received a failure signal)."
+            payload["description"], "Foo 已宕机（received a failure signal）。"
         )
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -133,7 +133,7 @@ class NotifyPdTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("Foo & Bar is DOWN", payload["description"])
+        self.assertIn("Foo & Bar 已宕机", payload["description"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_no_last_ping(self, mock_post: Mock) -> None:

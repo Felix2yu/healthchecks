@@ -50,15 +50,15 @@ class NotifyPagertreeTestCase(BaseTestCase):
         self.assertEqual(payload["event_type"], "trigger")
         self.assertEqual(payload["incident_key"], self.check.unique_key)
         self.assertEqual(
-            "Foo is DOWN (success signal did not arrive on time, grace time passed)",
+            "Foo 已宕机（success signal did not arrive on time, grace time passed）",
             payload["title"],
         )
 
         self.assertIn(
-            "Foo is DOWN (success signal did not arrive on time, grace time passed).",
+            "Foo 已宕机（success signal did not arrive on time, grace time passed）。",
             payload["description"],
         )
-        self.assertIn("Last ping was 10 minutes ago.", payload["description"])
+        self.assertIn("上次 Ping 时间为 10 minutes ago。", payload["description"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_reason_fail(self, mock_post: Mock) -> None:
@@ -68,12 +68,12 @@ class NotifyPagertreeTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertEqual("Foo is DOWN (received a failure signal)", payload["title"])
+        self.assertEqual("Foo 已宕机（received a failure signal）", payload["title"])
 
         self.assertIn(
-            "Foo is DOWN (received a failure signal).", payload["description"]
+            "Foo 已宕机（received a failure signal）。", payload["description"]
         )
-        self.assertIn("Last ping was 10 minutes ago.", payload["description"])
+        self.assertIn("上次 Ping 时间为 10 minutes ago。", payload["description"])
 
     @override_settings(PAGERTREE_ENABLED=False)
     def test_it_requires_pagertree_enabled(self) -> None:
@@ -92,7 +92,7 @@ class NotifyPagertreeTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("Foo & Bar is DOWN", payload["title"])
+        self.assertIn("Foo & Bar 已宕机", payload["title"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_no_last_ping(self, mock_post: Mock) -> None:
@@ -102,4 +102,4 @@ class NotifyPagertreeTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertNotIn("Last ping was", payload["description"])
+        self.assertNotIn("上次 Ping 时间为", payload["description"])

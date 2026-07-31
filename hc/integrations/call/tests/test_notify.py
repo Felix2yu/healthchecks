@@ -47,7 +47,7 @@ class NotifyCallTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["data"]
         self.assertEqual(payload["To"], "+1234567890")
-        self.assertIn("""The check "foo" is down.</Say>""", payload["Twiml"])
+        self.assertIn("""检查项「foo」已宕机。</Say>""", payload["Twiml"])
 
         n = Notification.objects.get()
         callback_path = f"/api/v3/notifications/{n.code}/status"
@@ -66,7 +66,7 @@ class NotifyCallTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["data"]
         # The Twiml field contains XML so & should be escaped to &amp;
-        self.assertIn("""The check "Foo &amp; Bar" is down.</Say>""", payload["Twiml"])
+        self.assertIn("""检查项「Foo &amp; Bar」已宕机。</Say>""", payload["Twiml"])
 
     @override_settings(TWILIO_ACCOUNT=None)
     def test_it_requires_twilio_configuration(self) -> None:
@@ -95,14 +95,14 @@ class NotifyCallTestCase(BaseTestCase):
         self.assertEqual(email.to[0], "alice@example.org")
         # It should send the notice to project's team members as well:
         self.assertEqual(email.to[1], "bob@example.org")
-        self.assertEqual(email.subject, "Monthly Phone Call Limit Reached")
+        self.assertEqual(email.subject, "每月电话呼叫上限已达")
 
         # Account's owner should be mentioned in the message body
         self.assertEmailContains("alice@example.org")
 
         # The alert content itself should be in the message body
-        self.assertEmailContainsText("""The check "foo" is down.""")
-        self.assertEmailContainsHtml("""The check &quot;foo&quot; is down.""")
+        self.assertEmailContainsText("""检查项「foo」已宕机。""")
+        self.assertEmailContainsHtml("""检查项「foo」已宕机。""")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_limit_notice_handles_escaping(self, mock_post: Mock) -> None:
@@ -118,8 +118,8 @@ class NotifyCallTestCase(BaseTestCase):
         self.channel.notify(self.flip)
         mock_post.assert_not_called()
 
-        self.assertEmailContainsText("""The check "Foo & Bar" is down.""")
-        self.assertEmailContainsHtml("The check &quot;Foo &amp; Bar&quot; is down.")
+        self.assertEmailContainsText("""检查项「Foo & Bar」已宕机。""")
+        self.assertEmailContainsHtml("检查项「Foo &amp; Bar」已宕机。")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_call_limit_reset(self, mock_post: Mock) -> None:

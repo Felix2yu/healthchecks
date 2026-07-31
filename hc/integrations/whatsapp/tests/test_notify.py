@@ -124,14 +124,14 @@ class NotifyWhatsAppTestCase(BaseTestCase):
         email = mail.outbox[0]
         self.assertEqual(email.to[0], "alice@example.org")
         self.assertEqual(email.to[1], "bob@example.org")
-        self.assertEqual(email.subject, "Monthly WhatsApp Limit Reached")
+        self.assertEqual(email.subject, "每月 WhatsApp 上限已达")
 
         # Account's owner should be mentioned in the message body
         self.assertEmailContains("alice@example.org")
 
         # The alert content itself should be in the message body
-        self.assertEmailContainsText("""The check "Foo" is DOWN""")
-        self.assertEmailContainsHtml("""The check &quot;Foo&quot; is DOWN""")
+        self.assertEmailContainsText("""检查项 "Foo" 已宕机""")
+        self.assertEmailContainsHtml("""检查项 &quot;Foo&quot; 已宕机""")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_does_not_escape_special_characters(self, mock_post: Mock) -> None:

@@ -22,62 +22,62 @@ CURRENT_TIME = datetime(2020, 1, 15, tzinfo=timezone.utc)
 class DateFormattingTestCase(TestCase):
     def test_sub_second_works(self) -> None:
         s = format_hms(td(seconds=0.12))
-        self.assertEqual(s, "0.12 sec")
+        self.assertEqual(s, "0.12 秒")
 
     def test_mins_secs_work(self) -> None:
         s = format_hms(td(seconds=0))
-        self.assertEqual(s, "0 sec")
+        self.assertEqual(s, "0 秒")
 
         s = format_hms(td(seconds=1))
-        self.assertEqual(s, "1 sec")
+        self.assertEqual(s, "1 秒")
 
         s = format_hms(td(seconds=61))
-        self.assertEqual(s, "1 min 1 sec")
+        self.assertEqual(s, "1 分钟 1 秒")
 
         s = format_hms(td(seconds=62))
-        self.assertEqual(s, "1 min 2 sec")
+        self.assertEqual(s, "1 分钟 2 秒")
 
     def test_hours_work(self) -> None:
         s = format_hms(td(seconds=62 + 60 * 60))
-        self.assertEqual(s, "1 h 1 min 2 sec")
+        self.assertEqual(s, "1 小时 1 分钟 2 秒")
 
         s = format_hms(td(seconds=60 * 60))
-        self.assertEqual(s, "1 h 0 min 0 sec")
+        self.assertEqual(s, "1 小时 0 分钟 0 秒")
 
 
 class ApproxFormattingTestCase(TestCase):
     def test_days_work(self) -> None:
         s = format_approx_duration(td(days=3, hours=6, minutes=12, seconds=24))
-        self.assertEqual(s, "3 days 6 h")
+        self.assertEqual(s, "3 天 6 小时")
 
     def test_one_day_works(self) -> None:
         s = format_approx_duration(td(days=1, hours=6, minutes=12, seconds=24))
-        self.assertEqual(s, "1 day 6 h")
+        self.assertEqual(s, "1 天 6 小时")
 
     def test_hours_work(self) -> None:
         s = format_approx_duration(td(hours=6, minutes=12, seconds=24))
-        self.assertEqual(s, "6 h 12 min")
+        self.assertEqual(s, "6 小时 12 分钟")
 
     def test_minutes_work(self) -> None:
         s = format_approx_duration(td(minutes=12, seconds=24))
-        self.assertEqual(s, "12 min 24 sec")
+        self.assertEqual(s, "12 分钟 24 秒")
 
 
 class ForSentenceFormattingTestCase(TestCase):
     def test_it_works(self) -> None:
         samples = [
-            (td(days=3, hours=6, minutes=12, seconds=24), "3 days, 6 hours"),
-            (td(days=1, hours=6, minutes=12, seconds=24), "1 day, 6 hours"),
-            (td(days=3, hours=1, minutes=12, seconds=24), "3 days, 1 hour"),
-            (td(hours=6, minutes=12, seconds=24), "6 hours, 12 minutes"),
-            (td(hours=1, minutes=12, seconds=24), "1 hour, 12 minutes"),
-            (td(hours=6, minutes=1, seconds=24), "6 hours, 1 minute"),
-            (td(minutes=12, seconds=24), "12 minutes, 24 seconds"),
-            (td(minutes=1, seconds=24), "1 minute, 24 seconds"),
-            (td(minutes=12, seconds=1), "12 minutes, 1 second"),
-            (td(seconds=12), "12 seconds"),
-            (td(seconds=1), "1 second"),
-            (td(milliseconds=500), "0 seconds"),
+            (td(days=3, hours=6, minutes=12, seconds=24), "3 天, 6 小时"),
+            (td(days=1, hours=6, minutes=12, seconds=24), "1 天, 6 小时"),
+            (td(days=3, hours=1, minutes=12, seconds=24), "3 天, 1 小时"),
+            (td(hours=6, minutes=12, seconds=24), "6 小时, 12 分钟"),
+            (td(hours=1, minutes=12, seconds=24), "1 小时, 12 分钟"),
+            (td(hours=6, minutes=1, seconds=24), "6 小时, 1 分钟"),
+            (td(minutes=12, seconds=24), "12 分钟, 24 秒"),
+            (td(minutes=1, seconds=24), "1 分钟, 24 秒"),
+            (td(minutes=12, seconds=1), "12 分钟, 1 秒"),
+            (td(seconds=12), "12 秒"),
+            (td(seconds=1), "1 秒"),
+            (td(milliseconds=500), "0 秒"),
         ]
 
         for duration, expected in samples:

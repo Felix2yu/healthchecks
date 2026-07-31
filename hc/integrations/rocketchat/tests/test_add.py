@@ -14,9 +14,9 @@ class AddRocketChatTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Integration Settings", status_code=200)
+        self.assertContains(r, "集成设置", status_code=200)
         self.assertNotContains(
-            r, "click on <strong>Add Integration</strong>", status_code=200
+            r, "点击 Rocket.Chat 集成旁的", status_code=200
         )
 
     def test_it_works(self) -> None:

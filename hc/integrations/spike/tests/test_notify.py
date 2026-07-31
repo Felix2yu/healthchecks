@@ -50,11 +50,11 @@ class NotifySpikeTestCase(BaseTestCase):
         self.assertEqual(payload["check_id"], self.check.unique_key)
         self.assertEqual(
             payload["title"],
-            "Foo is DOWN (success signal did not arrive on time, grace time passed)",
+            "Foo DOWN（success signal did not arrive on time, grace time passed）",
         )
-        self.assertIn("Foo is DOWN", payload["message"])
+        self.assertIn("Foo DOWN", payload["message"])
         self.assertIn("grace time passed", payload["message"])
-        self.assertIn("Last ping was 10 minutes ago.", payload["message"])
+        self.assertIn("上次 Ping：10 minutes ago。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_reason_fail(self, mock_post: Mock) -> None:
@@ -64,8 +64,8 @@ class NotifySpikeTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertEqual(payload["title"], "Foo is DOWN (received a failure signal)")
-        self.assertIn("Foo is DOWN", payload["message"])
+        self.assertEqual(payload["title"], "Foo DOWN（received a failure signal）")
+        self.assertIn("Foo DOWN", payload["message"])
         self.assertIn("received a failure signal", payload["message"])
 
     @override_settings(SPIKE_ENABLED=False)
@@ -86,8 +86,8 @@ class NotifySpikeTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertEqual(payload["title"], "Foo & Bar is UP")
-        self.assertEqual(payload["message"], "Foo & Bar is UP.")
+        self.assertEqual(payload["title"], "Foo & Bar UP")
+        self.assertEqual(payload["message"], "Foo & Bar UP。")
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_no_last_ping(self, mock_post: Mock) -> None:
@@ -97,4 +97,4 @@ class NotifySpikeTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertNotIn("Last ping was", payload["message"])
+        self.assertNotIn("上次 Ping", payload["message"])

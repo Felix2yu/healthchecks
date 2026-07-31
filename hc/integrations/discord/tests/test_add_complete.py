@@ -33,7 +33,7 @@ class AddDiscordCompleteTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "The Discord integration has been added!")
+        self.assertContains(r, "Discord 集成已添加！")
 
         ch = Channel.objects.get()
         self.assertEqual(ch.discord_webhook_url, "foo")
@@ -75,7 +75,7 @@ class AddDiscordCompleteTestCase(BaseTestCase):
             with patch("hc.integrations.discord.views.logger") as logger:
                 r = self.client.get(url, follow=True)
                 self.assertRedirects(r, self.channels_url)
-                self.assertContains(r, "Received an unexpected response from Discord.")
+                self.assertContains(r, "收到来自 Discord 的意外响应。集成未添加。")
                 self.assertTrue(logger.warning.called)
 
     def test_it_avoids_csrf(self) -> None:
@@ -102,7 +102,7 @@ class AddDiscordCompleteTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Discord setup was cancelled.")
+        self.assertContains(r, "Discord 设置已取消。")
 
         self.assertEqual(Channel.objects.count(), 0)
 

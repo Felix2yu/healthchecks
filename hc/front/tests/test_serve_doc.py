@@ -10,13 +10,13 @@ class ServeDocTestCase(TestCase):
         r = self.client.get("/docs/")
         self.assertEqual(r.status_code, 200)
 
-        self.assertContains(r, "<strong>keeps silent</strong>")
+        self.assertContains(r, "<strong>保持沉默</strong>")
 
     def test_it_serves_subpage(self) -> None:
         r = self.client.get("/docs/reliability_tips/")
         self.assertEqual(r.status_code, 200)
 
-        self.assertContains(r, "Pinging Reliability Tips")
+        self.assertContains(r, "Ping 可靠性提示")
 
     def test_it_handles_bad_url(self) -> None:
         r = self.client.get("/docs/does_not_exist/")

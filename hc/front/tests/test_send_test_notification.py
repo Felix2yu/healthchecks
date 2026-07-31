@@ -24,7 +24,7 @@ class SendTestNotificationTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {}, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Test notification sent!")
+        self.assertContains(r, "测试通知已发送！")
 
         # An email should have been sent
         self.assertEqual(len(mail.outbox), 1)
@@ -72,7 +72,7 @@ class SendTestNotificationTestCase(BaseTestCase):
         r = self.client.post(self.url, {}, follow=True)
 
         self.assertContains(
-            r, "Could not send a test notification. Email not verified."
+            r, "无法发送测试通知。Email not verified。"
         )
 
         self.channel.refresh_from_db()
@@ -100,7 +100,7 @@ class SendTestNotificationTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {}, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Test notification sent!")
+        self.assertContains(r, "测试通知已发送！")
 
         args = mock_get.call_args.args
         self.assertEqual(args, ("get", "http://example-url"))
@@ -124,7 +124,7 @@ class SendTestNotificationTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {}, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Could not send a test notification")
+        self.assertContains(r, "无法发送测试通知")
 
     def test_it_checks_channel_ownership(self) -> None:
         self.client.login(username="charlie@example.org", password="password")
@@ -143,10 +143,10 @@ class SendTestNotificationTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, {}, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Test notification sent!")
+        self.assertContains(r, "测试通知已发送！")
 
         payload = mock_post.call_args.kwargs["data"]
-        self.assertIn("is UP", payload["Body"])
+        self.assertIn("已恢复", payload["Body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_webhook_with_json_variable(self, mock_post: Mock) -> None:

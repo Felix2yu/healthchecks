@@ -58,12 +58,12 @@ class NotifyMatrixTestCase(BaseTestCase):
         self.assertEqual(headers["Authorization"], "Bearer test-token")
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("Foo is DOWN", payload["body"])
+        self.assertIn("Foo 已宕机", payload["body"])
         self.assertIn("grace time passed", payload["body"])
 
-        self.assertIn("is <b>DOWN</b>", payload["formatted_body"])
+        self.assertIn("<b>已宕机</b>", payload["formatted_body"])
         self.assertIn("grace time passed", payload["formatted_body"])
-        self.assertIn("Success, 10 minutes ago", payload["formatted_body"])
+        self.assertIn("Success，10 minutes ago", payload["formatted_body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_reason_failure(self, mock_post: Mock) -> None:
@@ -78,9 +78,9 @@ class NotifyMatrixTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["body"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["body"])
         self.assertIn(
-            "The downtime lasted 1 hour, 30 minutes.", payload["formatted_body"]
+            "宕机持续了 1 小时, 30 分钟。", payload["formatted_body"]
         )
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -104,5 +104,5 @@ class NotifyMatrixTestCase(BaseTestCase):
         assert Notification.objects.count() == 1
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertNotIn("Last ping was", payload["body"])
-        self.assertIn("<b>Last Ping:</b> Never", payload["formatted_body"])
+        self.assertNotIn("上次 Ping", payload["body"])
+        self.assertIn("<b>上次 Ping：</b> 从未", payload["formatted_body"])

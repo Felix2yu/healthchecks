@@ -102,7 +102,7 @@ class NotifyWebhookTestCase(BaseTestCase):
         self.assertEqual(mock_get.call_count, 3)
 
         n = Notification.objects.get()
-        self.assertEqual(n.error, "Received status code 500")
+        self.assertEqual(n.error, "收到状态码 500")
 
     @patch(
         "hc.api.transports.curl.request",

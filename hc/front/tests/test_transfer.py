@@ -15,8 +15,8 @@ class TransferTestCase(BaseTestCase):
     def test_it_serves_form(self) -> None:
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Transfer to Another Project")
-        self.assertNotContains(r, "(at check limit)")
+        self.assertContains(r, "转移到其他项目")
+        self.assertNotContains(r, "（达到检查项上限）")
 
     def test_form_obeys_check_limit(self) -> None:
         # Alices's projects cannot accept checks due to limits:
@@ -25,8 +25,8 @@ class TransferTestCase(BaseTestCase):
 
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Transfer to Another Project")
-        self.assertContains(r, "(at check limit)")
+        self.assertContains(r, "转移到其他项目")
+        self.assertContains(r, "（达到检查项上限）")
 
     def test_form_always_allows_transfers_between_same_accounts_projects(self) -> None:
         # If user is at check limit, they should still be able to
@@ -39,15 +39,15 @@ class TransferTestCase(BaseTestCase):
 
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Transfer to Another Project")
-        self.assertNotContains(r, "(at check limit)")
+        self.assertContains(r, "转移到其他项目")
+        self.assertNotContains(r, "（达到检查项上限）")
 
     def test_it_works(self) -> None:
         self.client.login(username="bob@example.org", password="password")
         payload = {"project": self.project.code}
         r = self.client.post(self.url, payload, follow=True)
         self.assertRedirects(r, f"/checks/{self.check.code}/details/")
-        self.assertContains(r, "Check transferred successfully")
+        self.assertContains(r, "检查项转移成功")
 
         check = Check.objects.get()
         self.assertEqual(check.project, self.project)
@@ -65,7 +65,7 @@ class TransferTestCase(BaseTestCase):
         payload = {"project": p2.code}
         r = self.client.post(self.url, payload, follow=True)
         self.assertRedirects(r, f"/checks/{self.check.code}/details/")
-        self.assertContains(r, "Check transferred successfully")
+        self.assertContains(r, "检查项转移成功")
 
     def test_post_obeys_check_limit(self) -> None:
         # Alice's projects cannot accept checks due to limits:

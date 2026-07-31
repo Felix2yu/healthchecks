@@ -57,18 +57,18 @@ class NotifyGitHubTestCase(BaseTestCase):
         assert Notification.objects.count() == 1
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertEqual(payload["title"], "DB Backup is DOWN")
+        self.assertEqual(payload["title"], "DB Backup DOWN")
         self.assertEqual(payload["labels"], ["foo", "bar"])
         self.assertIn("[DB Backup]", payload["body"])
         self.assertIn(self.check.cloaked_url(), payload["body"])
         self.assertIn("grace time passed", payload["body"])
 
-        self.assertIn("**Project:** Alices Project\n", payload["body"])
-        self.assertIn("**Tags:** `foo` `bar` `baz` \n", payload["body"])
+        self.assertIn("**项目：** Alices Project\n", payload["body"])
+        self.assertIn("**标签：** `foo` `bar` `baz` \n", payload["body"])
 
-        self.assertIn("**Period:** 1 day\n", payload["body"])
-        self.assertIn("**Total Pings:** 112233\n", payload["body"])
-        self.assertIn("**Last Ping:** Success, 10 minutes ago", payload["body"])
+        self.assertIn("**周期：** 1 天\n", payload["body"])
+        self.assertIn("**总 Ping 数：** 112233\n", payload["body"])
+        self.assertIn("**上次 Ping：** Success，10 minutes ago", payload["body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_reason_failure(self, mock_post: Mock) -> None:
@@ -91,7 +91,7 @@ class NotifyGitHubTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Last Ping:** Exit status 123, 10 minutes ago", payload["body"])
+        self.assertIn("**上次 Ping：** Exit status 123，10 minutes ago", payload["body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_cron_schedule(self, mock_post: Mock) -> None:
@@ -105,8 +105,8 @@ class NotifyGitHubTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Schedule:** `* * * * MON-FRI`\n", payload["body"])
-        self.assertIn("**Time Zone:** Europe/Riga\n", payload["body"])
+        self.assertIn("**计划：** `* * * * MON-FRI`\n", payload["body"])
+        self.assertIn("**时区：** Europe/Riga\n", payload["body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_oncalendar_schedule(self, mock_post: Mock) -> None:
@@ -120,8 +120,8 @@ class NotifyGitHubTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Schedule:** `Mon 2-29`\n", payload["body"])
-        self.assertIn("**Time Zone:** Europe/Riga\n", payload["body"])
+        self.assertIn("**计划：** `Mon 2-29`\n", payload["body"])
+        self.assertIn("**时区：** Europe/Riga\n", payload["body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_returns_error(self, mock_post: Mock) -> None:
@@ -161,7 +161,7 @@ class NotifyGitHubTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("**Last Ping Body:**\n", payload["body"])
+        self.assertIn("**上次 Ping 内容：**\n", payload["body"])
         self.assertIn("Hello World", payload["body"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -174,7 +174,7 @@ class NotifyGitHubTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertNotIn("Last Ping Body", payload["body"])
+        self.assertNotIn("上次 Ping 内容", payload["body"])
         self.assertNotIn("```", payload["body"])
 
     @override_settings(GITHUB_PRIVATE_KEY=None)

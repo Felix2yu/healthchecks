@@ -19,7 +19,7 @@ class AddWebauthnTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get(self.url)
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
     @override_settings(RP_ID=None)
     def test_it_requires_rp_id(self) -> None:
@@ -34,7 +34,7 @@ class AddWebauthnTestCase(BaseTestCase):
         self.set_sudo_flag()
 
         r = self.client.get(self.url)
-        self.assertContains(r, "Add Security Key")
+        self.assertContains(r, "添加安全密钥")
 
         # It should put a "state" key in the session:
         self.assertIn("state", self.client.session)
@@ -53,7 +53,7 @@ class AddWebauthnTestCase(BaseTestCase):
         payload = {"name": "My New Key", "response": "dummy response"}
         r = self.client.post(self.url, payload, follow=True)
         self.assertRedirects(r, "/accounts/profile/")
-        self.assertContains(r, "Added security key <strong>My New Key</strong>")
+        self.assertContains(r, "已添加安全密钥 <strong>My New Key</strong>")
 
         c = Credential.objects.get()
         self.assertEqual(c.name, "My New Key")

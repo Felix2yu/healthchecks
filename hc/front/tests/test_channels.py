@@ -57,7 +57,7 @@ class ChannelsTestCase(BaseTestCase):
         r = self.client.get(self.channels_url)
 
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "(normal priority)")
+        self.assertContains(r, "normal 优先级")
 
     def test_it_shows_unconfirmed_email(self) -> None:
         channel = Channel(project=self.project, kind="email")
@@ -67,7 +67,7 @@ class ChannelsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.channels_url)
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "Unconfirmed")
+        self.assertContains(r, "未确认")
 
     def test_it_shows_down_only_note_for_email(self) -> None:
         channel = Channel(project=self.project, kind="email")
@@ -79,7 +79,7 @@ class ChannelsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.channels_url)
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "(down only)")
+        self.assertContains(r, "（仅异常）")
 
     def test_it_shows_up_only_note_for_email(self) -> None:
         channel = Channel(project=self.project, kind="email")
@@ -91,7 +91,7 @@ class ChannelsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.channels_url)
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "(up only)")
+        self.assertContains(r, "（仅恢复）")
 
     def test_it_shows_sms_number(self) -> None:
         ch = Channel(kind="sms", project=self.project)
@@ -125,7 +125,7 @@ class ChannelsTestCase(BaseTestCase):
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(self.channels_url)
 
-        self.assertNotContains(r, "Add Integration", status_code=200)
+        self.assertNotContains(r, "添加集成", status_code=200)
         self.assertNotContains(r, "ic-delete")
         self.assertNotContains(r, "edit_webhook")
 
@@ -137,7 +137,7 @@ class ChannelsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.channels_url)
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "(down only)")
+        self.assertContains(r, "（仅异常）")
 
     def test_it_shows_up_only_note_for_sms(self) -> None:
         channel = Channel(project=self.project, kind="sms")
@@ -147,7 +147,7 @@ class ChannelsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.channels_url)
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "(up only)")
+        self.assertContains(r, "（仅恢复）")
 
     def test_it_shows_disabled_note(self) -> None:
         ch = Channel(kind="slack", project=self.project)
@@ -167,7 +167,7 @@ class ChannelsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.channels_url)
-        self.assertContains(r, "Fix&hellip;", status_code=200)
+        self.assertContains(r, "修复&hellip;", status_code=200)
 
     def test_it_shows_gotify_details(self) -> None:
         ch = Channel(kind="gotify", project=self.project)

@@ -28,7 +28,7 @@ class AddZulipTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "open-source group chat app")
+        self.assertContains(r, "开源群聊应用")
 
     def test_it_works(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -48,25 +48,25 @@ class AddZulipTestCase(BaseTestCase):
         payload = _get_payload(bot_email="not@an@email")
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, payload)
-        self.assertContains(r, "Invalid file format.")
+        self.assertContains(r, "文件格式无效")
 
     def test_it_rejects_missing_api_key(self) -> None:
         payload = _get_payload(api_key="")
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, payload)
-        self.assertContains(r, "Invalid file format.")
+        self.assertContains(r, "文件格式无效")
 
     def test_it_rejects_missing_site(self) -> None:
         payload = _get_payload(site="")
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, payload)
-        self.assertContains(r, "Invalid file format.")
+        self.assertContains(r, "文件格式无效")
 
     def test_it_rejects_malformed_site(self) -> None:
         payload = _get_payload(site="not an url")
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(self.url, payload)
-        self.assertContains(r, "Invalid file format.")
+        self.assertContains(r, "文件格式无效")
 
     def test_it_rejects_bad_mtype(self) -> None:
         payload = _get_payload(mtype="this-should-not-work")

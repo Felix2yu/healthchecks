@@ -16,7 +16,7 @@ class AddGroupTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "multiple integrations at once.")
+        self.assertContains(r, "同时分发给多个集成")
         self.assertContains(r, self.c1_code_str)
 
     def test_it_requires_rw_access(self) -> None:

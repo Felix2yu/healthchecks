@@ -19,7 +19,7 @@ class ChannelChecksTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url)
         self.assertContains(r, "Database Backups")
-        self.assertContains(r, "Assign Checks to Integration", status_code=200)
+        self.assertContains(r, "分配检查项到集成", status_code=200)
 
     def test_team_access_works(self) -> None:
         url = f"/integrations/{self.channel.code}/checks/"
@@ -28,7 +28,7 @@ class ChannelChecksTestCase(BaseTestCase):
         # should work.
         self.client.login(username="bob@example.org", password="password")
         r = self.client.get(url)
-        self.assertContains(r, "Assign Checks to Integration", status_code=200)
+        self.assertContains(r, "分配检查项到集成", status_code=200)
 
     def test_it_checks_owner(self) -> None:
         # channel does not belong to mallory so this should come back
@@ -53,4 +53,4 @@ class ChannelChecksTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url)
-        self.assertContains(r, "there are currently no checks", status_code=200)
+        self.assertContains(r, "中没有检查项", status_code=200)

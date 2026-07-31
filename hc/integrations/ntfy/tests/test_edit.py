@@ -28,7 +28,7 @@ class EditNtfyTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Save Integration")
+        self.assertContains(r, "保存集成")
         self.assertContains(r, "https://example.org")
         self.assertContains(r, "foo-bar-baz")
         self.assertContains(r, "test-token")

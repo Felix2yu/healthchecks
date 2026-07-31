@@ -17,8 +17,8 @@ class CronPreviewTestCase(BaseTestCase):
     def test_it_accepts_sunday_7(self) -> None:
         payload = {"schedule": "* * * * 7", "tz": "UTC"}
         r = self.client.post(self.url, payload)
-        self.assertContains(r, "Expected Ping Dates", status_code=200)
-        self.assertNotContains(r, "Invalid cron expression", status_code=200)
+        self.assertContains(r, "预期的 Ping 日期", status_code=200)
+        self.assertNotContains(r, "无效的 Cron 表达式", status_code=200)
 
     def test_it_rejects_invalid_cron_expression(self) -> None:
         samples = ["", "*", "100 100 100 100 100", "* * * * * *"]
@@ -26,17 +26,17 @@ class CronPreviewTestCase(BaseTestCase):
         for schedule in samples:
             payload = {"schedule": schedule, "tz": "UTC"}
             r = self.client.post(self.url, payload)
-            self.assertContains(r, "Invalid cron expression", status_code=200)
+            self.assertContains(r, "无效的 Cron 表达式", status_code=200)
 
     def test_it_handles_invalid_timezone(self) -> None:
         for tz in ["", "not-a-timezone"]:
             payload = {"schedule": "* * * * *", "tz": tz}
             r = self.client.post(self.url, payload)
-            self.assertContains(r, "Invalid timezone", status_code=200)
+            self.assertContains(r, "无效的时区", status_code=200)
 
     def test_it_handles_missing_arguments(self) -> None:
         r = self.client.post(self.url, {})
-        self.assertContains(r, "Invalid cron expression", status_code=200)
+        self.assertContains(r, "无效的 Cron 表达式", status_code=200)
 
     def test_it_rejects_get(self) -> None:
         r = self.client.get(self.url, {})
@@ -54,7 +54,7 @@ class CronPreviewTestCase(BaseTestCase):
         # be able to handle this:
         payload = {"schedule": "0 3 * * *", "tz": "Europe/Riga"}
         r = self.client.post(self.url, payload)
-        self.assertNotContains(r, "Invalid cron expression", status_code=200)
+        self.assertNotContains(r, "无效的 Cron 表达式", status_code=200)
 
     def test_it_handles_feb_29(self) -> None:
         payload = {"schedule": "0 0 29 2 *", "tz": "UTC"}
@@ -64,4 +64,4 @@ class CronPreviewTestCase(BaseTestCase):
     def test_it_handles_no_matches(self) -> None:
         payload = {"schedule": "0 0 */100 * MON#2", "tz": "UTC"}
         r = self.client.post(self.url, payload)
-        self.assertContains(r, "Invalid cron expression", status_code=200)
+        self.assertContains(r, "无效的 Cron 表达式", status_code=200)

@@ -14,7 +14,7 @@ class AddDiscordTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Connect Discord", status_code=200)
+        self.assertContains(r, "连接 Discord", status_code=200)
         self.assertContains(r, "discordapp.com/api/oauth2/authorize")
 
         # There should now be a key in session

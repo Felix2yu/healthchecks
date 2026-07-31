@@ -11,12 +11,12 @@ class AddPdcHelpTestCase(BaseTestCase):
 
     def test_instructions_work_when_not_logged_in(self) -> None:
         r = self.client.get(self.url)
-        self.assertContains(r, "Before adding PagerDuty integration, please log")
+        self.assertContains(r, "登录您的 PagerDuty 帐户")
 
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "If your team uses")
+        self.assertContains(r, "如果您的团队使用")
 
     @override_settings(PD_APP_ID=None)
     def test_it_requires_vendor_key(self) -> None:

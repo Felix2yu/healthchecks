@@ -36,7 +36,7 @@ class DetailsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "How To Ping", status_code=200)
+        self.assertContains(r, "如何 Ping", status_code=200)
         self.assertContains(r, "ping-now")
         # The page should contain timezone strings
         self.assertContains(r, "Europe/Riga")
@@ -70,7 +70,7 @@ class DetailsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Cron Expression", status_code=200)
+        self.assertContains(r, "Cron 表达式", status_code=200)
 
     def test_it_allows_cross_team_access(self) -> None:
         self.client.login(username="bob@example.org", password="password")
@@ -161,7 +161,7 @@ class DetailsTestCase(BaseTestCase):
         self.assertContains(r, "Dec. 2019")
 
         # The summary for Jan. 2020 should be "1 downtime, 1 hour total"
-        self.assertContains(r, "1 downtime, 1 h 0 min total")
+        self.assertContains(r, "宕机 1 次，共 1 小时 0 分钟")
         self.assertContains(r, "99.86% uptime")
 
     @time_machine.travel("2020-02-01 00:00+00:00")
@@ -186,7 +186,7 @@ class DetailsTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
 
-        self.assertContains(r, "1 downtime, 2 h 0 min total")
+        self.assertContains(r, "宕机 1 次，共 2 小时 0 分钟")
         self.assertContains(r, "99.73% uptime")
 
     @time_machine.travel("2020-02-01 00:00+00:00")
@@ -244,9 +244,9 @@ class DetailsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Ping Key Required", status_code=200)
+        self.assertContains(r, "需要 Ping 密钥", status_code=200)
         self.assertNotContains(r, "ping-now")
-        self.assertContains(r, "The ping key is currently not set")
+        self.assertContains(r, "此项目尚未设置 Ping 密钥")
 
     def test_it_handles_no_ping_key_for_readonly_user(self) -> None:
         self.project.show_slugs = True
@@ -261,9 +261,9 @@ class DetailsTestCase(BaseTestCase):
         self.client.login(username="bob@example.org", password="password")
 
         r = self.client.get(self.url)
-        self.assertNotContains(r, "Ping Key Required", status_code=200)
+        self.assertNotContains(r, "需要 Ping 密钥", status_code=200)
         self.assertNotContains(r, "ping-now")
-        self.assertNotContains(r, "The ping key is currently not set")
+        self.assertNotContains(r, "此项目尚未设置 Ping 密钥")
 
     def test_it_handles_empty_slug(self) -> None:
         self.project.show_slugs = True
@@ -271,10 +271,10 @@ class DetailsTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "(unavailable, set slug first)", status_code=200)
-        self.assertNotContains(r, "Copy URL")
+        self.assertContains(r, "（不可用，请先设置标识）", status_code=200)
+        self.assertNotContains(r, "复制 URL")
         self.assertNotContains(r, "ping-now")
-        self.assertNotContains(r, "The ping key is currently not set")
+        self.assertNotContains(r, "此项目尚未设置 Ping 密钥")
 
     def test_it_saves_url_format_preference(self) -> None:
         self.client.login(username="alice@example.org", password="password")

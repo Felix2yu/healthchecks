@@ -18,9 +18,9 @@ class AddEmailTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Get an email message")
-        self.assertContains(r, "Requires confirmation")
-        self.assertContains(r, "Set Up Email Notifications")
+        self.assertContains(r, "发送邮件")
+        self.assertContains(r, "需要确认。")
+        self.assertContains(r, "设置邮件通知")
 
     def test_it_creates_channel(self) -> None:
         form = {"value": "dan@example.org", "down": "true", "up": "true"}
@@ -40,7 +40,7 @@ class AddEmailTestCase(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
 
         email = mail.outbox[0]
-        self.assertTrue(email.subject.startswith("Verify email address on"))
+        self.assertTrue(email.subject.startswith("验证"))
         # Make sure we're sending to an email address, not a JSON string:
         self.assertEqual(email.to[0], "dan@example.org")
 

@@ -98,7 +98,7 @@ class MyChecksTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "There are more things to monitor", status_code=200)
+        self.assertContains(r, "还有更多可以监控的项目", status_code=200)
 
     def test_it_saves_sort_field(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -176,7 +176,7 @@ class MyChecksTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
         self.assertContains(r, "alice-was-here")
-        self.assertNotContains(r, "(not unique)")
+        self.assertNotContains(r, "（不唯一）")
 
     def test_it_shows_not_unique_note(self) -> None:
         self.project.show_slugs = True
@@ -189,7 +189,7 @@ class MyChecksTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
         self.assertContains(r, "alice-was-here")
-        self.assertContains(r, "(not unique)")
+        self.assertContains(r, "（不唯一）")
 
     def test_it_saves_url_format_preference(self) -> None:
         self.client.login(username="alice@example.org", password="password")

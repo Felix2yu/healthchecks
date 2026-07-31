@@ -50,7 +50,7 @@ class NotifyGotidyTestCase(BaseTestCase):
         self.assertEqual(url, "https://example.org/message?token=abc")
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertEqual(payload["title"], "Foo is DOWN")
+        self.assertEqual(payload["title"], "Foo DOWN")
         self.assertIn(self.check.cloaked_url(), payload["message"])
         self.assertIn("grace time passed", payload["message"])
         self.assertNotIn("priority", payload)
@@ -78,7 +78,7 @@ class NotifyGotidyTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["message"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_subpath(self, mock_post: Mock) -> None:
@@ -117,7 +117,7 @@ class NotifyGotidyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("All the other checks are up.", payload["message"])
+        self.assertIn("所有其他检查项均已恢复。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_lists_other_down_checks(self, mock_post: Mock) -> None:
@@ -132,9 +132,9 @@ class NotifyGotidyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("The following checks are also down", payload["message"])
+        self.assertIn("以下检查项也宕机", payload["message"])
         self.assertIn("Foobar", payload["message"])
-        self.assertIn("(last ping: an hour ago)", payload["message"])
+        self.assertIn("（上次 Ping：an hour ago）", payload["message"])
         self.assertIn(other.cloaked_url(), payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -146,7 +146,7 @@ class NotifyGotidyTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("(last ping: never)", payload["message"])
+        self.assertIn("（上次 Ping：从未）", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_does_not_show_more_than_10_other_checks(self, mock_post: Mock) -> None:
@@ -163,7 +163,7 @@ class NotifyGotidyTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         self.assertNotIn("Foobar", payload["message"])
-        self.assertIn("11 other checks are also down.", payload["message"])
+        self.assertIn("其他 11 个检查项也宕机。", payload["message"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_no_last_ping(self, mock_post: Mock) -> None:

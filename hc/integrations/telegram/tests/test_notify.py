@@ -51,20 +51,20 @@ class NotifyTelegramTestCase(BaseTestCase):
         payload = mock_post.call_args.kwargs["json"]
         self.assertEqual(payload["chat_id"], 123)
         self.assertIsNone(payload["message_thread_id"])
-        self.assertIn("The check", payload["text"])
+        self.assertIn("检查项", payload["text"])
         self.assertIn(">DB Backup</a>", payload["text"])
         self.assertIn(self.check.cloaked_url(), payload["text"])
         self.assertIn("grace time passed", payload["text"])
 
-        self.assertIn("<b>Project:</b> Alices Project\n", payload["text"])
-        self.assertIn("<b>Tags:</b> foo, bar, baz\n", payload["text"])
-        self.assertIn("<b>Period:</b> 1 day\n", payload["text"])
-        self.assertIn("<b>Total Pings:</b> 112233\n", payload["text"])
-        self.assertIn("<b>Last Ping:</b> Success, 10 minutes ago", payload["text"])
+        self.assertIn("<b>项目：</b> Alices Project\n", payload["text"])
+        self.assertIn("<b>标签：</b> foo, bar, baz\n", payload["text"])
+        self.assertIn("<b>周期：</b> 1 天\n", payload["text"])
+        self.assertIn("<b>总 Ping 数：</b> 112233\n", payload["text"])
+        self.assertIn("<b>上次 Ping：</b> Success，10 minutes ago", payload["text"])
 
         # Only one check in the project, so there should be no note about
         # other checks:
-        self.assertNotIn("All the other checks are up.", payload["text"])
+        self.assertNotIn("所有其他检查项都已恢复。", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_reason_failure(self, mock_post: Mock) -> None:
@@ -89,7 +89,7 @@ class NotifyTelegramTestCase(BaseTestCase):
         self.channel.notify(up_flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", payload["text"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_exitstatus(self, mock_post: Mock) -> None:
@@ -103,7 +103,7 @@ class NotifyTelegramTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         self.assertIn(
-            "<b>Last Ping:</b> Exit status 123, 10 minutes ago", payload["text"]
+            "<b>上次 Ping：</b> Exit status 123，10 minutes ago", payload["text"]
         )
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -132,9 +132,9 @@ class NotifyTelegramTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         self.assertIn(
-            "<b>Schedule:</b> <code>* * * * MON-FRI</code>\n", payload["text"]
+            "<b>计划：</b> <code>* * * * MON-FRI</code>\n", payload["text"]
         )
-        self.assertIn("<b>Time Zone:</b> Europe/Riga\n", payload["text"])
+        self.assertIn("<b>时区：</b> Europe/Riga\n", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_shows_oncalendar_schedule(self, mock_post: Mock) -> None:
@@ -148,8 +148,8 @@ class NotifyTelegramTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("<b>Schedule:</b> <code>Mon 2-29</code>\n", payload["text"])
-        self.assertIn("<b>Time Zone:</b> Europe/Riga\n", payload["text"])
+        self.assertIn("<b>计划：</b> <code>Mon 2-29</code>\n", payload["text"])
+        self.assertIn("<b>时区：</b> Europe/Riga\n", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_returns_error(self, mock_post: Mock) -> None:
@@ -210,7 +210,7 @@ class NotifyTelegramTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("All the other checks are up.", payload["text"])
+        self.assertIn("所有其他检查项都已恢复。", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_lists_other_down_checks(self, mock_post: Mock) -> None:
@@ -225,9 +225,9 @@ class NotifyTelegramTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("The following checks are also down", payload["text"])
+        self.assertIn("以下检查项也处于宕机状态", payload["text"])
         self.assertIn("Foobar", payload["text"])
-        self.assertIn("(last ping: an hour ago)", payload["text"])
+        self.assertIn("（上次 Ping：an hour ago）", payload["text"])
         self.assertIn(other.cloaked_url(), payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -239,7 +239,7 @@ class NotifyTelegramTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("(last ping: never)", payload["text"])
+        self.assertIn("（上次 Ping：从未）", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_does_not_show_more_than_10_other_checks(self, mock_post: Mock) -> None:
@@ -256,7 +256,7 @@ class NotifyTelegramTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         self.assertNotIn("Foobar", payload["text"])
-        self.assertIn("11 other checks are also down.", payload["text"])
+        self.assertIn("其他 11 个检查项也处于宕机状态。", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_disables_channel_on_403(self, mock_post: Mock) -> None:
@@ -322,7 +322,7 @@ class NotifyTelegramTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("<b>Last Ping Body:</b>\n", payload["text"])
+        self.assertIn("<b>上次 Ping 正文：</b>\n", payload["text"])
         self.assertIn("Hello World", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
@@ -335,7 +335,7 @@ class NotifyTelegramTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         payload = mock_post.call_args.kwargs["json"]
-        self.assertIn("[truncated]", payload["text"])
+        self.assertIn("[已截断]", payload["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_escapes_html(self, mock_post: Mock) -> None:

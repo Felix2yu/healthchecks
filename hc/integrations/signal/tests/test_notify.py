@@ -124,20 +124,20 @@ class NotifySignalTestCase(BaseTestCase):
         self.assertEqual(socketobj.timeout, 60)
 
         params = socketobj.req["params"]
-        self.assertIn("Daily Backup is DOWN", params["message"])
-        self.assertEqual(params["textStyle"][0], "10:12:BOLD")
+        self.assertIn("检查项 Daily Backup 已宕机", params["message"])
+        self.assertEqual(params["textStyle"][0], "4:12:BOLD")
         self.assertIn("grace time passed", params["message"])
 
-        self.assertIn("Project: Alices Project", params["message"])
-        self.assertIn("Tags: foo, bar", params["message"])
-        self.assertIn("Period: 1 day", params["message"])
-        self.assertIn("Total Pings: 112233", params["message"])
-        self.assertIn("Last Ping: Success, 10 minutes ago", params["message"])
+        self.assertIn("项目： Alices Project", params["message"])
+        self.assertIn("标签： foo, bar", params["message"])
+        self.assertIn("周期： 1 天", params["message"])
+        self.assertIn("总 Ping 数： 112233", params["message"])
+        self.assertIn("上次 Ping： Success，10 minutes ago", params["message"])
         self.assertIn("+123456789", params["recipient"])
 
         # Only one check in the project, so there should be no note about
         # other checks:
-        self.assertNotIn("All the other checks are up.", params["message"])
+        self.assertNotIn("所有其他检查项均已恢复。", params["message"])
 
     def test_it_handles_reason_fail(self, socket: Mock) -> None:
         socketobj = setup_mock(socket, {})
@@ -162,7 +162,7 @@ class NotifySignalTestCase(BaseTestCase):
 
         assert socketobj.req
         params = socketobj.req["params"]
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", params["message"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", params["message"])
 
     def test_it_shows_exitstatus(self, socket: Mock) -> None:
         socketobj = setup_mock(socket, {})
@@ -179,7 +179,7 @@ class NotifySignalTestCase(BaseTestCase):
 
         assert socketobj.req
         params = socketobj.req["params"]
-        self.assertIn("Last Ping: Exit status 123, 10 minutes ago", params["message"])
+        self.assertIn("上次 Ping： Exit status 123，10 minutes ago", params["message"])
 
     def test_it_shows_cron_schedule_and_tz(self, socket: Mock) -> None:
         socketobj = setup_mock(socket, {})
@@ -191,8 +191,8 @@ class NotifySignalTestCase(BaseTestCase):
 
         assert socketobj.req
         params = socketobj.req["params"]
-        self.assertIn("Schedule: * * * * *", params["message"])
-        self.assertIn("Time Zone: Europe/Riga", params["message"])
+        self.assertIn("计划： * * * * *", params["message"])
+        self.assertIn("时区： Europe/Riga", params["message"])
 
     def test_it_shows_oncalendar_schedule_and_tz(self, socket: Mock) -> None:
         socketobj = setup_mock(socket, {})
@@ -205,8 +205,8 @@ class NotifySignalTestCase(BaseTestCase):
 
         assert socketobj.req
         params = socketobj.req["params"]
-        self.assertIn("Schedule: Mon 2-29", params["message"])
-        self.assertIn("Time Zone: Europe/Riga", params["message"])
+        self.assertIn("计划： Mon 2-29", params["message"])
+        self.assertIn("时区： Europe/Riga", params["message"])
 
     def test_it_handles_special_characters(self, socket: Mock) -> None:
         socketobj = setup_mock(socket, {})
@@ -226,9 +226,9 @@ class NotifySignalTestCase(BaseTestCase):
 
         assert socketobj.req
         params = socketobj.req["params"]
-        self.assertIn("Foo & Co is DOWN", params["message"])
-        self.assertIn("Project: Alice & Friends", params["message"])
-        self.assertIn("Tags: foo, a&b", params["message"])
+        self.assertIn("检查项 Foo & Co 已宕机", params["message"])
+        self.assertIn("项目： Alice & Friends", params["message"])
+        self.assertIn("标签： foo, a&b", params["message"])
 
     @override_settings(SIGNAL_CLI_SOCKET="example.org:1234")
     def test_it_handles_host_port(self, socket: Mock) -> None:
@@ -295,7 +295,7 @@ class NotifySignalTestCase(BaseTestCase):
 
         assert socketobj.req
         message = socketobj.req["params"]["message"]
-        self.assertIn("All the other checks are up.", message)
+        self.assertIn("所有其他检查项均已恢复。", message)
 
     def test_it_lists_other_down_checks(self, socket: Mock) -> None:
         socketobj = setup_mock(socket, {})
@@ -310,7 +310,7 @@ class NotifySignalTestCase(BaseTestCase):
 
         assert socketobj.req
         message = socketobj.req["params"]["message"]
-        self.assertIn("The following checks are also down", message)
+        self.assertIn("以下检查项也宕机", message)
         self.assertIn("Foobar & Co", message)
         self.assertIn("(last ping: an hour ago)", message)
 
@@ -340,7 +340,7 @@ class NotifySignalTestCase(BaseTestCase):
         assert socketobj.req
         message = socketobj.req["params"]["message"]
         self.assertNotIn("Foobar", message)
-        self.assertIn("11 other checks are also down.", message)
+        self.assertIn("其他 11 个检查项也宕机。", message)
 
     @patch("hc.integrations.signal.transport.logger")
     def test_it_handles_unexpected_payload(self, logger: Mock, socket: Mock) -> None:
@@ -512,16 +512,16 @@ class NotifySignalTestCase(BaseTestCase):
         email = emails["alice@example.org"]
         self.assertEqual(
             email.subject,
-            "Signal notification failed: The check Foo & Co is DOWN"
-            " (success signal did not arrive on time, grace time passed).",
+            "Signal 通知发送失败：检查项 Foo & Co 已宕机"
+            "（success signal did not arrive on time, grace time passed）。",
         )
         # The plaintext version should have no HTML markup, and should
         # have no &amp;, &lt; &gt; stuff:
-        self.assertIn("The check Foo & Co is DOWN", email.body)
+        self.assertIn("检查项 Foo & Co 已宕机", email.body)
         # The HTML version should retain styling, and escape special characters
         # in project name, check name, etc.:
         html = self.get_html(email)
-        self.assertIn("The check <b>Foo &amp; Co</b> is <b>DOWN</b>", html)
+        self.assertIn("检查项 <b>Foo &amp; Co</b> 已<b>宕机</b>", html)
 
     def test_it_handles_null_data(self, socket: Mock) -> None:
         msg = {

@@ -28,7 +28,7 @@ class AddPushbulletTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(url, follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "The Pushbullet integration has been added!")
+        self.assertContains(r, "Pushbullet 集成已添加！")
 
         ch = Channel.objects.get()
         self.assertEqual(ch.value, "test-token")
@@ -50,7 +50,7 @@ class AddPushbulletTestCase(BaseTestCase):
             with patch("hc.integrations.pushbullet.views.logger") as logger:
                 r = self.client.get(url, follow=True)
                 self.assertContains(
-                    r, "Received an unexpected response from Pushbullet."
+                    r, "收到来自 Pushbullet 的意外响应。集成未添加。"
                 )
                 self.assertTrue(logger.warning.called)
 
@@ -74,7 +74,7 @@ class AddPushbulletTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url + "?error=access_denied", follow=True)
         self.assertRedirects(r, self.channels_url)
-        self.assertContains(r, "Pushbullet setup was cancelled")
+        self.assertContains(r, "Pushbullet 设置已取消。")
 
         self.assertEqual(Channel.objects.count(), 0)
 

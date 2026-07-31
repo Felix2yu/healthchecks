@@ -61,7 +61,7 @@ class SendReportsTestCase(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
 
         email = mail.outbox[0]
-        self.assertEqual(email.subject, "Monthly Report")
+        self.assertEqual(email.subject, "Monthly 报告")
 
     def test_it_obeys_next_report_date(self) -> None:
         self.profile.next_report_date = CURRENT_TIME + td(days=1)
@@ -122,7 +122,7 @@ class SendReportsTestCase(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
 
         email = mail.outbox[0]
-        self.assertEqual(email.subject, "Reminder: 1 check still down")
+        self.assertEqual(email.subject, "提醒：1 个检查项仍宕机")
 
     def test_it_obeys_next_nag_date(self) -> None:
         self.profile.next_nag_date = CURRENT_TIME + td(days=1)

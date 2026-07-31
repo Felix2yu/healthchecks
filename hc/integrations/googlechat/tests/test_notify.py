@@ -67,7 +67,7 @@ class NotifyGoogleChatTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         fields = self.fields(payload)
-        self.assertIn("Reason: success signal did not arrive on time", fields["text"])
+        self.assertIn("原因：success signal did not arrive on time", fields["text"])
         self.assertEqual(fields["Last Ping"], "Success, 10 minutes ago")
         self.assertEqual(fields["Total Pings"], "112233")
         self.assertTrue(fields["url"].startswith("http://testserver/cloaked/"))
@@ -86,7 +86,7 @@ class NotifyGoogleChatTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         fields = self.fields(payload)
-        self.assertIn("Reason: received a failure signal.", fields["text"])
+        self.assertIn("原因：received a failure signal。", fields["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_reports_down_duration(self, mock_post: Mock) -> None:
@@ -103,7 +103,7 @@ class NotifyGoogleChatTestCase(BaseTestCase):
 
         payload = mock_post.call_args.kwargs["json"]
         fields = self.fields(payload)
-        self.assertIn("The downtime lasted 1 hour, 30 minutes.", fields["text"])
+        self.assertIn("宕机持续了 1 小时, 30 分钟。", fields["text"])
 
     @patch("hc.api.transports.curl.request", autospec=True)
     def test_it_handles_500(self, mock_post: Mock) -> None:
@@ -113,7 +113,7 @@ class NotifyGoogleChatTestCase(BaseTestCase):
         self.channel.notify(self.flip)
 
         n = Notification.objects.get()
-        self.assertEqual(n.error, "Received status code 500")
+        self.assertEqual(n.error, "收到状态码 500")
 
     @patch(
         "hc.api.transports.curl.request",

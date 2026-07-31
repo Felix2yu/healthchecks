@@ -24,7 +24,7 @@ class LoginTotpTestCase(BaseTestCase):
 
     def test_it_shows_form(self) -> None:
         r = self.client.get(self.url)
-        self.assertContains(r, "Please enter the six-digit code")
+        self.assertContains(r, "请输入您身份验证器应用中的六位数字验证码。")
 
     def test_it_requires_unauthenticated_user(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -77,7 +77,7 @@ class LoginTotpTestCase(BaseTestCase):
         mock_TOTP.return_value.verify.return_value = False
 
         r = self.client.post(self.url, {"code": "000000"})
-        self.assertContains(r, "The code you entered was incorrect.")
+        self.assertContains(r, "您输入的验证码不正确。")
 
     def test_it_uses_rate_limiting(self) -> None:
         obj = TokenBucket(value=f"totp-{self.alice.id}")
@@ -85,7 +85,7 @@ class LoginTotpTestCase(BaseTestCase):
         obj.save()
 
         r = self.client.post(self.url, {"code": "000000"})
-        self.assertContains(r, "Too Many Requests")
+        self.assertContains(r, "请求过多")
 
     @patch("hc.accounts.views.pyotp.totp.TOTP")
     def test_it_rejects_used_code(self, mock_TOTP: Mock) -> None:
@@ -96,4 +96,4 @@ class LoginTotpTestCase(BaseTestCase):
         obj.save()
 
         r = self.client.post(self.url, {"code": "000000"})
-        self.assertContains(r, "Too Many Requests")
+        self.assertContains(r, "请求过多")

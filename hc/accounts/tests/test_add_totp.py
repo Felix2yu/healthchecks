@@ -15,14 +15,14 @@ class AddTotpTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get(self.url)
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
     def test_it_shows_form(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         self.set_sudo_flag()
 
         r = self.client.get(self.url)
-        self.assertContains(r, "Enter the six-digit code")
+        self.assertContains(r, "在下方输入您身份验证器应用中的六位数字验证码。")
 
         # It should put a "totp_secret" key in the session:
         self.assertIn("totp_secret", self.client.session)
@@ -37,7 +37,7 @@ class AddTotpTestCase(BaseTestCase):
         payload = {"code": "000000"}
         r = self.client.post(self.url, payload, follow=True)
         self.assertRedirects(r, "/accounts/profile/")
-        self.assertContains(r, "Successfully set up the Authenticator app")
+        self.assertContains(r, "成功设置身份验证器应用。")
 
         # totp_secret should be gone from the session:
         self.assertNotIn("totp_secret", self.client.session)
@@ -56,7 +56,7 @@ class AddTotpTestCase(BaseTestCase):
 
         payload = {"code": "000000"}
         r = self.client.post(self.url, payload, follow=True)
-        self.assertContains(r, "The code you entered was incorrect.")
+        self.assertContains(r, "您输入的验证码不正确。")
 
         self.profile.refresh_from_db()
         self.assertIsNone(self.profile.totp)

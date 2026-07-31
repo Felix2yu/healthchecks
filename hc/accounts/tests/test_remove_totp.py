@@ -17,15 +17,15 @@ class RemoveCredentialTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         r = self.client.get(self.url)
-        self.assertContains(r, "We have sent a confirmation code")
+        self.assertContains(r, "我们已向您的邮箱地址发送了一个确认码。")
 
     def test_it_shows_form(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         self.set_sudo_flag()
 
         r = self.client.get(self.url)
-        self.assertContains(r, "Disable Authenticator App")
-        self.assertContains(r, "two-factor authentication will no longer be active")
+        self.assertContains(r, "禁用身份验证器应用")
+        self.assertContains(r, "双重身份验证将不再生效。")
 
     def test_it_skips_warning_when_other_2fa_methods_exist(self) -> None:
         self.c = Credential.objects.create(user=self.alice, name="Alices Key")
@@ -33,7 +33,7 @@ class RemoveCredentialTestCase(BaseTestCase):
         self.set_sudo_flag()
 
         r = self.client.get(self.url)
-        self.assertNotContains(r, "two-factor authentication will no longer be active")
+        self.assertNotContains(r, "双重身份验证将不再生效。")
 
     def test_it_removes_totp(self) -> None:
         self.client.login(username="alice@example.org", password="password")
@@ -41,7 +41,7 @@ class RemoveCredentialTestCase(BaseTestCase):
 
         r = self.client.post(self.url, {"disable_totp": "1"}, follow=True)
         self.assertRedirects(r, "/accounts/profile/")
-        self.assertContains(r, "Disabled the authenticator app.")
+        self.assertContains(r, "已禁用身份验证器应用。")
 
         self.profile.refresh_from_db()
         self.assertIsNone(self.profile.totp)

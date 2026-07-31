@@ -14,7 +14,7 @@ class AddSlackBtnTestCase(BaseTestCase):
     def test_instructions_work(self) -> None:
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get(self.url)
-        self.assertContains(r, "Setup Guide", status_code=200)
+        self.assertContains(r, "设置指南", status_code=200)
 
     def test_slack_button(self) -> None:
         self.client.login(username="alice@example.org", password="password")

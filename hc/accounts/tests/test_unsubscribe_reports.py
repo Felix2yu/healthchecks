@@ -21,7 +21,7 @@ class UnsubscribeReportsTestCase(BaseTestCase):
         url = f"/accounts/unsubscribe_reports/{sig}/"
 
         r = self.client.post(url)
-        self.assertContains(r, "Unsubscribed")
+        self.assertContains(r, "已取消订阅")
 
         self.profile.refresh_from_db()
         self.assertEqual(self.profile.reports, "off")
@@ -33,14 +33,14 @@ class UnsubscribeReportsTestCase(BaseTestCase):
     def test_bad_signature_gets_rejected(self) -> None:
         url = "/accounts/unsubscribe_reports/invalid/"
         r = self.client.get(url)
-        self.assertContains(r, "Incorrect Link")
+        self.assertContains(r, "链接无效")
 
     def test_it_serves_confirmation_form(self) -> None:
         sig = signing.TimestampSigner(salt="reports").sign("alice")
         url = f"/accounts/unsubscribe_reports/{sig}/"
 
         r = self.client.get(url)
-        self.assertContains(r, "Please press the button below")
+        self.assertContains(r, "请点击下方按钮取消订阅")
         self.assertNotContains(r, "submit()")
 
     def test_aged_signature_autosubmits(self) -> None:
@@ -52,7 +52,7 @@ class UnsubscribeReportsTestCase(BaseTestCase):
         url = f"/accounts/unsubscribe_reports/{sig}/"
 
         r = self.client.get(url)
-        self.assertContains(r, "Please press the button below")
+        self.assertContains(r, "请点击下方按钮取消订阅")
         self.assertContains(r, "submit()")
 
     def test_it_handles_missing_user(self) -> None:
@@ -62,4 +62,4 @@ class UnsubscribeReportsTestCase(BaseTestCase):
         url = f"/accounts/unsubscribe_reports/{sig}/"
 
         r = self.client.post(url)
-        self.assertContains(r, "Unsubscribed")
+        self.assertContains(r, "已取消订阅")
