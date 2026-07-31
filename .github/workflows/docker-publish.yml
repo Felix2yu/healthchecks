@@ -58,6 +58,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Make package public
+        if: ${{ secrets.GH_PAT != '' }}
         run: gh api --method PATCH user/packages/container/${{ env.IMAGE_NAME }} -f visibility=public
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
