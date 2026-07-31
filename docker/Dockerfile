@@ -82,6 +82,10 @@ COPY --from=builder /app/healthchecks /app/healthchecks
 
 COPY docker/root/ /
 
+RUN chmod +x \
+    /etc/s6-overlay/s6-rc.d/init-healthchecks-config/run \
+    /etc/s6-overlay/s6-rc.d/svc-healthchecks/run
+
 EXPOSE 8000
 
 VOLUME /config
