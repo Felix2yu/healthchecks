@@ -2,7 +2,7 @@
 Django settings for healthchecks project.
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/4.2/ref/settings/
+https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from __future__ import annotations
@@ -313,14 +313,25 @@ def immutable_file_test(path: Any, url: str) -> bool:
 WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test
 
 # SMTP credentials for sending email
-EMAIL_HOST = os.getenv("EMAIL_HOST", "")
-EMAIL_PORT = envint("EMAIL_PORT", "587")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = envsecret("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = envbool("EMAIL_USE_TLS", "True")
-EMAIL_USE_SSL = envbool("EMAIL_USE_SSL", "False")
 EMAIL_USE_VERIFICATION = envbool("EMAIL_USE_VERIFICATION", "True")
 EMAIL_MAIL_FROM_TMPL = os.getenv("EMAIL_MAIL_FROM_TMPL", "")
+
+MAILERS = {}
+if os.getenv("EMAIL_HOST"):
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+            "OPTIONS": {
+                "host": os.getenv("EMAIL_HOST", ""),
+                "port": envint("EMAIL_PORT", "587"),
+                "use_tls": envbool("EMAIL_USE_TLS", "True"),
+                "use_ssl": envbool("EMAIL_USE_SSL", "False"),
+                "username": os.getenv("EMAIL_HOST_USER", ""),
+                "password": envsecret("EMAIL_HOST_PASSWORD", ""),
+            },
+        },
+    }
+
 
 # WebAuthn
 RP_ID = os.getenv("RP_ID")
@@ -436,4 +447,4 @@ ZULIP_ENABLED = envbool("ZULIP_ENABLED", "True")
 
 # Read additional configuration from hc/local_settings.py if it exists
 if (BASE_DIR / "hc/local_settings.py").exists():
-    from .local_settings import *  # noqa: F403
+    from .local_settings import *

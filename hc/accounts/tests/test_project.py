@@ -146,7 +146,7 @@ class ProjectTestCase(BaseTestCase):
 
         self.assertEmailContains("您可以管理现有的监控检查项并设置新的检查项。")
 
-    @override_settings(EMAIL_HOST=None)
+    @override_settings(MAILERS={})
     def test_it_skips_invite_email_if_email_host_not_set(self) -> None:
         self.client.login(username="alice@example.org", password="password")
 

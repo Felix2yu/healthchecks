@@ -90,23 +90,34 @@ Healthchecks 附带 Django 的管理面板，您可以在其中执行
 
 ## 发送电子邮件
 
-Healthchecks 需要 SMTP 凭据才能发送电子邮件：
-登录链接、监控通知、月度报告。
+Healthchecks 必须能够发送电子邮件消息，以便向用户发送登录链接和警报。使用以下环境变量指定 SMTP 凭据：
 
-使用 `EMAIL_HOST`、`EMAIL_PORT`、`EMAIL_HOST_USER`、`EMAIL_HOST_PASSWORD`、`EMAIL_USE_SSL` 和 `EMAIL_USE_TLS` 环境变量指定 SMTP 凭据。
-示例：
+- 隐式 TLS（*推荐*）：
 
-```ini
-EMAIL_HOST=my-smtp-server-here.com
-EMAIL_PORT=465
-EMAIL_HOST_USER=my-username
-EMAIL_HOST_PASSWORD=mypassword
-EMAIL_USE_SSL = True
+```python
+DEFAULT_FROM_EMAIL = "valid-sender-address@example.org"
+EMAIL_HOST = "smtp.example.org"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "example-username"
+EMAIL_HOST_PASSWORD = "example-password"
 EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 ```
 
-您可以在 Django 文档的 [Sending Email](https://docs.djangoproject.com/en/4.2/topics/email/)
-部分阅读有关处理外发电子邮件的更多信息。
+根据 [RFC8314 第 3.3 节：SMTP 提交的隐式 TLS](https://tools.ietf.org/html/rfc8314#section-3.3)，端口 465 应是首选方法。请务必使用 TLS 证书而不是 SSL 证书。
+
+- 显式 TLS：
+
+```python
+DEFAULT_FROM_EMAIL = "valid-sender-address@example.org"
+EMAIL_HOST = "smtp.example.org"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "example-username"
+EMAIL_HOST_PASSWORD = "example-password"
+EMAIL_USE_TLS = True
+```
+
+Healthchecks 使用这些环境变量构建 `settings.MAILERS` 字典（一个标准 Django 设置，[文档](https://docs.djangoproject.com/en/6.1/ref/settings/#std-setting-MAILERS)）。
 
 ## 接收电子邮件
 

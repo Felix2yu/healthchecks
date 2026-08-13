@@ -14,7 +14,7 @@ team management features: projects, team members, read-only access.
 The building blocks are:
 
 * Python 3.12+
-* Django 6.0
+* Django 6.1
 * PostgreSQL, MySQL or MariaDB
 
 Healthchecks is licensed under the BSD 3-clause license.
@@ -144,7 +144,7 @@ Healthchecks reads configuration from environment variables. See the
 you can set via environment variables.
 
 In addition, Healthchecks reads settings from the `hc/local_settings.py` file if it
-exists. You can set or override any [standard Django setting](https://docs.djangoproject.com/en/5.1/ref/settings/)
+exists. You can set or override any [standard Django setting](https://docs.djangoproject.com/en/6.1/ref/settings/)
 in this file. You can copy the provided `hc/local_settings.py.example` as
 `hc/local_settings.py` and use it as a starting point.
 
@@ -173,28 +173,30 @@ environment variables:
 - Implicit TLS (*recommended*):
     ```python
     DEFAULT_FROM_EMAIL = "valid-sender-address@example.org"
-    EMAIL_HOST = "your-smtp-server-here.com"
+    EMAIL_HOST = "smtp.example.org"
     EMAIL_PORT = 465
-    EMAIL_HOST_USER = "smtp-username"
-    EMAIL_HOST_PASSWORD = "smtp-password"
+    EMAIL_HOST_USER = "example-username"
+    EMAIL_HOST_PASSWORD = "example-password"
     EMAIL_USE_TLS = False
     EMAIL_USE_SSL = True
     ```
 
-    Port 465 should be the preferred method according to [RFC8314 Section 3.3: Implicit TLS for SMTP Submission](https://tools.ietf.org/html/rfc8314#section-3.3). Be sure to use a TLS certificate and not an SSL one.
+    Port 465 should be the preferred method according to [RFC8314 Section 3.3: Implicit
+    TLS for SMTP Submission](https://tools.ietf.org/html/rfc8314#section-3.3). Be sure
+    to use a TLS certificate and not an SSL one.
 
 - Explicit TLS:
     ```python
     DEFAULT_FROM_EMAIL = "valid-sender-address@example.org"
-    EMAIL_HOST = "your-smtp-server-here.com"
+    EMAIL_HOST = "smtp.example.org"
     EMAIL_PORT = 587
-    EMAIL_HOST_USER = "smtp-username"
-    EMAIL_HOST_PASSWORD = "smtp-password"
+    EMAIL_HOST_USER = "example-username"
+    EMAIL_HOST_PASSWORD = "example-password"
     EMAIL_USE_TLS = True
     ```
 
-For more information, have a look at Django documentation,
-[Sending Email](https://docs.djangoproject.com/en/4.2/topics/email/) section.
+Healthchecks use these environment variables to construct the `settings.MAILERS`
+dictionary (a standard Django setting, [docs](https://docs.djangoproject.com/en/6.1/ref/settings/#std-setting-MAILERS)).
 
 ## Receiving Emails
 
@@ -537,15 +539,15 @@ Here is a non-exhaustive list of pointers and things to check before launching a
 Healthchecks instance in production.
 
 * Environment variables, settings.py and local_settings.py.
-  * [DEBUG](https://docs.djangoproject.com/en/4.2/ref/settings/#debug). Make sure it is
+  * [DEBUG](https://docs.djangoproject.com/en/6.1/ref/settings/#debug). Make sure it is
     set to `False`.
-  * [ALLOWED_HOSTS](https://docs.djangoproject.com/en/4.2/ref/settings/#allowed-hosts).
+  * [ALLOWED_HOSTS](https://docs.djangoproject.com/en/6.1/ref/settings/#allowed-hosts).
     Make sure it contains the correct domain name you want to use.
   * Server Errors. When DEBUG=False, Django will not show detailed error pages, and
     will not print exception tracebacks to standard output. To receive exception
     tracebacks in email, review and edit the
-    [ADMINS](https://docs.djangoproject.com/en/4.2/ref/settings/#admins) and
-    [SERVER_EMAIL](https://docs.djangoproject.com/en/4.2/ref/settings/#server-email)
+    [ADMINS](https://docs.djangoproject.com/en/6.1/ref/settings/#admins) and
+    [SERVER_EMAIL](https://docs.djangoproject.com/en/6.1/ref/settings/#server-email)
     settings. Consider setting up exception logging with [Sentry](https://sentry.io/for/django/).
 * Use a reverse proxy. Do not expose the Healthchecks instance directly to the public
   internet, put a reverse proxy such as nginx, HAProxy, or Caddy in front of it.

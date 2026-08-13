@@ -96,20 +96,32 @@ $<span class="w"> </span>./manage.py<span class="w"> </span>createsuperuser
 <p>然后，使用超级用户凭据登录站点。登录后，
 点击顶部导航中的"Account"下拉菜单，选择"Site Administration"。</p>
 <h2>发送电子邮件</h2>
-<p>Healthchecks 需要 SMTP 凭据才能发送电子邮件：
-登录链接、监控通知、月度报告。</p>
-<p>使用 <code>EMAIL_HOST</code>、<code>EMAIL_PORT</code>、<code>EMAIL_HOST_USER</code>、<code>EMAIL_HOST_PASSWORD</code>、<code>EMAIL_USE_SSL</code> 和 <code>EMAIL_USE_TLS</code> 环境变量指定 SMTP 凭据。
-示例：</p>
-<div class="highlight"><pre><span></span><code><span class="na">EMAIL_HOST</span><span class="o">=</span><span class="s">my-smtp-server-here.com</span>
-<span class="na">EMAIL_PORT</span><span class="o">=</span><span class="s">465</span>
-<span class="na">EMAIL_HOST_USER</span><span class="o">=</span><span class="s">my-username</span>
-<span class="na">EMAIL_HOST_PASSWORD</span><span class="o">=</span><span class="s">mypassword</span>
-<span class="na">EMAIL_USE_SSL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
-<span class="na">EMAIL_USE_TLS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">False</span>
+<p>Healthchecks 必须能够发送电子邮件消息，以便向用户发送登录链接和警报。使用以下环境变量指定 SMTP 凭据：</p>
+<ul>
+<li>隐式 TLS（<em>推荐</em>）：</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">DEFAULT_FROM_EMAIL</span> <span class="o">=</span> <span class="s2">&quot;valid-sender-address@example.org&quot;</span>
+<span class="n">EMAIL_HOST</span> <span class="o">=</span> <span class="s2">&quot;smtp.example.org&quot;</span>
+<span class="n">EMAIL_PORT</span> <span class="o">=</span> <span class="mi">465</span>
+<span class="n">EMAIL_HOST_USER</span> <span class="o">=</span> <span class="s2">&quot;example-username&quot;</span>
+<span class="n">EMAIL_HOST_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;example-password&quot;</span>
+<span class="n">EMAIL_USE_TLS</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">EMAIL_USE_SSL</span> <span class="o">=</span> <span class="kc">True</span>
 </code></pre></div>
 
-<p>您可以在 Django 文档的 <a href="https://docs.djangoproject.com/en/4.2/topics/email/">Sending Email</a>
-部分阅读有关处理外发电子邮件的更多信息。</p>
+<p>根据 <a href="https://tools.ietf.org/html/rfc8314#section-3.3">RFC8314 第 3.3 节：SMTP 提交的隐式 TLS</a>，端口 465 应是首选方法。请务必使用 TLS 证书而不是 SSL 证书。</p>
+<ul>
+<li>显式 TLS：</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">DEFAULT_FROM_EMAIL</span> <span class="o">=</span> <span class="s2">&quot;valid-sender-address@example.org&quot;</span>
+<span class="n">EMAIL_HOST</span> <span class="o">=</span> <span class="s2">&quot;smtp.example.org&quot;</span>
+<span class="n">EMAIL_PORT</span> <span class="o">=</span> <span class="mi">587</span>
+<span class="n">EMAIL_HOST_USER</span> <span class="o">=</span> <span class="s2">&quot;example-username&quot;</span>
+<span class="n">EMAIL_HOST_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;example-password&quot;</span>
+<span class="n">EMAIL_USE_TLS</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+<p>Healthchecks 使用这些环境变量构建 <code>settings.MAILERS</code> 字典（一个标准 Django 设置，<a href="https://docs.djangoproject.com/en/6.1/ref/settings/#std-setting-MAILERS">文档</a>）。</p>
 <h2>接收电子邮件</h2>
 <p>Healthchecks 附带一个 <code>smtpd</code> 管理命令，用于启动
 SMTP 监听服务。运行该命令后，您可以通过发送电子邮件消息

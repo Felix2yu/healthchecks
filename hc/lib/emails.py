@@ -22,8 +22,6 @@ class EmailThread(Thread):
     def run(self) -> None:
         for attempt in range(self.MAX_TRIES):
             try:
-                # Make sure each retry creates a new connection:
-                self.message.connection = None
                 self.message.send()
                 # No exception--great! Return from the retry loop
                 return
@@ -38,12 +36,17 @@ class EmailThread(Thread):
 
 
 def make_message(
-    name: str, to: str | list[str], ctx: dict[str, Any], headers: dict[str, str] = {}
+    name: str,
+    to: str | list[str],
+    ctx: dict[str, Any],
+    headers: dict[str, str] | None = None,
 ) -> Message:
     subject = render(f"emails/{name}-subject.html", ctx).strip()
     # xa0 is a non-breaking space, in text emails we want regular spaces
     body = render(f"emails/{name}-body-text.html", ctx).replace("\xa0", " ")
     html = render(f"emails/{name}-body-html.html", ctx)
+    if headers is None:
+        headers = {}
 
     domain = settings.DEFAULT_FROM_EMAIL.split("@")[-1].strip(">")
     headers["Message-ID"] = make_msgid(domain=domain)
@@ -66,7 +69,7 @@ def make_message(
 
 
 def send(message: Message, block: bool = False) -> None:
-    assert settings.EMAIL_HOST, (
+    assert settings.MAILERS, (
         "No SMTP configuration,"
         " see https://github.com/healthchecks/healthchecks#sending-emails"
     )

@@ -119,7 +119,7 @@
 <div class="highlight"><pre><span></span><code><span class="na">ALLOWED_HOSTS</span><span class="o">=</span><span class="s">first.example.org,second.example.org</span>
 </code></pre></div>
 
-<p>除了逗号分隔语法之外，这是一个标准的 Django 设置。在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts">Django 文档</a>中了解更多。</p>
+<p>除了逗号分隔语法之外，这是一个标准的 Django 设置。在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#allowed-hosts">Django 文档</a>中了解更多。</p>
 <h2 id="APPRISE_ENABLED"><code>APPRISE_ENABLED</code></h2>
 <p>默认值：<code>False</code></p>
 <p>一个布尔值，用于开启/关闭 <a href="https://github.com/caronc/apprise">Apprise</a> 集成。</p>
@@ -132,22 +132,22 @@
 <p>要使用的数据库引擎。可能的值：<code>sqlite</code>、<code>postgres</code>、<code>mysql</code>。</p>
 <h2 id="DB_CONN_MAX_AGE"><code>DB_CONN_MAX_AGE</code></h2>
 <p>默认值：<code>0</code></p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#conn-max-age">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#conn-max-age">Django 文档</a>中了解更多。</p>
 <h2 id="DB_HOST"><code>DB_HOST</code></h2>
 <p>默认值：<code>""</code>（空字符串）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#host">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#host">Django 文档</a>中了解更多。</p>
 <h2 id="DB_NAME"><code>DB_NAME</code></h2>
 <p>默认值：<code>hc</code>（PostgreSQL、MySQL）或 <code>/path/to/projectdir/hc.sqlite</code>（SQLite）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#name">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#name">Django 文档</a>中了解更多。</p>
 <h2 id="DB_PASSWORD"><code>DB_PASSWORD</code></h2>
 <p>默认值：<code>""</code>（空字符串）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#password">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#password">Django 文档</a>中了解更多。</p>
 <h2 id="DB_PASSWORD_FILE"><code>DB_PASSWORD_FILE</code></h2>
 <p>默认值：<code>None</code></p>
 <p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#DB_PASSWORD">DB_PASSWORD</a> 设置。如果同时设置了 <code>DB_PASSWORD</code> 和 <code>DB_PASSWORD_FILE</code>，则 <code>DB_PASSWORD_FILE</code> 优先。</p>
 <h2 id="DB_PORT"><code>DB_PORT</code></h2>
 <p>默认值：<code>""</code>（空字符串）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#port">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#port">Django 文档</a>中了解更多。</p>
 <h2 id="DB_SSLMODE"><code>DB_SSLMODE</code></h2>
 <p>默认值：<code>prefer</code></p>
 <p>PostgreSQL 专用，<a href="https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-SSLMODE">详情</a></p>
@@ -156,15 +156,15 @@
 <p>PostgreSQL 专用，<a href="https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-CONNECT-TARGET-SESSION-ATTRS">详情</a></p>
 <h2 id="DB_USER"><code>DB_USER</code></h2>
 <p>默认值：<code>postgres</code>（PostgreSQL）或 <code>root</code>（MySQL）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#user">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#user">Django 文档</a>中了解更多。</p>
 <h2 id="DEBUG"><code>DEBUG</code></h2>
 <p>默认值：<code>True</code></p>
 <p>一个布尔值，用于开启/关闭调试模式。</p>
 <p><em>切勿在生产环境中以调试模式运行 Healthchecks 实例！</em></p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#debug">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#debug">Django 文档</a>中了解更多。</p>
 <h2 id="DEFAULT_FROM_EMAIL"><code>DEFAULT_FROM_EMAIL</code></h2>
 <p>默认值：<code>healthchecks@example.org</code></p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#default-from-email">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#default-from-email">Django 文档</a>中了解更多。</p>
 <h2 id="DISCORD_CLIENT_ID"><code>DISCORD_CLIENT_ID</code></h2>
 <p>默认值：<code>None</code></p>
 <p>Discord 客户端 ID，Discord 集成所需。</p>
@@ -182,25 +182,25 @@
 <p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#DISCORD_CLIENT_SECRET">DISCORD_CLIENT_SECRET</a> 设置。如果同时设置了 <code>DISCORD_CLIENT_SECRET</code> 和 <code>DISCORD_CLIENT_SECRET_FILE</code>，则 <code>DISCORD_CLIENT_SECRET_FILE</code> 优先。</p>
 <h2 id="EMAIL_HOST"><code>EMAIL_HOST</code></h2>
 <p>默认值：<code>""</code>（空字符串）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#email-host">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_HOST_PASSWORD"><code>EMAIL_HOST_PASSWORD</code></h2>
 <p>默认值：<code>""</code>（空字符串）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-password">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#email-host-password">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_HOST_PASSWORD_FILE"><code>EMAIL_HOST_PASSWORD_FILE</code></h2>
 <p>默认值：<code>None</code></p>
 <p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#EMAIL_HOST_PASSWORD">EMAIL_HOST_PASSWORD</a> 设置。如果同时设置了 <code>EMAIL_HOST_PASSWORD</code> 和 <code>EMAIL_HOST_PASSWORD_FILE</code>，则 <code>EMAIL_HOST_PASSWORD_FILE</code> 优先。</p>
 <h2 id="EMAIL_HOST_USER"><code>EMAIL_HOST_USER</code></h2>
 <p>默认值：<code>""</code>（空字符串）</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-user">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#email-host-user">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_PORT"><code>EMAIL_PORT</code></h2>
 <p>默认值：<code>587</code></p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-port">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#email-port">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_USE_TLS"><code>EMAIL_USE_TLS</code></h2>
 <p>默认值：<code>True</code></p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-tls">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#email-use-tls">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_USE_SSL"><code>EMAIL_USE_SSL</code></h2>
 <p>默认值：<code>False</code></p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-ssl">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#email-use-ssl">Django 文档</a>中了解更多。</p>
 <h2 id="EMAIL_USE_VERIFICATION"><code>EMAIL_USE_VERIFICATION</code></h2>
 <p>默认值：<code>True</code></p>
 <p>一个布尔值，用于开启/关闭添加电子邮件集成时的验证步骤。</p>
@@ -462,7 +462,7 @@ https://ping.my-hc.example.org/1fj9XWM6Ns8vLGTmnPGk9g/dummy-slug
 <h2 id="SECRET_KEY"><code>SECRET_KEY</code></h2>
 <p>默认值：<code>---</code></p>
 <p>用于加密签名的密钥。应设置为唯一且不可预测的值。</p>
-<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key">Django 文档</a>中了解更多。</p>
+<p>这是一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#secret-key">Django 文档</a>中了解更多。</p>
 <h2 id="SECRET_KEY_FILE"><code>SECRET_KEY_FILE</code></h2>
 <p>默认值：<code>None</code></p>
 <p>如果设置，必须包含指向可读文件的文件系统路径。Healthchecks 会将文件内容读入 <a href="#SECRET_KEY">SECRET_KEY</a> 设置。如果同时设置了 <code>SECRET_KEY</code> 和 <code>SECRET_KEY_FILE</code>，则 <code>SECRET_KEY_FILE</code> 优先。</p>
@@ -482,7 +482,7 @@ https://ping.my-hc.example.org/1fj9XWM6Ns8vLGTmnPGk9g/dummy-slug
 <span class="na">SECURE_PROXY_SSL_HEADER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">(&quot;HTTP_X_FORWARDED_PROTO&quot;, &quot;https&quot;)</span>
 </code></pre></div>
 
-<p>此环境变量映射到一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/5.1/ref/settings/#secure-proxy-ssl-header">Django 文档</a>中了解更多。</p>
+<p>此环境变量映射到一个标准的 Django 设置，在 <a href="https://docs.djangoproject.com/en/6.1/ref/settings/#secure-proxy-ssl-header">Django 文档</a>中了解更多。</p>
 <h2 id="SHELL_ENABLED"><code>SHELL_ENABLED</code></h2>
 <p>默认值：<code>False</code></p>
 <p>一个布尔值，用于开启/关闭"Shell Commands"集成。</p>
@@ -544,10 +544,10 @@ https://ping.my-hc.example.org/1fj9XWM6Ns8vLGTmnPGk9g/dummy-slug
 <ul>
 <li><code>LOGIN_URL=<b>/prefix</b>/accounts/login/</code>。当未认证用户请求需要认证的页面时，
 需要此设置以正确重定向到登录页面。<code>LOGIN_URL</code> 是一个标准的 Django 设置，在
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#login-url">Django 文档</a>中了解更多。</li>
+<a href="https://docs.djangoproject.com/en/6.1/ref/settings/#login-url">Django 文档</a>中了解更多。</li>
 <li><code>STATIC_URL=<b>/prefix</b>/static/</code>。需要此设置以正确生成静态文件（JS、CSS、图像）的 URL。
 <code>STATIC_URL</code> 是一个标准的 Django 设置，在
-<a href="https://docs.djangoproject.com/en/5.1/ref/settings/#static-url">Django 文档</a>中了解更多。</li>
+<a href="https://docs.djangoproject.com/en/6.1/ref/settings/#static-url">Django 文档</a>中了解更多。</li>
 </ul>
 <p><strong>关于使用 <code>local_settings.py</code>：</strong> 仅当你通过环境变量指定 <code>SITE_ROOT</code> 时，Healthchecks 才会设置上述额外设置。如果你在 <code>local_settings.py</code> 中指定它，你还需要在其中设置 <code>ALLOWED_HOSTS</code>、<code>LOGIN_URL</code> 和 <code>STATIC_URL</code>。</p>
 <h2 id="SLACK_CLIENT_ID"><code>SLACK_CLIENT_ID</code></h2>

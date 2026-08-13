@@ -131,7 +131,7 @@ ADMINS=alice@example.org,bob@example.org
 ALLOWED_HOSTS=first.example.org,second.example.org
 ```
 
-除了逗号分隔语法之外，这是一个标准的 Django 设置。在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts)中了解更多。
+除了逗号分隔语法之外，这是一个标准的 Django 设置。在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#allowed-hosts)中了解更多。
 
 ## `APPRISE_ENABLED` {: #APPRISE_ENABLED }
 
@@ -155,25 +155,25 @@ pip install apprise
 
 默认值：`0`
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#conn-max-age)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#conn-max-age)中了解更多。
 
 ## `DB_HOST` {: #DB_HOST }
 
 默认值：`""`（空字符串）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#host)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#host)中了解更多。
 
 ## `DB_NAME` {: #DB_NAME }
 
 默认值：`hc`（PostgreSQL、MySQL）或 `/path/to/projectdir/hc.sqlite`（SQLite）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#name)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#name)中了解更多。
 
 ## `DB_PASSWORD` {: #DB_PASSWORD }
 
 默认值：`""`（空字符串）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#password)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#password)中了解更多。
 
 ## `DB_PASSWORD_FILE` {: #DB_PASSWORD_FILE }
 
@@ -185,7 +185,7 @@ pip install apprise
 
 默认值：`""`（空字符串）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#port)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#port)中了解更多。
 
 ## `DB_SSLMODE` {: #DB_SSLMODE }
 
@@ -203,7 +203,7 @@ PostgreSQL 专用，[详情](https://www.postgresql.org/docs/10/libpq-connect.ht
 
 默认值：`postgres`（PostgreSQL）或 `root`（MySQL）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#user)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#user)中了解更多。
 
 ## `DEBUG` {: #DEBUG }
 
@@ -213,13 +213,13 @@ PostgreSQL 专用，[详情](https://www.postgresql.org/docs/10/libpq-connect.ht
 
 _切勿在生产环境中以调试模式运行 Healthchecks 实例！_
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#debug)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#debug)中了解更多。
 
 ## `DEFAULT_FROM_EMAIL` {: #DEFAULT_FROM_EMAIL }
 
 默认值：`healthchecks@example.org`
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#default-from-email)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#default-from-email)中了解更多。
 
 ## `DISCORD_CLIENT_ID` {: #DISCORD_CLIENT_ID }
 
@@ -249,13 +249,29 @@ Discord 客户端密钥，Discord 集成所需。在 [https://discordapp.com/dev
 
 默认值：`""`（空字符串）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host)中了解更多。
+用于发送电子邮件的 SMTP 服务器主机名。如果未设置此环境变量，Healthchecks 将无法发送任何电子邮件。
+
+**关于使用 `local_settings.py`：**
+Healthchecks 从 `EMAIL_*` 环境变量中读取 SMTP 设置，并使用它们构建 `settings.MAILERS` 字典（这是一个标准 Django 设置，更多信息请参阅 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#std-setting-MAILERS)）。要在 `local_settings.py` 文件中配置 SMTP 服务器，请使用 `MAILERS` 设置，而不是单独的 `EMAIL_*` 设置：
+
+```
+MAILERS = {
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": "smtp.example.org",
+            "username": "example-username",
+            "password": "example-password",
+        },
+    },
+}
+```
 
 ## `EMAIL_HOST_PASSWORD` {: #EMAIL_HOST_PASSWORD }
 
 默认值：`""`（空字符串）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-password)中了解更多。
+在 [EMAIL_HOST](#EMAIL_HOST) 中定义的 SMTP 服务器所使用的密码。
 
 ## `EMAIL_HOST_PASSWORD_FILE` {: #EMAIL_HOST_PASSWORD_FILE }
 
@@ -267,25 +283,25 @@ Discord 客户端密钥，Discord 集成所需。在 [https://discordapp.com/dev
 
 默认值：`""`（空字符串）
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-host-user)中了解更多。
+在 [EMAIL_HOST](#EMAIL_HOST) 中定义的 SMTP 服务器所使用的用户名。
 
 ## `EMAIL_PORT` {: #EMAIL_PORT }
 
 默认值：`587`
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-port)中了解更多。
+在 [EMAIL_HOST](#EMAIL_HOST) 中定义的 SMTP 服务器所使用的端口。
 
 ## `EMAIL_USE_TLS` {: #EMAIL_USE_TLS }
 
 默认值：`True`
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-tls)中了解更多。
+是否在与 SMTP 服务器通信时使用 TLS（安全）连接。这用于显式 TLS 连接，通常在 587 端口上使用。
 
 ## `EMAIL_USE_SSL` {: #EMAIL_USE_SSL}
 
 默认值：`False`
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#email-use-ssl)中了解更多。
+是否在与 SMTP 服务器通信时使用隐式 TLS（安全）连接。它通常在 465 端口上使用。
 
 ## `EMAIL_USE_VERIFICATION` {: #EMAIL_USE_VERIFICATION }
 
@@ -717,7 +733,7 @@ S3 服务中账户的密钥。
 
 用于加密签名的密钥。应设置为唯一且不可预测的值。
 
-这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key)中了解更多。
+这是一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#secret-key)中了解更多。
 
 ## `SECRET_KEY_FILE` {: #SECRET_KEY_FILE }
 
@@ -750,7 +766,7 @@ SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO,https
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ```
 
-此环境变量映射到一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#secure-proxy-ssl-header)中了解更多。
+此环境变量映射到一个标准的 Django 设置，在 [Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#secure-proxy-ssl-header)中了解更多。
 
 ## `SHELL_ENABLED` {: #SHELL_ENABLED }
 
@@ -845,10 +861,10 @@ Default: `Mychecks`
 
 * <code>LOGIN_URL=<b>/prefix</b>/accounts/login/</code>。当未认证用户请求需要认证的页面时，
 需要此设置以正确重定向到登录页面。`LOGIN_URL` 是一个标准的 Django 设置，在
-[Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#login-url)中了解更多。
+[Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#login-url)中了解更多。
 * <code>STATIC_URL=<b>/prefix</b>/static/</code>。需要此设置以正确生成静态文件（JS、CSS、图像）的 URL。
 `STATIC_URL` 是一个标准的 Django 设置，在
-[Django 文档](https://docs.djangoproject.com/en/5.1/ref/settings/#static-url)中了解更多。
+[Django 文档](https://docs.djangoproject.com/en/6.1/ref/settings/#static-url)中了解更多。
 
 **关于使用 `local_settings.py`：** 仅当你通过环境变量指定 `SITE_ROOT` 时，Healthchecks 才会设置上述额外设置。如果你在 `local_settings.py` 中指定它，你还需要在其中设置 `ALLOWED_HOSTS`、`LOGIN_URL` 和 `STATIC_URL`。
 
