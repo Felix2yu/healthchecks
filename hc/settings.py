@@ -448,3 +448,35 @@ ZULIP_ENABLED = envbool("ZULIP_ENABLED", "True")
 # Read additional configuration from hc/local_settings.py if it exists
 if (BASE_DIR / "hc/local_settings.py").exists():
     from .local_settings import *
+
+# 兼容旧版 EMAIL_* 配置：Django 6.1 起禁止 MAILERS 与 EMAIL_* 同时显式定义。
+# 若 local_settings.py 仍使用旧式 EMAIL_* 设置，将其转换为 MAILERS 并移除旧设置。
+if "EMAIL_HOST" in globals():
+    if not MAILERS:
+        MAILERS = {
+            "default": {
+                "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+                "OPTIONS": {
+                    "host": globals().get("EMAIL_HOST", ""),
+                    "port": globals().get("EMAIL_PORT", 587),
+                    "use_tls": globals().get("EMAIL_USE_TLS", True),
+                    "use_ssl": globals().get("EMAIL_USE_SSL", False),
+                    "username": globals().get("EMAIL_HOST_USER", ""),
+                    "password": globals().get("EMAIL_HOST_PASSWORD", ""),
+                },
+            },
+        }
+    for _legacy_setting in (
+        "EMAIL_BACKEND",
+        "EMAIL_FILE_PATH",
+        "EMAIL_HOST",
+        "EMAIL_HOST_PASSWORD",
+        "EMAIL_HOST_USER",
+        "EMAIL_PORT",
+        "EMAIL_SSL_CERTFILE",
+        "EMAIL_SSL_KEYFILE",
+        "EMAIL_TIMEOUT",
+        "EMAIL_USE_SSL",
+        "EMAIL_USE_TLS",
+    ):
+        globals().pop(_legacy_setting, None)
