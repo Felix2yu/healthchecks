@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## v4.4-dev - Unreleased
+## v4.4 - 2026-08-31
 
 ### Improvements
 - Send flapping notices to all team members (not just the owner)
@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 - Fix the email integration to sanitize long lines in .eml attachments
+- Fix race conditions when concurrent requests update the same check
+- Fix bounce signing code to produce shorter signatures
+- Security: fix the email verification link to depend on the email address
 
 ## v4.3 - 2026-07-14
 

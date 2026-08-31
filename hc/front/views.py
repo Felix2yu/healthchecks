@@ -564,7 +564,7 @@ def update_name(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
         check.slug = form.cleaned_data["slug"]
         check.tags = form.cleaned_data["tags"]
         check.desc = form.cleaned_data["desc"]
-        check.save()
+        check.save(update_fields=("name", "slug", "tags", "desc"))
 
     if "/details/" in request.headers.get("Referer", ""):
         return redirect("hc-details", code)
@@ -581,17 +581,20 @@ def filtering_rules(request: AuthenticatedHttpRequest, code: UUID) -> HttpRespon
 
     form = forms.FilteringRulesForm(request.POST)
     if form.is_valid():
-        check.filter_subject = form.cleaned_data["filter_subject"]
-        check.filter_body = form.cleaned_data["filter_body"]
-        check.filter_http_body = form.cleaned_data["filter_http_body"]
-        check.filter_default_fail = form.cleaned_data["filter_default_fail"]
-        check.start_kw = form.cleaned_data["start_kw"]
-        check.success_kw = form.cleaned_data["success_kw"]
-        check.failure_kw = form.cleaned_data["failure_kw"]
-
-        check.methods = form.cleaned_data["methods"]
-        check.manual_resume = form.cleaned_data["manual_resume"]
-        check.save()
+        update_fields = (
+            "filter_subject",
+            "filter_body",
+            "filter_http_body",
+            "filter_default_fail",
+            "start_kw",
+            "success_kw",
+            "failure_kw",
+            "methods",
+            "manual_resume",
+        )
+        for field in update_fields:
+            setattr(check, field, form.cleaned_data[field])
+        check.save(update_fields=update_fields)
 
     return redirect("hc-details", code)
 
@@ -600,6 +603,7 @@ def filtering_rules(request: AuthenticatedHttpRequest, code: UUID) -> HttpRespon
 @login_required
 def update_timeout(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     check = _get_rw_check_for_user(request, code)
+    fields = ("kind", "timeout", "grace", "schedule", "tz", "alert_after")
 
     kind = request.POST.get("kind")
     if kind == "simple":
@@ -651,12 +655,12 @@ def update_timeout(request: AuthenticatedHttpRequest, code: UUID) -> HttpRespons
             # Kick off nags. This would normally happen in the sendalerts management
             # command while processing a flip, but we have already marked the flip
             # as processed
-            check.save()
+            check.save(update_fields=fields + ("status",))
             check_saved = True
             check.project.update_next_nag_dates()
 
     if not check_saved:
-        check.save()
+        check.save(update_fields=fields)
 
     if "/details/" in request.headers.get("Referer", ""):
         return redirect("hc-details", code)
@@ -828,7 +832,7 @@ def pause(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     check.status = "paused"
     check.last_start = None
     check.alert_after = None
-    check.save()
+    check.save(update_fields=("status", "last_start", "alert_after"))
 
     # After pausing a check we must check if all checks are up,
     # and Profile.next_nag_date needs to be cleared out:
@@ -854,7 +858,7 @@ def resume(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     check.last_start = None
     check.last_ping = None
     check.alert_after = None
-    check.save()
+    check.save(update_fields=("status", "last_start", "last_ping", "alert_after"))
 
     return redirect("hc-details", code)
 
@@ -880,7 +884,16 @@ def clear_events(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     check.last_duration = None
     check.has_confirmation_link = False
     check.alert_after = None
-    check.save()
+    check.save(
+        update_fields=(
+            "status",
+            "last_ping",
+            "last_start",
+            "last_duration",
+            "has_confirmation_link",
+            "alert_after",
+        )
+    )
 
     check.ping_set.all().delete()
     check.notification_set.all().delete()
@@ -1048,7 +1061,7 @@ def transfer(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
                 return HttpResponseBadRequest()
 
         check.project = target_project
-        check.save()
+        check.save(update_fields=("project",))
         check.assign_all_channels()
 
         messages.success(request, "检查项转移成功！")

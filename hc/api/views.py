@@ -341,42 +341,38 @@ def _update(check: Check, spec: Spec, v: int) -> None:
 
             new_channels.add(matches[0])
 
-    need_save = False
-    if check.pk is None:
-        # Empty pk means we're inserting a new check,
-        # and so do need to save() it:
-        need_save = True
+    update_fields = set()
 
-    if spec.name is not None and check.name != spec.name:
+    if spec.name is not None:
         check.name = spec.name
+        update_fields.add("name")
         if v < 3:
             # v1 and v2 generates slug automatically from name
             check.slug = slugify(spec.name)
-        need_save = True
+            update_fields.add("slug")
 
     kind = spec.kind()
     if kind == "simple":
-        if check.kind != "simple" or check.timeout != spec.timeout:
-            check.kind = "simple"
-            check.timeout = spec.timeout
-            need_save = True
+        check.kind = "simple"
+        check.timeout = spec.timeout
+        update_fields.update(("kind", "timeout"))
 
     if kind in ("cron", "oncalendar"):
-        if check.kind != kind or check.schedule != spec.schedule:
-            check.kind = kind
-            assert spec.schedule is not None
-            check.schedule = spec.schedule
-            need_save = True
+        check.kind = kind
+        assert spec.schedule is not None
+        check.schedule = spec.schedule
+        update_fields.update(("kind", "schedule"))
 
+    # subject and subject_fail are deprecated but still supported.
+    # Here's the special logic to map them to success_kw, failure_kw, filter_subject.
     if spec.subject is not None:
         check.success_kw = spec.subject
         check.filter_subject = bool(check.success_kw or check.failure_kw)
-        need_save = True
-
+        update_fields.update(("success_kw", "filter_subject"))
     if spec.subject_fail is not None:
         check.failure_kw = spec.subject_fail
         check.filter_subject = bool(check.success_kw or check.failure_kw)
-        need_save = True
+        update_fields.update(("failure_kw", "filter_subject"))
 
     for key in (
         "slug",
@@ -395,13 +391,18 @@ def _update(check: Check, spec: Spec, v: int) -> None:
         "grace",
     ):
         v = getattr(spec, key)
-        if v is not None and getattr(check, key) != v:
+        if v is not None:
             setattr(check, key, v)
-            need_save = True
+            update_fields.add(key)
 
-    if need_save:
-        check.alert_after = check.going_down_after()
+    check.alert_after = check.going_down_after()
+    update_fields.add("alert_after")
+    if check._state.adding:
         check.save()
+    else:
+        # Update only the fields that were in the spec. Updating all fields risks
+        # overwriting concurrent changes with older values.
+        check.save(update_fields=update_fields)
 
     # This needs to be done after saving the check, because of
     # the M2M relation between checks and channels:
@@ -497,8 +498,6 @@ def get_check_by_unique_key(request: ApiRequest, unique_key: str) -> HttpRespons
 
 @authorize
 def update_check(request: ApiRequest, code: UUID) -> HttpResponse:
-    # Don't acquire lock right away, first see if the check exists
-    # and matches the API key
     check = get_object_or_404(Check, code=code)
     if check.project_id != request.project.id:
         return HttpResponseForbidden()
@@ -508,15 +507,12 @@ def update_check(request: ApiRequest, code: UUID) -> HttpResponse:
     except ValidationError as e:
         return JsonResponse({"error": format_first_error(e)}, status=400)
 
-    # Start a transaction, select for update, update.
-    # Use get_object_or_404 here again, in case another concurrent request
-    # has *just* deleted this check.
-    with transaction.atomic():
-        check = get_object_or_404(Check.objects.select_for_update(), code=code)
-        try:
-            _update(check, spec, request.v)
-        except BadChannelException as e:
-            return JsonResponse({"error": e.message}, status=400)
+    try:
+        _update(check, spec, request.v)
+    except BadChannelException as e:
+        return JsonResponse({"error": e.message}, status=400)
+    except Check.NotUpdated:
+        return HttpResponseNotFound()
 
     return JsonResponse(check.to_dict(v=request.v))
 
@@ -563,7 +559,7 @@ def pause(request: ApiRequest, code: UUID) -> HttpResponse:
     check.status = "paused"
     check.last_start = None
     check.alert_after = None
-    check.save()
+    check.save(update_fields=("status", "last_start", "alert_after"))
 
     # After pausing a check we must check if all checks are up,
     # and Profile.next_nag_date needs to be cleared out:
@@ -589,7 +585,7 @@ def resume(request: ApiRequest, code: UUID) -> HttpResponse:
     check.last_start = None
     check.last_ping = None
     check.alert_after = None
-    check.save()
+    check.save(update_fields=("status", "last_start", "last_ping", "alert_after"))
 
     return JsonResponse(check.to_dict(v=request.v))
 

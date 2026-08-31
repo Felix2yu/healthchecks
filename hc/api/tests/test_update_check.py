@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import uuid
 from datetime import timedelta as td
+from typing import Any
+from unittest.mock import patch
 
 from django.utils.timezone import now
 
@@ -63,6 +65,7 @@ class UpdateCheckTestCase(BaseTestCase):
 
         self.check.refresh_from_db()
         self.assertEqual(self.check.name, "Foo")
+        self.assertEqual(self.check.slug, "foo")
         self.assertEqual(self.check.tags, "bar,baz")
         self.assertEqual(self.check.timeout.total_seconds(), 3600)
         self.assertEqual(self.check.grace.total_seconds(), 60)
@@ -430,3 +433,15 @@ class UpdateCheckTestCase(BaseTestCase):
 
         self.check.refresh_from_db()
         self.assertEqual(self.check.slug, "foo")
+
+    def test_it_handles_concurrent_delete(self) -> None:
+
+        def get_and_delete(*args: Any, **kwargs: Any) -> Check:
+            check = Check.objects.get(id=self.check.id)
+            self.check.delete()
+            return check
+
+        with patch("hc.api.views.get_object_or_404", get_and_delete):
+            r = self.post(self.check.code, {"name": "foo"})
+
+        self.assertEqual(r.status_code, 404)

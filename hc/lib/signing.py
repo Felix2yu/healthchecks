@@ -10,13 +10,18 @@ def hex_hmac(salt: str, value: bytes | str, key: bytes | str, algorithm: str) ->
     return salted_hmac(salt, value, key, algorithm=algorithm).hexdigest()
 
 
-class HexTimestampSigner(Signer):
-    """TimestampSigner, but uses hex for serialization."""
+class ShortHexTimestampSigner(Signer):
+    """TimestampSigner, but uses hex for serialization, and uses a short signature."""
 
     def signature(self, value: bytes | str, key: bytes | str | None = None) -> str:
         key = key or self.key
         assert isinstance(self.salt, str)
-        return hex_hmac(self.salt + "signer", value, key, algorithm=self.algorithm)
+        full = hex_hmac(self.salt + "signer", value, key, algorithm=self.algorithm)
+        # Chop off the end of the signature. This makes the signature weaker
+        # but that's acceptable for our intended use case, signing bounce notifications.
+        # The goal is to make a signed "n.<uuid>" or "r.<uuid>" string fit in
+        # 64 characters so it can be used in the local-part of an email address.
+        return full[:16]
 
     def sign(self, value: str) -> str:
         timestamp = hex(int(time.time()))[2:]
@@ -35,8 +40,9 @@ class HexTimestampSigner(Signer):
 
 
 def sign_bounce_id(s: str) -> str:
-    return HexTimestampSigner(sep=".", algorithm="sha1").sign(s)
+    return ShortHexTimestampSigner(sep=".").sign(s)
 
 
 def unsign_bounce_id(s: str, max_age: int) -> str:
-    return HexTimestampSigner(sep=".", algorithm="sha1").unsign(s, max_age=max_age)
+    short_hex_signer = ShortHexTimestampSigner(sep=".")
+    return short_hex_signer.unsign(s, max_age=max_age)
