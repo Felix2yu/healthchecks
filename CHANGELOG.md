@@ -3,15 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## v4.4 - 2026-08-31
 
-### Improvements
-- Send flapping notices to all team members (not just the owner)
-- Upgrade to Django 6.1
+### 改进
+- 向所有团队成员发送波动通知（不仅仅是所有者）
+- 升级到 Django 6.1
 
-### Bug Fixes
-- Fix the email integration to sanitize long lines in .eml attachments
-- Fix race conditions when concurrent requests update the same check
-- Fix bounce signing code to produce shorter signatures
-- Security: fix the email verification link to depend on the email address
+### 错误修复
+- 修复电子邮件集成以清理 .eml 附件中的长行
+- 修复并发请求更新同一检查时的竞争条件
+- 修复反弹签名代码以产生更短的签名
+- 安全：修复电子邮件验证链接以依赖于电子邮件地址
 
 ## v4.3 - 2026-07-14
 
